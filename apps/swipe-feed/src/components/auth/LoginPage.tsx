@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
+import { signIn, DEMO_CREDENTIALS } from '../../lib/auth';
 import { 
   Zap, Shield, HardHat, Building2, Activity, 
   Map, Users, FileText, Eye, EyeOff, AlertCircle,
@@ -22,12 +22,7 @@ export const LoginPage: React.FC = () => {
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
+      await signIn(email, password);
       
       setSuccess(true);
       setTimeout(() => {
@@ -41,8 +36,8 @@ export const LoginPage: React.FC = () => {
   };
 
   const handleDemoLogin = async () => {
-    setEmail('demo@fieldforge.com');
-    setPassword('demo123456');
+    setEmail(DEMO_CREDENTIALS.email);
+    setPassword(DEMO_CREDENTIALS.password);
     // Auto-submit after setting demo credentials
     setTimeout(() => {
       handleLogin(new Event('submit') as any);

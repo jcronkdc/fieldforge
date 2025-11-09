@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
+import { signUp } from '../../lib/auth';
 import { 
   Zap, Shield, Eye, EyeOff, AlertCircle, CheckCircle, 
   Loader2, Building2, User, Mail, Phone, Briefcase,
@@ -64,40 +64,15 @@ export const SignUpPage: React.FC = () => {
     setError(null);
 
     try {
-      // Create auth user
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: formData.email,
-        password: formData.password,
-        options: {
-          data: {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            phone: formData.phone,
-            company: formData.company,
-            job_title: formData.jobTitle,
-            employee_id: formData.employeeId
-          }
-        }
+      // Create auth user with profile data
+      await signUp(formData.email, formData.password, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        company: formData.company,
+        jobTitle: formData.jobTitle,
+        employeeId: formData.employeeId
       });
-
-      if (authError) throw authError;
-
-      // Create user profile
-      if (authData.user) {
-        const { error: profileError } = await supabase
-          .from('user_profiles')
-          .insert({
-            id: authData.user.id,
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            email: formData.email,
-            phone: formData.phone,
-            job_title: formData.jobTitle,
-            employee_id: formData.employeeId
-          });
-
-        if (profileError) console.error('Profile creation error:', profileError);
-      }
 
       setSuccess(true);
       setTimeout(() => {
