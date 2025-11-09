@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
+import { AuthProvider } from './components/auth/AuthProvider';
 import './styles/animations.css';
 
 // Landing Page
@@ -124,9 +125,10 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        {isOffline && <OfflineIndicator />}
+    <AuthProvider>
+      <Router>
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+          {isOffline && <OfflineIndicator />}
         
         <Routes>
           {/* Public Landing Page */}
@@ -227,6 +229,7 @@ function App() {
         {session && <AIAssistant />}
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 
