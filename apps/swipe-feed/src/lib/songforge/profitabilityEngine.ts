@@ -347,7 +347,7 @@ export class ProfitabilityIntelligenceSystem {
         // Raise price or limit compute usage
         if (cvi < 0.7) {
           // Improve value before raising price
-          await this.improveT ierValue(tier);
+          await this.improveTierValue(tier);
         } else {
           // Can raise price
           tier.price *= 1.05;

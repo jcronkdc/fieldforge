@@ -11,6 +11,11 @@ import { LandingPage } from './pages/LandingPage';
 import { LoginPage } from './components/auth/LoginPage';
 import { SignUpPage } from './components/auth/SignUpPage';
 
+// Social & AI Components
+import { SocialFeed } from './components/feed/SocialFeed';
+import { AIAssistant } from './components/ai/AIAssistant';
+import { RealTimeViz } from './components/visualization/RealTimeViz';
+
 // Layout Components  
 import { MainLayout } from './components/layout/MainLayout';
 import { MobileNav } from './components/layout/MobileNav';
@@ -139,6 +144,8 @@ function App() {
             <Route element={<MainLayout session={session} />}>
               {/* Dashboard */}
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/feed" element={<SocialFeed />} />
+              <Route path="/analytics" element={<RealTimeViz />} />
               <Route path="/projects" element={<ProjectManager />} />
               <Route path="/metrics/project" element={<ProjectMetrics />} />
               <Route path="/metrics/safety" element={<SafetyMetrics />} />
@@ -204,6 +211,9 @@ function App() {
         
         {/* Sync Status Indicator */}
         {session && <SyncStatus />}
+        
+        {/* AI Assistant - Available on all protected routes */}
+        {session && <AIAssistant />}
       </div>
     </Router>
   );

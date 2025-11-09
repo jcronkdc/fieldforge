@@ -8,6 +8,7 @@ import {
   Settings, LogOut, Menu, X, Bell, Zap, Users, AlertTriangle,
   Activity, Wrench, Truck, Building2, Radio, ChevronDown
 } from 'lucide-react';
+import { PushNotifications } from '../notifications/PushNotifications';
 import { NotificationCenter } from '../notifications/NotificationCenter';
 import { WeatherWidget } from '../weather/WeatherWidget';
 
@@ -36,18 +37,33 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       color: 'text-amber-500'
     },
     {
+      label: 'Social Feed',
+      icon: MessageSquare,
+      path: '/feed',
+      badge: 'NEW',
+      badgeColor: 'bg-cyan-500',
+      color: 'text-cyan-500'
+    },
+    {
+      label: 'Live Analytics',
+      icon: Activity,
+      path: '/analytics',
+      badge: 'LIVE',
+      badgeColor: 'bg-purple-500',
+      color: 'text-purple-500'
+    },
+    {
       label: 'Projects',
       icon: Building2,
       path: '/projects',
       badge: null,
-      color: 'text-purple-500'
+      color: 'text-blue-500'
     },
     {
       label: 'Field Operations',
       icon: HardHat,
       path: '/field',
-      badge: 'LIVE',
-      badgeColor: 'bg-green-500',
+      badge: null,
       color: 'text-green-500',
       subItems: [
         { label: 'Daily Operations', path: '/field' },
@@ -294,13 +310,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
             </button>
 
             {/* Notifications */}
-            <button
-              onClick={() => setNotificationsOpen(!notificationsOpen)}
-              className="relative p-2 text-slate-400 hover:text-white transition-colors"
-            >
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
+            <PushNotifications />
 
             {/* Settings */}
             <Link

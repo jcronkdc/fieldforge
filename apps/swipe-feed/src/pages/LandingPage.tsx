@@ -106,7 +106,7 @@ const SocialFeedPreview = () => {
       user: 'AI Assistant',
       role: 'FieldForge AI',
       time: '1 hour ago',
-      content: 'Weather alert: Optimal conditions for concrete pour tomorrow. I've pre-scheduled crews and equipment. Confirm?',
+      content: "Weather alert: Optimal conditions for concrete pour tomorrow. I've pre-scheduled crews and equipment. Confirm?",
       likes: 156,
       comments: 45,
       type: 'ai',

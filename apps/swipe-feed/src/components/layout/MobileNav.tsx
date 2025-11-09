@@ -9,10 +9,10 @@ export const MobileNav: React.FC = () => {
   
   const navItems = [
     { icon: Home, label: 'Home', path: '/dashboard', color: 'text-amber-500' },
+    { icon: MessageSquare, label: 'Feed', path: '/feed', color: 'text-cyan-500' },
+    { icon: LayoutDashboard, label: 'Analytics', path: '/analytics', color: 'text-purple-500' },
     { icon: HardHat, label: 'Field', path: '/field', color: 'text-green-500' },
-    { icon: Shield, label: 'Safety', path: '/safety', color: 'text-red-500' },
-    { icon: FileText, label: 'Docs', path: '/documents', color: 'text-blue-500' },
-    { icon: MessageSquare, label: 'Chat', path: '/messages', color: 'text-purple-500' }
+    { icon: Shield, label: 'Safety', path: '/safety', color: 'text-red-500' }
   ];
 
   const isActive = (path: string) => location.pathname === path;
