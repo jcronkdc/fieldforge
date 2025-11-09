@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Test - FieldForge</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .status.success { background: #22c55e; color: white; }
+        .status.error { background: #ef4444; color: white; }
+        .status.warning { background: #f59e0b; color: white; }
+        .status.info { background: #3b82f6; color: white; }
+        button {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover { background: #d97706; }
+        .log {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-left: 3px solid #475569;
+        }
+        .log-entry.error { border-color: #ef4444; color: #fca5a5; }
+        .log-entry.success { border-color: #22c55e; color: #86efac; }
+        .log-entry.warning { border-color: #f59e0b; color: #fcd34d; }
+        h1 { color: #f59e0b; }
+        h2 { color: #cbd5e1; margin-top: 0; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 FieldForge Dashboard Diagnostic</h1>
+        
+        <div class="test-card">
+            <h2>Quick Actions</h2>
+            <button onclick="testDashboard()">Test Dashboard Route</button>
+            <button onclick="testAuth()">Check Authentication</button>
+            <button onclick="clearSession()">Clear Session</button>
+            <button onclick="simulateLogin()">Simulate Login</button>
+            <button onclick="window.location.href='/dashboard'">Go to Dashboard</button>
+            <button onclick="window.location.href='/login'">Go to Login</button>
+        </div>
+
+        <div class="grid">
+            <div class="test-card">
+                <h2>🔌 Connection Status</h2>
+                <p>Supabase: <span id="supabase-status" class="status info">Checking...</span></p>
+                <p>Session: <span id="session-status" class="status info">Checking...</span></p>
+                <p>User: <span id="user-email">Not logged in</span></p>
+            </div>
+
+            <div class="test-card">
+                <h2>📊 Dashboard Components</h2>
+                <p>Main Layout: <span id="layout-status" class="status info">Not tested</span></p>
+                <p>Dashboard Module: <span id="dashboard-status" class="status info">Not tested</span></p>
+                <p>Data Loading: <span id="data-status" class="status info">Not tested</span></p>
+            </div>
+        </div>
+
+        <div class="test-card">
+            <h2>📝 Console Log</h2>
+            <div id="log" class="log"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+        const log = (message, type = 'info') => {
+            const logEl = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.insertBefore(entry, logEl.firstChild);
+            console.log(`[Dashboard Test] ${message}`);
+        };
+
+        const supabaseUrl = 'https://sxjydbukmknnmncyqsff.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4anlkYnVrbWtubW1uY3lxc2ZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzEwNzY1NjksImV4cCI6MjA0NjY1MjU2OX0.p2i0FpyKzwNkVJdV8BfJMCNhIpKdHZRnSLNgPsFejxE';
+        
+        let supabase;
+        
+        try {
+            supabase = createClient(supabaseUrl, supabaseKey);
+            log('Supabase client initialized', 'success');
+            document.getElementById('supabase-status').className = 'status success';
+            document.getElementById('supabase-status').textContent = 'Connected';
+        } catch (error) {
+            log(`Failed to initialize Supabase: ${error.message}`, 'error');
+            document.getElementById('supabase-status').className = 'status error';
+            document.getElementById('supabase-status').textContent = 'Failed';
+        }
+
+        // Check session on load
+        async function checkSession() {
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (error) throw error;
+                
+                if (session) {
+                    log(`Session found for: ${session.user.email}`, 'success');
+                    document.getElementById('session-status').className = 'status success';
+                    document.getElementById('session-status').textContent = 'Active';
+                    document.getElementById('user-email').textContent = session.user.email;
+                } else {
+                    log('No active session', 'warning');
+                    document.getElementById('session-status').className = 'status warning';
+                    document.getElementById('session-status').textContent = 'None';
+                }
+            } catch (error) {
+                log(`Session check failed: ${error.message}`, 'error');
+                document.getElementById('session-status').className = 'status error';
+                document.getElementById('session-status').textContent = 'Error';
+            }
+        }
+
+        window.testDashboard = async () => {
+            log('Testing dashboard route...');
+            
+            // Test if dashboard component exists
+            try {
+                const response = await fetch('/dashboard');
+                if (response.ok) {
+                    log('Dashboard route accessible', 'success');
+                    document.getElementById('dashboard-status').className = 'status success';
+                    document.getElementById('dashboard-status').textContent = 'Accessible';
+                    
+                    // Check for React errors
+                    const text = await response.text();
+                    if (text.includes('error') || text.includes('Error')) {
+                        log('Dashboard may have errors - check browser console', 'warning');
+                    }
+                } else {
+                    log(`Dashboard returned status: ${response.status}`, 'error');
+                    document.getElementById('dashboard-status').className = 'status error';
+                    document.getElementById('dashboard-status').textContent = 'Failed';
+                }
+            } catch (error) {
+                log(`Dashboard test failed: ${error.message}`, 'error');
+                document.getElementById('dashboard-status').className = 'status error';
+                document.getElementById('dashboard-status').textContent = 'Error';
+            }
+        };
+
+        window.testAuth = async () => {
+            log('Testing authentication...');
+            await checkSession();
+        };
+
+        window.clearSession = async () => {
+            log('Clearing session...');
+            try {
+                await supabase.auth.signOut();
+                localStorage.clear();
+                sessionStorage.clear();
+                log('Session cleared successfully', 'success');
+                setTimeout(() => checkSession(), 500);
+            } catch (error) {
+                log(`Failed to clear session: ${error.message}`, 'error');
+            }
+        };
+
+        window.simulateLogin = async () => {
+            log('Attempting to simulate login...');
+            const email = 'justincronk@pm.me';
+            const password = 'Junuh2014!';
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                
+                log(`Login successful for ${email}`, 'success');
+                setTimeout(() => checkSession(), 500);
+            } catch (error) {
+                log(`Login failed: ${error.message}`, 'error');
+                log('Try creating account at /admin-setup first', 'warning');
+            }
+        };
+
+        // Monitor console errors
+        const originalError = console.error;
+        console.error = function(...args) {
+            log(`Console Error: ${args.join(' ')}`, 'error');
+            originalError.apply(console, args);
+        };
+
+        // Initial checks
+        checkSession();
+        
+        // Test component loading
+        setTimeout(() => {
+            log('Checking if React app is loaded...');
+            const root = document.getElementById('root');
+            if (root && root.children.length > 0) {
+                log('React app appears to be loaded', 'success');
+                document.getElementById('layout-status').className = 'status success';
+                document.getElementById('layout-status').textContent = 'Loaded';
+            } else {
+                log('React app may not be loaded properly', 'warning');
+                document.getElementById('layout-status').className = 'status warning';
+                document.getElementById('layout-status').textContent = 'Not loaded';
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

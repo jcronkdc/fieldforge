@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, HardHat, Shield, FileText, MessageSquare 
+  Home, HardHat, Shield, FileText, MessageSquare, LayoutDashboard 
 } from 'lucide-react';
 
 export const MobileNav: React.FC = () => {

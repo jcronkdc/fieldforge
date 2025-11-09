@@ -2,7 +2,7 @@
 // These will be replaced with full implementations
 
 import React from 'react';
-import { HardHat, Shield, Package, ClipboardCheck, FileText, Calendar, Cloud, MessageSquare, Map, Brain, Settings, Activity, Users, Timer, AlertTriangle, Building2, Wrench, DollarSign, Target } from 'lucide-react';
+import { HardHat, Shield, Package, ClipboardCheck, FileText, Calendar, Cloud, MessageSquare, Map, Brain, Settings as SettingsIcon, Activity, Users, Timer, AlertTriangle, Building2, Wrench, DollarSign, Target } from 'lucide-react';
 
 const PlaceholderPage: React.FC<{ title: string; icon: React.ElementType; description: string }> = ({ title, icon: Icon, description }) => (
   <div className="p-6">
@@ -68,7 +68,7 @@ export const SubstationModel = () => <PlaceholderPage title="Substation Model" i
 export const FieldForgeAI = () => <PlaceholderPage title="FieldForge AI Assistant" icon={Brain} description="AI-powered construction assistant" />;
 
 // Settings
-export const Settings = () => <PlaceholderPage title="Settings" icon={Settings} description="Application settings and preferences" />;
+export const Settings = () => <PlaceholderPage title="Settings" icon={SettingsIcon} description="Application settings and preferences" />;
 export const CompanySettings = () => <PlaceholderPage title="Company Settings" icon={Building2} description="Company configuration and management" />;
 export const UserProfile = () => <PlaceholderPage title="User Profile" icon={Users} description="Manage your profile and preferences" />;
 
