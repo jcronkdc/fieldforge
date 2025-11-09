@@ -13,6 +13,7 @@ interface VoiceCommand {
 
 export const VoiceCommandInterface: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
+  const [isSupported, setIsSupported] = useState(true);
   const [transcript, setTranscript] = useState('');
   const [interimTranscript, setInterimTranscript] = useState('');
   const [status, setStatus] = useState<'idle' | 'listening' | 'processing' | 'success' | 'error'>('idle');
@@ -149,10 +150,17 @@ export const VoiceCommandInterface: React.FC = () => {
 
   // Initialize speech recognition
   useEffect(() => {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      setFeedback('Voice commands not supported in this browser');
-      return;
+    const browserSupportsRecognition =
+      typeof window !== 'undefined' &&
+      (('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window));
+
+    if (!browserSupportsRecognition) {
+      setIsSupported(false);
+      setFeedback('Voice commands are not supported in this browser. Use Chrome on desktop for full functionality.');
+      return () => undefined;
     }
+
+    setIsSupported(true);
 
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     recognitionRef.current = new SpeechRecognition();
@@ -193,7 +201,15 @@ export const VoiceCommandInterface: React.FC = () => {
 
     recognition.onerror = (event: any) => {
       setStatus('error');
-      setFeedback(`Error: ${event.error}`);
+      if (event.error === 'not-allowed') {
+        setFeedback('Microphone access was denied. Please allow microphone permissions and try again.');
+      } else if (event.error === 'network') {
+        setFeedback('Network error while processing voice command. Check your connection.');
+      } else if (event.error === 'no-speech') {
+        setFeedback('No speech detected. Please try again.');
+      } else {
+        setFeedback(`Error: ${event.error}`);
+      }
       setIsListening(false);
     };
 
@@ -214,15 +230,23 @@ export const VoiceCommandInterface: React.FC = () => {
 
   // Toggle listening
   const toggleListening = () => {
+    if (!isSupported) return;
     if (isListening) {
       recognitionRef.current?.stop();
       setIsListening(false);
       setStatus('idle');
       setFeedback('');
     } else {
-      recognitionRef.current?.start();
-      setIsListening(true);
-      speak('Voice commands activated. How can I help you?');
+      try {
+        recognitionRef.current?.start();
+        setIsListening(true);
+        speak('Voice commands activated. How can I help you?');
+      } catch (error) {
+        console.error('Failed to start voice recognition', error);
+        setStatus('error');
+        setFeedback('Unable to access the microphone. Please verify permissions and try again.');
+        setIsListening(false);
+      }
     }
   };
 
@@ -241,17 +265,23 @@ export const VoiceCommandInterface: React.FC = () => {
           {/* Main button */}
           <button
             onClick={toggleListening}
+            disabled={!isSupported}
             className={`
               relative w-16 h-16 rounded-full shadow-lg transition-all transform hover:scale-110
-              ${isListening 
+              ${!isSupported
+                ? 'bg-slate-600 cursor-not-allowed'
+                : isListening 
                 ? 'bg-red-600 hover:bg-red-700' 
                 : 'bg-amber-500 hover:bg-amber-600'
               }
               flex items-center justify-center
             `}
             aria-label={isListening ? 'Stop voice commands' : 'Start voice commands'}
+            aria-disabled={!isSupported}
           >
-            {isListening ? (
+            {!isSupported ? (
+              <AlertCircle className="w-8 h-8 text-white" />
+            ) : isListening ? (
               <MicOff className="w-8 h-8 text-white" />
             ) : (
               <Mic className="w-8 h-8 text-white" />
