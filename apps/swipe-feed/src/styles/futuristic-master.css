@@ -1,0 +1,396 @@
+/* 
+  ⚡ FIELDFORGE MASTER FUTURISTIC THEME
+  =====================================
+  Electrical Construction Future Aesthetic
+  Transmission • Distribution • Substations
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+/* ============================================
+   ROOT VARIABLES - Master Design System
+   ============================================ */
+:root {
+  /* Primary Colors - Electrical Theme */
+  --electric-blue: #00d4ff;
+  --power-amber: #ffb800;
+  --voltage-purple: #9945ff;
+  --grid-green: #14f195;
+  --danger-red: #ff0040;
+  --cyber-pink: #ff00ff;
+  
+  /* Gradient Definitions */
+  --gradient-electric: linear-gradient(135deg, #00d4ff 0%, #9945ff 100%);
+  --gradient-power: linear-gradient(135deg, #ffb800 0%, #ff6b00 100%);
+  --gradient-danger: linear-gradient(135deg, #ff0040 0%, #ff00ff 100%);
+  --gradient-matrix: linear-gradient(135deg, #14f195 0%, #00d4ff 100%);
+  --gradient-dark: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+  
+  /* Background Colors */
+  --bg-primary: #0a0e27;
+  --bg-secondary: #1a1f3a;
+  --bg-tertiary: #252a45;
+  --bg-card: rgba(26, 31, 58, 0.8);
+  --bg-overlay: rgba(10, 14, 39, 0.95);
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-accent: #00d4ff;
+  --text-warning: #ffb800;
+  --text-danger: #ff0040;
+  --text-success: #14f195;
+  
+  /* Border Colors */
+  --border-primary: rgba(0, 212, 255, 0.3);
+  --border-secondary: rgba(148, 163, 184, 0.2);
+  --border-glow: rgba(0, 212, 255, 0.6);
+  
+  /* Fonts */
+  --font-display: 'Orbitron', monospace;
+  --font-body: 'Exo 2', sans-serif;
+  --font-accent: 'Rajdhani', sans-serif;
+  
+  /* Animations */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* Futuristic Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-electric);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gradient-power);
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+.heading-xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  background: var(--gradient-electric);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+}
+
+.heading-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.heading-md {
+  font-family: var(--font-accent);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.body-text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   BUTTONS - Futuristic Style
+   ============================================ */
+.btn-futuristic {
+  font-family: var(--font-accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-base);
+  backdrop-filter: blur(10px);
+}
+
+.btn-futuristic::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-futuristic:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: var(--gradient-electric);
+  color: var(--text-primary);
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 30px rgba(0, 212, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-power {
+  background: var(--gradient-power);
+  color: var(--text-primary);
+  box-shadow: 0 4px 20px rgba(255, 184, 0, 0.3);
+}
+
+.btn-danger {
+  background: var(--gradient-danger);
+  color: var(--text-primary);
+  box-shadow: 0 4px 20px rgba(255, 0, 64, 0.3);
+}
+
+/* ============================================
+   CARDS - Holographic Style
+   ============================================ */
+.card-futuristic {
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  transition: var(--transition-base);
+}
+
+.card-futuristic::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--gradient-electric);
+  border-radius: 12px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s;
+}
+
+.card-futuristic:hover::before {
+  opacity: 1;
+}
+
+.card-futuristic:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+}
+
+/* ============================================
+   INPUTS - Cyber Style
+   ============================================ */
+.input-futuristic {
+  font-family: var(--font-body);
+  background: rgba(26, 31, 58, 0.6);
+  border: 1px solid var(--border-secondary);
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition-base);
+  width: 100%;
+}
+
+.input-futuristic:focus {
+  outline: none;
+  border-color: var(--electric-blue);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1),
+              inset 0 0 20px rgba(0, 212, 255, 0.05);
+}
+
+.input-futuristic::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes electric-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.8),
+                0 0 60px rgba(0, 212, 255, 0.4);
+  }
+}
+
+@keyframes power-glow {
+  0%, 100% { 
+    filter: brightness(1) drop-shadow(0 0 10px rgba(255, 184, 0, 0.5));
+  }
+  50% { 
+    filter: brightness(1.2) drop-shadow(0 0 20px rgba(255, 184, 0, 0.8));
+  }
+}
+
+@keyframes data-stream {
+  0% { transform: translateY(100%); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+
+@keyframes cyber-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes hologram-flicker {
+  0%, 100% { opacity: 1; }
+  10% { opacity: 0.9; }
+  20% { opacity: 1; }
+  30% { opacity: 0.95; }
+  40% { opacity: 1; }
+  50% { opacity: 0.92; }
+  60% { opacity: 1; }
+  70% { opacity: 0.96; }
+  80% { opacity: 1; }
+  90% { opacity: 0.93; }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.glow-electric {
+  animation: electric-pulse 2s ease-in-out infinite;
+}
+
+.glow-power {
+  animation: power-glow 2s ease-in-out infinite;
+}
+
+.hologram {
+  animation: hologram-flicker 3s ease-in-out infinite;
+}
+
+.scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.scan-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    var(--electric-blue),
+    transparent
+  );
+  animation: cyber-scan 3s linear infinite;
+}
+
+/* Grid Background Pattern */
+.grid-bg {
+  position: relative;
+  background-image: 
+    linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.grid-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    var(--bg-primary) 100%
+  );
+  pointer-events: none;
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+@media (max-width: 768px) {
+  .heading-xl {
+    font-size: 2rem;
+  }
+  
+  .heading-lg {
+    font-size: 1.5rem;
+  }
+  
+  .heading-md {
+    font-size: 1.25rem;
+  }
+  
+  .card-futuristic {
+    padding: 16px;
+  }
+}
+
+/* ============================================
+   COMPONENT OVERRIDES
+   ============================================ */
+/* Override all default Tailwind/other styles */
+.override-theme * {
+  font-family: inherit !important;
+}
+
+/* Ensure theme is applied to all children */
+.futuristic-theme {
+  font-family: var(--font-body) !important;
+  color: var(--text-primary) !important;
+  background: var(--bg-primary) !important;
+}

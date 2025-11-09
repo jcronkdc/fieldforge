@@ -8,11 +8,12 @@ import { VoiceCommandInterface } from './components/voice/VoiceCommandInterface'
 import './styles/animations.css';
 import './styles/ai-animations.css';
 import './styles/futuristic.css';
+import './styles/futuristic-master.css';
 
 // Auth Components
-import { LoginPage } from './components/auth/LoginPage';
+import { FuturisticLogin } from './components/auth/FuturisticLogin';
 import { SignUpPage } from './components/auth/SignUpPage';
-import { AdminSetup } from './components/auth/AdminSetup';
+import { FuturisticAdminSetup } from './components/auth/FuturisticAdminSetup';
 
 // Landing Page
 import { FuturisticElectricalLanding } from './pages/FuturisticElectricalLanding';
@@ -23,11 +24,11 @@ import { AIAssistant } from './components/ai/AIAssistant';
 import { RealTimeViz } from './components/visualization/RealTimeViz';
 
 // Layout Components  
-import { MainLayout } from './components/layout/MainLayout';
+import { FuturisticLayout } from './components/layout/FuturisticLayout';
 import { MobileNav } from './components/layout/MobileNav';
 
 // Dashboard
-import { Dashboard } from './components/dashboard/Dashboard';
+import { FuturisticDashboard } from './components/dashboard/FuturisticDashboard';
 
 // Project Management
 import { ProjectManager } from './components/projects/ProjectManager';
@@ -192,7 +193,7 @@ function AppSafe() {
               } />
               
               <Route path="/login" element={
-                session ? <Navigate to="/dashboard" replace /> : <LoginPage />
+                session ? <Navigate to="/dashboard" replace /> : <FuturisticLogin />
               } />
               
               <Route path="/signup" element={
@@ -200,7 +201,7 @@ function AppSafe() {
               } />
               
               {/* Admin Setup - Always accessible */}
-              <Route path="/admin-setup" element={<AdminSetup />} />
+              <Route path="/admin-setup" element={<FuturisticAdminSetup />} />
               
               {/* QA Test Runner - Always accessible */}
               <Route path="/qa-tests" element={<QATestRunner />} />
@@ -208,8 +209,8 @@ function AppSafe() {
               {/* Protected Routes */}
               {session ? (
                 <>
-                  <Route element={<MainLayout session={session} />}>
-                    <Route path="/dashboard" element={<Dashboard />} />
+                  <Route element={<FuturisticLayout session={session} />}>
+                    <Route path="/dashboard" element={<FuturisticDashboard />} />
                     <Route path="/feed" element={<SocialFeed />} />
                     <Route path="/analytics" element={<RealTimeViz />} />
                     <Route path="/projects" element={<ProjectManager />} />
