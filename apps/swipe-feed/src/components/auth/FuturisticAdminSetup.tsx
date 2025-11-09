@@ -133,50 +133,32 @@ export const FuturisticAdminSetup: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center">
-      {/* Animated Grid Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-purple-950/20 to-slate-950" />
-        <div 
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: `
-              linear-gradient(magenta 1px, transparent 1px),
-              linear-gradient(90deg, magenta 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-            animation: 'slide 10s linear infinite'
-          }}
-        />
-      </div>
-
-      {/* Holographic Effects */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" />
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+      {/* Subtle Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
 
       {/* Main Container */}
-      <div className="relative z-10 w-full max-w-2xl px-6">
+      <div className="relative z-10 w-full max-w-2xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full mb-4 animate-pulse shadow-[0_0_40px_rgba(168,85,247,0.5)]">
-            <Shield className="w-10 h-10 text-white" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-500 rounded-lg mb-4">
+            <Shield className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl font-bold font-['Orbitron'] text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 mb-2">
-            ADMIN INITIALIZATION
+          <h1 className="text-3xl font-bold text-white mb-2">
+            Admin Setup
           </h1>
-          <p className="text-purple-400/80 text-sm tracking-wider">SYSTEM ADMINISTRATOR SETUP PROTOCOL</p>
+          <p className="text-slate-400 text-sm">Configure system administrator account</p>
         </div>
 
         {/* Status Panel */}
         <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-lg blur opacity-30 animate-pulse" />
           
-          <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-lg p-8 border border-purple-500/30 shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+          <div className="bg-slate-900 border border-slate-800 rounded-lg p-8">
             {/* Credentials Display */}
-            <div className="mb-8 p-6 bg-slate-950/50 rounded-lg border border-purple-500/20">
-              <h2 className="text-lg font-bold text-purple-400 mb-4 font-['Orbitron'] flex items-center">
+            <div className="mb-8 p-6 bg-slate-950/50 rounded-lg border border-slate-800">
+              <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
                 <Key className="w-5 h-5 mr-2" />
-                ADMINISTRATIVE CREDENTIALS
+                Administrative Credentials
               </h2>
               
               <div className="space-y-3 font-['Exo 2']">

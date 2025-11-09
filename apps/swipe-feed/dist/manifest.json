@@ -1,57 +1,62 @@
 {
-  "name": "FieldForge - T&D Construction Management",
+  "name": "FieldForge Electrical - T&D Construction Management",
   "short_name": "FieldForge",
-  "description": "Construction management platform for Transmission, Distribution & Substation projects",
-  "version": "1.0.0",
-  "manifest_version": 3,
-  "start_url": "/",
+  "description": "AI-powered construction management platform for transmission, distribution, and substation projects",
+  "theme_color": "#00d4ff",
+  "background_color": "#0a0e27",
   "display": "standalone",
-  "background_color": "#1a1a1a",
-  "theme_color": "#f59e0b",
-  "orientation": "portrait",
+  "orientation": "any",
   "scope": "/",
+  "start_url": "/?source=pwa",
+  "id": "fieldforge-electrical",
   "categories": ["business", "productivity", "utilities"],
   "lang": "en-US",
   "dir": "ltr",
   "icons": [
     {
-      "src": "/icons/icon-72x72.png",
+      "src": "/icon-72.png",
       "sizes": "72x72",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-96x96.png",
+      "src": "/icon-96.png",
       "sizes": "96x96",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-128x128.png",
+      "src": "/icon-128.png",
       "sizes": "128x128",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-144x144.png",
+      "src": "/icon-144.png",
       "sizes": "144x144",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-152x152.png",
+      "src": "/icon-152.png",
       "sizes": "152x152",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-384x384.png",
+      "src": "/icon-384.png",
       "sizes": "384x384",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -59,49 +64,76 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshots/dashboard.png",
-      "sizes": "1080x1920",
+      "src": "/screenshot-desktop.png",
+      "sizes": "1920x1080",
       "type": "image/png",
-      "label": "Project Dashboard"
+      "form_factor": "wide",
+      "label": "FieldForge Dashboard - Command Center View"
     },
     {
-      "src": "/screenshots/safety.png",
-      "sizes": "1080x1920",
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
       "type": "image/png",
-      "label": "Safety Management"
-    },
-    {
-      "src": "/screenshots/equipment.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "label": "Equipment Tracking"
+      "form_factor": "narrow",
+      "label": "FieldForge Mobile - Field Operations"
     }
   ],
   "shortcuts": [
     {
       "name": "Daily Report",
       "short_name": "Report",
-      "description": "Create daily report",
-      "url": "/daily-report",
-      "icons": [{ "src": "/icons/report.png", "sizes": "96x96" }]
+      "description": "Create a new daily field report",
+      "url": "/field/daily-report?source=pwa",
+      "icons": [
+        {
+          "src": "/shortcut-report.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Scan Receipt",
+      "short_name": "Receipt",
+      "description": "Scan and process a receipt",
+      "url": "/field/receipts?source=pwa",
+      "icons": [
+        {
+          "src": "/shortcut-receipt.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "Safety Brief",
       "short_name": "Safety",
       "description": "Conduct safety briefing",
-      "url": "/safety-briefing",
-      "icons": [{ "src": "/icons/safety.png", "sizes": "96x96" }]
+      "url": "/safety/briefing?source=pwa",
+      "icons": [
+        {
+          "src": "/shortcut-safety.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
-      "name": "RFI",
-      "short_name": "RFI",
-      "description": "Submit new RFI",
-      "url": "/rfi/new",
-      "icons": [{ "src": "/icons/rfi.png", "sizes": "96x96" }]
+      "name": "Emergency",
+      "short_name": "SOS",
+      "description": "Emergency protocols and contacts",
+      "url": "/emergency?source=pwa",
+      "icons": [
+        {
+          "src": "/shortcut-emergency.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ],
-  "prefer_related_applications": false,
   "related_applications": [],
+  "prefer_related_applications": false,
   "share_target": {
     "action": "/share",
     "method": "POST",
@@ -112,8 +144,12 @@
       "url": "url",
       "files": [
         {
-          "name": "image",
+          "name": "receipt",
           "accept": ["image/*"]
+        },
+        {
+          "name": "report",
+          "accept": ["application/pdf"]
         }
       ]
     }
@@ -121,15 +157,41 @@
   "features": [
     "Cross Platform",
     "Offline Capable",
-    "Location Services",
-    "Camera Access",
-    "Push Notifications",
-    "File Upload"
+    "Voice Commands",
+    "AI Assistant",
+    "Real-time Sync",
+    "Push Notifications"
   ],
-  "permissions": [
-    "geolocation",
-    "camera",
-    "notifications",
-    "storage"
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  },
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "browser"
+  ],
+  "file_handlers": [
+    {
+      "action": "/open",
+      "accept": {
+        "image/*": [".jpg", ".jpeg", ".png", ".gif", ".webp"],
+        "application/pdf": [".pdf"]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+fieldforge",
+      "url": "/protocol?url=%s"
+    }
+  ],
+  "scope_extensions": [
+    {
+      "origin": "https://*.supabase.co"
+    }
   ]
 }
