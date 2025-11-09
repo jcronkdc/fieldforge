@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
 import { AuthProvider } from './components/auth/AuthProvider';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { VoiceCommandInterface } from './components/voice/VoiceCommandInterface';
+import { FuturisticToastContainer } from './components/common/FuturisticToast';
+import { FuturisticLoader } from './components/common/FuturisticLoader';
+import { KeyboardShortcutsModal, useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import './styles/animations.css';
 import './styles/ai-animations.css';
 import './styles/futuristic.css';
@@ -135,17 +138,9 @@ function AppSafe() {
     };
   }, []);
 
-  // Show loading state
+  // Show loading state with futuristic loader
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h1 className="text-2xl font-bold text-white">FieldForge</h1>
-          <p className="text-slate-400 mt-2">Loading...</p>
-        </div>
-      </div>
-    );
+    return <FuturisticLoader size="fullscreen" message="INITIALIZING FIELDFORGE SYSTEMS..." />;
   }
 
   // Show error state if critical error
@@ -181,10 +176,27 @@ function AppSafe() {
     <ErrorBoundary fallback={<ErrorFallback />}>
       <AuthProvider>
         <Router>
-          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-            <LiveSiteBanner />
-            <EnvironmentBadge />
-            {isOffline && <OfflineIndicator />}
+          <AppContent session={session} isOffline={isOffline} />
+        </Router>
+      </AuthProvider>
+    </ErrorBoundary>
+  );
+}
+
+// Inner component that can use Router hooks
+const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({ session, isOffline }) => {
+  // Use keyboard shortcuts hook
+  useKeyboardShortcuts();
+
+  return (
+    <>
+      <FuturisticToastContainer />
+      <KeyboardShortcutsModal />
+      
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <LiveSiteBanner />
+        <EnvironmentBadge />
+        {isOffline && <OfflineIndicator />}
             
             <Routes>
               {/* Public Routes */}
@@ -223,20 +235,18 @@ function AppSafe() {
               )}
             </Routes>
 
-            {/* Global Components - Only show when authenticated */}
-            {session && (
-              <>
-                <MobileNav />
-                <SyncStatus />
-                <VoiceCommandInterface />
-                <AIAssistant />
-              </>
-            )}
-          </div>
-        </Router>
-      </AuthProvider>
-    </ErrorBoundary>
+        {/* Global Components - Only show when authenticated */}
+        {session && (
+          <>
+            <MobileNav />
+            <SyncStatus />
+            <VoiceCommandInterface />
+            <AIAssistant />
+          </>
+        )}
+      </div>
+    </>
   );
-}
+};
 
 export default AppSafe;
