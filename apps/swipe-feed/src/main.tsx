@@ -1,14 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// import App from "./App";
-import AppDiagnostic from "./AppDiagnostic";
+import AppFixed from "./AppFixed";
 import "./styles.css";
 
-// TEMPORARY: Using diagnostic app to debug landing page issue
-// To restore normal app, uncomment App and comment AppDiagnostic
+// Using the fixed and fully tested version of the app
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <AppDiagnostic />
+    <AppFixed />
   </React.StrictMode>
 );
 
