@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FieldForgeQATestSuite from '../tests/completeQATests';
+import CanonicalFieldForgeTestSuite from '../tests/canonicalTestSuite';
 
 interface TestResult {
   test: string;
@@ -40,6 +41,39 @@ export const QATestRunner: React.FC = () => {
       setResults(qaResults);
     } catch (error) {
       console.error('Test suite failed:', error);
+    } finally {
+      setIsRunning(false);
+    }
+  };
+
+  const runCanonicalTests = async () => {
+    setIsRunning(true);
+    setLogs([]);
+    setResults(null);
+    
+    try {
+      console.log('Starting Canonical Test Suite...');
+      const suite = new CanonicalFieldForgeTestSuite();
+      await suite.runAllTests();
+      
+      // Get results from window
+      const canonicalResults = (window as any).__CANONICAL_TEST_RESULTS__;
+      if (canonicalResults) {
+        // Convert to standard format
+        const convertedResults = {
+          summary: canonicalResults.summary,
+          results: canonicalResults.testCases.map((tc: any) => ({
+            test: `${tc.id}: ${tc.name}`,
+            status: tc.status || 'PENDING',
+            message: tc.message || tc.description,
+            time: tc.duration
+          })),
+          timestamp: canonicalResults.timestamp
+        };
+        setResults(convertedResults);
+      }
+    } catch (error) {
+      console.error('Canonical test suite failed:', error);
     } finally {
       setIsRunning(false);
     }
@@ -90,7 +124,27 @@ export const QATestRunner: React.FC = () => {
                     Running Tests...
                   </span>
                 ) : (
-                  '🚀 Run All Tests'
+                  '🚀 Run Basic Tests'
+                )}
+              </button>
+              <button
+                onClick={runCanonicalTests}
+                disabled={isRunning}
+                className={`
+                  px-6 py-3 rounded-lg font-semibold transition-all
+                  ${isRunning 
+                    ? 'bg-gray-600 cursor-not-allowed' 
+                    : 'bg-amber-600 hover:bg-amber-700 transform hover:scale-105'
+                  }
+                `}
+              >
+                {isRunning ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    Running Canonical...
+                  </span>
+                ) : (
+                  '🎯 Run Canonical Suite'
                 )}
               </button>
               <button
