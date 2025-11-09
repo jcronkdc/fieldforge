@@ -36,6 +36,13 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       color: 'text-amber-500'
     },
     {
+      label: 'Projects',
+      icon: Building2,
+      path: '/projects',
+      badge: null,
+      color: 'text-purple-500'
+    },
+    {
       label: 'Field Operations',
       icon: HardHat,
       path: '/field',

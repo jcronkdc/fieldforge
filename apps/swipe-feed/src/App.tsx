@@ -18,6 +18,9 @@ import { MobileNav } from './components/layout/MobileNav';
 // Dashboard
 import { Dashboard } from './components/dashboard/Dashboard';
 
+// Project Management
+import { ProjectManager } from './components/projects/ProjectManager';
+
 // Import all placeholder components
 import {
   ProjectMetrics,
@@ -136,6 +139,7 @@ function App() {
             <Route element={<MainLayout session={session} />}>
               {/* Dashboard */}
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/projects" element={<ProjectManager />} />
               <Route path="/metrics/project" element={<ProjectMetrics />} />
               <Route path="/metrics/safety" element={<SafetyMetrics />} />
               
