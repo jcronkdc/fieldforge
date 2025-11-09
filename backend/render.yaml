@@ -1,0 +1,28 @@
+# Render deployment configuration
+services:
+  - type: web
+    name: mythatron-backend
+    runtime: node
+    repo: https://github.com/jcronkdc/greatest
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: DATABASE_URL
+        sync: false # You'll add this in Render dashboard
+      - key: AI_PROVIDER_API_KEY
+        sync: false # You'll add this in Render dashboard
+      - key: AI_PROVIDER_URL
+        value: https://api.anthropic.com/v1
+      - key: AI_PROVIDER_MODEL
+        value: claude-3-haiku-20240307
+      - key: STRIPE_SECRET_KEY
+        sync: false # You'll add this in Render dashboard
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false # You'll add this in Render dashboard
+      - key: ABLY_API_KEY
+        sync: false # Optional - add if you have it

@@ -1,0 +1,142 @@
+/* OmniGuide Mobile Optimizations */
+
+/* Ensure OmniGuide is mobile-friendly */
+@media (max-width: 768px) {
+  /* Full-screen on mobile */
+  .omniguide-chat-container {
+    position: fixed !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  /* Make buttons larger and more touch-friendly */
+  .omniguide-action-button,
+  button[class*="bg-cyan-500/10"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    cursor: pointer !important;
+  }
+
+  /* Ensure proper spacing between buttons */
+  .omniguide-actions-container,
+  div[class*="flex-wrap gap-2"] {
+    gap: 12px !important;
+  }
+
+  /* Make input area more accessible */
+  .omniguide-input-container {
+    padding: 16px !important;
+    background: rgba(0, 0, 0, 0.95) !important;
+  }
+
+  .omniguide-input-field,
+  input[placeholder*="Ask OmniGuide"] {
+    min-height: 44px !important;
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    padding: 12px !important;
+  }
+
+  /* Floating button positioning */
+  .floating-omniguide-button {
+    bottom: 20px !important;
+    right: 20px !important;
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .floating-omniguide-button > div:last-child {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  /* Ensure messages are readable */
+  .omniguide-message {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    padding: 12px !important;
+  }
+
+  /* Header adjustments */
+  .omniguide-header {
+    padding: 16px !important;
+    border-bottom: 1px solid rgba(6, 182, 212, 0.2) !important;
+  }
+
+  /* Minimize button should be larger */
+  button[class*="hover:bg-white/5"] {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Ensure scrolling works properly */
+  .omniguide-messages-container,
+  div[class*="overflow-y-auto"] {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+  }
+
+  /* Fix for iOS Safari */
+  .omniguide-chat-container {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+/* Ensure touch interactions work */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch-specific optimizations */
+  button,
+  [role="button"],
+  .clickable {
+    cursor: pointer !important;
+    touch-action: manipulation !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+  }
+
+  /* Active states for touch */
+  button:active,
+  [role="button"]:active {
+    transform: scale(0.98) !important;
+    opacity: 0.9 !important;
+  }
+}
+
+/* Fix for action buttons specifically */
+.omniguide-action-buttons button,
+button[onClick*="executeAction"] {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Ensure buttons in messages are clickable */
+div[class*="max-w-[80%]"] button {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* Fix overlapping issues */
+.omniguide-chat-container * {
+  pointer-events: auto !important;
+}
+
+.omniguide-chat-container {
+  pointer-events: auto !important;
+}

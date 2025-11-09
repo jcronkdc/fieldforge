@@ -1,0 +1,143 @@
+/**
+ * Clear Button Selection Feedback
+ * Makes it obvious when buttons are clicked/selected
+ */
+
+/* All buttons get a clear active state */
+button:active,
+a:active,
+[role="button"]:active,
+.clickable:active {
+  transform: scale(0.95) !important;
+  box-shadow: inset 0 0 20px rgba(147, 51, 234, 0.5) !important;
+  background-color: rgba(147, 51, 234, 0.1) !important;
+  transition: all 0.1s ease !important;
+}
+
+/* Selected/Active buttons get a strong border */
+button[aria-pressed="true"],
+button[data-selected="true"],
+button.selected,
+button.active,
+.tab-active,
+.menu-active {
+  border: 2px solid rgb(147, 51, 234) !important;
+  background-color: rgba(147, 51, 234, 0.15) !important;
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3) !important;
+}
+
+/* Focus states for keyboard navigation */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgb(147, 51, 234) !important;
+  outline-offset: 2px !important;
+}
+
+/* Hover states remain subtle but clear */
+button:hover:not(:active):not(:disabled),
+a:hover:not(:active),
+[role="button"]:hover:not(:active) {
+  background-color: rgba(147, 51, 234, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+/* Disabled buttons are clearly inactive */
+button:disabled,
+button[disabled],
+a[disabled],
+.disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  filter: grayscale(50%);
+}
+
+/* Navigation items when selected */
+nav button.active,
+nav a.active,
+.nav-item.active,
+.navigation-active {
+  background: linear-gradient(90deg, rgba(147, 51, 234, 0.2), rgba(236, 72, 153, 0.2)) !important;
+  border-left: 4px solid rgb(147, 51, 234) !important;
+  font-weight: 600 !important;
+}
+
+/* Tab selections */
+.tab-button.active,
+[role="tab"][aria-selected="true"] {
+  border-bottom: 3px solid rgb(147, 51, 234) !important;
+  color: rgb(147, 51, 234) !important;
+  font-weight: 600 !important;
+}
+
+/* Radio/Checkbox style buttons */
+input[type="radio"]:checked + label,
+input[type="checkbox"]:checked + label,
+.radio-button.selected,
+.checkbox-button.selected {
+  background-color: rgba(147, 51, 234, 0.2) !important;
+  border: 2px solid rgb(147, 51, 234) !important;
+}
+
+/* Toggle switches when on */
+.toggle.on,
+.switch.active,
+[role="switch"][aria-checked="true"] {
+  background-color: rgb(147, 51, 234) !important;
+}
+
+/* Card selections */
+.card.selected,
+.item.selected,
+.option.selected {
+  border: 2px solid rgb(147, 51, 234) !important;
+  background-color: rgba(147, 51, 234, 0.05) !important;
+  transform: scale(1.02);
+}
+
+/* Click feedback animation */
+@keyframes button-click {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.92);
+    box-shadow: inset 0 0 30px rgba(147, 51, 234, 0.6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Apply click animation to buttons on click */
+button:active:not(:disabled) {
+  animation: button-click 0.2s ease;
+}
+
+/* Make selected states persist with important colors */
+.bg-gradient-to-r.from-purple-500\/20.to-blue-500\/20,
+.bg-gradient-to-r.from-purple-500\/30.to-pink-500\/30,
+.bg-gradient-to-br.from-purple-500\/30.to-pink-500\/30,
+.bg-gradient-to-br.from-blue-500\/30.to-purple-500\/30,
+.bg-gradient-to-br.from-pink-500\/30.to-red-500\/30 {
+  border: 2px solid rgb(147, 51, 234) !important;
+  box-shadow: 0 0 15px rgba(147, 51, 234, 0.4) !important;
+}
+
+/* Clear visual feedback for Angry Lips mode selection */
+.bg-gradient-to-br.from-purple-500\/30.to-pink-500\/30.border-purple-400,
+.bg-gradient-to-br.from-blue-500\/30.to-purple-500\/30.border-blue-400,
+.bg-gradient-to-br.from-pink-500\/30.to-red-500\/30.border-pink-400 {
+  transform: scale(1.05) !important;
+  z-index: 10;
+  position: relative;
+}
+
+/* Dashboard navigation selected state */
+.bg-gradient-to-r.from-purple-500\/20.to-blue-500\/20.border.border-purple-500\/30 {
+  background: linear-gradient(90deg, rgba(147, 51, 234, 0.3), rgba(59, 130, 246, 0.3)) !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 25px rgba(147, 51, 234, 0.4) !important;
+}

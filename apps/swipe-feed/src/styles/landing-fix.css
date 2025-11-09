@@ -1,0 +1,99 @@
+/**
+ * Landing Page Fix - Ensure sign in button works
+ */
+
+/* Fix for AuthForm on landing page */
+.auth-form,
+[class*="AuthForm"],
+form[action*="auth"],
+form[action*="login"],
+form[action*="signin"] {
+  position: relative !important;
+  z-index: 10 !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure all auth buttons work */
+.auth-form button,
+.auth-form input,
+.auth-form a,
+[class*="AuthForm"] button,
+[class*="AuthForm"] input,
+[class*="AuthForm"] a,
+form button[type="submit"],
+button:has-text("Sign In"),
+button:has-text("Sign Up"),
+button:has-text("Login"),
+button:has-text("Register") {
+  position: relative !important;
+  z-index: 11 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Fix any overlapping elements */
+canvas {
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* Ensure interactive elements aren't blocked */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Override any problematic global styles for auth forms */
+.auth-form *:not(:disabled),
+[class*="AuthForm"] *:not(:disabled) {
+  pointer-events: auto !important;
+}
+
+/* Fix for buttons that might be affected by global styles */
+button[type="submit"]:not(:disabled),
+button[type="button"]:not(:disabled) {
+  transform: none !important;
+  transition: all 0.2s ease !important;
+}
+
+button[type="submit"]:not(:disabled):hover,
+button[type="button"]:not(:disabled):hover {
+  transform: translateY(-1px) scale(1.02) !important;
+}
+
+button[type="submit"]:not(:disabled):active,
+button[type="button"]:not(:disabled):active {
+  transform: scale(0.98) !important;
+}
+
+/* Specific fix for landing page sections */
+#hero-section,
+#auth-section,
+.landing-hero,
+.landing-auth {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Ensure forms are above animations */
+form {
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+/* Fix potential transform issues */
+.auth-form {
+  transform: none !important;
+  will-change: auto !important;
+}
+
+/* Remove any filters that might cause issues */
+.auth-form button:not(:disabled) {
+  filter: none !important;
+}
+
+.auth-form button:not(:disabled):hover {
+  filter: brightness(1.1) !important;
+}

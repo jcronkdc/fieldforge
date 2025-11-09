@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPUS 4.1 Test Runner</title>
+    <style>
+        body {
+            background: #000;
+            color: #06B6D4;
+            font-family: monospace;
+            padding: 20px;
+            margin: 0;
+        }
+        h1 {
+            background: linear-gradient(to right, #06B6D4, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        button {
+            background: linear-gradient(to right, #EF4444, #F97316);
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(239, 68, 68, 0.5);
+        }
+        #results {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .passed { color: #10B981; }
+        .failed { color: #EF4444; }
+        .pending { color: #6B7280; }
+    </style>
+</head>
+<body>
+    <h1>🔬 OPUS 4.1 Comprehensive Test Protocol</h1>
+    <p>Target: 1,000,000 MAU • ≥100,000 concurrent • Margin 65-75%</p>
+    <button onclick="runTest()">🚀 RUN COMPREHENSIVE TEST SUITE</button>
+    <div id="results"></div>
+
+    <script type="module">
+        import OpusBrowserTest from './src/testing/opus-browser-test.ts';
+        
+        window.runTest = async function() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = 'Running tests...';
+            
+            try {
+                const test = new OpusBrowserTest();
+                const report = await test.runAllTests();
+                
+                let html = '<h2>📊 TEST RESULTS</h2>\n';
+                html += '='.repeat(60) + '\n\n';
+                
+                report.gates.forEach(gate => {
+                    const icon = gate.status === 'passed' ? '✅' : 
+                                gate.status === 'failed' ? '❌' : '⏸️';
+                    const className = gate.status;
+                    
+                    html += `<span class="${className}">${icon} ${gate.name}</span>\n`;
+                    if (gate.message) {
+                        html += `   ${gate.message}\n`;
+                    }
+                    if (gate.errors) {
+                        gate.errors.forEach(error => {
+                            html += `   - ${error}\n`;
+                        });
+                    }
+                    html += '\n';
+                });
+                
+                html += '-'.repeat(60) + '\n';
+                html += `\n🎯 OVERALL STATUS: <strong>${report.overallStatus.toUpperCase()}</strong>\n`;
+                html += `📊 SCORE: ${report.summary}\n`;
+                html += `📅 CONSECUTIVE DAYS: ${report.consecutiveDaysPassed}/7\n\n`;
+                
+                if (report.consecutiveDaysPassed >= 7) {
+                    html += '🎉🎉🎉 ACCEPTANCE CRITERIA MET! 🎉🎉🎉\n';
+                    html += 'All gates have passed for 7 consecutive days!\n';
+                } else if (report.overallStatus === 'passed') {
+                    const remaining = 7 - report.consecutiveDaysPassed;
+                    html += `⏳ ${remaining} more consecutive days needed\n`;
+                } else {
+                    html += '❌ Fix failed tests and run again tomorrow\n';
+                }
+                
+                resultsDiv.innerHTML = html;
+                
+                // Also log to console
+                console.log('Full Report:', report);
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `<span class="failed">❌ Test failed: ${error.message}</span>`;
+                console.error('Test error:', error);
+            }
+        };
+    </script>
+</body>
+</html>

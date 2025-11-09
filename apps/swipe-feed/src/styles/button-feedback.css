@@ -1,0 +1,214 @@
+/**
+ * Enhanced Button Feedback Styles
+ * Makes all interactions super obvious
+ */
+
+/* Base button enhancements */
+button {
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Hover state - lift and glow */
+button:not(:disabled):hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 
+    0 10px 25px -5px rgba(147, 51, 234, 0.5),
+    0 5px 10px -5px rgba(147, 51, 234, 0.3),
+    inset 0 0 0 1px rgba(147, 51, 234, 0.2);
+  filter: brightness(1.15);
+}
+
+/* Active state - press down with strong feedback */
+button:not(:disabled):active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 
+    0 0 0 3px rgba(147, 51, 234, 0.4),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  filter: brightness(0.95);
+}
+
+/* Focus state - keyboard navigation */
+button:focus-visible {
+  outline: none;
+  box-shadow: 
+    0 0 0 3px rgba(147, 51, 234, 0.5),
+    0 0 0 6px rgba(147, 51, 234, 0.2);
+  transform: scale(1.02);
+}
+
+/* Add pulse animation to important buttons */
+button.pulse-attention {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(147, 51, 234, 0);
+  }
+}
+
+/* Links should also be obvious */
+a:not(.no-feedback) {
+  position: relative;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+a:not(.no-feedback):hover {
+  transform: translateX(2px);
+  color: #a855f7 !important;
+}
+
+a:not(.no-feedback):active {
+  transform: scale(0.98);
+}
+
+/* Ripple effect for all clicks */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple-container:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Success state */
+button.success-feedback {
+  animation: successBounce 0.5s ease;
+  background-color: #10b981 !important;
+}
+
+@keyframes successBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Error state */
+button.error-feedback {
+  animation: errorShake 0.5s ease;
+  background-color: #ef4444 !important;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* Loading state */
+button.loading-feedback {
+  pointer-events: none;
+  position: relative;
+  color: transparent !important;
+}
+
+button.loading-feedback::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin: -10px 0 0 -10px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Disabled state - very obvious */
+button:disabled,
+button[aria-disabled="true"] {
+  opacity: 0.3 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  filter: grayscale(1) !important;
+  box-shadow: none !important;
+}
+
+/* Mobile touch feedback */
+@media (hover: none) {
+  button:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.5);
+  }
+}
+
+/* Navigation items */
+nav button,
+nav a {
+  position: relative;
+  overflow: hidden;
+}
+
+nav button::after,
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #9333ea, #ec4899);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+nav button:hover::after,
+nav a:hover::after {
+  transform: translateX(0);
+}
+
+/* Icon buttons */
+button svg {
+  transition: transform 0.2s ease;
+}
+
+button:hover svg {
+  transform: scale(1.1) rotate(5deg);
+}
+
+button:active svg {
+  transform: scale(0.9) rotate(-5deg);
+}
+
+/* Floating action buttons */
+.fixed button {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.fixed button:hover {
+  box-shadow: 0 8px 15px rgba(147, 51, 234, 0.4);
+  transform: translateY(-3px) scale(1.05);
+}
+
+.fixed button:active {
+  box-shadow: 0 2px 4px rgba(147, 51, 234, 0.4);
+  transform: translateY(0) scale(0.98);
+}

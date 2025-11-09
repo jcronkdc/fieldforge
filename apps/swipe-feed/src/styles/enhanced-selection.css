@@ -1,0 +1,132 @@
+/**
+ * ENHANCED SELECTION STATES
+ * Making it SUPER OBVIOUS when buttons are selected
+ */
+
+/* Base button enhancement */
+button {
+  position: relative;
+  transition: all 0.2s ease !important;
+}
+
+/* Active/Selected State - SUPER OBVIOUS */
+button[data-selected="true"],
+button.selected,
+button[aria-pressed="true"],
+button[aria-selected="true"],
+button:active {
+  transform: scale(0.95) !important;
+  box-shadow: 
+    inset 0 0 20px rgba(6, 182, 212, 0.5),
+    0 0 40px rgba(6, 182, 212, 0.4) !important;
+}
+
+/* No checkmark - just rely on the glow effect */
+/* The selected state is now indicated by border, background, and shadow only */
+
+/* Click feedback */
+button:active {
+  transform: scale(0.92) !important;
+}
+
+/* Selected items get bright border */
+.selected,
+[data-selected="true"] {
+  border-color: #06b6d4 !important;
+  border-width: 2px !important;
+  background: linear-gradient(135deg, 
+    rgba(6, 182, 212, 0.2), 
+    rgba(59, 130, 246, 0.2)) !important;
+}
+
+/* Hover on selected items */
+.selected:hover,
+[data-selected="true"]:hover {
+  border-color: #22d3ee !important;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.6) !important;
+}
+
+/* Focus states */
+button:focus {
+  outline: 2px solid #06b6d4 !important;
+  outline-offset: 2px !important;
+}
+
+/* Radio/Toggle style buttons */
+input[type="radio"]:checked + label,
+input[type="checkbox"]:checked + label,
+.toggle-button.active {
+  background: linear-gradient(135deg, #06b6d4, #3b82f6) !important;
+  color: black !important;
+  font-weight: bold !important;
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.5) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Tab-style selections */
+.tab-active,
+.tab[aria-selected="true"] {
+  border-bottom: 3px solid #06b6d4 !important;
+  background: rgba(6, 182, 212, 0.1) !important;
+  font-weight: bold !important;
+}
+
+/* Card selections */
+.card-selected,
+.card[data-selected="true"] {
+  border: 2px solid #06b6d4 !important;
+  box-shadow: 
+    0 0 40px rgba(6, 182, 212, 0.4),
+    inset 0 0 20px rgba(6, 182, 212, 0.2) !important;
+  transform: scale(1.02) !important;
+}
+
+/* List item selections */
+.list-item-selected,
+li[aria-selected="true"] {
+  background: linear-gradient(90deg, 
+    rgba(6, 182, 212, 0.3), 
+    transparent) !important;
+  border-left: 4px solid #06b6d4 !important;
+  padding-left: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* Glowing effect for important selections */
+.glow-selected {
+  animation: glow-pulse 2s infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(6, 182, 212, 0.5),
+      0 0 40px rgba(6, 182, 212, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(6, 182, 212, 0.7),
+      0 0 60px rgba(6, 182, 212, 0.5);
+  }
+}
+
+/* Disabled state should be obvious too */
+button:disabled {
+  opacity: 0.3 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Make clicks super visible */
+@keyframes click-wave {
+  0% {
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(6, 182, 212, 0);
+  }
+}
+
+button:not(:disabled):active {
+  animation: click-wave 0.4s ease-out;
+}

@@ -1,0 +1,523 @@
+/**
+ * GLOBAL SITE-WIDE FEEDBACK STYLES
+ * Applied to EVERYTHING clickable across the entire app
+ */
+
+/* ============================================
+   UNIVERSAL SELECTORS - CATCH EVERYTHING
+   ============================================ */
+
+/* Every clickable element in the entire app */
+*[onclick],
+*[onClick],
+*[role="button"],
+*[role="link"],
+*[role="menuitem"],
+*[role="tab"],
+*[role="checkbox"],
+*[role="radio"],
+*[role="switch"],
+*[tabindex]:not([tabindex="-1"]),
+button,
+a,
+input[type="submit"],
+input[type="button"],
+input[type="checkbox"],
+input[type="radio"],
+select,
+textarea,
+.clickable,
+.btn,
+.button,
+[class*="button"],
+[class*="Button"],
+[class*="btn"],
+[class*="Btn"],
+[class*="link"],
+[class*="Link"] {
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hover state for EVERYTHING clickable */
+*[onclick]:hover,
+*[onClick]:hover,
+*[role="button"]:not(:disabled):hover,
+*[role="link"]:hover,
+*[role="menuitem"]:hover,
+*[role="tab"]:hover,
+button:not(:disabled):hover,
+a:hover,
+input[type="submit"]:not(:disabled):hover,
+input[type="button"]:not(:disabled):hover,
+input[type="checkbox"]:not(:disabled):hover,
+input[type="radio"]:not(:disabled):hover,
+select:not(:disabled):hover,
+.clickable:hover,
+.btn:not(:disabled):hover,
+.button:not(:disabled):hover,
+[class*="button"]:not(:disabled):hover,
+[class*="Button"]:not(:disabled):hover,
+[class*="btn"]:not(:disabled):hover,
+[class*="Btn"]:not(:disabled):hover {
+  transform: translateY(-1px) scale(1.02) !important;
+  filter: brightness(1.1) contrast(1.1) !important;
+  box-shadow: 
+    0 4px 12px rgba(147, 51, 234, 0.3),
+    0 2px 4px rgba(147, 51, 234, 0.2),
+    inset 0 0 0 1px rgba(147, 51, 234, 0.1) !important;
+  z-index: 1;
+}
+
+/* Active/clicking state for EVERYTHING */
+*[onclick]:active,
+*[onClick]:active,
+*[role="button"]:active,
+*[role="link"]:active,
+*[role="menuitem"]:active,
+*[role="tab"]:active,
+button:not(:disabled):active,
+a:active,
+input[type="submit"]:not(:disabled):active,
+input[type="button"]:not(:disabled):active,
+input[type="checkbox"]:not(:disabled):active,
+input[type="radio"]:not(:disabled):active,
+select:not(:disabled):active,
+.clickable:active,
+.btn:not(:disabled):active,
+.button:not(:disabled):active,
+[class*="button"]:not(:disabled):active,
+[class*="Button"]:not(:disabled):active,
+[class*="btn"]:not(:disabled):active,
+[class*="Btn"]:not(:disabled):active {
+  transform: translateY(0) scale(0.98) !important;
+  filter: brightness(0.95) !important;
+  box-shadow: 
+    0 0 0 3px rgba(147, 51, 234, 0.5),
+    inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Focus state for keyboard navigation - EVERYTHING */
+*:focus-visible {
+  outline: 2px solid #9333ea !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.2) !important;
+}
+
+/* ============================================
+   SPECIFIC ELEMENT ENHANCEMENTS
+   ============================================ */
+
+/* All divs with click handlers */
+div[onclick],
+div[onClick],
+span[onclick],
+span[onClick],
+p[onclick],
+p[onClick],
+li[onclick],
+li[onClick] {
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+div[onclick]:hover,
+div[onClick]:hover,
+span[onclick]:hover,
+span[onClick]:hover,
+p[onclick]:hover,
+p[onClick]:hover,
+li[onclick]:hover,
+li[onClick]:hover {
+  background-color: rgba(147, 51, 234, 0.05) !important;
+  transform: translateX(2px) !important;
+}
+
+/* Cards and panels */
+.card,
+[class*="card"],
+[class*="Card"],
+.panel,
+[class*="panel"],
+[class*="Panel"] {
+  transition: all 0.2s ease !important;
+}
+
+.card:hover,
+[class*="card"]:hover,
+[class*="Card"]:hover,
+.panel:hover,
+[class*="panel"]:hover,
+[class*="Panel"]:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 16px rgba(147, 51, 234, 0.2) !important;
+}
+
+/* Form elements */
+input:not([type="hidden"]),
+textarea,
+select {
+  transition: all 0.2s ease !important;
+  cursor: text !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #9333ea !important;
+  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1) !important;
+  transform: scale(1.01) !important;
+}
+
+/* Checkboxes and radios */
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer !important;
+  transform: scale(1) !important;
+  transition: all 0.15s ease !important;
+}
+
+input[type="checkbox"]:hover,
+input[type="radio"]:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 0 8px rgba(147, 51, 234, 0.4) !important;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background-color: #9333ea !important;
+  border-color: #9333ea !important;
+  transform: scale(1.05) !important;
+}
+
+/* Dropdown menus */
+select {
+  cursor: pointer !important;
+}
+
+select:hover {
+  background-color: rgba(147, 51, 234, 0.02) !important;
+}
+
+/* ============================================
+   NAVIGATION ELEMENTS
+   ============================================ */
+
+/* All nav elements */
+nav *,
+header *,
+[role="navigation"] *,
+.nav *,
+.navbar *,
+.menu *,
+[class*="nav"] *,
+[class*="Nav"] *,
+[class*="menu"] *,
+[class*="Menu"] * {
+  transition: all 0.2s ease !important;
+}
+
+/* Nav links and buttons */
+nav a,
+nav button,
+.nav a,
+.nav button,
+.navbar a,
+.navbar button,
+[role="navigation"] a,
+[role="navigation"] button {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+nav a::before,
+nav button::before,
+.nav a::before,
+.nav button::before {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, #9333ea, #ec4899) !important;
+  transition: width 0.3s ease !important;
+}
+
+nav a:hover::before,
+nav button:hover::before,
+.nav a:hover::before,
+.nav button:hover::before {
+  width: 100% !important;
+}
+
+/* ============================================
+   ICONS AND SVGS
+   ============================================ */
+
+svg {
+  transition: all 0.2s ease !important;
+  pointer-events: none;
+}
+
+button svg,
+a svg,
+[role="button"] svg {
+  transition: transform 0.2s ease !important;
+}
+
+button:hover svg,
+a:hover svg,
+[role="button"]:hover svg {
+  transform: scale(1.1) rotate(3deg) !important;
+}
+
+button:active svg,
+a:active svg,
+[role="button"]:active svg {
+  transform: scale(0.9) rotate(-3deg) !important;
+}
+
+/* ============================================
+   MODAL AND OVERLAY ELEMENTS
+   ============================================ */
+
+.modal,
+.overlay,
+.dialog,
+[role="dialog"],
+[class*="modal"],
+[class*="Modal"],
+[class*="overlay"],
+[class*="Overlay"] {
+  animation: fadeIn 0.2s ease !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Close buttons in modals */
+.close,
+[class*="close"],
+[class*="Close"],
+[aria-label*="close"],
+[aria-label*="Close"] {
+  transition: all 0.2s ease !important;
+}
+
+.close:hover,
+[class*="close"]:hover,
+[class*="Close"]:hover {
+  transform: rotate(90deg) scale(1.1) !important;
+  color: #ef4444 !important;
+}
+
+/* ============================================
+   LISTS AND MENU ITEMS
+   ============================================ */
+
+li[onclick],
+li[onClick],
+.list-item,
+[class*="list-item"],
+[class*="ListItem"],
+[role="option"],
+[role="menuitem"] {
+  transition: all 0.15s ease !important;
+  cursor: pointer !important;
+}
+
+li[onclick]:hover,
+li[onClick]:hover,
+.list-item:hover,
+[class*="list-item"]:hover,
+[class*="ListItem"]:hover,
+[role="option"]:hover,
+[role="menuitem"]:hover {
+  background-color: rgba(147, 51, 234, 0.08) !important;
+  padding-left: calc(var(--padding-left, 0px) + 4px) !important;
+  border-left: 3px solid #9333ea !important;
+}
+
+/* ============================================
+   DISABLED STATE - UNIVERSAL
+   ============================================ */
+
+*:disabled,
+*[disabled],
+*[aria-disabled="true"],
+.disabled,
+[class*="disabled"],
+[class*="Disabled"] {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  filter: grayscale(0.8) contrast(0.8) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.loading,
+[class*="loading"],
+[class*="Loading"],
+*[aria-busy="true"] {
+  position: relative !important;
+  pointer-events: none !important;
+  opacity: 0.7 !important;
+}
+
+.loading::after,
+[class*="loading"]::after,
+[class*="Loading"]::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: -10px 0 0 -10px !important;
+  border: 3px solid rgba(147, 51, 234, 0.3) !important;
+  border-top-color: #9333ea !important;
+  border-radius: 50% !important;
+  animation: spin 0.8s linear infinite !important;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   MOBILE/TOUCH SPECIFIC
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Touch feedback for mobile */
+  *[onclick]:active,
+  *[onClick]:active,
+  button:active,
+  a:active,
+  [role="button"]:active {
+    transform: scale(0.95) !important;
+    box-shadow: 0 0 0 6px rgba(147, 51, 234, 0.3) !important;
+  }
+  
+  /* Larger touch targets */
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  [role="button"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+}
+
+/* ============================================
+   ANIMATIONS FOR EVERYTHING
+   ============================================ */
+
+/* Pulse animation for attention */
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(147, 51, 234, 0);
+  }
+}
+
+.pulse,
+[class*="pulse"],
+.attention {
+  animation: pulse 2s infinite !important;
+}
+
+/* Success animation */
+@keyframes success {
+  0% { transform: scale(1); background-color: inherit; }
+  50% { transform: scale(1.05); background-color: rgba(16, 185, 129, 0.1); }
+  100% { transform: scale(1); background-color: inherit; }
+}
+
+.success,
+[class*="success"] {
+  animation: success 0.5s ease !important;
+}
+
+/* Error animation */
+@keyframes error {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.error,
+[class*="error"] {
+  animation: error 0.5s ease !important;
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* ============================================
+   OVERRIDE ANY CONFLICTING STYLES
+   ============================================ */
+
+/* Force cursor pointer on all interactive elements */
+button:not(:disabled),
+a:not([disabled]),
+[role="button"]:not([aria-disabled="true"]),
+[onclick],
+[onClick] {
+  cursor: pointer !important;
+}
+
+/* Ensure visibility */
+button,
+a,
+[role="button"] {
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+
+/* Remove any blocking overlays */
+*:not(.modal):not(.overlay) {
+  z-index: auto !important;
+}
+
+/* ============================================
+   RIPPLE EFFECT FOR ALL CLICKS
+   ============================================ */
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple-effect {
+  position: absolute !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.5) 0%, transparent 70%) !important;
+  transform: scale(0) !important;
+  animation: ripple 0.6s ease-out !important;
+  pointer-events: none !important;
+}
