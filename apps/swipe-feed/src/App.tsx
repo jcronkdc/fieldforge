@@ -9,6 +9,7 @@ import './styles/ai-animations.css';
 
 // Landing Page
 import { LandingPage } from './pages/LandingPage';
+import { SimpleLandingPage } from './pages/SimpleLandingPage';
 import { LandingPageTest } from './pages/LandingPageTest';
 import { TestRouting } from './pages/TestRouting';
 import { TestRunner } from './pages/TestRunner';
@@ -154,7 +155,7 @@ function App() {
               <Navigate to="/dashboard" replace />
             ) : (
               console.log('App.tsx: No session, showing landing page'),
-              <LandingPage />
+              <SimpleLandingPage />
             )
           } />
           
