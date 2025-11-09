@@ -12,6 +12,7 @@ import './styles/futuristic.css';
 // Auth Components
 import { LoginPage } from './components/auth/LoginPage';
 import { SignUpPage } from './components/auth/SignUpPage';
+import { AdminSetup } from './components/auth/AdminSetup';
 
 // Social & AI Components
 import { SocialFeed } from './components/feed/SocialFeed';
@@ -348,6 +349,9 @@ function AppFixed() {
               <Route path="/signup" element={
                 session ? <Navigate to="/dashboard" replace /> : <SignUpPage />
               } />
+              
+              {/* Admin Setup - For creating admin account */}
+              <Route path="/admin-setup" element={<AdminSetup />} />
               
               {/* QA Test Runner - Available to all for testing */}
               <Route path="/qa-tests" element={<QATestRunner />} />

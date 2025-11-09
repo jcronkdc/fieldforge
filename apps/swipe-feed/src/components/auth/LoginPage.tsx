@@ -69,9 +69,21 @@ export const LoginPage: React.FC = () => {
           <form onSubmit={handleLogin} className="space-y-6">
             {/* Error/Success Messages */}
             {error && (
-              <div className="flex items-center space-x-2 p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400">
-                <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                <p className="text-sm">{error}</p>
+              <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg">
+                <div className="flex items-center space-x-2 text-red-400">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <p className="text-sm">{error}</p>
+                </div>
+                {error.includes('Invalid login credentials') && email === 'justincronk@pm.me' && (
+                  <div className="mt-2 pt-2 border-t border-red-500/30">
+                    <p className="text-xs text-red-300">
+                      Admin account may not be set up yet.{' '}
+                      <a href="/admin-setup" className="underline hover:text-red-200">
+                        Click here to set up admin account
+                      </a>
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             
