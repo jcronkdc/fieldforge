@@ -1,103 +1,84 @@
-# Vercel Environment Variables Setup for FieldForge
-
-## Your Supabase Project Details
-
-I've retrieved your actual Supabase credentials through MCP:
-- Project Reference: `lzfzkrylexsarpxypktt`
-- Project URL: `https://lzfzkrylexsarpxypktt.supabase.co`
+# Vercel Environment Variables Setup
 
 ## Required Environment Variables
 
-You need to add these to your Vercel project:
+You need to add these environment variables in your Vercel project settings:
 
-### 1. Supabase Configuration
+### 1. Go to Vercel Dashboard
+1. Navigate to your project
+2. Click on "Settings" tab
+3. Click on "Environment Variables" in the left sidebar
 
-```bash
-VITE_SUPABASE_URL=https://lzfzkrylexsarpxypktt.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6ZnprcnlsZXhzYXJweHlwa3R0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0MzU4NTMsImV4cCI6MjA3ODAxMTg1M30.NkvmFfttYQ-DUpG3KLK10AGrJRS9OlQ-83XXX6CU7cY
+### 2. Add These Variables
+
+| Variable Name | Description | Where to Find It |
+|--------------|-------------|------------------|
+| `VITE_SUPABASE_URL` | Your Supabase project URL | Supabase Dashboard → Settings → API |
+| `VITE_SUPABASE_ANON_KEY` | Your Supabase anonymous key | Supabase Dashboard → Settings → API |
+| `VITE_GOOGLE_PLACES_API_KEY` | Google Places API key | Google Cloud Console |
+
+### 3. Example Values Format
+
+```env
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+VITE_GOOGLE_PLACES_API_KEY=AIzaSy...
 ```
 
-## How to Get Your Supabase Anon Key
+## Important Notes
 
-✅ **Already Retrieved!** I've obtained your anon key through the MCP connection.
+⚠️ **VITE_ Prefix Required**: All client-side environment variables in Vite must be prefixed with `VITE_`
 
-If you need to access your Supabase Dashboard:
-1. Go to your Supabase Dashboard: https://supabase.com/dashboard/project/lzfzkrylexsarpxypktt
-2. Click on **Settings** (gear icon) in the left sidebar
-3. Click on **API** under Configuration
-4. Find the **anon public** key (it starts with `eyJ...`)
-5. Copy this entire key
-
-## How to Add to Vercel
-
-### Option 1: Via Vercel Dashboard (Recommended)
-
-1. Go to: https://vercel.com/dashboard/project/prj_VxsijypjnqozFi6UeKw2uENCN78c
-2. Click on **Settings** tab
-3. Click on **Environment Variables** in the left sidebar
-4. Add each variable:
-   - Click **Add New**
-   - Enter the Key (e.g., `VITE_SUPABASE_URL`)
-   - Enter the Value
-   - Select environments (Production, Preview, Development)
-   - Click **Save**
-
-### Option 2: Via Vercel CLI
-
-If you have Vercel CLI installed:
-
-```bash
-# Set Supabase URL
-vercel env add VITE_SUPABASE_URL production
-# When prompted, enter: https://lzfzkrylexsarpxypktt.supabase.co
-
-# Set Supabase Anon Key
-vercel env add VITE_SUPABASE_ANON_KEY production
-# When prompted, paste the anon key provided above
-```
-
-## All Environment Variables to Add
-
-| Variable Name | Value | Required |
-|--------------|-------|----------|
-| `VITE_SUPABASE_URL` | `https://lzfzkrylexsarpxypktt.supabase.co` | ✅ Yes |
-| `VITE_SUPABASE_ANON_KEY` | See key above (starts with `eyJhbGc...`) | ✅ Yes |
-| `VITE_API_BASE_URL` | Leave empty for now | ❌ No |
-| `VITE_GOOGLE_PLACES_API_KEY` | Your Google API key (if you have one) | ❌ No |
-| `VITE_GOOGLE_MAPS_API_KEY` | Your Google Maps key (if you have one) | ❌ No |
-
-## Quick Vercel Dashboard Link
-
-**Direct link to add environment variables:**
-https://vercel.com/dashboard/project/prj_VxsijypjnqozFi6UeKw2uENCN78c/settings/environment-variables
+⚠️ **Apply to All Environments**: Make sure to add these variables for:
+- Production
+- Preview
+- Development
 
 ## After Adding Variables
 
-1. **Redeploy** your application:
-   - Go to Deployments tab in Vercel
-   - Click the three dots on the latest deployment
-   - Select "Redeploy"
-   - Choose "Use existing Build Cache" ❌ (unchecked)
-   - Click "Redeploy"
+1. **Redeploy your project** for changes to take effect
+2. **Verify routes work** by visiting `/test-routing` on your deployed site
+3. **Test authentication** by trying to log in with the demo account:
+   - Email: `demo@fieldforge.com`
+   - Password: `FieldForge2025!Demo`
 
-2. **Verify** the deployment:
-   - Check build logs for success
-   - Visit https://fieldforge.vercel.app
-   - The login page should load without errors
+## Troubleshooting
 
-## Testing the Connection
+### If routes return 404:
+- Verify `vercel.json` exists with proper rewrites
+- Check that the build output directory is `dist`
 
-Once deployed with proper environment variables:
-1. Go to https://fieldforge.vercel.app
-2. Try the "Demo Account" button
-3. Or create a new account with Sign Up
+### If authentication fails:
+- Verify Supabase URL and anon key are correct
+- Check that the values don't have extra spaces or quotes
+- Ensure variables are prefixed with `VITE_`
 
-## Your Anon Key (Retrieved via MCP)
+### If the app shows blank page:
+- Check browser console for errors
+- Verify all environment variables are set
+- Check build logs in Vercel dashboard
 
-✅ I've already retrieved your anon key. It's included in the configuration above.
-Copy the entire key when adding it to Vercel.
+## Build Command Verification
 
----
+In Vercel project settings, ensure:
+- **Framework Preset**: Vite
+- **Build Command**: `npm run build` or leave as auto-detected
+- **Output Directory**: `dist`
+- **Install Command**: `npm install` or leave as auto-detected
 
-**Your Supabase Project Dashboard Direct Link:**
-https://supabase.com/dashboard/project/lzfzkrylexsarpxypktt
+## Test URLs After Deployment
+
+Once deployed, test these URLs:
+- `/` - Should show futuristic landing page
+- `/test-routing` - Should show route testing page
+- `/login` - Should show login page
+- `/signup` - Should show signup page
+- `/dashboard` - Should redirect to `/` if not logged in
+
+## Support
+
+If issues persist after following this guide:
+1. Check Vercel build logs for errors
+2. Verify all environment variables are correctly set
+3. Test locally with the same environment variables
+4. Clear browser cache and try again
