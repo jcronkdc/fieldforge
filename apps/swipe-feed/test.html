@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FieldForge Test</title>
+</head>
+<body>
+    <h1>Testing FieldForge</h1>
+    <div id="app-status">Checking...</div>
+    <script>
+        // Test if JavaScript is working
+        document.getElementById('app-status').innerHTML = 'JavaScript is working!';
+        
+        // Test if we can reach the app
+        fetch('http://localhost:5173')
+            .then(res => res.text())
+            .then(html => {
+                console.log('App HTML received:', html.length + ' bytes');
+                document.getElementById('app-status').innerHTML += '<br>Server is responding!';
+                
+                // Check if React is loading
+                if (html.includes('src="/src/main.tsx"')) {
+                    document.getElementById('app-status').innerHTML += '<br>React app detected!';
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                document.getElementById('app-status').innerHTML += '<br>Error: ' + err.message;
+            });
+            
+        // Try to load the actual app in an iframe
+        setTimeout(() => {
+            const iframe = document.createElement('iframe');
+            iframe.src = 'http://localhost:5173';
+            iframe.style.width = '100%';
+            iframe.style.height = '600px';
+            iframe.style.border = '2px solid blue';
+            document.body.appendChild(iframe);
+        }, 1000);
+    </script>
+</body>
+</html>
