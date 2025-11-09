@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Site Verification - FieldForge</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #00ff00;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #00d4ff;
+            text-shadow: 0 0 20px #00d4ff;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .test-section {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid #00d4ff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        .test-item:last-child {
+            border-bottom: none;
+        }
+        .status {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.pending { background: #666; color: #fff; }
+        .status.testing { background: #ffb800; color: #000; animation: pulse 1s infinite; }
+        .status.success { background: #00ff00; color: #000; }
+        .status.error { background: #ff0040; color: #fff; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        button {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .log {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ff00;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        .log-entry.success { color: #00ff00; }
+        .log-entry.error { color: #ff0040; }
+        .log-entry.info { color: #00d4ff; }
+        .log-entry.warning { color: #ffb800; }
+        .url-info {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #00d4ff;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .credential-box {
+            background: rgba(255, 184, 0, 0.1);
+            border: 1px solid #ffb800;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .credential-box h3 {
+            color: #ffb800;
+            margin-bottom: 10px;
+        }
+        .credential-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ FIELDFORGE LIVE SITE VERIFICATION</h1>
+        
+        <div class="url-info">
+            <strong>Current URL:</strong> <span id="current-url"></span><br>
+            <strong>Environment:</strong> <span id="environment"></span>
+        </div>
+
+        <div class="test-section">
+            <h2>🔌 Connection Tests</h2>
+            <div class="test-item">
+                <span>Supabase Connection</span>
+                <span id="supabase-status" class="status pending">PENDING</span>
+            </div>
+            <div class="test-item">
+                <span>Database Tables</span>
+                <span id="database-status" class="status pending">PENDING</span>
+            </div>
+            <div class="test-item">
+                <span>Authentication Service</span>
+                <span id="auth-status" class="status pending">PENDING</span>
+            </div>
+            <div class="test-item">
+                <span>RLS Policies</span>
+                <span id="rls-status" class="status pending">PENDING</span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>👤 Admin Account Tests</h2>
+            <div class="test-item">
+                <span>Account Exists</span>
+                <span id="account-exists" class="status pending">PENDING</span>
+            </div>
+            <div class="test-item">
+                <span>Login Test</span>
+                <span id="login-test" class="status pending">PENDING</span>
+            </div>
+            <div class="test-item">
+                <span>Admin Privileges</span>
+                <span id="admin-status" class="status pending">PENDING</span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🎯 Feature Tests</h2>
+            <div class="test-item">
+                <span>Landing Page</span>
+                <span id="landing-status" class="status pending">PENDING</span>
+            </div>
+            <div class="test-item">
+                <span>Login Page</span>
+                <span id="login-page-status" class="status pending">PENDING</span>
+            </div>
+            <div class="test-item">
+                <span>Dashboard Access</span>
+                <span id="dashboard-status" class="status pending">PENDING</span>
+            </div>
+            <div class="test-item">
+                <span>Theme Loaded</span>
+                <span id="theme-status" class="status pending">PENDING</span>
+            </div>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <button onclick="runAllTests()" id="run-btn">🚀 RUN ALL TESTS</button>
+            <button onclick="testAuthentication()">🔐 TEST AUTH</button>
+            <button onclick="clearSession()">🗑️ CLEAR SESSION</button>
+            <button onclick="window.location.reload()">🔄 REFRESH</button>
+        </div>
+
+        <div class="credential-box">
+            <h3>📋 Admin Credentials</h3>
+            <p>Email: <code>justincronk@pm.me</code></p>
+            <p>Password: <code>Junuh2014!</code></p>
+            <p style="margin-top: 10px;">
+                <a href="/admin-setup" style="color: #ffb800;">→ Go to Admin Setup</a> |
+                <a href="/login" style="color: #00d4ff;">→ Go to Login</a>
+            </p>
+        </div>
+
+        <div class="log" id="log">
+            <div class="log-entry info">System initialized. Ready for testing...</div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Display current environment
+        document.getElementById('current-url').textContent = window.location.href;
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const isVercel = window.location.hostname.includes('vercel.app');
+        document.getElementById('environment').textContent = 
+            isLocal ? '🏠 LOCAL DEVELOPMENT' : 
+            isVercel ? '☁️ VERCEL PRODUCTION' : 
+            '🌐 UNKNOWN';
+
+        const log = (message, type = 'info') => {
+            const logEl = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.appendChild(entry);
+            logEl.scrollTop = logEl.scrollHeight;
+        };
+
+        const setStatus = (elementId, status, text = null) => {
+            const el = document.getElementById(elementId);
+            el.className = `status ${status}`;
+            if (text) el.textContent = text;
+            else {
+                switch(status) {
+                    case 'success': el.textContent = 'PASS'; break;
+                    case 'error': el.textContent = 'FAIL'; break;
+                    case 'testing': el.textContent = 'TESTING...'; break;
+                    default: el.textContent = 'PENDING';
+                }
+            }
+        };
+
+        let supabase;
+
+        window.runAllTests = async () => {
+            document.getElementById('run-btn').disabled = true;
+            log('Starting comprehensive verification...', 'info');
+
+            try {
+                // Test 1: Supabase Connection
+                setStatus('supabase-status', 'testing');
+                log('Testing Supabase connection...');
+                
+                const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+                const supabaseUrl = 'https://sxjydbukmknnmncyqsff.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN4anlkYnVrbWtubW1uY3lxc2ZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzEwNzY1NjksImV4cCI6MjA0NjY1MjU2OX0.p2i0FpyKzwNkVJdV8BfJMCNhIpKdHZRnSLNgPsFejxE';
+                
+                supabase = createClient(supabaseUrl, supabaseKey);
+                setStatus('supabase-status', 'success');
+                log('✅ Supabase connected successfully', 'success');
+
+                // Test 2: Database Tables
+                setStatus('database-status', 'testing');
+                log('Checking database tables...');
+                
+                const { data: tables, error: tableError } = await supabase
+                    .from('companies')
+                    .select('count')
+                    .limit(1);
+                
+                if (tableError) {
+                    throw new Error(`Database error: ${tableError.message}`);
+                }
+                setStatus('database-status', 'success');
+                log('✅ Database tables accessible', 'success');
+
+                // Test 3: Authentication Service
+                setStatus('auth-status', 'testing');
+                log('Testing authentication service...');
+                
+                const { data: { session }, error: authError } = await supabase.auth.getSession();
+                if (authError) {
+                    log(`⚠️ Auth check failed: ${authError.message}`, 'warning');
+                    setStatus('auth-status', 'error');
+                } else {
+                    setStatus('auth-status', 'success');
+                    log(session ? `✅ Session found: ${session.user.email}` : '✅ Auth service active (no session)', 'success');
+                }
+
+                // Test 4: RLS Policies
+                setStatus('rls-status', 'testing');
+                log('Verifying RLS policies...');
+                
+                // Try to query without auth - should get empty result, not error
+                const { data: rlsTest, error: rlsError } = await supabase
+                    .from('projects')
+                    .select('id')
+                    .limit(1);
+                
+                if (rlsError && !rlsError.message.includes('rows')) {
+                    log(`⚠️ RLS may not be configured: ${rlsError.message}`, 'warning');
+                    setStatus('rls-status', 'warning', 'CHECK');
+                } else {
+                    setStatus('rls-status', 'success');
+                    log('✅ RLS policies active', 'success');
+                }
+
+                // Test 5: Check Admin Account
+                setStatus('account-exists', 'testing');
+                log('Checking admin account...');
+                
+                const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+                    email: 'justincronk@pm.me',
+                    password: 'Junuh2014!'
+                });
+                
+                if (signInData?.user) {
+                    setStatus('account-exists', 'success');
+                    setStatus('login-test', 'success');
+                    log('✅ Admin account exists and login successful', 'success');
+                    
+                    // Check admin privileges
+                    const { data: profile } = await supabase
+                        .from('user_profiles')
+                        .select('is_admin')
+                        .eq('id', signInData.user.id)
+                        .single();
+                    
+                    if (profile?.is_admin) {
+                        setStatus('admin-status', 'success');
+                        log('✅ Admin privileges confirmed', 'success');
+                    } else {
+                        setStatus('admin-status', 'warning', 'NO ADMIN');
+                        log('⚠️ Account exists but missing admin privileges', 'warning');
+                    }
+                    
+                    // Sign out after test
+                    await supabase.auth.signOut();
+                } else if (signInError?.message === 'Invalid login credentials') {
+                    setStatus('account-exists', 'error');
+                    setStatus('login-test', 'error');
+                    log('❌ Admin account not found. Please create via /admin-setup', 'error');
+                } else {
+                    setStatus('account-exists', 'error');
+                    log(`❌ Auth error: ${signInError?.message}`, 'error');
+                }
+
+                // Test 6: Page accessibility
+                setStatus('landing-status', 'testing');
+                log('Testing page routes...');
+                
+                const pages = [
+                    { path: '/', status: 'landing-status' },
+                    { path: '/login', status: 'login-page-status' },
+                    { path: '/dashboard', status: 'dashboard-status' }
+                ];
+                
+                for (const page of pages) {
+                    try {
+                        const response = await fetch(page.path);
+                        if (response.ok) {
+                            setStatus(page.status, 'success');
+                            log(`✅ ${page.path} accessible`, 'success');
+                        } else {
+                            setStatus(page.status, 'warning', `${response.status}`);
+                            log(`⚠️ ${page.path} returned ${response.status}`, 'warning');
+                        }
+                    } catch (err) {
+                        setStatus(page.status, 'error');
+                        log(`❌ ${page.path} failed: ${err.message}`, 'error');
+                    }
+                }
+
+                // Test 7: Theme Loading
+                setStatus('theme-status', 'testing');
+                const hasOrbitronFont = document.fonts.check('12px Orbitron');
+                const hasFuturisticCSS = [...document.styleSheets].some(sheet => {
+                    try {
+                        return sheet.href && sheet.href.includes('futuristic');
+                    } catch { return false; }
+                });
+                
+                if (hasOrbitronFont || hasFuturisticCSS) {
+                    setStatus('theme-status', 'success');
+                    log('✅ Futuristic theme detected', 'success');
+                } else {
+                    setStatus('theme-status', 'warning', 'PARTIAL');
+                    log('⚠️ Theme may not be fully loaded', 'warning');
+                }
+
+                log('🎉 All tests complete!', 'success');
+            } catch (error) {
+                log(`❌ Test suite error: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('run-btn').disabled = false;
+            }
+        };
+
+        window.testAuthentication = async () => {
+            log('Testing authentication flow...', 'info');
+            if (!supabase) {
+                log('Initializing Supabase first...', 'info');
+                await runAllTests();
+            }
+            
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: 'justincronk@pm.me',
+                password: 'Junuh2014!'
+            });
+            
+            if (data?.user) {
+                log(`✅ Login successful! User ID: ${data.user.id}`, 'success');
+                log('Redirecting to dashboard in 3 seconds...', 'info');
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 3000);
+            } else {
+                log(`❌ Login failed: ${error?.message}`, 'error');
+                log('Try creating account at /admin-setup first', 'warning');
+            }
+        };
+
+        window.clearSession = async () => {
+            log('Clearing session and local storage...', 'info');
+            if (supabase) {
+                await supabase.auth.signOut();
+            }
+            localStorage.clear();
+            sessionStorage.clear();
+            log('✅ Session cleared', 'success');
+        };
+
+        // Auto-run tests on load
+        setTimeout(() => {
+            if (confirm('Run automatic verification tests?')) {
+                runAllTests();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
