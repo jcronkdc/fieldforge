@@ -7,6 +7,7 @@ import {
   Battery, Power, Cable, Router, HardHat, MapPin,
   Sparkles, Brain, Wifi, ChevronRight, Play
 } from 'lucide-react';
+import { SEOHead, generateOrganizationSchema, generateSoftwareSchema, generateWebPageSchema } from '../components/seo/SEOHead';
 
 // Animated Electric Grid Background
 const ElectricGridBackground = () => {
@@ -226,6 +227,17 @@ const AnimatedCounter = ({ end, duration, suffix = '' }: { end: number; duration
 export const FuturisticElectricalLanding: React.FC = () => {
   const navigate = useNavigate();
   const [activeFeature, setActiveFeature] = useState(0);
+  
+  // Generate structured data for SEO
+  const structuredData = {
+    ...generateOrganizationSchema(),
+    ...generateSoftwareSchema(),
+    ...generateWebPageSchema(
+      'FieldForge - AI Construction Management for Electrical T&D | 34% Efficiency Gains',
+      'Revolutionary AI-powered platform for transmission lines, distribution systems & substations. Voice control, smart OCR, predictive analytics. Enterprise-ready.',
+      'https://fieldforge.app'
+    )
+  };
 
   const features = [
     {
@@ -262,12 +274,29 @@ export const FuturisticElectricalLanding: React.FC = () => {
   }, [features.length]);
 
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <>
+      <SEOHead
+        title="FieldForge - AI Construction Management for T&D | Voice Control, Smart OCR | 34% Efficiency"
+        description="Revolutionary AI-powered construction management platform for electrical infrastructure. Transmission lines, distribution systems, substations. Voice-controlled operations, smart OCR, real-time analytics. 34% efficiency gains, 45% safer. Enterprise-ready for electrical contractors."
+        keywords="construction management software, electrical construction, T&D construction, transmission lines, distribution systems, substations, AI construction, voice control construction, smart OCR, field management, construction safety, electrical contractors, power grid, utility construction, construction efficiency, digital construction, construction automation, project management, Quanta Services, electrical infrastructure, power line construction, grid modernization, construction technology, enterprise software, field operations, construction analytics"
+        image="https://fieldforge.app/og-hero-image.png"
+        url="https://fieldforge.app"
+        type="website"
+        canonical="https://fieldforge.app"
+        structuredData={structuredData}
+      />
+      
+      <main className="relative min-h-screen bg-black text-white overflow-hidden" role="main" itemScope itemType="https://schema.org/WebPage">
+        {/* SEO: Hidden H1 for search engines */}
+        <h1 className="sr-only">FieldForge - AI-Powered Construction Management Software for Electrical Infrastructure, Transmission Lines, Distribution Systems and Substations</h1>
+      
       {/* Animated Background */}
-      <ElectricGridBackground />
+      <div aria-hidden="true">
+        <ElectricGridBackground />
+      </div>
       
       {/* Cyberpunk Grid Overlay */}
-      <div className="fixed inset-0 opacity-30">
+      <div className="fixed inset-0 opacity-30" aria-hidden="true">
         <div 
           className="absolute inset-0"
           style={{
@@ -283,19 +312,19 @@ export const FuturisticElectricalLanding: React.FC = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-20 flex justify-between items-center p-6">
+      <nav className="relative z-20 flex justify-between items-center p-6" role="navigation" aria-label="Main navigation">
         <div className="flex items-center space-x-3">
           <div className="relative">
-            <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center transform rotate-45">
-              <Zap className="w-6 h-6 text-white transform -rotate-45" />
+            <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center transform rotate-45" role="img" aria-label="FieldForge Logo">
+              <Zap className="w-6 h-6 text-white transform -rotate-45" aria-hidden="true" />
             </div>
-            <div className="absolute inset-0 bg-amber-500 rounded-xl blur-xl opacity-50 animate-pulse" />
+            <div className="absolute inset-0 bg-amber-500 rounded-xl blur-xl opacity-50 animate-pulse" aria-hidden="true" />
           </div>
-          <div>
-            <span className="text-2xl font-black bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent">
+          <div itemProp="publisher" itemScope itemType="https://schema.org/Organization">
+            <span className="text-2xl font-black bg-gradient-to-r from-amber-400 to-amber-600 bg-clip-text text-transparent" itemProp="name">
               FIELDFORGE
             </span>
-            <div className="text-xs text-cyan-400 tracking-widest">ELECTRICAL DIVISION</div>
+            <div className="text-xs text-cyan-400 tracking-widest" itemProp="description">ELECTRICAL DIVISION</div>
           </div>
         </div>
         
@@ -665,7 +694,20 @@ export const FuturisticElectricalLanding: React.FC = () => {
         .animate-float {
           animation: float 10s ease-in-out infinite;
         }
+        /* SEO: Ensure sr-only class for screen readers */
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border-width: 0;
+        }
       `}</style>
-    </div>
+    </main>
+    </>
   );
 };

@@ -1,0 +1,87 @@
+# FieldForge Robots.txt
+# AI-Powered Construction Management Platform
+# https://fieldforge.app
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /_next/
+Disallow: /tmp/
+Disallow: /drafts/
+
+# Allow search engines to access important pages
+Allow: /login
+Allow: /signup
+Allow: /features
+Allow: /pricing
+Allow: /about
+Allow: /contact
+Allow: /blog
+Allow: /case-studies
+Allow: /acquisition
+
+# Sitemap location
+Sitemap: https://fieldforge.app/sitemap.xml
+Sitemap: https://fieldforge.app/sitemap-index.xml
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
+# Specific bot rules for better SEO
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Cache control hints
+User-agent: *
+Disallow: /*.json$
+Disallow: /*.xml$
+Allow: /sitemap.xml
+Allow: /sitemap-*.xml
+Allow: /feed.xml
