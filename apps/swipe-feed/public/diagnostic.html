@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FieldForge Diagnostic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            color: #fbbf24;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card h2 {
+            color: #60a5fa;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-value {
+            font-weight: bold;
+        }
+        
+        .status-value.good {
+            color: #10b981;
+        }
+        
+        .status-value.bad {
+            color: #ef4444;
+        }
+        
+        .status-value.warning {
+            color: #f59e0b;
+        }
+        
+        button {
+            background: #fbbf24;
+            color: #0f172a;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 1rem;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+        }
+        
+        button.danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        button.danger:hover {
+            background: #dc2626;
+        }
+        
+        pre {
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.875rem;
+        }
+        
+        .test-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .test-result {
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .test-result.pass {
+            border: 2px solid #10b981;
+        }
+        
+        .test-result.fail {
+            border: 2px solid #ef4444;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(251, 191, 36, 0.3);
+            border-top-color: #fbbf24;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 FieldForge System Diagnostic</h1>
+        
+        <div class="card">
+            <h2>📊 System Status</h2>
+            <div id="system-status">
+                <div class="status-item">
+                    <span>Page Loaded</span>
+                    <span class="status-value good">✅ YES</span>
+                </div>
+                <div class="status-item">
+                    <span>JavaScript Enabled</span>
+                    <span class="status-value good">✅ YES</span>
+                </div>
+                <div class="status-item">
+                    <span>Server Connection</span>
+                    <span class="status-value" id="server-status">
+                        <span class="spinner"></span> Checking...
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span>Supabase Connection</span>
+                    <span class="status-value" id="supabase-status">
+                        <span class="spinner"></span> Checking...
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span>Session Status</span>
+                    <span class="status-value" id="session-status">
+                        <span class="spinner"></span> Checking...
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span>React App</span>
+                    <span class="status-value" id="react-status">
+                        <span class="spinner"></span> Checking...
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🧪 Quick Tests</h2>
+            <div class="test-results" id="test-results"></div>
+        </div>
+        
+        <div class="card">
+            <h2>🔨 Actions</h2>
+            <div style="margin-bottom: 1rem;">
+                <button onclick="clearAll()">🗑️ Clear All Storage</button>
+                <button onclick="testRoutes()">🔗 Test Routes</button>
+                <button onclick="checkStorage()">💾 Check Storage</button>
+                <button class="danger" onclick="forceReset()">⚠️ Force Reset</button>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <button onclick="goToApp()">🏠 Go to App</button>
+                <button onclick="goToLogin()">🔑 Go to Login</button>
+                <button onclick="goToSignup()">📝 Go to Signup</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>📋 Storage Data</h2>
+            <pre id="storage-data">Loading...</pre>
+        </div>
+        
+        <div class="card">
+            <h2>🔍 Console Output</h2>
+            <pre id="console-output">Monitoring console...</pre>
+        </div>
+    </div>
+
+    <script>
+        // Console monitoring
+        const consoleOutput = [];
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            consoleOutput.push({ type: 'log', message: args.join(' '), time: new Date().toLocaleTimeString() });
+            updateConsoleDisplay();
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            consoleOutput.push({ type: 'error', message: args.join(' '), time: new Date().toLocaleTimeString() });
+            updateConsoleDisplay();
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            consoleOutput.push({ type: 'warn', message: args.join(' '), time: new Date().toLocaleTimeString() });
+            updateConsoleDisplay();
+        };
+        
+        function updateConsoleDisplay() {
+            const display = document.getElementById('console-output');
+            display.textContent = consoleOutput.slice(-10).map(entry => 
+                `[${entry.time}] ${entry.type.toUpperCase()}: ${entry.message}`
+            ).join('\n');
+        }
+        
+        // Status checks
+        async function checkServer() {
+            try {
+                const response = await fetch('/');
+                document.getElementById('server-status').innerHTML = response.ok ? 
+                    '<span class="good">✅ Connected</span>' : 
+                    '<span class="bad">❌ Error: ' + response.status + '</span>';
+            } catch (error) {
+                document.getElementById('server-status').innerHTML = '<span class="bad">❌ Offline</span>';
+            }
+        }
+        
+        async function checkSupabase() {
+            const supabaseUrl = localStorage.getItem('VITE_SUPABASE_URL') || 
+                               'https://sxjydbukmknnmncyqsff.supabase.co';
+            try {
+                const response = await fetch(supabaseUrl + '/auth/v1/health');
+                document.getElementById('supabase-status').innerHTML = response.ok ? 
+                    '<span class="good">✅ Healthy</span>' : 
+                    '<span class="warning">⚠️ Status: ' + response.status + '</span>';
+            } catch (error) {
+                document.getElementById('supabase-status').innerHTML = '<span class="bad">❌ Unreachable</span>';
+            }
+        }
+        
+        function checkSession() {
+            const sessionKeys = Object.keys(localStorage).filter(k => k.includes('supabase') && k.includes('auth'));
+            if (sessionKeys.length > 0) {
+                const sessionData = localStorage.getItem(sessionKeys[0]);
+                const hasToken = sessionData && sessionData.includes('access_token');
+                document.getElementById('session-status').innerHTML = hasToken ? 
+                    '<span class="warning">⚠️ Active Session</span>' : 
+                    '<span class="good">✅ No Session</span>';
+            } else {
+                document.getElementById('session-status').innerHTML = '<span class="good">✅ No Session</span>';
+            }
+        }
+        
+        function checkReact() {
+            const rootElement = document.getElementById('root');
+            const hasReact = rootElement && rootElement._reactRootContainer;
+            document.getElementById('react-status').innerHTML = hasReact ? 
+                '<span class="good">✅ Loaded</span>' : 
+                '<span class="warning">⚠️ Not Detected</span>';
+        }
+        
+        function checkStorage() {
+            const storageData = {
+                localStorage: {},
+                sessionStorage: {},
+                cookies: document.cookie
+            };
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                storageData.localStorage[key] = value.length > 100 ? value.substring(0, 100) + '...' : value;
+            }
+            
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                const value = sessionStorage.getItem(key);
+                storageData.sessionStorage[key] = value.length > 100 ? value.substring(0, 100) + '...' : value;
+            }
+            
+            document.getElementById('storage-data').textContent = JSON.stringify(storageData, null, 2);
+        }
+        
+        function clearAll() {
+            if (confirm('Clear all storage and reload?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                document.cookie.split(";").forEach(c => {
+                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                });
+                location.reload();
+            }
+        }
+        
+        function forceReset() {
+            if (confirm('This will clear everything and hard reload. Continue?')) {
+                clearAll();
+                window.location.href = '/?reset=' + Date.now();
+            }
+        }
+        
+        async function testRoutes() {
+            const routes = ['/', '/login', '/signup', '/dashboard', '/test'];
+            const results = document.getElementById('test-results');
+            results.innerHTML = '';
+            
+            for (const route of routes) {
+                const div = document.createElement('div');
+                div.className = 'test-result';
+                div.innerHTML = `<strong>${route}</strong><br><span class="spinner"></span>`;
+                results.appendChild(div);
+                
+                try {
+                    const response = await fetch(route);
+                    div.className = response.ok ? 'test-result pass' : 'test-result fail';
+                    div.innerHTML = `<strong>${route}</strong><br>${response.ok ? '✅ OK' : '❌ ' + response.status}`;
+                } catch (error) {
+                    div.className = 'test-result fail';
+                    div.innerHTML = `<strong>${route}</strong><br>❌ Error`;
+                }
+            }
+        }
+        
+        function goToApp() {
+            window.location.href = '/';
+        }
+        
+        function goToLogin() {
+            window.location.href = '/login';
+        }
+        
+        function goToSignup() {
+            window.location.href = '/signup';
+        }
+        
+        // Run checks on load
+        window.addEventListener('DOMContentLoaded', () => {
+            checkServer();
+            checkSupabase();
+            checkSession();
+            checkStorage();
+            setTimeout(checkReact, 1000);
+        });
+        
+        // Auto-refresh storage display
+        setInterval(checkStorage, 5000);
+    </script>
+</body>
+</html>
