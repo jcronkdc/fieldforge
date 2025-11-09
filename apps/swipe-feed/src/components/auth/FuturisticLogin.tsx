@@ -29,8 +29,8 @@ export const FuturisticLogin: React.FC = () => {
       if (error.message === 'Invalid login credentials' && email === 'justincronk@pm.me') {
         setError(
           <div>
-            Invalid credentials. 
-            <Link to="/admin-setup" className="ml-2 text-amber-500 hover:text-amber-400 underline">
+            Invalid credentials.
+            <Link to="/admin-setup" className="ml-2 text-slate-900 underline">
               Setup admin account →
             </Link>
           </div>
@@ -44,122 +44,105 @@ export const FuturisticLogin: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 flex items-center justify-center p-6">
-      {/* Subtle Background Pattern */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" aria-hidden="true" />
-      
-      {/* Main Login Container */}
-      <div className="relative z-10 w-full max-w-md">
-        {/* Logo Section */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-400 rounded-lg mb-4">
-            <Zap className="w-8 h-8 text-slate-900" />
+    <div className="min-h-screen bg-white flex items-center justify-center px-6 py-12">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(15,76,129,0.08),_transparent_55%)]" aria-hidden />
+
+      <div className="w-full max-w-2xl grid gap-10 rounded-3xl border border-slate-200 bg-white p-10 shadow-xl lg:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <div className="flex items-center gap-3">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-white">
+              <Zap className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-slate-900">FieldForge</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Secure Access</p>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-1">
-            FieldForge
-          </h1>
-          <p className="text-slate-400 text-sm">Electrical Construction Operations</p>
-        </div>
 
-        {/* Login Form */}
-        <div className="bg-slate-900 border border-slate-800 rounded-lg p-8">
-          <h2 className="text-xl font-semibold text-white mb-6">
-            Sign in to your account
-          </h2>
+          <h1 className="mt-8 text-3xl font-semibold text-slate-900">Sign in to continue</h1>
+          <p className="mt-3 text-sm text-slate-600">
+            Enter your credentials to access the FieldForge control surface. Multi-factor authentication and SSO are available on enterprise plans.
+          </p>
 
-          {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg flex items-start space-x-2">
-              <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
-              <div className="text-red-400 text-sm">{error}</div>
+          <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+            <div className="flex items-center gap-3 text-slate-700">
+              <Shield className="h-5 w-5" />
+              <p className="text-sm font-semibold">Built for regulated environments</p>
             </div>
-          )}
-
-          <form onSubmit={handleLogin} className="space-y-4">
-            {/* Email Input */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-                Email address
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-500" />
-                </div>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2.5 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                  placeholder="you@company.com"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Password Input */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-500" />
-                </div>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2.5 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-4 bg-amber-400 hover:bg-amber-300 text-slate-900 font-semibold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-            >
-              {loading ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
-                  <span>Signing in...</span>
-                </>
-              ) : (
-                <>
-                  <span>Sign in</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="mt-6 pt-6 border-t border-slate-800">
-            <div className="flex items-center justify-between text-sm">
-              <Link
-                to="/signup"
-                className="text-slate-400 hover:text-white transition-colors"
-              >
-                Create account
-              </Link>
-              <Link
-                to="/admin-setup"
-                className="text-amber-400 hover:text-amber-300 transition-colors"
-              >
-                Admin setup
-              </Link>
-            </div>
+            <p className="mt-3 text-xs text-slate-600">
+              SOC 2, SSO, and detailed audit trails ensure compliance with utility and regulator standards.
+            </p>
           </div>
         </div>
 
-        {/* Security Badge */}
-        <div className="mt-6 text-center">
-          <div className="inline-flex items-center space-x-2 text-slate-500 text-xs">
-            <Shield className="w-4 h-4" />
-            <span>Secure authentication</span>
+        <div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            {error && (
+              <div className="mb-4 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+                <AlertCircle className="mt-0.5 h-4 w-4" />
+                <div>{error}</div>
+              </div>
+            )}
+
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div>
+                <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Email address
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10 pr-3 py-2 border border-slate-300 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10"
+                    placeholder="you@company.com"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                    <Lock className="h-4 w-4" />
+                  </div>
+                  <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-10 pr-3 py-2 border border-slate-300 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10"
+                    placeholder="Enter your password"
+                    required
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full btn-primary justify-center"
+              >
+                {loading ? 'Signing in…' : 'Sign in'}
+                {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
+              </button>
+            </form>
+
+            <div className="mt-8 flex items-center justify-between text-sm text-slate-600">
+              <Link to="/signup" className="hover:underline">
+                Request access
+              </Link>
+              <Link to="/admin-setup" className="hover:underline">
+                Administrator setup
+              </Link>
+            </div>
           </div>
         </div>
       </div>

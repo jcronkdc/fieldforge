@@ -34,37 +34,37 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       icon: LayoutDashboard,
       path: '/dashboard',
       badge: null,
-      color: 'text-amber-500'
+      color: 'text-slate-900'
     },
     {
       label: 'Social Feed',
       icon: MessageSquare,
       path: '/feed',
       badge: 'NEW',
-      badgeColor: 'bg-cyan-500',
-      color: 'text-cyan-500'
+      badgeColor: 'bg-slate-900 text-white',
+      color: 'text-slate-900'
     },
     {
       label: 'Live Analytics',
       icon: Activity,
       path: '/analytics',
       badge: 'LIVE',
-      badgeColor: 'bg-purple-500',
-      color: 'text-purple-500'
+      badgeColor: 'bg-emerald-500 text-white',
+      color: 'text-slate-900'
     },
     {
       label: 'Projects',
       icon: Building2,
       path: '/projects',
       badge: null,
-      color: 'text-blue-500'
+      color: 'text-slate-900'
     },
     {
       label: 'Field Operations',
       icon: HardHat,
       path: '/field',
       badge: null,
-      color: 'text-green-500',
+      color: 'text-slate-900',
       subItems: [
         { label: 'Operational Index', path: '/field' },
         { label: 'Crew Management', path: '/field/crews' },
@@ -77,7 +77,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       icon: Shield,
       path: '/safety',
       badge: null,
-      color: 'text-red-500',
+      color: 'text-slate-900',
       subItems: [
         { label: 'Safety Hub', path: '/safety' },
         { label: 'Briefings', path: '/safety/briefing' },
@@ -90,7 +90,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       icon: Package,
       path: '/equipment',
       badge: null,
-      color: 'text-blue-500',
+      color: 'text-slate-900',
       subItems: [
         { label: 'Equipment Hub', path: '/equipment' },
         { label: 'Inventory', path: '/equipment/inventory' },
@@ -102,8 +102,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       icon: ClipboardCheck,
       path: '/qaqc',
       badge: '3',
-      badgeColor: 'bg-orange-500',
-      color: 'text-orange-500',
+      badgeColor: 'bg-slate-200 text-slate-700',
+      color: 'text-slate-900',
       subItems: [
         { label: 'QAQC Hub', path: '/qaqc' },
         { label: 'Inspections', path: '/qaqc/inspections' },
@@ -115,7 +115,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       icon: FileText,
       path: '/documents',
       badge: null,
-      color: 'text-purple-500',
+      color: 'text-slate-900',
       subItems: [
         { label: 'Document Hub', path: '/documents' },
         { label: 'Drawings', path: '/documents/drawings' },
@@ -127,7 +127,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       icon: Calendar,
       path: '/schedule',
       badge: null,
-      color: 'text-cyan-500',
+      color: 'text-slate-900',
       subItems: [
         { label: 'Master Schedule', path: '/schedule' },
         { label: '3-Week Lookahead', path: '/schedule/lookahead' },
@@ -139,60 +139,58 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       icon: Cloud,
       path: '/weather',
       badge: null,
-      color: 'text-sky-500'
+      color: 'text-slate-900'
     },
     {
       label: 'Messages',
       icon: MessageSquare,
       path: '/messages',
       badge: '5',
-      badgeColor: 'bg-indigo-500',
-      color: 'text-indigo-500'
+      badgeColor: 'bg-slate-200 text-slate-700',
+      color: 'text-slate-900'
     },
     {
       label: '3D Map',
       icon: Map,
       path: '/map',
       badge: 'NEW',
-      badgeColor: 'bg-emerald-500',
-      color: 'text-emerald-500'
+      badgeColor: 'bg-slate-200 text-slate-700',
+      color: 'text-slate-900'
     },
     {
       label: 'AI Assistant',
       icon: Brain,
       path: '/ai',
       badge: 'BETA',
-      badgeColor: 'bg-violet-500',
-      color: 'text-violet-500'
+      badgeColor: 'bg-slate-200 text-slate-700',
+      color: 'text-slate-900'
     }
   ];
 
   const isActive = (path: string) => location.pathname === path;
-  const hasActiveSubItem = (item: any) => 
+  const hasActiveSubItem = (item: any) =>
     item.subItems?.some((sub: any) => location.pathname === sub.path);
 
   return (
-    <div className="min-h-screen bg-slate-900 flex">
+    <div className="min-h-screen bg-[#f5f7fb] flex">
       {/* Sidebar */}
-      <aside className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-slate-800/95 backdrop-blur-lg border-r border-slate-700
-        transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-68 bg-white border-r border-slate-200 shadow-md transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      >
         {/* Logo */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-slate-700">
-          <Link to="/dashboard" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center">
-              <Zap className="w-6 h-6 text-white" />
+        <div className="h-16 flex items-center justify-between px-5 border-b border-slate-200">
+          <Link to="/dashboard" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center">
+              <Zap className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white">FieldForge</h1>
-              <p className="text-xs text-amber-500">T&D Construction</p>
+              <h1 className="text-lg font-semibold text-slate-900">FieldForge</h1>
+              <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-slate-500">Grid Construction</p>
             </div>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-slate-400 hover:text-white"
+            className="lg:hidden text-slate-500 hover:text-slate-900"
           >
             <X className="w-5 h-5" />
           </button>
@@ -204,39 +202,34 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
             <div key={item.path}>
               <Link
                 to={item.path}
-                className={`
-                  flex items-center justify-between px-3 py-2 rounded-lg transition-all
-                  ${isActive(item.path) || hasActiveSubItem(item)
-                    ? 'bg-slate-700/50 text-white' 
-                    : 'text-slate-400 hover:bg-slate-700/30 hover:text-white'
-                  }
-                `}
+                className={`flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                  isActive(item.path) || hasActiveSubItem(item)
+                    ? 'bg-slate-900 text-white'
+                    : 'text-slate-600 hover:bg-slate-100'
+                }`}
               >
                 <div className="flex items-center space-x-3">
-                  <item.icon className={`w-5 h-5 ${item.color}`} />
+                  <item.icon className={`w-5 h-5 ${isActive(item.path) || hasActiveSubItem(item) ? 'text-white' : 'text-slate-500'}`} />
                   <span className="font-medium">{item.label}</span>
                 </div>
                 {item.badge && (
-                  <span className={`px-2 py-0.5 text-xs rounded-full text-white ${item.badgeColor || 'bg-slate-600'}`}>
+                  <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${item.badgeColor || 'bg-slate-200 text-slate-700'}`}>
                     {item.badge}
                   </span>
                 )}
               </Link>
 
-              {/* Sub Items */}
               {item.subItems && (hasActiveSubItem(item) || isActive(item.path)) && (
                 <div className="ml-8 mt-1 space-y-1">
-                  {item.subItems.map((subItem) => (
+                  {item.subItems.map((subItem: any) => (
                     <Link
                       key={subItem.path}
                       to={subItem.path}
-                      className={`
-                        block px-3 py-1.5 rounded text-sm transition-all
-                        ${isActive(subItem.path) 
-                          ? 'text-amber-500 bg-slate-700/30' 
-                          : 'text-slate-500 hover:text-slate-300'
-                        }
-                      `}
+                      className={`block px-3 py-1.5 rounded-lg text-sm transition-all ${
+                        isActive(subItem.path)
+                          ? 'text-slate-900 font-semibold'
+                          : 'text-slate-500 hover:text-slate-700'
+                      }`}
                     >
                       {subItem.label}
                     </Link>
@@ -248,80 +241,61 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
         </nav>
 
         {/* User Section */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-700 bg-slate-800/95">
+        <div className="absolute bottom-0 left-0 right-0 border-t border-slate-200 bg-white p-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
-                <span className="text-sm font-bold text-white">
-                  {(user.email ?? 'user@fieldforge.app').charAt(0).toUpperCase()}
-                </span>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center font-semibold">
+                {(user.email ?? 'user@fieldforge.app').charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">
+                <p className="text-sm font-semibold text-slate-900 truncate">
                   {(() => {
                     const email = user.email ?? 'user@fieldforge.app';
                     const atIndex = email.indexOf('@');
                     return atIndex > 0 ? email.slice(0, atIndex) : email;
                   })()}
                 </p>
-                <p className="text-xs text-slate-400">Field Supervisor</p>
+                <p className="text-xs text-slate-500">Administrator</p>
               </div>
             </div>
             <button
               onClick={handleSignOut}
-              className="text-slate-400 hover:text-red-400 transition-colors"
-              title="Sign Out"
+              className="inline-flex items-center justify-center rounded-full border border-slate-300 px-2.5 py-2 text-slate-600 hover:bg-slate-100"
+              title="Sign out"
             >
-              <LogOut className="w-5 h-5" />
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col lg:ml-68">
         {/* Top Bar */}
-        <header className="h-16 bg-slate-800/50 backdrop-blur-md border-b border-slate-700 px-4 flex items-center justify-between">
+        <header className="h-16 bg-white border-b border-slate-200 px-5 flex items-center justify-between shadow-sm">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-slate-400 hover:text-white"
+              className="lg:hidden text-slate-500 hover:text-slate-900"
             >
               <Menu className="w-6 h-6" />
             </button>
 
-            {/* Project Selector */}
-            <div className="flex items-center space-x-2 px-3 py-1.5 bg-slate-700/50 rounded-lg">
-              <Building2 className="w-4 h-4 text-amber-500" />
-              <span className="text-sm font-medium text-white">Demo 138kV Substation</span>
-              <ChevronDown className="w-4 h-4 text-slate-400" />
-            </div>
-
-            {/* Live Status */}
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-slate-400">Systems Online</span>
+            <div className="flex items-center space-x-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5">
+              <Building2 className="w-4 h-4 text-slate-600" />
+              <span className="text-sm font-medium text-slate-700">Demo 138kV Substation</span>
+              <ChevronDown className="w-4 h-4 text-slate-500" />
             </div>
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* Weather Widget */}
             <WeatherWidget />
-
-            {/* Emergency Button */}
-            <button className="flex items-center space-x-2 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/50 rounded-lg transition-colors">
-              <Radio className="w-4 h-4 text-red-500" />
-              <span className="text-sm font-medium text-red-500">Emergency</span>
+            <button className="flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-900 hover:bg-slate-100">
+              <Radio className="w-4 h-4" />
+              Emergency
             </button>
-
-            {/* Notifications */}
             <PushNotifications />
-
-            {/* Settings */}
-            <Link
-              to="/settings"
-              className="p-2 text-slate-400 hover:text-white transition-colors"
-            >
+            <Link to="/settings" className="p-2 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">
               <Settings className="w-5 h-5" />
             </Link>
           </div>
@@ -343,7 +317,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}

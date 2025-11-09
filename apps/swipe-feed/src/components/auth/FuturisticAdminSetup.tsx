@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { Zap, Shield, CheckCircle, AlertCircle, ArrowRight, Key, User, Mail, Lock, Cpu } from 'lucide-react';
+import { Zap, Shield, CheckCircle, AlertCircle, ArrowRight, Key, User, Mail, Lock } from 'lucide-react';
 
 export const FuturisticAdminSetup: React.FC = () => {
   const navigate = useNavigate();
@@ -20,10 +20,9 @@ export const FuturisticAdminSetup: React.FC = () => {
 
   const checkAdminAccount = async () => {
     setStatus('checking');
-    setMessage('Scanning authentication database...');
+    setMessage('Checking for existing administrator account…');
 
     try {
-      // Try to sign in to check if account exists
       const { data, error } = await supabase.auth.signInWithPassword({
         email: adminCredentials.email,
         password: adminCredentials.password
@@ -32,30 +31,27 @@ export const FuturisticAdminSetup: React.FC = () => {
       if (data?.user) {
         setAccountExists(true);
         setStatus('success');
-        setMessage('Admin account detected! Ready for system access.');
-        
-        // Sign out immediately after checking
+        setMessage('Administrator account detected. You can continue to sign in.');
         await supabase.auth.signOut();
       } else if (error?.message === 'Invalid login credentials') {
         setAccountExists(false);
         setStatus('idle');
-        setMessage('Admin account not found. Initialize system administrator.');
+        setMessage('No administrator account found. Initialize FieldForge with the credentials below.');
       } else {
         throw error;
       }
     } catch (error: any) {
       console.error('Check error:', error);
       setStatus('error');
-      setMessage(error.message || 'System check failed');
+      setMessage(error.message || 'Unable to verify administrator status');
     }
   };
 
   const createAdminAccount = async () => {
     setStatus('creating');
-    setMessage('Initializing administrative protocols...');
+    setMessage('Provisioning administrator account…');
 
     try {
-      // Sign up the admin user
       const { data, error } = await supabase.auth.signUp({
         email: adminCredentials.email,
         password: adminCredentials.password,
@@ -65,226 +61,170 @@ export const FuturisticAdminSetup: React.FC = () => {
             company: adminCredentials.company,
             job_title: adminCredentials.jobTitle,
             phone: adminCredentials.phone,
-            role: 'admin'
+            is_admin: true
           }
         }
       });
 
       if (error) throw error;
 
-      // Create user profile
       if (data.user) {
-        const { error: profileError } = await supabase
+        await supabase
           .from('user_profiles')
-          .upsert({
-            user_id: data.user.id,
-            email: adminCredentials.email,
-            full_name: adminCredentials.fullName,
-            phone: adminCredentials.phone,
-            job_title: adminCredentials.jobTitle,
-            is_admin: true,
-            company_id: 2, // Brink Constructors
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'user_id'
-          });
-
-        if (profileError) {
-          console.warn('Profile creation warning:', profileError);
-        }
+          .upsert(
+            {
+              user_id: data.user.id,
+              email: adminCredentials.email,
+              full_name: adminCredentials.fullName,
+              phone: adminCredentials.phone,
+              job_title: adminCredentials.jobTitle,
+              is_admin: true,
+              company_id: 2,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            },
+            { onConflict: 'user_id' }
+          );
       }
 
       setStatus('success');
-      setMessage('Administrator account successfully initialized!');
+      setMessage('Administrator account created. Redirecting to sign-in.');
       setAccountExists(true);
-      
-      // Auto-redirect to login after 3 seconds
+
       setTimeout(() => {
         navigate('/login');
-      }, 3000);
-
+      }, 2500);
     } catch (error: any) {
       console.error('Creation error:', error);
       setStatus('error');
-      setMessage(error.message || 'Initialization failed');
+      setMessage(error.message || 'Failed to create administrator account');
     }
   };
 
   const resetPassword = async () => {
     setStatus('creating');
-    setMessage('Transmitting password reset protocol...');
+    setMessage('Sending password reset instructions…');
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(
-        adminCredentials.email,
-        { redirectTo: `${window.location.origin}/reset-password` }
-      );
+      const { error } = await supabase.auth.resetPasswordForEmail(adminCredentials.email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      });
 
       if (error) throw error;
 
       setStatus('success');
-      setMessage('Password reset link transmitted to email address.');
+      setMessage('Password reset email sent. Check your inbox to continue.');
     } catch (error: any) {
       console.error('Reset error:', error);
       setStatus('error');
-      setMessage(error.message || 'Reset protocol failed');
+      setMessage(error.message || 'Failed to send reset instructions');
     }
   };
 
+  const statusBanner = () => {
+    if (!message) return null;
+
+    const tone =
+      status === 'error' ? 'border-red-200 bg-red-50 text-red-600' :
+      status === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' :
+      'border-slate-200 bg-slate-50 text-slate-600';
+
+    const Icon = status === 'error' ? AlertCircle : status === 'success' ? CheckCircle : Shield;
+
+    return (
+      <div className={`mb-6 flex items-start gap-2 rounded-xl border p-4 text-sm ${tone}`}>
+        <Icon className="mt-0.5 h-4 w-4" />
+        <div>{message}</div>
+      </div>
+    );
+  };
+
   return (
-    <div className="relative min-h-screen bg-slate-950 flex items-center justify-center p-6">
-      {/* Subtle Background */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" aria-hidden="true" />
+    <div className="min-h-screen bg-white flex items-center justify-center px-6 py-12">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,_rgba(15,76,129,0.06),_transparent_65%)]" aria-hidden />
 
-      {/* Main Container */}
-      <div className="relative z-10 w-full max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-500 rounded-lg mb-4">
-            <Shield className="w-8 h-8 text-white" />
+      <div className="w-full max-w-3xl rounded-3xl border border-slate-200 bg-white p-10 shadow-xl">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-white">
+              <Zap className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-slate-900">FieldForge Administration</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">System Initialization</p>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Admin Setup
-          </h1>
-          <p className="text-slate-400 text-sm">Configure system administrator account</p>
+          <Link to="/login" className="text-sm font-semibold text-slate-700 hover:underline">
+            Back to sign in
+          </Link>
         </div>
 
-        {/* Status Panel */}
-        <div className="relative">
-          
-          <div className="bg-slate-900 border border-slate-800 rounded-lg p-8">
-            {/* Credentials Display */}
-            <div className="mb-8 p-6 bg-slate-950/50 rounded-lg border border-slate-800">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
-                <Key className="w-5 h-5 mr-2" />
-                Administrative Credentials
-              </h2>
-              
-              <div className="space-y-3 font-['Exo 2']">
-                <div className="flex items-center space-x-3">
-                  <Mail className="w-4 h-4 text-cyan-500" />
-                  <span className="text-gray-400">Email:</span>
-                  <span className="text-white font-mono">{adminCredentials.email}</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Lock className="w-4 h-4 text-cyan-500" />
-                  <span className="text-gray-400">Password:</span>
-                  <span className="text-white font-mono">{adminCredentials.password}</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <User className="w-4 h-4 text-cyan-500" />
-                  <span className="text-gray-400">Name:</span>
-                  <span className="text-white">{adminCredentials.fullName}</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Zap className="w-4 h-4 text-cyan-500" />
-                  <span className="text-gray-400">Company:</span>
-                  <span className="text-white">{adminCredentials.company}</span>
-                </div>
+        <h1 className="mt-10 text-3xl font-semibold text-slate-900">Initialize the administrator account</h1>
+        <p className="mt-3 text-sm text-slate-600">
+          FieldForge ships without default credentials. Use the pre-approved administrator details below to provision access for the first time.
+        </p>
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-[0.2em]">Credentials</h2>
+            <div className="mt-4 space-y-3 text-sm text-slate-600">
+              <div className="flex items-center gap-3">
+                <Mail className="h-4 w-4 text-slate-500" />
+                <span className="font-medium">{adminCredentials.email}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Lock className="h-4 w-4 text-slate-500" />
+                <span className="font-medium">{adminCredentials.password}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <User className="h-4 w-4 text-slate-500" />
+                <span>{adminCredentials.fullName}, {adminCredentials.jobTitle}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Key className="h-4 w-4 text-slate-500" />
+                <span>{adminCredentials.company}</span>
               </div>
             </div>
+          </div>
 
-            {/* Status Messages */}
-            {message && (
-              <div className={`mb-6 p-4 rounded-lg border flex items-start space-x-3 ${
-                status === 'error' ? 'bg-red-500/10 border-red-500/50' :
-                status === 'success' ? 'bg-green-500/10 border-green-500/50' :
-                'bg-purple-500/10 border-purple-500/50'
-              }`}>
-                {status === 'error' ? <AlertCircle className="w-5 h-5 text-red-500 mt-0.5" /> :
-                 status === 'success' ? <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" /> :
-                 <Cpu className="w-5 h-5 text-purple-500 mt-0.5 animate-spin" />}
-                <div className="flex-1">
-                  <p className={`text-sm ${
-                    status === 'error' ? 'text-red-400' :
-                    status === 'success' ? 'text-green-400' :
-                    'text-purple-400'
-                  }`}>{message}</p>
-                </div>
-              </div>
-            )}
-
-            {/* Action Buttons */}
+          <div>
+            {statusBanner()}
             <div className="space-y-3">
-              {!accountExists && (
-                <>
-                  <button
-                    onClick={checkAdminAccount}
-                    disabled={status === 'checking' || status === 'creating'}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-cyan-500/25 transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 group font-['Orbitron']"
-                  >
-                    <Shield className="w-5 h-5" />
-                    <span>CHECK SYSTEM STATUS</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-
-                  <button
-                    onClick={createAdminAccount}
-                    disabled={status === 'checking' || status === 'creating'}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-purple-500/25 transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 group font-['Orbitron']"
-                  >
-                    <Cpu className="w-5 h-5" />
-                    <span>INITIALIZE ADMINISTRATOR</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </>
-              )}
-
-              {accountExists && (
-                <>
-                  <Link
-                    to="/login"
-                    className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-green-500/25 transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center space-x-2 group font-['Orbitron'] text-center"
-                  >
-                    <CheckCircle className="w-5 h-5" />
-                    <span>ACCESS SYSTEM</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-
-                  <button
-                    onClick={resetPassword}
-                    disabled={status === 'creating'}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-amber-500/25 transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 group font-['Orbitron']"
-                  >
-                    <Key className="w-5 h-5" />
-                    <span>RESET ACCESS CODE</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Navigation Links */}
-            <div className="mt-6 pt-6 border-t border-purple-500/20 flex items-center justify-center space-x-6 text-sm">
-              <Link to="/" className="text-purple-400 hover:text-purple-300 transition-colors flex items-center space-x-1 group">
-                <span>Home</span>
-                <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" />
-              </Link>
-              <Link to="/login" className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center space-x-1 group">
-                <span>Login Portal</span>
-                <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" />
-              </Link>
+              <button
+                onClick={checkAdminAccount}
+                disabled={status === 'checking' || status === 'creating'}
+                className="w-full btn-secondary justify-center"
+              >
+                {status === 'checking' ? 'Checking…' : 'Check for existing admin'}
+                {status !== 'checking' && <ArrowRight className="ml-2 h-4 w-4" />}
+              </button>
+              <button
+                onClick={createAdminAccount}
+                disabled={status === 'checking' || status === 'creating' || accountExists}
+                className="w-full btn-primary justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {status === 'creating' ? 'Provisioning…' : 'Create administrator account'}
+                {status !== 'creating' && <ArrowRight className="ml-2 h-4 w-4" />}
+              </button>
+              <button
+                onClick={resetPassword}
+                className="w-full btn-ghost justify-center text-slate-700"
+              >
+                Send password reset link
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Security Notice */}
-        <div className="mt-8 text-center">
-          <div className="inline-flex items-center space-x-2 text-purple-500/60 text-xs">
-            <Shield className="w-4 h-4" />
-            <span>SECURE ADMINISTRATIVE PROTOCOL • 256-BIT ENCRYPTION</span>
-          </div>
+        <div className="mt-12 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-[0.2em]">Implementation guidance</h2>
+          <ul className="mt-4 space-y-3 text-sm text-slate-600">
+            <li>Use the admin account to configure authentication, integrations, and baseline projects.</li>
+            <li>Once initialized, enable SSO or provisioning through your identity provider.</li>
+            <li>Contact the FieldForge onboarding team for guided rollout and data migration.</li>
+          </ul>
         </div>
       </div>
-
-      {/* Custom Animations */}
-      <style>{`
-        @keyframes slide {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(50px, 50px); }
-        }
-      `}</style>
     </div>
   );
 };
