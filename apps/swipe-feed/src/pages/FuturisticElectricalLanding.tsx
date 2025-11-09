@@ -12,6 +12,7 @@ import {
   Activity,
   Waves
 } from 'lucide-react';
+import { GridHeroBackdrop } from '../components/graphics/GridHeroBackdrop';
 
 const highlights = [
   'Transmission, distribution, and substation execution in one system',
@@ -114,6 +115,10 @@ export const FuturisticElectricalLanding: React.FC = () => {
       </header>
 
       <section className="relative border-b border-slate-200">
+        <div className="absolute inset-0 overflow-hidden">
+          <GridHeroBackdrop />
+        </div>
+        <div className="relative">
         <div className="mx-auto flex max-w-6xl flex-col gap-14 px-6 pb-28 pt-20 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div className="max-w-2xl space-y-6">
             <p className="badge">Transmission • Distribution • Substations</p>
@@ -142,7 +147,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
             </div>
           </div>
 
-          <aside className="relative w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)]">
+          <aside className="relative w-full max-w-md rounded-3xl border border-slate-200 bg-white/95 backdrop-blur p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)]">
             <div className="absolute -left-8 top-10 hidden h-32 w-32 rounded-full bg-gradient-to-br from-indigo-200/40 to-cyan-200/40 blur-3xl lg:block" />
             <div className="absolute -right-6 bottom-6 hidden h-24 w-24 rounded-full bg-gradient-to-br from-emerald-200/40 to-slate-200/40 blur-3xl lg:block" />
             <div className="relative">
@@ -150,9 +155,9 @@ export const FuturisticElectricalLanding: React.FC = () => {
               <p className="mt-3 text-lg font-medium text-slate-800">
                 Utilities running FieldForge close outage packages 2.4× faster than with legacy systems.
               </p>
-              <div className="mt-6 space-y-4">
+              <div className="mt-6 space-y-4 animate-fade-in">
                 {metrics.map(({ label, value, icon: Icon }) => (
-                  <div key={label} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-3">
+                  <div key={label} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-3 shadow-sm">
                     <div className="flex items-center gap-3">
                       <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-900 text-white">
                         <Icon className="h-5 w-5" />
@@ -168,8 +173,11 @@ export const FuturisticElectricalLanding: React.FC = () => {
               <div className="mt-6 rounded-2xl border border-slate-200 bg-white/90 p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Live site indicators</p>
                 <div className="mt-3 grid gap-3 text-sm text-slate-600">
-                  {telemetry.map(({ label, value, status }) => (
-                    <div key={label} className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
+                  {telemetry.map(({ label, value, status }, index) => (
+                    <div
+                      key={label}
+                      className={`flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2 shadow-sm ${index % 2 === 0 ? 'animate-float-slow' : 'animate-float-slower'}`}
+                    >
                       <div>
                         <p className="font-semibold text-slate-900">{value}</p>
                         <p className="text-xs text-slate-500">{label}</p>
@@ -186,6 +194,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
         <div className="pointer-events-none absolute inset-x-0 top-[52%] h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" aria-hidden />
         <div className="pointer-events-none absolute inset-x-[10%] top-[58%] h-48 rounded-[28px] border border-slate-200 bg-white/80 shadow-[0_18px_60px_rgba(15,23,42,0.08)] blur-[1px]" aria-hidden />
         <div className="pointer-events-none absolute inset-x-[12%] top-[60%] hidden h-40 rounded-[24px] bg-[repeating-linear-gradient(90deg,_rgba(15,76,129,0.08)_0,_rgba(15,76,129,0.08)_1px,_transparent_1px,_transparent_42px)] lg:block" aria-hidden />
+        </div>
       </section>
 
       <section className="border-b border-slate-200 bg-white/70 backdrop-blur">
