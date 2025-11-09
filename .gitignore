@@ -1,0 +1,5 @@
+.vercel
+apps/swipe-feed/dist/
+apps/swipe-feed/node_modules/
+apps/swipe-feed/test-results/
+.env

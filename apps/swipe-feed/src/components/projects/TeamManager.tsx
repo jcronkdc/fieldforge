@@ -241,8 +241,8 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                       <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center">
                         <span className="text-white font-semibold">
                           {member.user ? 
-                            `${member.user.first_name[0]}${member.user.last_name[0]}` : 
-                            member.invited_email?.[0].toUpperCase()
+                            `${member.user.first_name?.charAt(0) ?? ''}${member.user.last_name?.charAt(0) ?? ''}` || 'FF' : 
+                            (member.invited_email ? member.invited_email.charAt(0).toUpperCase() : 'FF')
                           }
                         </span>
                       </div>

@@ -27,7 +27,12 @@ export function ProfileSetup({ user, onComplete }: ProfileSetupProps) {
     return <div className="text-center text-white py-12 text-2xl">Loading profile...</div>;
   }
   const [username, setUsername] = useState("");
-  const [displayName, setDisplayName] = useState(user?.email?.split("@")[0] ?? "");
+  const [displayName, setDisplayName] = useState(() => {
+    const email = user?.email;
+    if (!email) return "";
+    const atIndex = email.indexOf("@");
+    return atIndex > 0 ? email.slice(0, atIndex) : email;
+  });
   const [bio, setBio] = useState("");
   const [avatarKey, setAvatarKey] = useState<string>(AVATAR_CHOICES[0]?.key ?? "");
   const [avatarUpload, setAvatarUpload] = useState<{ key: string | null; url: string | null }>({ key: null, url: null });

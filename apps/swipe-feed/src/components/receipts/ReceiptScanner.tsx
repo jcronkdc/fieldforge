@@ -176,7 +176,12 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
       
       const userName = userProfile 
         ? `${userProfile.first_name} ${userProfile.last_name}`
-        : user.email?.split('@')[0] || 'Unknown User';
+        : (() => {
+            const email = user.email ?? '';
+            if (!email) return 'Unknown User';
+            const atIndex = email.indexOf('@');
+            return atIndex > 0 ? email.slice(0, atIndex) : email;
+          })();
 
       // Get project details
       const project = projects.find(p => p.id === selectedProject);

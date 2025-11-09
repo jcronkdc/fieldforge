@@ -47,6 +47,10 @@ import { WelcomePage } from './pages/WelcomePage';
 // Placeholder components
 import { ReceiptManager } from './components/placeholders';
 
+// Specialized components for electrical contractors
+import { SubstationManager } from './components/specialized/SubstationManager';
+import { NationwideCrewManager } from './components/specialized/NationwideCrewManager';
+
 // Offline Support
 import { OfflineIndicator } from './components/common/OfflineIndicator';
 import { SyncStatus } from './components/common/SyncStatus';
@@ -235,10 +239,12 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
                   <Route element={<FuturisticLayout session={session} />}>
                     <Route path="/dashboard" element={<FuturisticDashboard />} />
                     <Route path="/feed" element={<SocialFeed />} />
-                    <Route path="/analytics" element={<RealTimeViz />} />
-                    <Route path="/projects" element={<ProjectManager />} />
-                    <Route path="/field/receipts" element={<ReceiptManager />} />
-                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/analytics" element={<RealTimeViz />} />
+              <Route path="/projects" element={<ProjectManager />} />
+              <Route path="/field/receipts" element={<ReceiptManager />} />
+              <Route path="/substations" element={<SubstationManager />} />
+              <Route path="/crews" element={<NationwideCrewManager />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
                   </Route>
                 </>
               ) : (

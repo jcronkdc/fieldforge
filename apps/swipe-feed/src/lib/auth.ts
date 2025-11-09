@@ -70,14 +70,16 @@ export async function getCurrentUser() {
 
 // Get user profile
 export async function getUserProfile(userId: string) {
-  const { data, error } = await supabase
+  const { data, error, status } = await supabase
     .from('user_profiles')
     .select('*')
     .eq('id', userId)
-    .single();
+    .maybeSingle();
   
-  if (error) throw error;
-  return data;
+  if (error && status !== 406) {
+    throw error;
+  }
+  return data ?? null;
 }
 
 // Update user profile

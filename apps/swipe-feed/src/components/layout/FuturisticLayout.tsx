@@ -19,6 +19,9 @@ export const FuturisticLayout: React.FC<FuturisticLayoutProps> = ({ session }) =
   const location = useLocation();
   const navigate = useNavigate();
   const user = session.user;
+  const userEmail = user.email ?? 'user@fieldforge.app';
+  const emailInitial = userEmail.charAt(0).toUpperCase();
+  const emailHandle = userEmail.includes('@') ? userEmail.split('@')[0] : userEmail;
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -155,12 +158,12 @@ export const FuturisticLayout: React.FC<FuturisticLayoutProps> = ({ session }) =
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
                 <span className="text-sm font-bold font-['Orbitron']">
-                  {user.email?.[0].toUpperCase()}
+                  {emailInitial}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-white truncate">
-                  {user.email?.split('@')[0]}
+                  {emailHandle}
                 </p>
                 <p className="text-xs text-cyan-400/60">Administrator</p>
               </div>

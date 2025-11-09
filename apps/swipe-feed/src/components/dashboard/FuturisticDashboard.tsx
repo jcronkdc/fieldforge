@@ -1,337 +1,168 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Activity, TrendingUp, TrendingDown, AlertTriangle, CheckCircle,
-  Clock, Users, Truck, Zap, Shield, Package, Calendar, 
-  BarChart3, ArrowUp, ArrowDown, Target, Gauge, Building2,
-  HardHat, Wrench, FileText, DollarSign, Timer, MapPin,
-  Cpu, Radio, Wifi, Battery, Signal, Power
+import React from 'react';
+import {
+  Building2,
+  Users,
+  Shield,
+  FileText,
+  HardHat,
+  Calendar,
+  ArrowRight,
+  CheckCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-interface MetricCard {
-  title: string;
-  value: string | number;
-  change: number;
-  trend: 'up' | 'down' | 'neutral';
-  icon: React.ElementType;
-  gradient: string;
-  unit?: string;
-}
-
 export const FuturisticDashboard: React.FC = () => {
-  const [loading, setLoading] = useState(true);
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [metrics] = useState<MetricCard[]>([
+  const summaryCards = [
     {
-      title: 'Grid Load',
-      value: 67,
-      change: 5,
-      trend: 'up',
-      icon: Power,
-      gradient: 'from-cyan-500 to-blue-600',
-      unit: 'MW'
+      title: 'Projects',
+      description: 'Keep structure packages, switching plans, and materials in one place.',
+      cta: 'Create a project',
+      to: '/projects',
+      icon: Building2
     },
     {
-      title: 'System Health',
-      value: 98.5,
-      change: 0.5,
-      trend: 'up',
-      icon: Signal,
-      gradient: 'from-green-500 to-emerald-600',
-      unit: '%'
+      title: 'Crews & partners',
+      description: 'Invite supervisors, field crews, subcontractors, and client representatives.',
+      cta: 'Manage people',
+      to: '/crews',
+      icon: Users
     },
     {
-      title: 'Active Crews',
-      value: 8,
-      change: 2,
-      trend: 'up',
-      icon: Users,
-      gradient: 'from-purple-500 to-pink-600',
-      unit: 'teams'
-    },
-    {
-      title: 'Voltage Stability',
-      value: 138.2,
-      change: -0.3,
-      trend: 'down',
-      icon: Zap,
-      gradient: 'from-amber-500 to-orange-600',
-      unit: 'kV'
+      title: 'Safety & permits',
+      description: 'Log tailboard briefings, energized work authorizations, and corrective actions.',
+      cta: 'View safety tools',
+      to: '/safety',
+      icon: Shield
     }
-  ]);
+  ];
 
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    setTimeout(() => setLoading(false), 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const setupChecklist = [
+    'Add the active circuits, spans, and structures for your project.',
+    'Upload the latest switching orders, drawings, and vendor documents.',
+    'Publish tomorrow’s work plan so crews can review before the tailboard.',
+    'Invite construction management, QC, safety, and commissioning partners.'
+  ];
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="relative">
-          <div className="w-24 h-24 border-4 border-cyan-500/30 rounded-full animate-spin" />
-          <div className="absolute top-0 left-0 w-24 h-24 border-4 border-t-cyan-500 rounded-full animate-spin" />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <Zap className="w-8 h-8 text-cyan-500 animate-pulse" />
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const upcomingItems = [
+    {
+      title: 'Review outages and switching windows',
+      description: 'Confirm clearances, customer notices, and staffing before locking the schedule.',
+      to: '/analytics'
+    },
+    {
+      title: 'Prepare tomorrow’s tailboard package',
+      description: 'Attach procedures, energized work approvals, and crew assignments.',
+      to: '/safety'
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Animated Grid Background */}
-      <div className="fixed inset-0 opacity-20">
-        <div 
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(cyan 1px, transparent 1px),
-              linear-gradient(90deg, cyan 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-            animation: 'slide 20s linear infinite'
-          }}
-        />
-      </div>
-
-      {/* Main Content */}
-      <div className="relative z-10 p-6">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-4xl font-bold font-['Orbitron'] text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                COMMAND CENTER
-              </h1>
-              <p className="text-cyan-400/60 mt-1">138kV Substation Control System</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="px-4 py-2 bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-lg">
-                <div className="flex items-center space-x-2">
-                  <Radio className="w-4 h-4 text-green-500 animate-pulse" />
-                  <span className="text-xs text-green-500 font-['Exo 2']">SYSTEM ONLINE</span>
-                </div>
-              </div>
-              <div className="px-4 py-2 bg-slate-900/50 backdrop-blur-sm border border-cyan-500/30 rounded-lg">
-                <span className="text-cyan-400 font-['Orbitron'] text-sm">
-                  {currentTime.toLocaleTimeString()}
-                </span>
-              </div>
-            </div>
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-10 lg:px-8">
+        <header className="flex flex-col gap-4 border-b border-slate-800 pb-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-amber-300">Project command center</p>
+            <h1 className="text-3xl font-semibold text-white">
+              Align field crews, office teams, and partners
+            </h1>
+            <p className="max-w-3xl text-base text-slate-300">
+              Use FieldForge to keep construction, commissioning, and safety on the same page. Organise the day’s plan,
+              confirm switching orders, and record progress without leaving the flow of work.
+            </p>
           </div>
+          <Link
+            to="/analytics"
+            className="inline-flex items-center gap-2 rounded-md border border-slate-700 px-3 py-2 text-sm font-medium text-slate-200 hover:bg-slate-800"
+          >
+            View schedule
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </header>
 
-          {/* Quick Actions Bar */}
-          <div className="flex flex-wrap gap-3">
-            {[
-              { label: 'EMERGENCY SHUTDOWN', icon: AlertTriangle, color: 'from-red-500 to-pink-600' },
-              { label: 'SYSTEM DIAGNOSTICS', icon: Activity, color: 'from-cyan-500 to-blue-600' },
-              { label: 'CREW DISPATCH', icon: Users, color: 'from-purple-500 to-indigo-600' },
-              { label: 'GRID ANALYSIS', icon: BarChart3, color: 'from-green-500 to-emerald-600' }
-            ].map((action, idx) => (
-              <button
-                key={idx}
-                className={`px-4 py-2 bg-gradient-to-r ${action.color} rounded-lg flex items-center space-x-2 hover:scale-105 transform transition-all duration-200 shadow-lg hover:shadow-2xl`}
-              >
-                <action.icon className="w-4 h-4" />
-                <span className="text-xs font-semibold font-['Orbitron']">{action.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {metrics.map((metric, idx) => (
-            <div
-              key={idx}
-              className="relative group"
-            >
-              {/* Glow Effect */}
-              <div className={`absolute -inset-1 bg-gradient-to-r ${metric.gradient} rounded-lg blur opacity-25 group-hover:opacity-50 transition-opacity`} />
-              
-              <div className="relative bg-slate-900/90 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-6 hover:border-cyan-500/50 transition-all">
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`p-3 bg-gradient-to-br ${metric.gradient} rounded-lg shadow-lg`}>
-                    <metric.icon className="w-6 h-6 text-white" />
-                  </div>
-                  {metric.trend !== 'neutral' && (
-                    <div className={`flex items-center space-x-1 text-xs ${
-                      metric.trend === 'up' ? 'text-green-500' : 'text-red-500'
-                    }`}>
-                      {metric.trend === 'up' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
-                      <span>{Math.abs(metric.change)}%</span>
-                    </div>
-                  )}
-                </div>
-                
-                <h3 className="text-cyan-400/80 text-xs font-medium mb-2 uppercase tracking-wider">
-                  {metric.title}
-                </h3>
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-bold font-['Orbitron']">{metric.value}</span>
-                  {metric.unit && (
-                    <span className="ml-2 text-cyan-400/60 text-sm">{metric.unit}</span>
-                  )}
-                </div>
-
-                {/* Mini Chart */}
-                <div className="mt-4 h-8 flex items-end space-x-1">
-                  {Array.from({ length: 7 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 bg-gradient-to-t from-cyan-500/50 to-cyan-500/20 rounded-t"
-                      style={{ height: `${30 + Math.random() * 70}%` }}
-                    />
-                  ))}
-                </div>
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {summaryCards.map(({ title, description, cta, to, icon: Icon }) => (
+            <div key={title} className="rounded-lg border border-slate-800 bg-slate-900/70 p-5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-amber-100/80">
+                <Icon className="h-5 w-5 text-slate-900" aria-hidden="true" />
               </div>
+              <h2 className="mt-4 text-lg font-semibold text-white">{title}</h2>
+              <p className="mt-2 text-sm text-slate-300">{description}</p>
+              <Link to={to} className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-amber-300 hover:text-amber-200">
+                {cta}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           ))}
-        </div>
+        </section>
 
-        {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Power Grid Visualization */}
-          <div className="lg:col-span-2">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition-opacity" />
-              <div className="relative bg-slate-900/90 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold font-['Orbitron'] text-cyan-400">
-                    POWER GRID STATUS
-                  </h2>
-                  <div className="flex items-center space-x-2">
-                    <Wifi className="w-4 h-4 text-green-500 animate-pulse" />
-                    <span className="text-xs text-green-500">LIVE</span>
-                  </div>
-                </div>
-
-                {/* Grid Visualization */}
-                <div className="h-64 bg-slate-950/50 rounded-lg p-4 relative overflow-hidden">
-                  {/* Animated Power Lines */}
-                  <svg className="w-full h-full">
-                    <defs>
-                      <linearGradient id="powerFlow">
-                        <stop offset="0%" stopColor="transparent" />
-                        <stop offset="50%" stopColor="#00d4ff" />
-                        <stop offset="100%" stopColor="transparent" />
-                      </linearGradient>
-                    </defs>
-                    
-                    {/* Main Transmission Lines */}
-                    <line x1="10%" y1="50%" x2="90%" y2="50%" 
-                      stroke="url(#powerFlow)" strokeWidth="3" opacity="0.8">
-                      <animate attributeName="x1" from="10%" to="90%" dur="3s" repeatCount="indefinite" />
-                      <animate attributeName="x2" from="90%" to="170%" dur="3s" repeatCount="indefinite" />
-                    </line>
-                    
-                    {/* Substations */}
-                    <circle cx="25%" cy="50%" r="20" fill="none" stroke="#ffb800" strokeWidth="2" />
-                    <circle cx="50%" cy="50%" r="20" fill="none" stroke="#ffb800" strokeWidth="2" />
-                    <circle cx="75%" cy="50%" r="20" fill="none" stroke="#ffb800" strokeWidth="2" />
-                    
-                    {/* Power Flow Indicators */}
-                    <text x="25%" y="80%" fill="#14f195" fontSize="12" fontFamily="Orbitron" textAnchor="middle">
-                      45.2 MW
-                    </text>
-                    <text x="50%" y="80%" fill="#14f195" fontSize="12" fontFamily="Orbitron" textAnchor="middle">
-                      67.8 MW
-                    </text>
-                    <text x="75%" y="80%" fill="#14f195" fontSize="12" fontFamily="Orbitron" textAnchor="middle">
-                      52.1 MW
-                    </text>
-                  </svg>
-
-                  {/* Status Indicators */}
-                  <div className="absolute bottom-4 left-4 flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      <span className="text-xs text-gray-400">Primary</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                      <span className="text-xs text-gray-400">Secondary</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-cyan-500 rounded-full animate-pulse" />
-                      <span className="text-xs text-gray-400">Distribution</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <section className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+          <div className="rounded-lg border border-slate-800 bg-slate-900/70 p-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-white">Get set up</h2>
+              <span className="text-xs font-medium uppercase text-slate-400">Foundation checklist</span>
             </div>
+            <p className="mt-2 text-sm text-slate-300">
+              Work through these steps to move your active jobs into FieldForge.
+            </p>
+            <ol className="mt-6 space-y-4 text-sm text-slate-200">
+              {setupChecklist.map((item, index) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-full border border-slate-700 text-xs font-semibold text-slate-300">
+                    {index + 1}
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ol>
           </div>
 
-          {/* Activity Feed */}
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition-opacity" />
-            <div className="relative bg-slate-900/90 backdrop-blur-sm border border-cyan-500/30 rounded-lg p-6">
-              <h2 className="text-xl font-bold font-['Orbitron'] text-cyan-400 mb-6">
-                SYSTEM ACTIVITY
-              </h2>
-              
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {[
-                  { icon: Shield, text: 'Safety protocol activated', time: '2m ago', status: 'success' },
-                  { icon: Zap, text: 'Voltage spike detected - Line 3', time: '5m ago', status: 'warning' },
-                  { icon: Users, text: 'Crew B completed installation', time: '12m ago', status: 'info' },
-                  { icon: Package, text: 'Transformer delivered to Pad 5', time: '28m ago', status: 'info' },
-                  { icon: AlertTriangle, text: 'Weather alert: High winds', time: '1h ago', status: 'danger' }
-                ].map((activity, idx) => (
-                  <div key={idx} className="flex items-start space-x-3 p-3 bg-slate-950/50 rounded-lg hover:bg-slate-950/70 transition-colors">
-                    <div className={`p-2 rounded-lg ${
-                      activity.status === 'success' ? 'bg-green-500/20' :
-                      activity.status === 'warning' ? 'bg-amber-500/20' :
-                      activity.status === 'danger' ? 'bg-red-500/20' :
-                      'bg-cyan-500/20'
-                    }`}>
-                      <activity.icon className={`w-4 h-4 ${
-                        activity.status === 'success' ? 'text-green-500' :
-                        activity.status === 'warning' ? 'text-amber-500' :
-                        activity.status === 'danger' ? 'text-red-500' :
-                        'text-cyan-500'
-                      }`} />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-300">{activity.text}</p>
-                      <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
-                    </div>
-                  </div>
+          <div className="flex flex-col gap-6">
+            <div className="rounded-lg border border-slate-800 bg-slate-900/70 p-6">
+              <div className="flex items-center gap-3 text-white">
+                <HardHat className="h-5 w-5 text-amber-300" aria-hidden="true" />
+                <h2 className="text-lg font-semibold">Today’s focus</h2>
+              </div>
+              <p className="mt-2 text-sm text-slate-300">
+                Start with the crews that are mobilizing in the next 24 hours. Confirm that documents are current and
+                permits are recorded. Everyone sees the same plan once it is published.
+              </p>
+            </div>
+
+            <div className="rounded-lg border border-slate-800 bg-slate-900/70 p-6">
+              <div className="flex items-center gap-3 text-white">
+                <Calendar className="h-5 w-5 text-amber-300" aria-hidden="true" />
+                <h2 className="text-lg font-semibold">Upcoming items</h2>
+              </div>
+              <ul className="mt-4 space-y-4 text-sm text-slate-300">
+                {upcomingItems.map(({ title, description, to }) => (
+                  <li key={title} className="rounded-md border border-slate-800 bg-slate-950/70 p-4">
+                    <p className="font-medium text-white">{title}</p>
+                    <p className="mt-1 text-sm text-slate-300">{description}</p>
+                    <Link to={to} className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-amber-300 hover:text-amber-200">
+                      Go to section
+                      <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Quick Stats Bar */}
-        <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { icon: Battery, label: 'CAPACITY', value: '85%', color: 'text-green-500' },
-            { icon: Activity, label: 'LOAD FACTOR', value: '0.72', color: 'text-cyan-500' },
-            { icon: Timer, label: 'UPTIME', value: '99.98%', color: 'text-purple-500' },
-            { icon: Shield, label: 'SECURITY', value: 'MAX', color: 'text-amber-500' }
-          ].map((stat, idx) => (
-            <div key={idx} className="bg-slate-900/50 backdrop-blur-sm border border-cyan-500/20 rounded-lg p-4 flex items-center space-x-4">
-              <stat.icon className={`w-8 h-8 ${stat.color}`} />
-              <div>
-                <p className="text-xs text-gray-400 uppercase">{stat.label}</p>
-                <p className="text-xl font-bold font-['Orbitron']">{stat.value}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <section className="rounded-lg border border-slate-800 bg-slate-900/70 p-6">
+          <div className="flex items-center gap-3 text-white">
+            <FileText className="h-5 w-5 text-amber-300" aria-hidden="true" />
+            <h2 className="text-lg font-semibold">Latest activity</h2>
+          </div>
+          <p className="mt-2 text-sm text-slate-300">
+            Activity will appear here as you log daily reports, upload documents, and complete safety briefings.
+          </p>
+          <div className="mt-4 flex items-center gap-2 rounded-md border border-dashed border-slate-700 bg-slate-950/60 p-4 text-sm text-slate-400">
+            <CheckCircle className="h-4 w-4 text-amber-300" aria-hidden="true" />
+            <span>Once data is flowing, the timeline keeps the team aligned without extra status calls.</span>
+          </div>
+        </section>
       </div>
-
-      {/* Custom Animations */}
-      <style>{`
-        @keyframes slide {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(50px, 50px); }
-        }
-      `}</style>
     </div>
   );
 };

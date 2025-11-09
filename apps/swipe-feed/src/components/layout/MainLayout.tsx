@@ -253,12 +253,16 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
                 <span className="text-sm font-bold text-white">
-                  {user.email?.[0].toUpperCase()}
+                  {(user.email ?? 'user@fieldforge.app').charAt(0).toUpperCase()}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-white truncate">
-                  {user.email?.split('@')[0]}
+                  {(() => {
+                    const email = user.email ?? 'user@fieldforge.app';
+                    const atIndex = email.indexOf('@');
+                    return atIndex > 0 ? email.slice(0, atIndex) : email;
+                  })()}
                 </p>
                 <p className="text-xs text-slate-400">Field Supervisor</p>
               </div>
