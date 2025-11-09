@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FieldForge Debug</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #f59e0b; }
+        .status { margin: 10px 0; padding: 10px; border: 1px solid #333; }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <h1>FieldForge Debug Page</h1>
+    <div id="debug-output"></div>
+    
+    <script type="module">
+        const output = document.getElementById('debug-output');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            output.appendChild(div);
+        }
+        
+        // Check if app is responding
+        log('Testing server response...');
+        fetch('/')
+            .then(res => {
+                log(`Server responded with status: ${res.status}`, 'success');
+                return res.text();
+            })
+            .then(html => {
+                log(`HTML received: ${html.length} bytes`, 'success');
+                
+                // Check for key elements
+                if (html.includes('id="root"')) {
+                    log('✓ Root element found', 'success');
+                } else {
+                    log('✗ Root element missing', 'error');
+                }
+                
+                if (html.includes('/src/main.tsx')) {
+                    log('✓ Main script found', 'success');
+                } else {
+                    log('✗ Main script missing', 'error');
+                }
+            })
+            .catch(err => {
+                log(`Server error: ${err.message}`, 'error');
+            });
+        
+        // Try loading React and checking Supabase
+        log('Checking React and Supabase...');
+        import('/src/main.tsx')
+            .then(() => {
+                log('✓ Main script loaded successfully', 'success');
+            })
+            .catch(err => {
+                log(`✗ Failed to load main script: ${err.message}`, 'error');
+            });
+            
+        // Check Supabase configuration
+        import('/src/lib/supabase.ts')
+            .then(module => {
+                log('✓ Supabase module loaded', 'success');
+                if (module.supabase) {
+                    log('✓ Supabase client initialized', 'success');
+                    
+                    // Test Supabase connection
+                    module.supabase.auth.getSession()
+                        .then(({ data, error }) => {
+                            if (error) {
+                                log(`Supabase session error: ${error.message}`, 'error');
+                            } else {
+                                log(`Supabase session: ${data.session ? 'Active' : 'None'}`, 'info');
+                            }
+                        });
+                }
+            })
+            .catch(err => {
+                log(`✗ Failed to load Supabase: ${err.message}`, 'error');
+            });
+            
+        // Check if React components are loading
+        import('/src/pages/LandingPage.tsx')
+            .then(() => {
+                log('✓ LandingPage component loaded', 'success');
+            })
+            .catch(err => {
+                log(`✗ Failed to load LandingPage: ${err.message}`, 'error');
+            });
+            
+        // Check environment variables
+        log('Checking environment...');
+        setTimeout(() => {
+            if (import.meta.env.VITE_SUPABASE_URL) {
+                log('✓ VITE_SUPABASE_URL is set', 'success');
+            } else {
+                log('✗ VITE_SUPABASE_URL is missing', 'error');
+            }
+            
+            if (import.meta.env.VITE_SUPABASE_ANON_KEY) {
+                log('✓ VITE_SUPABASE_ANON_KEY is set', 'success');
+            } else {
+                log('✗ VITE_SUPABASE_ANON_KEY is missing', 'error');
+            }
+        }, 100);
+    </script>
+</body>
+</html>

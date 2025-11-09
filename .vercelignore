@@ -1,0 +1,21 @@
+# Vercel ignore file
+.git
+.gitignore
+node_modules
+*.log
+.DS_Store
+*.md
+.env
+.env.local
+.env.development
+.env.test
+src/**/*.test.ts
+src/**/*.test.tsx
+**/__tests__
+**/tests
+cypress
+playwright
+.vscode
+.idea
+*.sql
+supabase/
