@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Camera, Upload, X, Check, AlertCircle, Loader2, 
   Calendar, DollarSign, Building2, Tag, User,
-  FileText, Sparkles, Search, ChevronDown
+  FileText, Sparkles, Search, ChevronDown, Mail
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { ocrService } from '../../lib/services/ocrService';
 import { receiptService, Receipt, CostCode } from '../../lib/services/receiptService';
 import { projectService } from '../../lib/services/projectService';
+import { emailService } from '../../lib/services/emailService';
+import { imageEnhancer } from '../../lib/services/imageEnhancer';
 
 interface ReceiptScannerProps {
   projectId?: string;
@@ -101,11 +103,19 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
     setError('');
 
     try {
+      // Enhance the image for better visibility
+      const enhancedBlob = await imageEnhancer.enhanceReceipt(file);
+      const enhancedFile = new File([enhancedBlob], file.name, { type: 'image/jpeg' });
+      
+      // Update the stored file with enhanced version
+      setImageFile(enhancedFile);
+      setImagePreview(URL.createObjectURL(enhancedFile));
+      
       // Initialize OCR service
       await ocrService.initialize();
       
-      // Process the image
-      const result = await ocrService.processImage(file);
+      // Process the enhanced image
+      const result = await ocrService.processImage(enhancedFile);
       
       // Enhance results with AI
       const enhanced = await ocrService.enhanceWithAI(result);
@@ -156,14 +166,46 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('No authenticated user');
+      
+      // Get user profile for name
+      const { data: userProfile } = await supabase
+        .from('user_profiles')
+        .select('first_name, last_name')
+        .eq('id', user.id)
+        .single();
+      
+      const userName = userProfile 
+        ? `${userProfile.first_name} ${userProfile.last_name}`
+        : user.email?.split('@')[0] || 'Unknown User';
 
-      // Upload image to storage
+      // Get project details
+      const project = projects.find(p => p.id === selectedProject);
+      const jobNumber = project?.project_number || 'UNKNOWN';
+      
+      // Get cost code details
+      const costCodeObj = costCodes.find(c => c.id === selectedCostCode);
+      const costCodeString = costCodeObj ? `${costCodeObj.code} - ${costCodeObj.name}` : 'No Code';
+      
+      // Stamp the receipt with project info
+      let stampedImage = imageFile;
+      if (imageFile) {
+        const stampedBlob = await imageEnhancer.stampReceipt(imageFile, {
+          userName,
+          date: receiptDate,
+          jobNumber,
+          costCode: costCodeObj?.code || 'N/A',
+          status: 'PENDING'
+        });
+        stampedImage = new File([stampedBlob], 'stamped_' + imageFile.name, { type: 'image/jpeg' });
+      }
+
+      // Upload images to storage
       let imageUrl = '';
       let thumbnailUrl = '';
       
-      if (imageFile) {
-        imageUrl = await ocrService.uploadReceiptImage(imageFile, user.id, selectedProject);
-        thumbnailUrl = await ocrService.createThumbnail(imageFile);
+      if (stampedImage) {
+        imageUrl = await ocrService.uploadReceiptImage(stampedImage, user.id, selectedProject);
+        thumbnailUrl = await ocrService.createThumbnail(stampedImage);
       }
 
       // Create receipt record
@@ -189,6 +231,23 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
       });
 
       if (receipt) {
+        // Send email notification
+        const emailSent = await emailService.sendReceiptEmail({
+          userName,
+          userEmail: user.email || '',
+          jobNumber,
+          transactionDate: receiptDate,
+          costCode: costCodeString,
+          vendorName: vendorName || 'Unknown Vendor',
+          amount: parseFloat(amount),
+          receiptImage: imageFile!,
+          enhancedImage: stampedImage
+        });
+        
+        if (!emailSent) {
+          console.warn('Email notification failed, but receipt was saved');
+        }
+        
         onSuccess?.(receipt);
         resetForm();
       } else {
@@ -331,6 +390,22 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
           {/* Step 3: Review */}
           {step === 'review' && (
             <div className="space-y-6">
+              {/* Email Notification Info */}
+              <div className="p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                <div className="flex items-start space-x-3">
+                  <Mail className="w-5 h-5 text-blue-400 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-blue-300 font-medium">Email Notification</p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Receipt will be automatically emailed to: <span className="text-white font-medium">justincronk@pm.me</span>
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      You will be CC'd on this email
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
               {/* Image Preview */}
               {imagePreview && (
                 <div className="bg-gray-800 rounded-lg p-4">
@@ -533,12 +608,12 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
                   {processing ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Saving...</span>
+                      <span>Saving & Emailing...</span>
                     </>
                   ) : (
                     <>
-                      <Check className="w-5 h-5" />
-                      <span>Save Receipt</span>
+                      <Mail className="w-5 h-5" />
+                      <span>Save & Send Email</span>
                     </>
                   )}
                 </button>
