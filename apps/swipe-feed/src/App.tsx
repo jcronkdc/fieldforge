@@ -9,6 +9,7 @@ import './styles/ai-animations.css';
 
 // Landing Page
 import { LandingPage } from './pages/LandingPage';
+import { LandingPageTest } from './pages/LandingPageTest';
 import { TestRouting } from './pages/TestRouting';
 import { TestRunner } from './pages/TestRunner';
 
@@ -77,21 +78,25 @@ function App() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
   useEffect(() => {
+    console.log('App.tsx: Initializing...');
+    
     // Check session
     supabase.auth.getSession()
       .then(({ data: { session } }) => {
+        console.log('App.tsx: Session check complete', { hasSession: !!session });
         setSession(session);
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error getting session:', error);
+        console.error('App.tsx: Error getting session:', error);
         setLoading(false); // Make sure to set loading to false even on error
       });
 
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('App.tsx: Auth state changed', { event, hasSession: !!session });
       setSession(session);
       setLoading(false);
     });
@@ -120,7 +125,10 @@ function App() {
     };
   }, []);
 
+  console.log('App.tsx: Render state', { loading, hasSession: !!session });
+
   if (loading) {
+    console.log('App.tsx: Showing loading screen');
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
@@ -141,7 +149,13 @@ function App() {
         <Routes>
           {/* Public Landing Page */}
           <Route path="/" element={
-            session ? <Navigate to="/dashboard" replace /> : <LandingPage />
+            session ? (
+              console.log('App.tsx: User has session, redirecting to dashboard'),
+              <Navigate to="/dashboard" replace />
+            ) : (
+              console.log('App.tsx: No session, showing landing page'),
+              <LandingPage />
+            )
           } />
           
           {/* Auth Routes */}
@@ -153,6 +167,7 @@ function App() {
           } />
           
           {/* Test Routes - Available to all */}
+          <Route path="/test" element={<LandingPageTest />} />
           <Route path="/test-routing" element={<TestRouting />} />
           <Route path="/test-runner" element={<TestRunner />} />
           

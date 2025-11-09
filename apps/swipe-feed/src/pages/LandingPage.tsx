@@ -206,6 +206,8 @@ const AnimatedCounter = ({ end, duration = 2, suffix = '' }: { end: number; dura
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+  
+  console.log('LandingPage: Component rendered');
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
