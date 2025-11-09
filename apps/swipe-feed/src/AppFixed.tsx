@@ -7,6 +7,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { VoiceCommandInterface } from './components/voice/VoiceCommandInterface';
 import './styles/animations.css';
 import './styles/ai-animations.css';
+import './styles/futuristic.css';
 
 // Auth Components
 import { LoginPage } from './components/auth/LoginPage';
@@ -259,6 +260,7 @@ const FixedLandingPage = () => {
 // Need to import useNavigate separately for the component
 import { useNavigate } from 'react-router-dom';
 import { QATestRunner } from './pages/QATestRunner';
+import { FuturisticElectricalLanding } from './pages/FuturisticElectricalLanding';
 
 function AppFixed() {
   const [session, setSession] = useState<Session | null>(null);
@@ -336,7 +338,7 @@ function AppFixed() {
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={
-                session ? <Navigate to="/dashboard" replace /> : <FixedLandingPage />
+                session ? <Navigate to="/dashboard" replace /> : <FuturisticElectricalLanding />
               } />
               
               <Route path="/login" element={
