@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
 import { AuthProvider } from './components/auth/AuthProvider';
+import { VoiceCommandInterface } from './components/voice/VoiceCommandInterface';
 import './styles/animations.css';
+import './styles/ai-animations.css';
 
 // Landing Page
 import { LandingPage } from './pages/LandingPage';
@@ -230,6 +232,9 @@ function App() {
         
         {/* Sync Status Indicator */}
         {session && <SyncStatus />}
+        
+        {/* Voice Command Interface - Available when logged in */}
+        {session && <VoiceCommandInterface />}
         
         {/* AI Assistant - Available on all protected routes */}
         {session && <AIAssistant />}

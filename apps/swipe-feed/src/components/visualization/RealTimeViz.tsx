@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Activity, TrendingUp, TrendingDown, Zap, Users, Clock,
   DollarSign, Shield, AlertTriangle, CheckCircle, BarChart3,
   Gauge, Cpu, Waves, Network, Atom, Binary, Orbit,
   ArrowUp, ArrowDown, Minus, Building2, HardHat
 } from 'lucide-react';
+import { HolographicCard } from '../holographic/HolographicCard';
 
 interface Metric {
   label: string;

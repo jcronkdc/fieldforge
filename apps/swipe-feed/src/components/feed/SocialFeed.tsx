@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { formatDistanceToNow } from 'date-fns';
+import { SwipeableCard } from '../gestures/SwipeableCard';
+import { HolographicCard } from '../holographic/HolographicCard';
 
 interface FeedPost {
   id: string;

@@ -1,0 +1,344 @@
+/* AI-Powered Animations for FieldForge */
+
+/* Quantum Fade - AI-inspired fade animation */
+@keyframes quantumFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+    filter: blur(5px);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Neural Pulse - Mimics neural network activation */
+@keyframes neuralPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7);
+  }
+  25% {
+    box-shadow: 0 0 0 10px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(251, 191, 36, 0.1);
+  }
+  75% {
+    box-shadow: 0 0 0 30px rgba(251, 191, 36, 0);
+  }
+}
+
+/* Data Stream - Simulates data flowing */
+@keyframes dataStream {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 100% 50%;
+    opacity: 0;
+  }
+}
+
+/* Holographic Shimmer */
+@keyframes holographicShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Matrix Rain Effect */
+@keyframes matrixRain {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* AI Thinking Animation */
+@keyframes aiThinking {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(5deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(-5deg) scale(0.95);
+  }
+  75% {
+    transform: rotate(3deg) scale(1.02);
+  }
+}
+
+/* Cyber Glitch Effect */
+@keyframes cyberGlitch {
+  0%, 100% {
+    transform: translateX(0);
+    filter: hue-rotate(0deg);
+  }
+  10% {
+    transform: translateX(-2px);
+    filter: hue-rotate(90deg);
+  }
+  20% {
+    transform: translateX(2px);
+    filter: hue-rotate(180deg);
+  }
+  30% {
+    transform: translateX(-1px);
+    filter: hue-rotate(270deg);
+  }
+  40% {
+    transform: translateX(1px);
+    filter: hue-rotate(0deg);
+  }
+}
+
+/* Levitation Effect */
+@keyframes levitate {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Energy Field */
+@keyframes energyField {
+  0% {
+    box-shadow: 
+      inset 0 0 20px rgba(251, 191, 36, 0.5),
+      0 0 20px rgba(251, 191, 36, 0.5);
+  }
+  50% {
+    box-shadow: 
+      inset 0 0 40px rgba(251, 191, 36, 0.8),
+      0 0 40px rgba(251, 191, 36, 0.8);
+  }
+  100% {
+    box-shadow: 
+      inset 0 0 20px rgba(251, 191, 36, 0.5),
+      0 0 20px rgba(251, 191, 36, 0.5);
+  }
+}
+
+/* Quantum Entrance */
+@keyframes quantumEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(180deg);
+    filter: blur(10px);
+  }
+  50% {
+    transform: scale(1.1) rotate(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+}
+
+/* Digital Morph */
+@keyframes digitalMorph {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+}
+
+/* Circuit Board Trace */
+@keyframes circuitTrace {
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* AI Scan Line */
+@keyframes aiScanLine {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Utility Classes */
+
+.ai-fade-in {
+  animation: quantumFade 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.ai-pulse {
+  animation: neuralPulse 2s infinite;
+}
+
+.ai-stream {
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.5), transparent);
+  background-size: 200% 100%;
+  animation: dataStream 3s linear infinite;
+}
+
+.ai-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(251, 191, 36, 0.7) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: holographicShimmer 3s infinite;
+}
+
+.ai-thinking {
+  animation: aiThinking 2s ease-in-out infinite;
+}
+
+.ai-glitch {
+  animation: cyberGlitch 0.3s infinite;
+}
+
+.ai-glitch-text {
+  position: relative;
+}
+
+.ai-glitch-text::before,
+.ai-glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ai-glitch-text::before {
+  animation: cyberGlitch 0.3s infinite;
+  color: #00ffff;
+  z-index: -1;
+  animation-delay: 0.1s;
+}
+
+.ai-glitch-text::after {
+  animation: cyberGlitch 0.3s infinite;
+  color: #ff00ff;
+  z-index: -2;
+  animation-delay: 0.2s;
+}
+
+.ai-levitate {
+  animation: levitate 3s ease-in-out infinite;
+}
+
+.ai-energy-field {
+  animation: energyField 2s ease-in-out infinite;
+}
+
+.ai-entrance {
+  animation: quantumEntrance 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.ai-morph {
+  animation: digitalMorph 8s ease-in-out infinite;
+}
+
+.ai-scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-scan-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+  animation: aiScanLine 2s linear infinite;
+}
+
+/* Hover Effects */
+.ai-hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ai-hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3);
+}
+
+.ai-hover-glow {
+  transition: all 0.3s ease;
+}
+
+.ai-hover-glow:hover {
+  box-shadow: 
+    0 0 20px rgba(251, 191, 36, 0.6),
+    inset 0 0 20px rgba(251, 191, 36, 0.1);
+}
+
+/* Loading States */
+.ai-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(30, 41, 59, 0.5) 25%,
+    rgba(51, 65, 85, 0.5) 50%,
+    rgba(30, 41, 59, 0.5) 75%
+  );
+  background-size: 200% 100%;
+  animation: dataStream 1.5s linear infinite;
+}
+
+/* Parallax Layers */
+.ai-parallax-slow {
+  animation: levitate 6s ease-in-out infinite;
+}
+
+.ai-parallax-medium {
+  animation: levitate 4s ease-in-out infinite;
+  animation-delay: -1s;
+}
+
+.ai-parallax-fast {
+  animation: levitate 2s ease-in-out infinite;
+  animation-delay: -0.5s;
+}
