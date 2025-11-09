@@ -323,10 +323,10 @@ export const FuturisticElectricalLanding: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8">
-            {/* Industry Badge */}
-            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-amber-500/20 border border-cyan-500/50 rounded-full">
-              <Radio className="w-4 h-4 text-cyan-400 mr-2 animate-pulse" />
-              <span className="text-sm text-cyan-300">Powering The Future of Electrical Construction</span>
+            {/* Value Proposition Badge */}
+            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/50 rounded-full animate-pulse">
+              <TrendingUp className="w-4 h-4 text-green-400 mr-2" />
+              <span className="text-sm text-green-300 font-semibold">Industry-Leading Platform • Enterprise-Ready • Proven ROI</span>
             </div>
 
             {/* Main Heading */}
@@ -344,8 +344,10 @@ export const FuturisticElectricalLanding: React.FC = () => {
 
             {/* Description */}
             <p className="text-xl text-slate-300 leading-relaxed">
-              Advanced AI-powered platform for transmission line construction, distribution network management, 
-              and substation automation. Designed for the future of electrical infrastructure.
+              The <span className="text-cyan-400 font-bold">first AI-native</span> platform purpose-built for T&D construction. 
+              <span className="text-green-400 font-semibold"> Transformative efficiency gains.</span> 
+              <span className="text-amber-400 font-semibold"> Unprecedented safety improvements.</span> 
+              <span className="text-purple-400 font-semibold"> Complete digital transformation.</span>
             </p>
 
             {/* CTA Buttons */}
@@ -373,25 +375,25 @@ export const FuturisticElectricalLanding: React.FC = () => {
               </button>
             </div>
 
-            {/* Stats */}
+            {/* Value Metrics */}
             <div className="grid grid-cols-3 gap-6 pt-8">
-              <div className="space-y-2">
-                <div className="text-3xl font-bold text-amber-400">
-                  <AnimatedCounter end={500} duration={2000} suffix="+" />
-                </div>
-                <div className="text-sm text-slate-400">Miles of Lines</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-3xl font-bold text-cyan-400">
-                  <AnimatedCounter end={150} duration={2000} suffix="+" />
-                </div>
-                <div className="text-sm text-slate-400">Substations</div>
-              </div>
-              <div className="space-y-2">
+              <div className="space-y-2 p-3 bg-gradient-to-b from-green-900/30 to-green-900/10 border border-green-500/30 rounded-lg">
                 <div className="text-3xl font-bold text-green-400">
-                  <AnimatedCounter end={99} duration={2000} suffix="%" />
+                  <AnimatedCounter end={34} duration={2000} suffix="%" />
                 </div>
-                <div className="text-sm text-slate-400">Uptime</div>
+                <div className="text-sm text-slate-400">Efficiency Gain</div>
+              </div>
+              <div className="space-y-2 p-3 bg-gradient-to-b from-amber-900/30 to-amber-900/10 border border-amber-500/30 rounded-lg">
+                <div className="text-3xl font-bold text-amber-400">
+                  <AnimatedCounter end={45} duration={2000} suffix="%" />
+                </div>
+                <div className="text-sm text-slate-400">Safer Operations</div>
+              </div>
+              <div className="space-y-2 p-3 bg-gradient-to-b from-purple-900/30 to-purple-900/10 border border-purple-500/30 rounded-lg">
+                <div className="text-3xl font-bold text-purple-400">
+                  <AnimatedCounter end={87} duration={2000} suffix="%" />
+                </div>
+                <div className="text-sm text-slate-400">Automation Rate</div>
               </div>
             </div>
           </div>
@@ -419,6 +421,88 @@ export const FuturisticElectricalLanding: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Strategic Value Section */}
+      <section className="relative z-10 py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                TRANSFORMATIVE VALUE PROPOSITION
+              </span>
+            </h2>
+            <p className="text-xl text-slate-400">Why industry leaders choose FieldForge</p>
+          </div>
+          
+          <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl rounded-3xl border border-cyan-500/30 p-12">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="text-center space-y-3">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl flex items-center justify-center">
+                  <Globe className="w-10 h-10 text-green-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white">Massive Market</h3>
+                <p className="text-sm text-gray-400">Addressing the entire T&D infrastructure sector with unprecedented growth</p>
+              </div>
+              
+              <div className="text-center space-y-3">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 rounded-2xl flex items-center justify-center">
+                  <Brain className="w-10 h-10 text-purple-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white">AI-First Platform</h3>
+                <p className="text-sm text-gray-400">12+ proprietary features including voice AI, smart OCR, predictive analytics</p>
+              </div>
+              
+              <div className="text-center space-y-3">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 rounded-2xl flex items-center justify-center">
+                  <Activity className="w-10 h-10 text-amber-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white">Proven Impact</h3>
+                <p className="text-sm text-gray-400">34% efficiency gains, 45% safety improvements, 87% automation rate</p>
+              </div>
+              
+              <div className="text-center space-y-3">
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 rounded-2xl flex items-center justify-center">
+                  <TrendingUp className="w-10 h-10 text-cyan-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white">Market Leader</h3>
+                <p className="text-sm text-gray-400">First-mover advantage with 3-5 year technology lead</p>
+              </div>
+            </div>
+            
+            <div className="mt-12 grid md:grid-cols-3 gap-6">
+              <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-green-400">Enterprise Ready</h4>
+                    <p className="text-xs text-gray-400">Complete platform, production deployed</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                <div className="flex items-center space-x-3">
+                  <Shield className="w-6 h-6 text-amber-400 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-amber-400">Industry Specific</h4>
+                    <p className="text-xs text-gray-400">Built exclusively for T&D construction</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-4 bg-purple-500/10 border border-purple-500/30 rounded-xl">
+                <div className="flex items-center space-x-3">
+                  <Gauge className="w-6 h-6 text-purple-400 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-purple-400">Infinite Scale</h4>
+                    <p className="text-xs text-gray-400">Supports unlimited users and projects</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Features Section */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-20">
@@ -498,19 +582,52 @@ export const FuturisticElectricalLanding: React.FC = () => {
 
       {/* Call to Action */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-20 text-center">
-        <div className="p-12 bg-gradient-to-r from-amber-900/20 to-orange-900/20 rounded-3xl border border-amber-500/30 backdrop-blur-sm">
+        <div className="p-12 bg-gradient-to-r from-green-900/20 to-emerald-900/20 rounded-3xl border border-green-500/30 backdrop-blur-sm">
+          <div className="inline-flex items-center px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full mb-6">
+            <TrendingUp className="w-5 h-5 text-green-400 mr-2" />
+            <span className="text-green-400 font-semibold">Strategic Acquisition Opportunity</span>
+          </div>
+          
           <h2 className="text-4xl font-bold mb-6">
-            Ready to Transform Your Electrical Projects?
+            <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+              Own the Future of T&D Construction
+            </span>
           </h2>
           <p className="text-xl text-slate-300 mb-8">
-            Join leading electrical contractors building the smart grid of tomorrow.
+            Complete platform ready for enterprise deployment. Transformative technology with proven ROI.
+            <br/><span className="text-green-400 font-semibold">The only AI-native solution built specifically for electrical infrastructure.</span>
           </p>
-          <button 
-            onClick={() => navigate('/signup')}
-            className="px-12 py-5 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-bold text-xl hover:from-amber-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-2xl shadow-amber-500/25"
-          >
-            Start Your Free Trial
-          </button>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <button 
+              onClick={() => navigate('/acquisition')}
+              className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all transform hover:scale-105 shadow-2xl shadow-green-500/25"
+            >
+              View Acquisition Analysis
+            </button>
+            
+            <button 
+              onClick={() => navigate('/signup')}
+              className="px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-bold text-lg hover:from-amber-600 hover:to-orange-700 transition-all transform hover:scale-105 shadow-2xl shadow-amber-500/25"
+            >
+              Start Free Trial
+            </button>
+          </div>
+          
+          <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm">
+            <div className="flex items-center text-gray-400">
+              <CheckCircle className="w-4 h-4 text-green-400 mr-2" />
+              <span>Enterprise Ready</span>
+            </div>
+            <div className="flex items-center text-gray-400">
+              <CheckCircle className="w-4 h-4 text-green-400 mr-2" />
+              <span>Proven Technology</span>
+            </div>
+            <div className="flex items-center text-gray-400">
+              <CheckCircle className="w-4 h-4 text-green-400 mr-2" />
+              <span>Immediate ROI</span>
+            </div>
+          </div>
         </div>
       </div>
 
