@@ -12,10 +12,11 @@ import './styles/animations.css';
 import './styles/ai-animations.css';
 import './styles/futuristic.css';
 import './styles/futuristic-master.css';
+import './styles/premium-animations.css';
 
 // Auth Components
 import { FuturisticLogin } from './components/auth/FuturisticLogin';
-import { SignUpPage } from './components/auth/SignUpPage';
+import { FuturisticSignUp } from './components/auth/FuturisticSignUp';
 import { FuturisticAdminSetup } from './components/auth/FuturisticAdminSetup';
 
 // Landing Page
@@ -38,6 +39,9 @@ import { ProjectManager } from './components/projects/ProjectManager';
 
 // Test Components
 import { QATestRunner } from './pages/QATestRunner';
+
+// Onboarding
+import { WelcomePage } from './pages/WelcomePage';
 
 // Placeholder components
 import { ReceiptManager } from './components/placeholders';
@@ -209,8 +213,11 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
               } />
               
               <Route path="/signup" element={
-                session ? <Navigate to="/dashboard" replace /> : <SignUpPage />
+                session ? <Navigate to="/dashboard" replace /> : <FuturisticSignUp />
               } />
+              
+              {/* Welcome Page - For email confirmation */}
+              <Route path="/welcome" element={<WelcomePage />} />
               
               {/* Admin Setup - Always accessible */}
               <Route path="/admin-setup" element={<FuturisticAdminSetup />} />
