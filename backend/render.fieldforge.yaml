@@ -1,0 +1,31 @@
+# Render deployment configuration for FieldForge
+# This is a SEPARATE deployment from any other projects
+services:
+  - type: web
+    name: fieldforge-backend
+    runtime: node
+    repo: https://github.com/jcronkdc/fieldforge
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 4000
+      - key: DATABASE_URL
+        sync: false # Add your Supabase connection string in Render dashboard
+      - key: SUPABASE_URL
+        sync: false # Add your Supabase project URL
+      - key: SUPABASE_SERVICE_KEY
+        sync: false # Add your Supabase service role key
+      - key: WEATHER_API_KEY
+        sync: false # Optional - for weather service
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false # For location services
+      - key: ABLY_API_KEY
+        sync: false # For real-time messaging
+      - key: JWT_SECRET
+        sync: false # For authentication
+      - key: CORS_ORIGIN
+        value: https://fieldforge.vercel.app # Your frontend URL
