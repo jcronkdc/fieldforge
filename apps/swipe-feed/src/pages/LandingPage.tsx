@@ -47,29 +47,29 @@ const FuturisticBackground = () => {
 // Holographic Display Component (CSS-based)
 const HolographicDisplay = () => {
   return (
-    <div className="relative w-full h-[600px] rounded-3xl overflow-hidden bg-black/40 backdrop-blur-xl">
+    <div className="relative w-full max-w-4xl mx-auto h-[400px] md:h-[500px] rounded-3xl overflow-hidden bg-black/20 backdrop-blur-sm">
       {/* Animated background layers */}
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/20 via-purple-600/20 to-pink-600/20 animate-pulse"></div>
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-600/10 via-purple-600/10 to-pink-600/10 animate-pulse"></div>
+      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10"></div>
       
       {/* Rotating rings */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-96 h-96">
-          <div className="absolute inset-0 border-4 border-cyan-400/20 rounded-full animate-spin" style={{ animationDuration: '20s' }}></div>
-          <div className="absolute inset-8 border-4 border-purple-400/20 rounded-full animate-spin" style={{ animationDuration: '15s', animationDirection: 'reverse' }}></div>
-          <div className="absolute inset-16 border-4 border-pink-400/20 rounded-full animate-spin" style={{ animationDuration: '10s' }}></div>
+        <div className="relative w-64 h-64 md:w-80 md:h-80">
+          <div className="absolute inset-0 border-2 border-cyan-400/10 rounded-full animate-spin" style={{ animationDuration: '20s' }}></div>
+          <div className="absolute inset-8 border-2 border-purple-400/10 rounded-full animate-spin" style={{ animationDuration: '15s', animationDirection: 'reverse' }}></div>
+          <div className="absolute inset-16 border-2 border-pink-400/10 rounded-full animate-spin" style={{ animationDuration: '10s' }}></div>
         </div>
       </div>
       
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
       
       {/* Holographic UI Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
         <div className="text-center animate-pulse">
-          <h3 className="text-6xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-hologram">
+          <h3 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-hologram">
             FIELDFORGE™
           </h3>
-          <p className="text-cyan-300 mt-2 text-xl tracking-widest">NEXT GENERATION</p>
+          <p className="text-cyan-300/60 mt-2 text-sm md:text-lg tracking-widest">NEXT GENERATION</p>
         </div>
       </div>
     </div>
@@ -208,8 +208,10 @@ export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      <FuturisticBackground />
+    <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
+      <div className="fixed inset-0 -z-20">
+        <FuturisticBackground />
+      </div>
       
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-white/10">
@@ -251,11 +253,11 @@ export const LandingPage: React.FC = () => {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20">
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 -z-10 flex items-center justify-center">
           <HolographicDisplay />
         </div>
         
-        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-6 text-center">
           <div className="animate-slide-down">
             <div className="inline-flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600/20 to-cyan-600/20 backdrop-blur-xl rounded-full border border-cyan-500/30 mb-6">
               <Sparkles className="w-4 h-4 text-cyan-400" />
