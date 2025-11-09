@@ -155,18 +155,26 @@ class WeatherService {
     const restrictions: string[] = [];
     let severity: WorkRestrictions['severity'] = 'none';
 
+    const escalateSeverity = (
+      current: WorkRestrictions['severity'],
+      next: WorkRestrictions['severity']
+    ): WorkRestrictions['severity'] => {
+      const order: WorkRestrictions['severity'][] = ['none', 'advisory', 'warning', 'critical'];
+      return order[Math.max(order.indexOf(current), order.indexOf(next))] as WorkRestrictions['severity'];
+    };
+
     // Wind restrictions
     if (weather.windSpeed >= 35 || weather.windGust >= 40) {
       restrictions.push('All crane operations suspended - Wind exceeds 35 mph');
       restrictions.push('Aerial lift operations suspended');
-      severity = 'critical';
+      severity = escalateSeverity(severity, 'critical');
     } else if (weather.windSpeed >= 25 || weather.windGust >= 30) {
       restrictions.push('Crane operations restricted - Reduce loads by 25%');
       restrictions.push('No helicopter operations');
-      severity = severity === 'critical' ? 'critical' : 'warning';
+      severity = escalateSeverity(severity, 'warning');
     } else if (weather.windSpeed >= 20) {
       restrictions.push('Monitor crane operations closely');
-      severity = severity === 'none' ? 'advisory' : severity;
+      severity = escalateSeverity(severity, 'advisory');
     }
 
     // Lightning restrictions
@@ -174,7 +182,7 @@ class WeatherService {
       restrictions.push('ALL OUTDOOR WORK SUSPENDED - Lightning detected');
       restrictions.push('Seek shelter immediately');
       restrictions.push('No work on energized equipment');
-      severity = 'critical';
+      severity = escalateSeverity(severity, 'critical');
     }
 
     // Temperature restrictions
@@ -182,23 +190,23 @@ class WeatherService {
       restrictions.push('Cold weather procedures in effect');
       restrictions.push('No concrete pouring below 32°F without heating');
       restrictions.push('Increased break frequency required');
-      severity = severity === 'none' ? 'advisory' : severity;
+      severity = escalateSeverity(severity, 'advisory');
     } else if (weather.temperature >= 95) {
       restrictions.push('Heat illness prevention plan activated');
       restrictions.push('Mandatory shade and water breaks every hour');
       restrictions.push('Monitor workers for heat stress');
-      severity = severity === 'none' ? 'warning' : severity;
+      severity = escalateSeverity(severity, 'warning');
     }
 
     // Visibility restrictions
     if (weather.visibility < 0.25) {
       restrictions.push('Heavy equipment operations suspended - Low visibility');
       restrictions.push('No crane operations');
-      severity = severity === 'critical' ? 'critical' : 'warning';
+      severity = escalateSeverity(severity, 'warning');
     } else if (weather.visibility < 0.5) {
       restrictions.push('Reduced speed for all equipment');
       restrictions.push('Spotters required for equipment movement');
-      severity = severity === 'none' ? 'advisory' : severity;
+      severity = escalateSeverity(severity, 'advisory');
     }
 
     // Ice/Snow restrictions
@@ -206,14 +214,14 @@ class WeatherService {
       restrictions.push('Ice/snow conditions - Fall protection required');
       restrictions.push('De-icing required before climbing');
       restrictions.push('No work on energized equipment');
-      severity = severity === 'warning' ? 'warning' : 'advisory';
+      severity = escalateSeverity(severity, 'advisory');
     }
 
     // Rain restrictions
     if (weather.precipitation > 0.5) {
       restrictions.push('No energized work during heavy rain');
       restrictions.push('Excavation work suspended - Monitor for cave-ins');
-      severity = severity === 'none' ? 'advisory' : severity;
+      severity = escalateSeverity(severity, 'advisory');
     }
 
     return {

@@ -133,9 +133,9 @@ export const FuturisticAdminSetup: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+    <div className="relative min-h-screen bg-slate-950 flex items-center justify-center p-6">
       {/* Subtle Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" aria-hidden="true" />
 
       {/* Main Container */}
       <div className="relative z-10 w-full max-w-2xl">

@@ -339,8 +339,8 @@ class LocationService {
   /**
    * Validate if location is within project boundary
    */
-  async isLocationInProjectBounds(
-    location: Location, 
+  isLocationInProjectBounds(
+    location: Location,
     projectBounds: Location[]
   ): boolean {
     // Simple point-in-polygon test

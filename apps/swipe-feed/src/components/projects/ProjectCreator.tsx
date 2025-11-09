@@ -37,9 +37,10 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
     setError(null);
 
     try {
+      const { location, ...projectDetails } = formData;
+
       const project = await projectService.createProject({
-        ...formData,
-        location: formData.location,
+        ...projectDetails,
         status: 'planning'
       });
 

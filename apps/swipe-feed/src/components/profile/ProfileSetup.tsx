@@ -109,8 +109,8 @@ export function ProfileSetup({ user, onComplete }: ProfileSetupProps) {
         <div className="absolute inset-0 bg-gradient-to-br from-aurora/10 via-transparent to-purple-900/20 opacity-60" aria-hidden />
         <div className="relative grid gap-0 md:grid-cols-[1.15fr_0.85fr]">
           <div className="flex flex-col gap-6 border-b border-slate-800/60 p-10 md:border-b-0 md:border-r">
-            <Pill variant="aurora" className="w-fit text-sm normal-case text-aurora">
-              Welcome to Prologue
+            <Pill variant="info" className="w-fit text-sm normal-case text-slate-100">
+              Identify your crew role
             </Pill>
             <h1 className="text-3xl font-semibold text-slate-50">Set your storyteller identity</h1>
             <p className="text-sm leading-relaxed text-slate-300">

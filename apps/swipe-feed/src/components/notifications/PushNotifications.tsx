@@ -148,20 +148,27 @@ export const PushNotifications: React.FC = () => {
   };
 
   const subscribeToRealtimeNotifications = () => {
-    // Subscribe to real-time updates from Supabase
-    const channel = supabase.channel('notifications')
-      .on('broadcast', { event: 'new_notification' }, (payload) => {
+    const allowedTypes: Notification['type'][] = ['info', 'success', 'warning', 'error', 'safety', 'achievement'];
+
+    const channel = supabase
+      .channel('notifications')
+      .on('broadcast', { event: 'new_notification' }, ({ payload }) => {
+        const data = (payload ?? {}) as Partial<Notification> & { actionUrl?: string };
+        const type = allowedTypes.includes(data.type as Notification['type'])
+          ? (data.type as Notification['type'])
+          : 'info';
+
         const newNotification: Notification = {
-          id: payload.id || Date.now().toString(),
-          type: payload.type || 'info',
-          title: payload.title,
-          message: payload.message,
+          id: data.id ?? Date.now().toString(),
+          type,
+          title: data.title ?? 'FieldForge update',
+          message: data.message ?? 'A new notification is available.',
           timestamp: new Date(),
           read: false,
-          actionUrl: payload.actionUrl,
-          metadata: payload.metadata
+          actionUrl: data.actionUrl,
+          metadata: data.metadata
         };
-        
+
         addNotification(newNotification);
         showNotification(newNotification);
       })

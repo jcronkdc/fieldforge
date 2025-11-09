@@ -546,7 +546,13 @@ export function AccountSettingsPanel({
             <h2 className="text-2xl font-semibold text-white">Account settings</h2>
             <p className="text-sm text-slate-300">Manage your storyteller identity, security preferences, and quick launch tools.</p>
           </div>
-          <Button type="button" variant="ghost" iconOnly onClick={onClose} aria-label="Close settings">
+          <Button
+            type="button"
+            variant="ghost"
+            className="h-10 w-10 p-0 text-lg"
+            onClick={onClose}
+            aria-label="Close settings"
+          >
             ✕
           </Button>
         </header>

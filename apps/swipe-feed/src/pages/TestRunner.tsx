@@ -63,8 +63,10 @@ export const TestRunner: React.FC = () => {
 
   const getPassRate = () => {
     if (!summary || summary.total === 0) return 0;
-    return ((summary.passed / summary.total) * 100).toFixed(1);
+    return (summary.passed / summary.total) * 100;
   };
+
+  const passRate = getPassRate();
 
   return (
     <div className="min-h-screen bg-gray-900 p-8">
@@ -143,8 +145,8 @@ export const TestRunner: React.FC = () => {
                   <div className="text-sm text-gray-400">Total</div>
                 </div>
                 <div className="text-center">
-                  <div className={`text-2xl font-bold ${parseFloat(getPassRate()) === 100 ? 'text-green-400' : 'text-yellow-400'}`}>
-                    {getPassRate()}%
+                  <div className={`text-2xl font-bold ${passRate === 100 ? 'text-green-400' : 'text-yellow-400'}`}>
+                    {passRate.toFixed(1)}%
                   </div>
                   <div className="text-sm text-gray-400">Pass Rate</div>
                 </div>

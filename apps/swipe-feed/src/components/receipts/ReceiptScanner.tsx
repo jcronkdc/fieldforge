@@ -159,6 +159,11 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
       return;
     }
 
+    if (!imageFile) {
+      setError('Please capture or upload a receipt image before submitting.');
+      return;
+    }
+
     setProcessing(true);
     setError('');
 
@@ -192,7 +197,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
       const costCodeString = costCodeObj ? `${costCodeObj.code} - ${costCodeObj.name}` : 'No Code';
       
       // Stamp the receipt with project info
-      let stampedImage = imageFile;
+      let stampedImage: File | null = imageFile;
       if (imageFile) {
         const stampedBlob = await imageEnhancer.stampReceipt(imageFile, {
           userName,
@@ -245,7 +250,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
           costCode: costCodeString,
           vendorName: vendorName || 'Unknown Vendor',
           amount: parseFloat(amount),
-          receiptImage: imageFile!,
+          receiptImage: imageFile,
           enhancedImage: stampedImage
         });
         
