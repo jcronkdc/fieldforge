@@ -7,6 +7,7 @@ import './styles/animations.css';
 // Landing Page
 import { LandingPage } from './pages/LandingPage';
 import { TestRouting } from './pages/TestRouting';
+import { TestRunner } from './pages/TestRunner';
 
 // Auth Components
 import { LoginPage } from './components/auth/LoginPage';
@@ -140,8 +141,9 @@ function App() {
             session ? <Navigate to="/dashboard" replace /> : <SignUpPage />
           } />
           
-          {/* Test Route - Available to all */}
+          {/* Test Routes - Available to all */}
           <Route path="/test-routing" element={<TestRouting />} />
+          <Route path="/test-runner" element={<TestRunner />} />
           
           {/* Protected Routes */}
           {session ? (
