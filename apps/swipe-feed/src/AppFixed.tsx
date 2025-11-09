@@ -72,96 +72,203 @@ const FixedLandingPage = () => {
   const navigate = useNavigate();
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-amber-900/10 to-slate-900">
-      {/* Background Effects */}
-      <div className="fixed inset-0 overflow-hidden">
-        <div className="absolute top-0 -left-40 w-80 h-80 bg-amber-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl"></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-0 -left-4 w-96 h-96 bg-amber-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+          <div className="absolute top-0 -right-4 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          {/* Navigation */}
+          <nav className="flex justify-between items-center mb-16">
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">FF</span>
+              </div>
+              <span className="text-2xl font-bold text-white">FieldForge</span>
+            </div>
+            <div className="flex space-x-4">
+              <button
+                onClick={() => navigate('/login')}
+                className="px-6 py-2 text-white hover:text-amber-400 transition-colors"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => navigate('/signup')}
+                className="px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-semibold transition-all transform hover:scale-105"
+              >
+                Get Started
+              </button>
+            </div>
+          </nav>
+
+          {/* Hero Content */}
+          <div className="text-center">
+            <h1 className="text-5xl sm:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600 mb-6">
+              BUILD THE IMPOSSIBLE
+            </h1>
+            <p className="text-xl sm:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto">
+              Next-Generation Construction Management Platform with AI-Powered Tools,
+              Voice Control, and Real-Time Collaboration
+            </p>
+            
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <button
+                onClick={() => navigate('/signup')}
+                className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold rounded-lg shadow-lg transform transition hover:scale-105"
+              >
+                Start Free Trial
+              </button>
+              <button
+                onClick={() => navigate('/demo')}
+                className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg shadow-lg transform transition hover:scale-105 border border-slate-700"
+              >
+                Watch Demo
+              </button>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="flex flex-wrap justify-center gap-8 text-slate-400">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>50,000+ Field Workers</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>1,000+ Projects</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>99.9% Uptime</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        {/* Logo/Brand */}
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center justify-center w-24 h-24 mb-6 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl shadow-2xl">
-            <span className="text-4xl font-black text-white">FF</span>
+
+      {/* Features Section */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center text-white mb-12">
+          Cutting-Edge Features for Modern Construction
+        </h2>
+        
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* Voice Control */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+              <span className="text-3xl">🎙️</span>
+            </div>
+            <h3 className="text-xl font-bold text-amber-400 mb-3">Voice Control</h3>
+            <p className="text-slate-400">
+              Hands-free operation for field workers. Create reports, scan receipts,
+              and manage tasks with simple voice commands.
+            </p>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 mb-4">
-            FIELDFORGE
-          </h1>
+          {/* Gesture Controls */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+              <span className="text-3xl">👆</span>
+            </div>
+            <h3 className="text-xl font-bold text-amber-400 mb-3">Smart Gestures</h3>
+            <p className="text-slate-400">
+              Swipe to approve, reject, and manage. Intuitive touch controls
+              designed for tablets and mobile devices.
+            </p>
+          </div>
           
-          <p className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto">
-            Next-Generation Construction Management Platform
-          </p>
-        </div>
-        
-        {/* Feature Pills */}
-        <div className="flex flex-wrap gap-2 justify-center mb-8">
-          <span className="px-4 py-2 bg-slate-800/50 backdrop-blur text-amber-400 rounded-full text-sm font-medium">
-            🎙️ Voice Control
-          </span>
-          <span className="px-4 py-2 bg-slate-800/50 backdrop-blur text-amber-400 rounded-full text-sm font-medium">
-            👆 Gesture Support
-          </span>
-          <span className="px-4 py-2 bg-slate-800/50 backdrop-blur text-amber-400 rounded-full text-sm font-medium">
-            📊 Real-Time Analytics
-          </span>
-          <span className="px-4 py-2 bg-slate-800/50 backdrop-blur text-amber-400 rounded-full text-sm font-medium">
-            🤖 AI Assistant
-          </span>
-        </div>
-        
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-12">
-          <button
-            onClick={() => navigate('/signup')}
-            className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold rounded-xl shadow-lg transform transition-all hover:scale-105"
-          >
-            Get Started Free
-          </button>
-          <button
-            onClick={() => navigate('/login')}
-            className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl shadow-lg transform transition-all hover:scale-105"
-          >
-            Sign In
-          </button>
-        </div>
-        
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-8 text-center">
-          <div>
-            <div className="text-3xl font-bold text-amber-400">50K+</div>
-            <div className="text-sm text-slate-400">Field Workers</div>
+          {/* AI Assistant */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+              <span className="text-3xl">🤖</span>
+            </div>
+            <h3 className="text-xl font-bold text-amber-400 mb-3">AI Assistant</h3>
+            <p className="text-slate-400">
+              Get instant answers, generate reports, and receive intelligent
+              suggestions powered by advanced AI.
+            </p>
           </div>
-          <div>
-            <div className="text-3xl font-bold text-amber-400">1000+</div>
-            <div className="text-sm text-slate-400">Active Projects</div>
+
+          {/* Real-Time Analytics */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+              <span className="text-3xl">📊</span>
+            </div>
+            <h3 className="text-xl font-bold text-amber-400 mb-3">Live Analytics</h3>
+            <p className="text-slate-400">
+              Monitor project performance in real-time with interactive dashboards
+              and predictive insights.
+            </p>
           </div>
-          <div>
-            <div className="text-3xl font-bold text-amber-400">99.9%</div>
-            <div className="text-sm text-slate-400">Uptime</div>
+
+          {/* OCR Scanning */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+              <span className="text-3xl">📸</span>
+            </div>
+            <h3 className="text-xl font-bold text-amber-400 mb-3">Smart OCR</h3>
+            <p className="text-slate-400">
+              Scan receipts and documents with automatic data extraction and
+              intelligent categorization.
+            </p>
+          </div>
+
+          {/* 3D Visualization */}
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+              <span className="text-3xl">🌐</span>
+            </div>
+            <h3 className="text-xl font-bold text-amber-400 mb-3">3D Visualization</h3>
+            <p className="text-slate-400">
+              Holographic UI elements and immersive 3D project visualization
+              for better understanding.
+            </p>
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+              <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">FF</span>
+              </div>
+              <span className="text-xl font-bold text-white">FieldForge</span>
+            </div>
+            <p className="text-slate-400">© 2025 Cronk Companies LLC. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
 
-// Import useNavigate hook for FixedLandingPage
+// Need to import useNavigate separately for the component
 import { useNavigate } from 'react-router-dom';
+import { QATestRunner } from './pages/QATestRunner';
 
-// Import test runner
-import { SystemTestRunner } from './pages/SystemTestRunner';
-
-export default function AppFixed() {
+function AppFixed() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
   useEffect(() => {
     let mounted = true;
-
+    
+    // Check session
     const initializeAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -170,7 +277,7 @@ export default function AppFixed() {
           setLoading(false);
         }
       } catch (error) {
-        console.error('Auth initialization error:', error);
+        console.error('Error initializing auth:', error);
         if (mounted) {
           setLoading(false);
         }
@@ -180,9 +287,10 @@ export default function AppFixed() {
     initializeAuth();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (mounted) {
         setSession(session);
+        setLoading(false);
       }
     });
 
@@ -193,9 +301,9 @@ export default function AppFixed() {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Register service worker for PWA
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js').catch(console.error);
+    // Service Worker Registration
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+      navigator.serviceWorker.register('/service-worker.js');
     }
 
     return () => {
@@ -208,7 +316,7 @@ export default function AppFixed() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h1 className="text-2xl font-bold text-white">FieldForge</h1>
@@ -239,8 +347,8 @@ export default function AppFixed() {
                 session ? <Navigate to="/dashboard" replace /> : <SignUpPage />
               } />
               
-              {/* Test Runner - Available to all */}
-              <Route path="/test-runner" element={<SystemTestRunner />} />
+              {/* QA Test Runner - Available to all for testing */}
+              <Route path="/qa-tests" element={<QATestRunner />} />
               
               {/* Protected Routes */}
               {session ? (
@@ -251,63 +359,44 @@ export default function AppFixed() {
                   <Route path="/projects" element={<ProjectManager />} />
                   <Route path="/metrics/project" element={<ProjectMetrics />} />
                   <Route path="/metrics/safety" element={<SafetyMetrics />} />
-                  
-                  {/* Field Operations */}
                   <Route path="/field/daily-report" element={<DailyOperations />} />
-                  <Route path="/field/crew" element={<CrewManagement />} />
+                  <Route path="/field/crew-management" element={<CrewManagement />} />
                   <Route path="/field/time-tracking" element={<TimeTracking />} />
-                  <Route path="/field/weather" element={<WeatherDashboard />} />
-                  <Route path="/field/environmental" element={<EnvironmentalCompliance />} />
                   <Route path="/field/receipts" element={<ReceiptManager />} />
-                  
-                  {/* Safety */}
-                  <Route path="/safety" element={<SafetyHub />} />
+                  <Route path="/safety/hub" element={<SafetyHub />} />
                   <Route path="/safety/briefing" element={<SafetyBriefing />} />
                   <Route path="/safety/incident" element={<IncidentReporting />} />
                   <Route path="/safety/permits" element={<PermitManagement />} />
-                  <Route path="/safety/inspection" element={<InspectionManager />} />
-                  
-                  {/* Equipment & Materials */}
-                  <Route path="/equipment" element={<EquipmentHub />} />
+                  <Route path="/equipment/hub" element={<EquipmentHub />} />
                   <Route path="/equipment/inventory" element={<MaterialInventory />} />
                   <Route path="/equipment/maintenance" element={<EquipmentMaintenance />} />
-                  
-                  {/* Quality */}
-                  <Route path="/quality" element={<QAQCHub />} />
-                  <Route path="/quality/testing" element={<TestingDashboard />} />
-                  
-                  {/* Documents */}
-                  <Route path="/documents" element={<DocumentHub />} />
+                  <Route path="/qaqc/hub" element={<QAQCHub />} />
+                  <Route path="/qaqc/inspections" element={<InspectionManager />} />
+                  <Route path="/qaqc/testing" element={<TestingDashboard />} />
+                  <Route path="/documents/hub" element={<DocumentHub />} />
                   <Route path="/documents/drawings" element={<DrawingViewer />} />
                   <Route path="/documents/submittals" element={<SubmittalManager />} />
-                  
-                  {/* Schedule */}
-                  <Route path="/schedule" element={<ProjectSchedule />} />
+                  <Route path="/schedule/overview" element={<ProjectSchedule />} />
                   <Route path="/schedule/lookahead" element={<ThreeWeekLookahead />} />
-                  <Route path="/schedule/outage" element={<OutageCoordination />} />
-                  
-                  {/* Communication */}
-                  <Route path="/messages" element={<TeamMessaging />} />
-                  <Route path="/alerts" element={<EmergencyAlerts />} />
-                  
-                  {/* 3D Visualization */}
-                  <Route path="/map" element={<ProjectMap3D />} />
-                  <Route path="/model" element={<SubstationModel />} />
-                  
-                  {/* AI */}
-                  <Route path="/ai" element={<FieldForgeAI />} />
-                  
-                  {/* Settings */}
+                  <Route path="/schedule/outages" element={<OutageCoordination />} />
+                  <Route path="/field/weather" element={<WeatherDashboard />} />
+                  <Route path="/compliance/environmental" element={<EnvironmentalCompliance />} />
+                  <Route path="/communication/messages" element={<TeamMessaging />} />
+                  <Route path="/communication/alerts" element={<EmergencyAlerts />} />
+                  <Route path="/visualization/map" element={<ProjectMap3D />} />
+                  <Route path="/visualization/model" element={<SubstationModel />} />
+                  <Route path="/ai/assistant" element={<FieldForgeAI />} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/settings/company" element={<CompanySettings />} />
                   <Route path="/settings/profile" element={<UserProfile />} />
+                  <Route path="*" element={<Navigate to="/dashboard" replace />} />
                 </Route>
               ) : (
                 <Route path="*" element={<Navigate to="/" replace />} />
               )}
             </Routes>
 
-            {/* Global Components for authenticated users */}
+            {/* Global Components */}
             {session && (
               <>
                 <MobileNav />
@@ -322,3 +411,5 @@ export default function AppFixed() {
     </ErrorBoundary>
   );
 }
+
+export default AppFixed;
