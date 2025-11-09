@@ -31,7 +31,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
     {
       label: 'Dashboard',
       icon: LayoutDashboard,
-      path: '/',
+      path: '/dashboard',
       badge: null,
       color: 'text-amber-500'
     },
@@ -157,7 +157,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       `}>
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-slate-700">
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/dashboard" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center">
               <Zap className="w-6 h-6 text-white" />
             </div>

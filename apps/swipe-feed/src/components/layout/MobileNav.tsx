@@ -8,7 +8,7 @@ export const MobileNav: React.FC = () => {
   const location = useLocation();
   
   const navItems = [
-    { icon: Home, label: 'Home', path: '/', color: 'text-amber-500' },
+    { icon: Home, label: 'Home', path: '/dashboard', color: 'text-amber-500' },
     { icon: HardHat, label: 'Field', path: '/field', color: 'text-green-500' },
     { icon: Shield, label: 'Safety', path: '/safety', color: 'text-red-500' },
     { icon: FileText, label: 'Docs', path: '/documents', color: 'text-blue-500' },

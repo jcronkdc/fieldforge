@@ -76,7 +76,7 @@ export const SignUpPage: React.FC = () => {
 
       setSuccess(true);
       setTimeout(() => {
-        navigate('/');
+        navigate('/dashboard');
       }, 2000);
     } catch (error: any) {
       setError(error.message || 'Failed to create account');

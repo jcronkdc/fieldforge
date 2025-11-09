@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
+import './styles/animations.css';
+
+// Landing Page
+import { LandingPage } from './pages/LandingPage';
 
 // Auth Components
 import { LoginPage } from './components/auth/LoginPage';
@@ -114,19 +118,24 @@ function App() {
         {isOffline && <OfflineIndicator />}
         
         <Routes>
+          {/* Public Landing Page */}
+          <Route path="/" element={
+            session ? <Navigate to="/dashboard" replace /> : <LandingPage />
+          } />
+          
           {/* Auth Routes */}
           <Route path="/login" element={
-            session ? <Navigate to="/" replace /> : <LoginPage />
+            session ? <Navigate to="/dashboard" replace /> : <LoginPage />
           } />
           <Route path="/signup" element={
-            session ? <Navigate to="/" replace /> : <SignUpPage />
+            session ? <Navigate to="/dashboard" replace /> : <SignUpPage />
           } />
           
           {/* Protected Routes */}
           {session ? (
             <Route element={<MainLayout session={session} />}>
               {/* Dashboard */}
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/metrics/project" element={<ProjectMetrics />} />
               <Route path="/metrics/safety" element={<SafetyMetrics />} />
               

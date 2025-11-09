@@ -26,7 +26,7 @@ export const LoginPage: React.FC = () => {
       
       setSuccess(true);
       setTimeout(() => {
-        navigate('/');
+        navigate('/dashboard');
       }, 1000);
     } catch (error: any) {
       setError(error.message || 'Failed to sign in');
