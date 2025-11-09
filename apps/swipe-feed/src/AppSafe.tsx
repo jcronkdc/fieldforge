@@ -42,6 +42,9 @@ import { ReceiptManager } from './components/placeholders';
 import { OfflineIndicator } from './components/common/OfflineIndicator';
 import { SyncStatus } from './components/common/SyncStatus';
 
+// Environment Indicators
+import { EnvironmentBadge, LiveSiteBanner } from './components/common/EnvironmentBadge';
+
 // Simple fallback component for errors
 const ErrorFallback = () => (
   <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
@@ -178,6 +181,8 @@ function AppSafe() {
       <AuthProvider>
         <Router>
           <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+            <LiveSiteBanner />
+            <EnvironmentBadge />
             {isOffline && <OfflineIndicator />}
             
             <Routes>
