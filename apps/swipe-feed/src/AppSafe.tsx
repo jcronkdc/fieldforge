@@ -39,6 +39,7 @@ import { ProjectManager } from './components/projects/ProjectManager';
 
 // Test Components
 import { QATestRunner } from './pages/QATestRunner';
+import { AcquisitionEvaluation } from './tests/AcquisitionEvaluation';
 
 // Onboarding
 import { WelcomePage } from './pages/WelcomePage';
@@ -224,6 +225,9 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
               
               {/* QA Test Runner - Always accessible */}
               <Route path="/qa-tests" element={<QATestRunner />} />
+              
+              {/* Acquisition Evaluation - Always accessible */}
+              <Route path="/acquisition" element={<AcquisitionEvaluation />} />
               
               {/* Protected Routes */}
               {session ? (
