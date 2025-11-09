@@ -6,6 +6,7 @@ import './styles/animations.css';
 
 // Landing Page
 import { LandingPage } from './pages/LandingPage';
+import { TestRouting } from './pages/TestRouting';
 
 // Auth Components
 import { LoginPage } from './components/auth/LoginPage';
@@ -139,6 +140,9 @@ function App() {
             session ? <Navigate to="/dashboard" replace /> : <SignUpPage />
           } />
           
+          {/* Test Route - Available to all */}
+          <Route path="/test-routing" element={<TestRouting />} />
+          
           {/* Protected Routes */}
           {session ? (
             <Route element={<MainLayout session={session} />}>
@@ -200,9 +204,12 @@ function App() {
               <Route path="/settings" element={<Settings />} />
               <Route path="/settings/company" element={<CompanySettings />} />
               <Route path="/settings/profile" element={<UserProfile />} />
+              
+              {/* Catch all - redirect to dashboard */}
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Route>
           ) : (
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           )}
         </Routes>
 
