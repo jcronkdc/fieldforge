@@ -59,18 +59,19 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       badge: null,
       color: 'text-blue-500'
     },
-    {
-      label: 'Field Operations',
-      icon: HardHat,
-      path: '/field',
-      badge: null,
-      color: 'text-green-500',
-      subItems: [
-        { label: 'Daily Operations', path: '/field' },
-        { label: 'Crew Management', path: '/field/crews' },
-        { label: 'Time Tracking', path: '/field/time' }
-      ]
-    },
+        {
+          label: 'Field Operations',
+          icon: HardHat,
+          path: '/field',
+          badge: null,
+          color: 'text-green-500',
+          subItems: [
+            { label: 'Daily Operations', path: '/field' },
+            { label: 'Crew Management', path: '/field/crews' },
+            { label: 'Time Tracking', path: '/field/time' },
+            { label: 'Receipt Management', path: '/field/receipts' }
+          ]
+        },
     {
       label: 'Safety',
       icon: Shield,

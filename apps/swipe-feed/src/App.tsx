@@ -60,7 +60,8 @@ import {
   FieldForgeAI,
   Settings,
   CompanySettings,
-  UserProfile
+  UserProfile,
+  ReceiptManager
 } from './components/placeholders';
 
 // Offline Support
@@ -156,10 +157,11 @@ function App() {
               <Route path="/metrics/project" element={<ProjectMetrics />} />
               <Route path="/metrics/safety" element={<SafetyMetrics />} />
               
-              {/* Field Operations */}
-              <Route path="/field" element={<DailyOperations />} />
-              <Route path="/field/crews" element={<CrewManagement />} />
-              <Route path="/field/time" element={<TimeTracking />} />
+                  {/* Field Operations */}
+                  <Route path="/field" element={<DailyOperations />} />
+                  <Route path="/field/crews" element={<CrewManagement />} />
+                  <Route path="/field/time" element={<TimeTracking />} />
+                  <Route path="/field/receipts" element={<ReceiptManager />} />
               
               {/* Safety */}
               <Route path="/safety" element={<SafetyHub />} />

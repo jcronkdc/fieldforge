@@ -1,0 +1,135 @@
+{
+  "name": "FieldForge - T&D Construction Management",
+  "short_name": "FieldForge",
+  "description": "Construction management platform for Transmission, Distribution & Substation projects",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait",
+  "scope": "/",
+  "categories": ["business", "productivity", "utilities"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/dashboard.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Project Dashboard"
+    },
+    {
+      "src": "/screenshots/safety.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Safety Management"
+    },
+    {
+      "src": "/screenshots/equipment.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "label": "Equipment Tracking"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Daily Report",
+      "short_name": "Report",
+      "description": "Create daily report",
+      "url": "/daily-report",
+      "icons": [{ "src": "/icons/report.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Safety Brief",
+      "short_name": "Safety",
+      "description": "Conduct safety briefing",
+      "url": "/safety-briefing",
+      "icons": [{ "src": "/icons/safety.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "RFI",
+      "short_name": "RFI",
+      "description": "Submit new RFI",
+      "url": "/rfi/new",
+      "icons": [{ "src": "/icons/rfi.png", "sizes": "96x96" }]
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "image",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  },
+  "features": [
+    "Cross Platform",
+    "Offline Capable",
+    "Location Services",
+    "Camera Access",
+    "Push Notifications",
+    "File Upload"
+  ],
+  "permissions": [
+    "geolocation",
+    "camera",
+    "notifications",
+    "storage"
+  ]
+}
