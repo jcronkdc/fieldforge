@@ -1,6 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, BarChart3, CheckCircle, Globe2, LineChart, ShieldCheck, Users2, Zap } from 'lucide-react';
+import {
+  ArrowRight,
+  BarChart3,
+  CheckCircle,
+  Globe2,
+  LineChart,
+  ShieldCheck,
+  Users2,
+  Zap,
+  Activity,
+  Waves
+} from 'lucide-react';
 
 const highlights = [
   'Transmission, distribution, and substation execution in one system',
@@ -58,17 +69,28 @@ const metrics = [
   { label: 'Reduction in reporting lag', value: '63%', icon: BarChart3 }
 ];
 
+const telemetry = [
+  { label: 'Grid load', value: '72%', status: 'Stable' },
+  { label: 'Crew deployment', value: '184 crews', status: 'In-field' },
+  { label: 'Energization window', value: '14:30 PST', status: 'Locked' }
+];
+
 export const FuturisticElectricalLanding: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <main className="min-h-screen bg-white text-slate-900" role="main" itemScope itemType="https://schema.org/WebPage">
+    <main className="relative min-h-screen overflow-hidden bg-white text-slate-900" role="main" itemScope itemType="https://schema.org/WebPage">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,_rgba(15,76,129,0.08),_transparent_55%),_radial-gradient(circle_at_80%_0%,_rgba(17,118,161,0.12),_transparent_50%)]" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(120deg,_rgba(15,76,129,0.08),_transparent_40%),_linear-gradient(300deg,_rgba(17,118,161,0.12),_transparent_45%)]" aria-hidden />
+      <div className="pointer-events-none absolute inset-x-[5%] top-40 h-[28rem] -z-10 rounded-[36px] bg-gradient-to-br from-white via-slate-50 to-slate-100 opacity-[0.92] shadow-[0_40px_120px_rgba(15,23,42,0.16)]" aria-hidden />
+      <div className="pointer-events-none absolute left-1/2 top-[26rem] h-[20rem] w-[42rem] -translate-x-1/2 rounded-[32px] border border-slate-100/70 bg-white/80 blur-lg" aria-hidden />
+
       <h1 className="sr-only">FieldForge – Enterprise construction management for transmission, distribution, and substation delivery</h1>
 
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-slate-200 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 lg:px-8">
           <div className="flex items-center gap-3">
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-white">
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-white shadow-[0_12px_24px_rgba(15,23,42,0.18)]">
               <Zap className="h-6 w-6" aria-hidden="true" />
             </span>
             <div>
@@ -78,30 +100,21 @@ export const FuturisticElectricalLanding: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => navigate('/login')}
-              className="btn-ghost"
-            >
+            <button onClick={() => navigate('/login')} className="btn-ghost">
               Sign in
             </button>
-            <button
-              onClick={() => navigate('/demo')}
-              className="btn-secondary"
-            >
+            <button onClick={() => navigate('/demo')} className="btn-secondary">
               Request briefing
             </button>
-            <button
-              onClick={() => navigate('/signup')}
-              className="btn-primary"
-            >
+            <button onClick={() => navigate('/signup')} className="btn-primary">
               Launch sandbox
             </button>
           </div>
         </div>
       </header>
 
-      <section className="border-b border-slate-200 bg-gradient-to-br from-white via-white to-slate-100/60">
-        <div className="mx-auto flex max-w-6xl flex-col gap-12 px-6 py-20 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+      <section className="relative border-b border-slate-200">
+        <div className="mx-auto flex max-w-6xl flex-col gap-14 px-6 pb-28 pt-20 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div className="max-w-2xl space-y-6">
             <p className="badge">Transmission • Distribution • Substations</p>
             <h2 className="text-4xl font-semibold text-slate-900 sm:text-5xl">
@@ -113,7 +126,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
             <ul className="space-y-3 text-base text-slate-600">
               {highlights.map((item) => (
                 <li key={item} className="flex items-start gap-3">
-                  <CheckCircle className="mt-1 h-5 w-5 text-emerald-500" aria-hidden="true" />
+                  <CheckCircle className="mt-1 h-5 w-5 text-slate-900" aria-hidden="true" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -129,31 +142,53 @@ export const FuturisticElectricalLanding: React.FC = () => {
             </div>
           </div>
 
-          <aside className="w-full max-w-md rounded-3xl border border-slate-200 bg-white px-6 py-8 shadow-elevated">
-            <p className="text-sm font-semibold text-slate-500 uppercase">Executive scorecard</p>
-            <p className="mt-3 text-lg font-medium text-slate-800">
-              Utilities using FieldForge close outage packages 2.4× faster than with legacy systems.
-            </p>
-            <div className="mt-6 space-y-4">
-              {metrics.map(({ label, value, icon: Icon }) => (
-                <div key={label} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-900 text-white">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <p className="text-sm font-medium text-slate-500">{label}</p>
-                      <p className="text-lg font-semibold text-slate-900">{value}</p>
+          <aside className="relative w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.12)]">
+            <div className="absolute -left-8 top-10 hidden h-32 w-32 rounded-full bg-gradient-to-br from-indigo-200/40 to-cyan-200/40 blur-3xl lg:block" />
+            <div className="absolute -right-6 bottom-6 hidden h-24 w-24 rounded-full bg-gradient-to-br from-emerald-200/40 to-slate-200/40 blur-3xl lg:block" />
+            <div className="relative">
+              <p className="text-sm font-semibold text-slate-500 uppercase">Live executive telemetry</p>
+              <p className="mt-3 text-lg font-medium text-slate-800">
+                Utilities running FieldForge close outage packages 2.4× faster than with legacy systems.
+              </p>
+              <div className="mt-6 space-y-4">
+                {metrics.map(({ label, value, icon: Icon }) => (
+                  <div key={label} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-900 text-white">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">{label}</p>
+                        <p className="text-lg font-semibold text-slate-900">{value}</p>
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
+              <div className="mt-6 rounded-2xl border border-slate-200 bg-white/90 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Live site indicators</p>
+                <div className="mt-3 grid gap-3 text-sm text-slate-600">
+                  {telemetry.map(({ label, value, status }) => (
+                    <div key={label} className="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
+                      <div>
+                        <p className="font-semibold text-slate-900">{value}</p>
+                        <p className="text-xs text-slate-500">{label}</p>
+                      </div>
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-700">{status}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </aside>
         </div>
+
+        <div className="pointer-events-none absolute inset-x-0 top-[52%] h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" aria-hidden />
+        <div className="pointer-events-none absolute inset-x-[10%] top-[58%] h-48 rounded-[28px] border border-slate-200 bg-white/80 shadow-[0_18px_60px_rgba(15,23,42,0.08)] blur-[1px]" aria-hidden />
+        <div className="pointer-events-none absolute inset-x-[12%] top-[60%] hidden h-40 rounded-[24px] bg-[repeating-linear-gradient(90deg,_rgba(15,76,129,0.08)_0,_rgba(15,76,129,0.08)_1px,_transparent_1px,_transparent_42px)] lg:block" aria-hidden />
       </section>
 
-      <section className="border-b border-slate-200 bg-white">
+      <section className="border-b border-slate-200 bg-white/70 backdrop-blur">
         <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Trusted by leaders modernising the grid</p>
           <div className="mt-5 flex flex-wrap items-center gap-x-10 gap-y-4 text-sm font-semibold text-slate-500 lg:text-base">
@@ -177,12 +212,12 @@ export const FuturisticElectricalLanding: React.FC = () => {
           </div>
           <div className="mt-12 grid gap-6 lg:grid-cols-3">
             {capabilityColumns.map(({ title, items }) => (
-              <div key={title} className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
+              <div key={title} className="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
                 <ul className="mt-4 space-y-3 text-sm text-slate-600">
                   {items.map((item) => (
                     <li key={item} className="flex items-start gap-3">
-                      <div className="mt-1 h-2 w-2 rounded-full bg-slate-400" />
+                      <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-slate-400" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -195,13 +230,33 @@ export const FuturisticElectricalLanding: React.FC = () => {
 
       <section className="border-b border-slate-200 bg-slate-50">
         <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+          <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-start">
             <div className="space-y-6">
               <p className="badge">Why utilities switch</p>
               <h2 className="text-3xl font-semibold text-slate-900">From capital programs to storm response, FieldForge outperforms legacy suites</h2>
               <p className="text-base text-slate-600">
                 We built the platform around the realities of grid construction: multi-party coordination, regulator expectations, and relentless capital delivery targets. No more compromising between field adoption and executive reporting.
               </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="flex items-center gap-3 text-slate-900">
+                    <Activity className="h-5 w-5" />
+                    <span className="text-sm font-semibold uppercase tracking-[0.25em]">Live Ops</span>
+                  </div>
+                  <p className="mt-3 text-sm text-slate-600">
+                    Real-time switching readiness and crew telemetry let leadership challenge assumptions before outages go live.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="flex items-center gap-3 text-slate-900">
+                    <Waves className="h-5 w-5" />
+                    <span className="text-sm font-semibold uppercase tracking-[0.25em]">Trend Engine</span>
+                  </div>
+                  <p className="mt-3 text-sm text-slate-600">
+                    Anomaly detection across crews, spans, and cost codes surfaces overruns before they burn capital.
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="space-y-6">
               {proofPoints.map(({ heading, copy }) => (
@@ -243,8 +298,8 @@ export const FuturisticElectricalLanding: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-slate-900">
-        <div className="mx-auto max-w-6xl px-6 py-16 text-white lg:px-8 lg:py-20">
+      <section className="bg-slate-900 text-white">
+        <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8 lg:py-20">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-xl space-y-4">
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-300">Executive briefing</p>

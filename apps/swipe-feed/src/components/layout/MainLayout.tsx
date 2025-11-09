@@ -12,6 +12,12 @@ import { PushNotifications } from '../notifications/PushNotifications';
 import { NotificationCenter } from '../notifications/NotificationCenter';
 import { WeatherWidget } from '../weather/WeatherWidget';
 
+const headerTelemetry = [
+  { label: 'Grid load', value: '68%', tone: 'text-emerald-600' },
+  { label: 'Crews active', value: '137', tone: 'text-slate-900' },
+  { label: 'Incidents', value: '0', tone: 'text-emerald-600' }
+];
+
 interface MainLayoutProps {
   session: Session;
 }
@@ -172,7 +178,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
     item.subItems?.some((sub: any) => location.pathname === sub.path);
 
   return (
-    <div className="min-h-screen bg-[#f5f7fb] flex">
+    <div className="relative flex min-h-screen bg-[#f5f7fb]">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,_rgba(15,76,129,0.08),_transparent_55%),_radial-gradient(circle_at_75%_0,_rgba(17,118,161,0.12),_transparent_50%)]" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(130deg,_rgba(15,23,42,0.08),_transparent_45%)]" aria-hidden />
+
       {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-68 bg-white border-r border-slate-200 shadow-md transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
@@ -272,7 +281,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col lg:ml-68">
         {/* Top Bar */}
-        <header className="h-16 bg-white border-b border-slate-200 px-5 flex items-center justify-between shadow-sm">
+        <header className="h-20 bg-white/90 backdrop-blur border-b border-slate-200 px-5 flex items-center justify-between shadow-[0_6px_18px_rgba(15,23,42,0.08)]">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -285,6 +294,20 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
               <Building2 className="w-4 h-4 text-slate-600" />
               <span className="text-sm font-medium text-slate-700">Demo 138kV Substation</span>
               <ChevronDown className="w-4 h-4 text-slate-500" />
+            </div>
+
+            <div className="hidden xl:flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-1.5">
+              {headerTelemetry.map(({ label, value, tone }, index) => (
+                <div key={label} className="flex items-center gap-2 pr-3">
+                  <div>
+                    <p className={`text-sm font-semibold ${tone}`}>{value}</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-500">{label}</p>
+                  </div>
+                  {index < headerTelemetry.length - 1 && (
+                    <span className="h-8 w-[1px] bg-slate-200" aria-hidden />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
