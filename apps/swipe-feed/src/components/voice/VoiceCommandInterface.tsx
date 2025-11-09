@@ -27,7 +27,7 @@ export const VoiceCommandInterface: React.FC = () => {
       command: 'create report',
       aliases: ['new report', 'make report', 'start report'],
       action: () => {
-        window.location.href = '/field/daily-report';
+        window.location.href = '/field/daily';
         speak('Opening daily report creator');
       },
       category: 'Reports',
@@ -79,7 +79,7 @@ export const VoiceCommandInterface: React.FC = () => {
       command: 'time clock',
       aliases: ['clock in', 'clock out', 'time'],
       action: () => {
-        window.location.href = '/field/time-tracking';
+        window.location.href = '/field/time';
         speak('Opening time tracking');
       },
       category: 'Time',

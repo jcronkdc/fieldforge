@@ -45,7 +45,10 @@ import { AcquisitionEvaluation } from './tests/AcquisitionEvaluation';
 import { WelcomePage } from './pages/WelcomePage';
 
 // Placeholder components
-import { ReceiptManager } from './components/placeholders';
+import { ReceiptManager, DailyOperations, TimeTracking, WeatherDashboard } from './components/placeholders';
+
+// Field operations
+import { FieldOperationsIndex } from './pages/FieldOperationsIndex';
 
 // Specialized components for electrical contractors
 import { SubstationManager } from './components/specialized/SubstationManager';
@@ -241,7 +244,14 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
                     <Route path="/feed" element={<SocialFeed />} />
               <Route path="/analytics" element={<RealTimeViz />} />
               <Route path="/projects" element={<ProjectManager />} />
+              <Route path="/field" element={<FieldOperationsIndex />} />
+              <Route path="/field/daily" element={<DailyOperations />} />
+              <Route path="/field/daily-report" element={<DailyOperations />} />
+              <Route path="/field/crews" element={<NationwideCrewManager />} />
+              <Route path="/field/time" element={<TimeTracking />} />
+              <Route path="/field/time-tracking" element={<TimeTracking />} />
               <Route path="/field/receipts" element={<ReceiptManager />} />
+              <Route path="/field/weather" element={<WeatherDashboard />} />
               <Route path="/substations" element={<SubstationManager />} />
               <Route path="/crews" element={<NationwideCrewManager />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
