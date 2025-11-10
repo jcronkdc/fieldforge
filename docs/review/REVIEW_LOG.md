@@ -71,3 +71,33 @@
 - Verify app shell includes id="main" for Skip link target (to handle in Layout batch).
 - If Google Fonts were also @imported in CSS, remove them in a later batch to avoid churn now.
 
+
+
+## Batch 1 — Config & Meta (part 2)
+
+**Files reviewed**
+
+- apps/swipe-feed/postcss.config.js
+- apps/swipe-feed/vite.config.ts
+
+
+
+**Findings**
+
+- PostCSS already includes Tailwind and Autoprefixer.
+- Vite config needed env-aware base, alias, and host adjustments.
+
+
+
+**Changes made**
+
+- vite.config.ts: added base/env handling, alias for `@/`, and 0.0.0.0 dev host.
+- postcss.config.js: confirmed existing plugins; no change required.
+
+
+
+**Follow-ups**
+
+- Ensure components leverage the `@/` alias in future refactors.
+- Document any required VITE_BASE_URL/VITE_DEV_PORT env variables for deployments.
+
