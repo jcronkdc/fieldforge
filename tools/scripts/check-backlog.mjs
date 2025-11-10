@@ -1,6 +1,13 @@
 import { readFileSync } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const text = readFileSync("docs/review/GAPS.md", "utf8");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const root = path.resolve(__dirname, "..", "..");
+const backlogPath = path.join(root, "docs", "review", "GAPS.md");
+
+const text = readFileSync(backlogPath, "utf8");
 
 const missingOwner = [...text.matchAll(/- \[ \] .*?\(Owner:\s*\)/g)];
 const missingPriority = [...text.matchAll(/\[Priority:\s*\]/g)];
