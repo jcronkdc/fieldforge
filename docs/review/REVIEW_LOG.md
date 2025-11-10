@@ -130,3 +130,30 @@
 
 - Review rootMargin value in future animation batch (tracked in GAPS).
 
+
+
+## Batch 2 — Shared Libs / Utils (part 2)
+
+**Files reviewed**
+
+- apps/swipe-feed/src/lib/api.ts
+
+
+
+**Findings**
+
+- Previous wrapper lacked timeout handling and structured error propagation.
+
+
+
+**Changes made**
+
+- Added `fetchJson` helper with AbortController timeout, safe JSON parsing, and consistent logging.
+- Updated `apiRequest` to reuse the helper while keeping the existing call signature.
+
+
+
+**Follow-ups**
+
+- Migrate remaining feature-specific request helpers to `fetchJson` in a later batch (tracked in GAPS).
+
