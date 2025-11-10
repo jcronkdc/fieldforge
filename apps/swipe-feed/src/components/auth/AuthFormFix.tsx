@@ -76,7 +76,6 @@ export const AuthFormFix: React.FC = () => {
           
           const originalSubmit = formEl.onsubmit;
           formEl.onsubmit = function(e) {
-            console.log('[AUTH FIX] Form submitted:', formEl.action || 'auth form');
             if (originalSubmit) {
               return originalSubmit.call(this, e);
             }
@@ -86,7 +85,7 @@ export const AuthFormFix: React.FC = () => {
       });
     };
     
-    // Apply fixes immediately
+    // Apply fixes on initialization
     fixAuthButtons();
     
     // Reapply on DOM changes
@@ -105,15 +104,12 @@ export const AuthFormFix: React.FC = () => {
       
       // Check if it's a submit button
       if (target.tagName === 'BUTTON' && (target as HTMLButtonElement).type === 'submit') {
-        console.log('[AUTH FIX] Submit button clicked:', target.textContent);
-        
         // Ensure the click goes through
         e.stopPropagation = () => {};
         
         // Find the form
         const form = target.closest('form');
         if (form && e.defaultPrevented) {
-          console.log('[AUTH FIX] Click was prevented, forcing submission');
           e.preventDefault();
           form.requestSubmit(target as HTMLButtonElement);
         }
@@ -121,8 +117,6 @@ export const AuthFormFix: React.FC = () => {
     };
     
     document.addEventListener('click', handleClick, true);
-    
-    console.log('[AUTH FIX] Active - Sign in buttons protected');
     
     return () => {
       observer.disconnect();

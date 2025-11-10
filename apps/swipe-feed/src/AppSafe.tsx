@@ -120,8 +120,7 @@ function AppSafe() {
     initializeAuth();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth state change:', event);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (mounted) {
         setSession(session);
         setError(null);
@@ -137,9 +136,11 @@ function AppSafe() {
 
     // Service Worker Registration (only in production)
     if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-      navigator.serviceWorker.register('/service-worker.js').catch(err => {
-        console.log('Service worker registration failed:', err);
-      });
+      navigator.serviceWorker
+        .register('/service-worker.js')
+        .catch((err) => {
+          console.error('Service worker registration failed:', err);
+        });
     }
 
     return () => {
@@ -152,7 +153,7 @@ function AppSafe() {
 
   // Show loading state with futuristic loader
   if (loading) {
-    return <FuturisticLoader size="fullscreen" message="INITIALIZING FIELDFORGE SYSTEMS..." />;
+    return <FuturisticLoader size="fullscreen" message="INITIALIZING FIELDFORGE SYSTEMS" />;
   }
 
   // Show error state if critical error
@@ -202,6 +203,9 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
 
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <FuturisticToastContainer />
       <KeyboardShortcutsModal />
       

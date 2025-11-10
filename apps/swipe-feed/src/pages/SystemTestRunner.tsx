@@ -86,7 +86,7 @@ export const SystemTestRunner: React.FC = () => {
               {isRunning ? (
                 <>
                   <RefreshCw className="w-5 h-5 animate-spin" />
-                  Running Tests...
+                  Running system tests
                 </>
               ) : (
                 <>

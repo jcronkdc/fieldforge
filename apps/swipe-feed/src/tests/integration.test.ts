@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '../lib/supabase';
+import { describe, it } from 'vitest';
 
 // Test configuration
 const TEST_EMAIL = `test_${Date.now()}@fieldforge.com`;
@@ -316,3 +317,9 @@ function printTestSummary() {
 if (import.meta.url === `file://${process.argv[1]}`) {
   runIntegrationTests().catch(console.error);
 }
+
+describe.skip('Legacy integration harness', () => {
+  it('executes via manual runner outside Vitest', () => {
+    // Placeholder ensures Vitest treats this helper as a skipped suite.
+  });
+});

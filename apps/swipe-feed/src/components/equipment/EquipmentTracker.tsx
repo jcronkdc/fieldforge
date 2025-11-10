@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { locationService } from '../../lib/services/locationService';
+import { EmptyState } from '../EmptyState';
 
 interface Equipment {
   id: string;
@@ -108,7 +109,7 @@ export const EquipmentTracker: React.FC = () => {
   const EquipmentCard = ({ item }: { item: Equipment }) => (
     <div
       onClick={() => setSelectedEquipment(item)}
-      className="bg-gray-800 rounded-lg p-4 hover:bg-gray-750 cursor-pointer transition-colors"
+      className="cursor-pointer rounded-lg bg-gray-800 p-4 transition-colors hover:bg-gray-750"
     >
       <div className="flex justify-between items-start mb-3">
         <div>
@@ -166,7 +167,8 @@ export const EquipmentTracker: React.FC = () => {
             e.stopPropagation();
             // Handle edit
           }}
-          className="text-yellow-500 hover:text-yellow-400"
+          className="btn btn-ghost px-2 py-2 text-yellow-400 hover:text-yellow-300"
+          type="button"
         >
           <Edit className="w-4 h-4" />
         </button>
@@ -190,11 +192,7 @@ export const EquipmentTracker: React.FC = () => {
               <button
                 key={type.value}
                 onClick={() => setSelectedType(type.value)}
-                className={`px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${
-                  selectedType === type.value
-                    ? 'bg-yellow-600 text-black'
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-                }`}
+                className={`btn ${selectedType === type.value ? 'btn-primary' : 'btn-secondary'} px-3 py-2`}
               >
                 <Icon className="w-4 h-4" />
                 {type.label}
@@ -210,30 +208,40 @@ export const EquipmentTracker: React.FC = () => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by tag, serial number, or manufacturer..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              placeholder="Search equipment"
+              className="w-full rounded-md bg-gray-800 pl-10 pr-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
             />
           </div>
           <button
             onClick={() => setIsAddingNew(true)}
-            className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-black rounded-md flex items-center gap-2 transition-colors"
+            className="btn btn-primary"
           >
             <Plus className="w-5 h-5" />
-            Add Equipment
+            Add equipment
           </button>
         </div>
       </div>
 
       {/* Equipment Grid */}
       {loading ? (
-        <div className="text-center py-12">
-          <p className="text-gray-400">Loading equipment...</p>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <div key={idx} className="skeleton h-48 rounded-lg border border-gray-800 bg-gray-800/40" />
+          ))}
         </div>
       ) : filteredEquipment.length === 0 ? (
-        <div className="text-center py-12">
-          <Package className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-          <p className="text-gray-400">No equipment found</p>
-        </div>
+        <EmptyState
+          title="No equipment found"
+          body={searchTerm ? 'Adjust your search to locate equipment.' : 'Add equipment records to monitor status.'}
+          action={
+            !searchTerm ? (
+              <button onClick={() => setIsAddingNew(true)} className="btn btn-primary">
+                <Plus className="mr-1.5 h-4 w-4" />
+                Add equipment
+              </button>
+            ) : null
+          }
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredEquipment.map(item => (

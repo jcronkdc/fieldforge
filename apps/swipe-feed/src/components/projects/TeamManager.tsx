@@ -5,6 +5,7 @@ import {
   CheckCircle, Clock, AlertCircle, UserCheck, X
 } from 'lucide-react';
 import { projectService, Project, ProjectTeamMember } from '../../lib/services/projectService';
+import { EmptyState } from '../EmptyState';
 
 interface TeamManagerProps {
   project: Project;
@@ -70,8 +71,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
 
     if (token) {
       // In production, this would send an email
-      console.log('Invitation sent with token:', token);
-      alert(`Invitation sent to ${inviteData.email}! They will receive an email to join the project.`);
+      alert(`Invitation sent to ${inviteData.email}. They will receive an email to join the project.`);
       setShowInviteModal(false);
       setInviteData({ email: '', role: 'worker', message: '' });
       fetchTeamMembers();
@@ -131,32 +131,34 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
             <div className="flex items-center space-x-4">
               <button
                 onClick={onBack}
-                className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                className="btn btn-ghost px-2 py-2"
+                type="button"
+                aria-label="Back to projects"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-400" />
               </button>
               <div>
                 <h1 className="text-2xl font-bold text-white">{project.name}</h1>
-                <p className="text-gray-400 text-sm">Team Management • {project.project_number}</p>
+                <p className="text-gray-400 text-sm">Team management • {project.project_number}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               {canManageCrews && (
                 <button
                   onClick={onManageCrews}
-                  className="px-4 py-2 bg-gray-700 rounded-xl font-medium text-white hover:bg-gray-600 transition-colors flex items-center space-x-2"
+                  className="btn btn-secondary"
                 >
                   <Users className="w-5 h-5" />
-                  <span>Manage Crews</span>
+                  <span>Manage crews</span>
                 </button>
               )}
               {canManage && (
                 <button
                   onClick={() => setShowInviteModal(true)}
-                  className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-200 flex items-center space-x-2"
+                  className="btn btn-primary"
                 >
                   <UserPlus className="w-5 h-5" />
-                  <span>Invite Member</span>
+                  <span>Invite member</span>
                 </button>
               )}
             </div>
@@ -216,21 +218,25 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
           </div>
           
           {loading ? (
-            <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
+            <div className="space-y-4 p-6">
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <div key={idx} className="skeleton h-16 rounded-lg border border-gray-700/40 bg-gray-800/40" />
+              ))}
             </div>
           ) : teamMembers.length === 0 ? (
-            <div className="p-8 text-center">
-              <Users className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-400">No team members yet</p>
-              {canManage && (
-                <button
-                  onClick={() => setShowInviteModal(true)}
-                  className="mt-4 px-4 py-2 bg-amber-500 rounded-lg text-white hover:bg-amber-600 transition-colors"
-                >
-                  Invite First Member
-                </button>
-              )}
+            <div className="p-6">
+              <EmptyState
+                title="No team members yet"
+                body="Invite teammates to share project updates and assignments."
+                action={
+                  canManage ? (
+                    <button onClick={() => setShowInviteModal(true)} className="btn btn-primary">
+                      <UserPlus className="mr-1.5 h-4 w-4" />
+                      Invite member
+                    </button>
+                  ) : null
+                }
+              />
             </div>
           ) : (
             <div className="divide-y divide-gray-700">
@@ -279,7 +285,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                         <select
                           value={member.role}
                           onChange={(e) => handleUpdateRole(member, e.target.value)}
-                          className="px-3 py-1 bg-gray-700 border border-gray-600 rounded-lg text-sm text-white focus:border-amber-500 focus:outline-none"
+                          className="rounded-lg border border-gray-600 bg-gray-700 px-3 py-1 text-sm text-white focus:border-amber-500 focus:outline-none"
                           disabled={!member.user_id}
                         >
                           {roles.filter(r => r.value !== 'owner').map((role) => (
@@ -290,8 +296,9 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                         </select>
                         <button
                           onClick={() => handleRemoveMember(member)}
-                          className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                          className="btn btn-ghost px-2 py-2"
                           disabled={!member.user_id}
+                          aria-label={`Remove ${member.user?.first_name ?? ''}`}
                         >
                           <Trash2 className="w-4 h-4 text-red-400" />
                         </button>
@@ -359,7 +366,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                   onChange={(e) => setInviteData({ ...inviteData, message: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
-                  placeholder="Welcome to the team! Looking forward to working with you..."
+                  placeholder="Welcome to the team. Looking forward to working with you"
                 />
               </div>
               
@@ -384,7 +391,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                   {sending ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      <span>Sending...</span>
+                      <span>Sending invitation</span>
                     </>
                   ) : (
                     <>

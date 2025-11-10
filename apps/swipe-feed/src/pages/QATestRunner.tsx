@@ -52,7 +52,7 @@ export const QATestRunner: React.FC = () => {
     setResults(null);
     
     try {
-      console.log('Starting Canonical Test Suite...');
+      setLogs(prev => [...prev, 'Starting canonical test suite']);
       const suite = new CanonicalFieldForgeTestSuite();
       await suite.runAllTests();
       
@@ -121,7 +121,7 @@ export const QATestRunner: React.FC = () => {
                 {isRunning ? (
                   <span className="flex items-center gap-2">
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    Running Tests...
+                    Running basic tests
                   </span>
                 ) : (
                   '🚀 Run Basic Tests'
@@ -141,7 +141,7 @@ export const QATestRunner: React.FC = () => {
                 {isRunning ? (
                   <span className="flex items-center gap-2">
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                    Running Canonical...
+                    Running canonical suite
                   </span>
                 ) : (
                   '🎯 Run Canonical Suite'

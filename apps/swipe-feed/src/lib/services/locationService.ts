@@ -3,6 +3,12 @@
  * Integrates with Google Places API for location autocomplete and tracking
  */
 
+declare global {
+  interface Window {
+    google?: typeof google;
+  }
+}
+
 interface Location {
   lat: number;
   lng: number;
@@ -188,7 +194,12 @@ class LocationService {
         request.radius = 50000; // 50km radius
       }
 
-      this.autocompleteService.getPlacePredictions(request, (predictions, status) => {
+      this.autocompleteService.getPlacePredictions(
+        request,
+        (
+          predictions: google.maps.places.AutocompletePrediction[] | null,
+          status: google.maps.places.PlacesServiceStatus
+        ) => {
         if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
           const results: PlaceResult[] = predictions.map((prediction) => ({
             placeId: prediction.place_id,
@@ -219,12 +230,17 @@ class LocationService {
         return;
       }
 
-      const request = {
+      const request: google.maps.places.PlaceDetailsRequest = {
         placeId,
         fields: ['name', 'formatted_address', 'geometry', 'types'],
       };
 
-      this.googlePlacesService.getDetails(request, (place, status) => {
+      this.googlePlacesService.getDetails(
+        request,
+        (
+          place: google.maps.places.PlaceResult | null,
+          status: google.maps.places.PlacesServiceStatus
+        ) => {
         if (status === google.maps.places.PlacesServiceStatus.OK && place) {
           resolve({
             placeId,
@@ -260,7 +276,10 @@ class LocationService {
 
       this.geocoder.geocode(
         { location: { lat: location.lat, lng: location.lng } },
-        (results, status) => {
+        (
+          results: google.maps.GeocoderResult[] | null,
+          status: google.maps.GeocoderStatus
+        ) => {
           if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
             resolve(results[0].formatted_address);
           } else {

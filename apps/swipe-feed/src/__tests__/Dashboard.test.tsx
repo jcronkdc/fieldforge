@@ -18,7 +18,7 @@ describe("Dashboard page smoke test", () => {
     });
 
     expect(
-      screen.getByRole("button", { name: /daily report/i })
+      screen.getByRole("link", { name: /start daily report/i })
     ).toBeInTheDocument();
   });
 });

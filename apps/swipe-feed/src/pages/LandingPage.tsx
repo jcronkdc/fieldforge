@@ -84,7 +84,7 @@ const SocialFeedPreview = () => {
       user: 'Sarah Chen',
       role: 'Site Supervisor',
       time: '2 min ago',
-      content: 'Transformer installation complete on Pad 3! 🎯 Zero incidents, ahead of schedule.',
+      content: 'Transformer installation complete on Pad 3. 🎯 Zero incidents, ahead of schedule.',
       likes: 47,
       comments: 12,
       type: 'achievement',
@@ -95,7 +95,7 @@ const SocialFeedPreview = () => {
       user: 'Mike Rodriguez',
       role: 'Safety Lead',
       time: '15 min ago',
-      content: 'New AR safety briefing just dropped. Check it out in the app! 🥽⚡',
+      content: 'New AR safety briefing just dropped. Review it in the app to stay aligned. 🥽⚡',
       likes: 89,
       comments: 23,
       type: 'safety',
@@ -206,8 +206,6 @@ const AnimatedCounter = ({ end, duration = 2, suffix = '' }: { end: number; dura
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
-  
-  console.log('LandingPage: Component rendered');
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-x-hidden">

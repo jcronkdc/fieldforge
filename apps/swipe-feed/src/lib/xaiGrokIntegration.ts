@@ -159,7 +159,9 @@ export class GrokAPIWrapper {
     
     try {
       // Log the attempt (for audit trail)
+    if (import.meta.env.DEV) {
       console.log(`[GROK API] User ${userId} requesting ${resolution} image, cost: ${cost.requiredSparks} Sparks`);
+    }
       
       // Make API call to Grok 2
       const response = await this.callGrokAPI({
@@ -177,7 +179,9 @@ export class GrokAPIWrapper {
         this.dailyUsage++;
         
         // Log successful generation
+      if (import.meta.env.DEV) {
         console.log(`[GROK API] Success! Charged ${cost.requiredSparks} Sparks to user ${userId}`);
+      }
         
         return {
           success: true,
@@ -225,7 +229,9 @@ export class GrokAPIWrapper {
     
     try {
       // Log the attempt
+    if (import.meta.env.DEV) {
       console.log(`[GROK API] User ${userId} requesting ${duration} video, cost: ${cost.requiredSparks} Sparks`);
+    }
       
       // Make API call to Grok 2
       const response = await this.callGrokAPI({
@@ -242,7 +248,9 @@ export class GrokAPIWrapper {
       if (response.success) {
         this.dailyUsage++;
         
+      if (import.meta.env.DEV) {
         console.log(`[GROK API] Success! Charged ${cost.requiredSparks} Sparks to user ${userId}`);
+      }
         
         return {
           success: true,
@@ -435,13 +443,12 @@ export class GrokUsageTracker {
     }
   }
   
-  private saveToDatabase(record: GrokUsageRecord): void {
-    // TODO: Save to Supabase
-    console.log('[GROK USAGE] Saved to database:', record);
+  private saveToDatabase(_record: GrokUsageRecord): void {
+    // NOTE: Persistence integration with Supabase will be added in a future milestone (see docs/review/GAPS.md).
   }
   
   private sendAdminAlert(record: GrokUsageRecord): void {
-    // TODO: Send email/notification to admin
+    // NOTE: Replace with real notification pipeline when persistence is connected.
     console.error('[ADMIN ALERT] Unprofitable generation detected!', record);
   }
   

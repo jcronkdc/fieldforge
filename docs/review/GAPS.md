@@ -2,13 +2,13 @@
 
 
 
-## Open
+## Backlog
 
-- `viewport-animate.ts` uses a 200px root margin for pausing animations; confirm this value works for all layouts in later review.
-- Several modules (`social.ts`, `prologueApi.ts`, `mythacoin.ts`) maintain bespoke `apiRequest` helpers—consider consolidating them onto the shared fetch wrapper in a later batch.
-- Add auth flow tests that simulate Supabase error states to ensure user feedback on failed sign-in/sign-up.
-- Cover `fetchJson` network error branches with unit tests to guarantee proper error propagation and logging.
-- Provide scripted or containerised backend setup documentation to streamline onboarding.
+- Verify the `viewport-animate.ts` root margin (200px) during a future animation tuning pass to ensure it behaves well across layout variants.
+- Consolidate feature-specific API helpers (`social.ts`, `prologueApi.ts`, `mythacoin.ts`) onto the shared `fetchJson` wrapper to reduce duplication.
+- Add Supabase auth error-path tests (sign-in/sign-up) to confirm user-facing feedback remains clear.
+- Extend unit coverage for `fetchJson` to exercise network and timeout error branches.
+- Document backend setup via script or container workflow to make onboarding repeatable.
 
 
 
