@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type SwipeDirection = 'left' | 'right' | 'up' | 'down' | null;
 
@@ -24,30 +24,54 @@ interface GestureState {
   rotationAngle: number;
 }
 
-export const useSwipeGestures = (handlers: SwipeHandlers) => {
-  const [gestureState, setGestureState] = useState<GestureState>({
-    isSwipping: false,
-    direction: null,
-    distance: 0,
-    velocity: 0,
-    isPinching: false,
-    pinchScale: 1,
-    isRotating: false,
-    rotationAngle: 0
-  });
+const INITIAL_GESTURE_STATE: GestureState = {
+  isSwipping: false,
+  direction: null,
+  distance: 0,
+  velocity: 0,
+  isPinching: false,
+  pinchScale: 1,
+  isRotating: false,
+  rotationAngle: 0,
+};
+
+const MIN_SWIPE_DISTANCE_PX = 50;
+const MAX_SWIPE_TIME_MS = 500;
+const DOUBLE_TAP_DELAY_MS = 300;
+const LONG_PRESS_DELAY_MS = 500;
+
+/**
+ * Handle mobile touch gestures (swipe, pinch, rotate, long-press) via declarative handlers.
+ * @param handlers Gesture callbacks to invoke during touch interactions.
+ * @returns Current gesture state snapshot.
+ */
+export const useSwipeGestures = (handlers: SwipeHandlers): GestureState => {
+  const [gestureState, setGestureState] = useState<GestureState>(INITIAL_GESTURE_STATE);
+  const gestureStateRef = useRef<GestureState>(INITIAL_GESTURE_STATE);
+  const handlersRef = useRef<SwipeHandlers>(handlers);
+
+  useEffect(() => {
+    handlersRef.current = handlers;
+  }, [handlers]);
+
+  const setGestureStateSafe = useCallback(
+    (updater: GestureState | ((prev: GestureState) => GestureState)) => {
+      setGestureState((prev) => {
+        const next = typeof updater === 'function' ? (updater as (prev: GestureState) => GestureState)(prev) : updater;
+        gestureStateRef.current = next;
+        return next;
+      });
+    },
+    []
+  );
 
   const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
   const lastTapRef = useRef<number>(0);
-  const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pinchStartDistanceRef = useRef<number>(0);
   const rotationStartAngleRef = useRef<number>(0);
 
   useEffect(() => {
-    const minSwipeDistance = 50;
-    const maxSwipeTime = 500;
-    const doubleTapDelay = 300;
-    const longPressDelay = 500;
-
     const getDistance = (touch1: Touch, touch2: Touch) => {
       const dx = touch1.clientX - touch2.clientX;
       const dy = touch1.clientY - touch2.clientY;
@@ -69,8 +93,8 @@ export const useSwipeGestures = (handlers: SwipeHandlers) => {
 
         // Check for double tap
         const now = Date.now();
-        if (now - lastTapRef.current < doubleTapDelay) {
-          handlers.onDoubleTap?.();
+        if (now - lastTapRef.current < DOUBLE_TAP_DELAY_MS) {
+          handlersRef.current.onDoubleTap?.();
           lastTapRef.current = 0;
         } else {
           lastTapRef.current = now;
@@ -78,14 +102,14 @@ export const useSwipeGestures = (handlers: SwipeHandlers) => {
 
         // Start long press timer
         longPressTimerRef.current = setTimeout(() => {
-          handlers.onLongPress?.();
+          handlersRef.current.onLongPress?.();
           // Add haptic feedback if available
           if ('vibrate' in navigator) {
             navigator.vibrate(50);
           }
-        }, longPressDelay);
+        }, LONG_PRESS_DELAY_MS);
 
-        setGestureState(prev => ({ ...prev, isSwipping: true }));
+        setGestureStateSafe(prev => ({ ...prev, isSwipping: true }));
       } else if (e.touches.length === 2) {
         // Initialize pinch/rotate
         const distance = getDistance(e.touches[0], e.touches[1]);
@@ -94,7 +118,7 @@ export const useSwipeGestures = (handlers: SwipeHandlers) => {
         pinchStartDistanceRef.current = distance;
         rotationStartAngleRef.current = angle;
         
-        setGestureState(prev => ({
+        setGestureStateSafe(prev => ({
           ...prev,
           isPinching: true,
           isRotating: true,
@@ -124,7 +148,7 @@ export const useSwipeGestures = (handlers: SwipeHandlers) => {
           direction = deltaY > 0 ? 'down' : 'up';
         }
 
-        setGestureState(prev => ({
+        setGestureStateSafe(prev => ({
           ...prev,
           direction,
           distance,
@@ -139,14 +163,14 @@ export const useSwipeGestures = (handlers: SwipeHandlers) => {
         const currentAngle = getAngle(e.touches[0], e.touches[1]);
         const rotation = currentAngle - rotationStartAngleRef.current;
 
-        setGestureState(prev => ({
+        setGestureStateSafe(prev => ({
           ...prev,
           pinchScale: scale,
           rotationAngle: rotation
         }));
 
-        handlers.onPinch?.(scale);
-        handlers.onRotate?.(rotation);
+        handlersRef.current.onPinch?.(scale);
+        handlersRef.current.onRotate?.(rotation);
       }
     };
 
@@ -157,23 +181,23 @@ export const useSwipeGestures = (handlers: SwipeHandlers) => {
         longPressTimerRef.current = null;
       }
 
-      if (touchStartRef.current && gestureState.isSwipping) {
+      if (touchStartRef.current && gestureStateRef.current.isSwipping) {
         const deltaTime = Date.now() - touchStartRef.current.time;
         
-        if (deltaTime < maxSwipeTime && gestureState.distance > minSwipeDistance) {
+        if (deltaTime < MAX_SWIPE_TIME_MS && gestureStateRef.current.distance > MIN_SWIPE_DISTANCE_PX) {
           // Valid swipe detected
-          switch (gestureState.direction) {
+          switch (gestureStateRef.current.direction) {
             case 'left':
-              handlers.onSwipeLeft?.();
+              handlersRef.current.onSwipeLeft?.();
               break;
             case 'right':
-              handlers.onSwipeRight?.();
+              handlersRef.current.onSwipeRight?.();
               break;
             case 'up':
-              handlers.onSwipeUp?.();
+              handlersRef.current.onSwipeUp?.();
               break;
             case 'down':
-              handlers.onSwipeDown?.();
+              handlersRef.current.onSwipeDown?.();
               break;
           }
         }
@@ -181,16 +205,7 @@ export const useSwipeGestures = (handlers: SwipeHandlers) => {
 
       // Reset state
       touchStartRef.current = null;
-      setGestureState({
-        isSwipping: false,
-        direction: null,
-        distance: 0,
-        velocity: 0,
-        isPinching: false,
-        pinchScale: 1,
-        isRotating: false,
-        rotationAngle: 0
-      });
+      setGestureStateSafe(INITIAL_GESTURE_STATE);
     };
 
     // Add event listeners
@@ -207,7 +222,7 @@ export const useSwipeGestures = (handlers: SwipeHandlers) => {
         clearTimeout(longPressTimerRef.current);
       }
     };
-  }, [handlers, gestureState]);
+  }, [setGestureStateSafe]);
 
   return gestureState;
 };

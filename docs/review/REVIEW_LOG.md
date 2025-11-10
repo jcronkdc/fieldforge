@@ -157,3 +157,32 @@
 
 - Migrate remaining feature-specific request helpers to `fetchJson` in a later batch (tracked in GAPS).
 
+
+
+## Batch 3 — Hooks
+
+**Files reviewed**
+
+- apps/swipe-feed/src/hooks/useAuth.ts
+- apps/swipe-feed/src/hooks/useSwipeGestures.ts
+
+
+
+**Findings**
+
+- useAuth lacked stable dependencies and mounted protection for async work.
+- useSwipeGestures recreated listeners on every render and hard-coded gesture thresholds.
+
+
+
+**Changes made**
+
+- useAuth: memoised helpers, added mounted guards, and documented hook contract.
+- useSwipeGestures: extracted constants, stabilized handlers via refs, added helper docs.
+
+
+
+**Follow-ups**
+
+- Monitor gesture threshold constants during mobile QA; adjust if feedback suggests tweaks.
+
