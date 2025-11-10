@@ -192,6 +192,7 @@ _See `docs/review/POSTMORTEM.md` for QA retrospective._
 
 - [Micro-review log](docs/review/REVIEW_LOG.md)
 - [Open review gaps](docs/review/GAPS.md)
+_See `docs/review/POSTMORTEM.md` for QA retrospective._
 
 ## 📱 Mobile Application
 
