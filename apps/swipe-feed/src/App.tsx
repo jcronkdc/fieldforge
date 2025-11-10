@@ -8,8 +8,7 @@ import './styles/animations.css';
 import './styles/ai-animations.css';
 
 // Landing Page
-import { LandingPage } from './pages/LandingPage';
-import { SimpleLandingPage } from './pages/SimpleLandingPage';
+import { Landing } from './pages/Landing';
 import { LandingPageTest } from './pages/LandingPageTest';
 import { TestRouting } from './pages/TestRouting';
 import { TestRunner } from './pages/TestRunner';
@@ -28,7 +27,7 @@ import { MainLayout } from './components/layout/MainLayout';
 import { MobileNav } from './components/layout/MobileNav';
 
 // Dashboard
-import { Dashboard } from './components/dashboard/Dashboard';
+import { DashboardPage } from './pages/Dashboard';
 
 // Project Management
 import { ProjectManager } from './components/projects/ProjectManager';
@@ -63,11 +62,11 @@ import {
   ProjectMap3D,
   SubstationModel,
   FieldForgeAI,
-  Settings,
   CompanySettings,
   UserProfile,
   ReceiptManager
 } from './components/placeholders';
+import { SettingsPage } from './pages/Settings';
 
 // Offline Support
 import { OfflineIndicator } from './components/common/OfflineIndicator';
@@ -139,7 +138,7 @@ function App() {
           {/* Public Landing Page */}
           <Route
             path="/"
-            element={session ? <Navigate to="/dashboard" replace /> : <SimpleLandingPage />}
+            element={session ? <Navigate to="/dashboard" replace /> : <Landing />}
           />
           
           {/* Auth Routes */}
@@ -159,7 +158,7 @@ function App() {
           {session ? (
             <Route element={<MainLayout session={session} />}>
               {/* Dashboard */}
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/feed" element={<SocialFeed />} />
               <Route path="/analytics" element={<RealTimeViz />} />
               <Route path="/projects" element={<ProjectManager />} />
@@ -214,7 +213,7 @@ function App() {
               <Route path="/ai" element={<FieldForgeAI />} />
               
               {/* Settings */}
-              <Route path="/settings" element={<Settings />} />
+              <Route path="/settings" element={<SettingsPage />} />
               <Route path="/settings/company" element={<CompanySettings />} />
               <Route path="/settings/profile" element={<UserProfile />} />
               

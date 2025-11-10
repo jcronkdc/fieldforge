@@ -279,6 +279,38 @@
 
 
 
+## Batch 7 — Pages / Routes
+
+**Files reviewed**
+
+- apps/swipe-feed/src/pages/Landing.tsx
+- apps/swipe-feed/src/pages/Dashboard.tsx
+- apps/swipe-feed/src/pages/Settings.tsx
+- apps/swipe-feed/src/App.tsx
+
+
+
+**Findings**
+
+- Pages lacked per-route metadata and relied on raw components without structured head updates.
+- Default routes still mounted component-level implementations directly, making it harder to enforce consistent h1 hierarchy and future skeleton usage.
+
+
+
+**Changes made**
+
+- Added lightweight page wrappers that apply `SEOHead` metadata and reuse structured data helpers.
+- Updated router to mount the new page components for landing, dashboard, and settings views.
+- Ensured wrapped pages defer to component-level headings so each route exposes a single h1.
+
+
+
+**Follow-ups**
+
+- Extend the page-level pattern to remaining high-traffic routes (e.g., analytics, projects) to centralise metadata management.
+
+
+
 ## Batch 5 — Components (Small)
 
 **Files reviewed**
