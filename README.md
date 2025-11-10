@@ -186,6 +186,8 @@ From `apps/swipe-feed/` you can run the following project guards:
 - `npm run test` — execute Vitest + Testing Library smoke tests.
 - `npm run test:watch` — run the test suite in watch mode during development.
 
+_See `docs/review/POSTMORTEM.md` for QA retrospective._
+
 ## 📒 Review Artifacts
 
 - [Micro-review log](docs/review/REVIEW_LOG.md)
