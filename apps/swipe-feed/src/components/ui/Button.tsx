@@ -1,39 +1,105 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
+import clsx from 'clsx';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
-  children: React.ReactNode;
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type ButtonSize = 'sm' | 'md' | 'lg';
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /**
+   * Visual variant of the button.
+   */
+  variant?: ButtonVariant;
+  /**
+   * Defines padding and font sizing.
+   */
+  size?: ButtonSize;
+  /**
+   * Optional icon rendered alongside children.
+   */
+  icon?: React.ReactNode;
+  /**
+   * Icon alignment relative to text.
+   */
+  iconPosition?: 'left' | 'right';
+  /**
+   * Icon-only buttons hide the textual label visually but require an aria-label.
+   */
+  iconOnly?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  variant = 'primary',
-  size = 'md',
-  className = '',
-  children,
-  ...props
-}) => {
-  const baseStyles = 'inline-flex items-center justify-center font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg';
-  
-  const variantStyles = {
-    primary: 'bg-amber-500 text-black hover:bg-amber-400 focus:ring-amber-500',
-    secondary: 'bg-slate-700 text-white hover:bg-slate-600 focus:ring-slate-500',
-    ghost: 'bg-transparent text-slate-300 hover:bg-slate-800 focus:ring-slate-500',
-    danger: 'bg-red-600 text-white hover:bg-red-500 focus:ring-red-500'
-  };
-  
-  const sizeStyles = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg'
-  };
-  
-  return (
-    <button
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
-  );
+const variantStyles: Record<ButtonVariant, string> = {
+  primary:
+    'bg-[var(--color-accent)] text-[#0b0f14] hover:brightness-[1.05] focus-visible:brightness-[1.05]',
+  secondary:
+    'bg-slate-800 text-white hover:bg-slate-700 focus-visible:bg-slate-700',
+  ghost:
+    'bg-transparent text-slate-200 hover:bg-slate-800/60 focus-visible:bg-slate-800/60',
+  danger:
+    'bg-red-600 text-white hover:bg-red-500 focus-visible:bg-red-500',
 };
+
+const sizeStyles: Record<ButtonSize, string> = {
+  sm: 'px-3 py-1.5 text-sm',
+  md: 'px-4 py-2 text-base',
+  lg: 'px-6 py-3 text-lg',
+};
+
+/**
+ * Accessible button component with consistent variants, focus states,
+ * and optional leading/trailing icons.
+ */
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      variant = 'primary',
+      size = 'md',
+      className,
+      children,
+      icon,
+      iconPosition = 'left',
+      iconOnly = false,
+      type = 'button',
+      ...props
+    },
+    ref
+  ) => {
+    const propAriaLabel = props['aria-label'];
+    const fallbackLabel =
+      typeof children === 'string' ? children : undefined;
+    const resolvedAriaLabel = iconOnly ? propAriaLabel ?? fallbackLabel : propAriaLabel;
+
+    if (iconOnly && !resolvedAriaLabel && process.env.NODE_ENV !== 'production') {
+      console.warn('Button (iconOnly) requires an aria-label for accessibility.');
+    }
+
+    const baseStyles = clsx(
+      'inline-flex items-center justify-center gap-2 font-semibold rounded-lg',
+      'transition-[background-color,color,transform,box-shadow] duration-[var(--dur-med)] ease-[var(--ease-standard)]',
+      'focus-visible:outline-[var(--focus-outline)] focus-visible:outline-offset-[var(--ring-offset)] focus-visible:ring-0',
+      'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none'
+    );
+
+    const content = (
+      <>
+        {icon && iconPosition === 'left' && <span aria-hidden>{icon}</span>}
+        {iconOnly ? <span className="sr-only">{resolvedAriaLabel}</span> : children}
+        {icon && iconPosition === 'right' && <span aria-hidden>{icon}</span>}
+      </>
+    );
+
+    return (
+      <button
+        ref={ref}
+        type={type}
+        data-icon-only={iconOnly ? 'true' : undefined}
+        aria-label={resolvedAriaLabel}
+        className={clsx(baseStyles, variantStyles[variant], sizeStyles[size], className)}
+        {...props}
+      >
+        {content}
+      </button>
+    );
+  }
+);
+
+Button.displayName = 'Button';

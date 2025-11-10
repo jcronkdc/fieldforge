@@ -215,3 +215,63 @@
 
 - Consider extracting theme management into a dedicated hook/provider for reuse.
 
+
+
+## Batch 5 — Components (Small)
+
+**Files reviewed**
+
+- apps/swipe-feed/src/components/ui/Button.tsx
+- apps/swipe-feed/src/components/ui/Link.tsx
+- apps/swipe-feed/src/components/ui/Input.tsx
+
+
+
+**Findings**
+
+- Button/link components lacked consistent accessibility fallbacks for icon-only usage.
+- No shared input wrapper existed for handling helper/error messaging.
+
+
+
+**Changes made**
+
+- Button: improved icon-only labelling, tightened focus/disabled states, added documentation.
+- Link: aligned transition/focus styling with shared tokens.
+- Input: introduced accessible wrapper with label, helper, and error support.
+
+
+
+**Follow-ups**
+
+- Adopt new `Input` component across forms to remove bespoke field markup.
+
+
+
+## Batch 5 — Components (Small)
+
+**Files reviewed**
+
+- apps/swipe-feed/src/components/ui/Button.tsx
+- apps/swipe-feed/src/components/ui/Link.tsx
+
+
+
+**Findings**
+
+- Button lacked shared focus utility and forwardRef support.
+- Link focus styles were inconsistent with new token defaults.
+
+
+
+**Changes made**
+
+- Button: converted to forwardRef, enforced icon-only labelling, unified focus/hover transitions.
+- Link: converted to forwardRef, aligned focus-visible outline with tokens, hid decorative icons from a11y tree.
+
+
+
+**Follow-ups**
+
+- No dedicated Input component exists; verify form implementations reuse consistent patterns in a later batch.
+
