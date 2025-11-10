@@ -2,8 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --ff-heading: "Orbitron", "Rajdhani", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --ff-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
 body {
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--ff-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.heading-xl,
+.heading-lg,
+.heading-md {
+  font-family: var(--ff-heading);
 }
 
 button:disabled {

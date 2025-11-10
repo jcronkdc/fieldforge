@@ -5,8 +5,6 @@
   Transmission • Distribution • Substations
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap');
-
 /* ============================================
    ROOT VARIABLES - Master Design System
    ============================================ */
@@ -47,9 +45,9 @@
   --border-glow: rgba(0, 212, 255, 0.6);
   
   /* Fonts */
-  --font-display: 'Orbitron', monospace;
-  --font-body: 'Exo 2', sans-serif;
-  --font-accent: 'Rajdhani', sans-serif;
+  --font-display: "Orbitron", "Rajdhani", "Inter", sans-serif;
+  --font-body: "Rajdhani", "Inter", sans-serif;
+  --font-accent: "Rajdhani", "Inter", sans-serif;
   
   /* Animations */
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
