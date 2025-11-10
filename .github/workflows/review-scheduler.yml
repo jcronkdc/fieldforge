@@ -1,0 +1,17 @@
+name: Weekly Review
+
+on:
+  schedule:
+    - cron: "0 9 * * MON"
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: node tools/scripts/review-scheduler.mjs
+
