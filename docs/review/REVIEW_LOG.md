@@ -311,6 +311,40 @@
 
 
 
+## Batch 8 — Scripts & Linters
+
+**Files reviewed**
+
+- apps/swipe-feed/package.json
+- apps/swipe-feed/.eslintrc.cjs
+- apps/swipe-feed/.prettierrc.json
+- tools/scripts/check-no-ellipsis.mjs
+- tools/scripts/check-media-dimensions.mjs
+- tools/scripts/check-copy-style.mjs
+
+
+
+**Findings**
+
+- UI/copy/media lint scripts already existed but needed verification in package scripts.
+- No ESLint or Prettier baseline present, leaving formatting and linting inconsistent between contributors.
+
+
+
+**Changes made**
+
+- Confirmed npm scripts for UI copy, media dimensions, and copy style linting and ensured they run under the aggregate lint command.
+- Added `.eslintrc.cjs` extending `react/recommended` and `@typescript-eslint/recommended` with sensible defaults.
+- Added `.prettierrc.json` to align formatting (2 spaces, semicolons, single quotes) with repo convention.
+
+
+
+**Follow-ups**
+
+- Consider wiring the lint scripts into a pre-commit hook (e.g., Husky) once workflow stabilises.
+
+
+
 ## Batch 5 — Components (Small)
 
 **Files reviewed**
