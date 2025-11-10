@@ -27,7 +27,10 @@ async function testDeployment() {
     await page.waitForTimeout(2000);
     
     const landingContent = await page.content();
-    if (landingContent.includes('FIELDFORGE') && landingContent.includes('Build the Power Grid')) {
+    const normalizedLanding = landingContent.toLowerCase();
+    const hasBranding = normalizedLanding.includes('fieldforge');
+    const hasHeroHeadline = normalizedLanding.includes('one control surface') || normalizedLanding.includes('transmission • distribution • substations');
+    if (hasBranding && hasHeroHeadline) {
       results.landing.passed = true;
       console.log('   ✅ Landing page loads');
     } else {
