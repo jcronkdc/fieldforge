@@ -12,7 +12,8 @@
     "lint:ui-copy": "node ../../tools/scripts/check-no-ellipsis.mjs",
     "lint:media": "node ../../tools/scripts/check-media-dimensions.mjs",
     "lint:copy": "node ../../tools/scripts/check-copy-style.mjs",
-    "lint": "npm run lint:ui-copy && npm run lint:media && npm run lint:copy && npm run type-check",
+    "lint:backlog": "node ../../tools/scripts/check-backlog.mjs",
+    "lint": "npm run lint:ui-copy && npm run lint:media && npm run lint:copy && npm run lint:backlog && npm run type-check",
     "test": "vitest run",
     "test:watch": "vitest"
   },

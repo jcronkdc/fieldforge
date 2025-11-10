@@ -181,6 +181,7 @@ From `apps/swipe-feed/` you can run the following project guards:
 - `npm run lint:ui-copy` — ensure UI text contains no placeholder ellipses.
 - `npm run lint:media` — verify media elements include explicit dimensions.
 - `npm run lint:copy` — enforce product copy guidelines.
+- `npm run lint:backlog` — verifies backlog entries have owner/priority metadata.
 - `npm run lint` — run all UI/media/copy checks plus TypeScript type checking.
 - `npm run test` — execute Vitest + Testing Library smoke tests.
 - `npm run test:watch` — run the test suite in watch mode during development.
