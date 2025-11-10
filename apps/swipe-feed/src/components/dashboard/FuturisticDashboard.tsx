@@ -7,9 +7,35 @@ import {
   HardHat,
   Calendar,
   ArrowRight,
-  CheckCircle
+  CheckCircle,
+  Activity,
+  ShieldCheck
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const telemetryCards = [
+  {
+    label: 'Active spans',
+    metric: '487',
+    caption: '+12 vs plan',
+    tone: 'text-emerald-600',
+    icon: Activity
+  },
+  {
+    label: 'Crew utilization',
+    metric: '94%',
+    caption: '3% above target',
+    tone: 'text-slate-900',
+    icon: Users
+  },
+  {
+    label: 'Commercial status',
+    metric: 'Green',
+    caption: 'Variance < 2%',
+    tone: 'text-emerald-600',
+    icon: ShieldCheck
+  }
+];
 
 export const FuturisticDashboard: React.FC = () => {
   const summaryCards = [
@@ -57,7 +83,10 @@ export const FuturisticDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="relative min-h-screen bg-white text-slate-900">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_12%,_rgba(15,76,129,0.08),_transparent_55%),_radial-gradient(circle_at_82%_0,_rgba(17,118,161,0.08),_transparent_50%)]" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(120deg,_rgba(15,23,42,0.06),_transparent_45%)]" aria-hidden />
+
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-6 py-12 lg:px-8">
         <header className="flex flex-col gap-6 border-b border-slate-200 pb-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-3">
@@ -77,6 +106,28 @@ export const FuturisticDashboard: React.FC = () => {
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </header>
+
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {telemetryCards.map(({ label, metric, caption, tone, icon: Icon }, index) => (
+            <div
+              key={label}
+              className={`rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-sm backdrop-blur animate-fade-in ${
+                index % 2 === 0 ? 'animate-float-slow' : 'animate-float-slower'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-900 text-white shadow-[0_10px_24px_rgba(15,23,42,0.18)]">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className={`text-xl font-semibold ${tone}`}>{metric}</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">{label}</p>
+                </div>
+              </div>
+              <p className="mt-4 text-xs font-medium uppercase tracking-[0.18em] text-slate-500">{caption}</p>
+            </div>
+          ))}
+        </section>
 
         <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {summaryCards.map(({ title, description, cta, to, icon: Icon }) => (

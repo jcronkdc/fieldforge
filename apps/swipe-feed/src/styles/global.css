@@ -304,3 +304,8 @@ textarea::placeholder {
 .animate-fade-in {
   animation: fadeInSoft 0.9s ease forwards;
 }
+
+.animate-fade-in-delay {
+  animation: fadeInSoft 1s ease forwards;
+  animation-delay: 0.2s;
+}
