@@ -450,9 +450,59 @@
 
 
 
-# Review Log (Cycle 2)
+## Batch 15 — Backlog Grooming
 
-## Batch 0 — Setup
+**Files reviewed**
 
-Initialized new cycle on 2025-11-10.
+- docs/review/GAPS.md
+- docs/review/REVIEW_LOG.md
+
+
+
+**Findings**
+
+- Migrated all open tasks into backlog format.
+- Added owners and priorities to each carried item.
+
+
+
+**Changes made**
+
+- Updated headings and backlog bullet structure.
+- Retired the previous “Open” section in favour of the structured backlog.
+
+
+
+**Follow-ups**
+
+- Begin next nanostep focused on backlog triage and scheduling.
+
+
+
+## Batch 5 — Components (Small)
+
+**Files reviewed**
+
+- apps/swipe-feed/src/components/ui/Button.tsx
+- apps/swipe-feed/src/components/ui/Link.tsx
+
+
+
+**Findings**
+
+- Button lacked shared focus utility and forwardRef support.
+- Link focus styles were inconsistent with new token defaults.
+
+
+
+**Changes made**
+
+- Button: converted to forwardRef, enforced icon-only labelling, unified focus/hover transitions.
+- Link: converted to forwardRef, aligned focus-visible outline with tokens, hid decorative icons from a11y tree.
+
+
+
+**Follow-ups**
+
+- No dedicated Input component exists; verify form implementations reuse consistent patterns in a later batch.
 
