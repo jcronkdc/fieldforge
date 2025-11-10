@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
 import { AuthProvider } from './components/auth/AuthProvider';
@@ -189,6 +189,7 @@ function AppSafe() {
     <ErrorBoundary fallback={<ErrorFallback />}>
       <AuthProvider>
         <Router>
+          <ScrollToTop />
           <AppContent session={session} isOffline={isOffline} />
         </Router>
       </AuthProvider>
@@ -196,6 +197,15 @@ function AppSafe() {
   );
 }
 
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
+
+  return null;
+};
 // Inner component that can use Router hooks
 const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({ session, isOffline }) => {
   // Use keyboard shortcuts hook

@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useCallback, useState, useMemo } from 'react';
+import { useNavigate, type NavigateFunction } from 'react-router-dom';
 import { toast } from '../components/common/FuturisticToast';
 
 interface Shortcut {
@@ -13,124 +13,133 @@ interface Shortcut {
   category: string;
 }
 
-const shortcuts: Shortcut[] = [
-  // Navigation
+interface ShortcutDefinition extends Omit<Shortcut, 'action'> {
+  createAction: (navigate: NavigateFunction) => () => void;
+}
+
+const baseShortcutDefinitions: ShortcutDefinition[] = [
   {
     key: 'h',
     cmd: true,
-    action: () => window.location.href = '/dashboard',
     description: 'Go to Dashboard',
-    category: 'Navigation'
+    category: 'Navigation',
+    createAction: (navigate) => () => navigate('/dashboard')
   },
   {
     key: 'k',
     cmd: true,
-    action: () => {
-      // Open command palette
+    description: 'Open Command Palette',
+    category: 'Navigation',
+    createAction: () => () => {
       const event = new CustomEvent('openCommandPalette');
       window.dispatchEvent(event);
-    },
-    description: 'Open Command Palette',
-    category: 'Navigation'
+    }
   },
   {
     key: '/',
     cmd: true,
-    action: () => {
+    description: 'Toggle Help',
+    category: 'Navigation',
+    createAction: () => () => {
       const event = new CustomEvent('toggleHelp');
       window.dispatchEvent(event);
-    },
-    description: 'Toggle Help',
-    category: 'Navigation'
+    }
   },
-  
-  // Actions
   {
     key: 'n',
     cmd: true,
-    action: () => window.location.href = '/field/daily-report',
     description: 'New Daily Report',
-    category: 'Actions'
+    category: 'Actions',
+    createAction: (navigate) => () => navigate('/field/daily-report')
   },
   {
     key: 'r',
     cmd: true,
-    action: () => window.location.href = '/field/receipts',
     description: 'Scan Receipt',
-    category: 'Actions'
+    category: 'Actions',
+    createAction: (navigate) => () => navigate('/field/receipts')
   },
   {
     key: 's',
     cmd: true,
-    action: () => {
-      toast.success('Draft saved successfully');
-    },
     description: 'Save Draft',
-    category: 'Actions'
+    category: 'Actions',
+    createAction: () => () => {
+      toast.success('Draft saved.');
+    }
   },
   {
     key: 'b',
     cmd: true,
-    action: () => window.location.href = '/safety/briefing',
     description: 'Safety Briefing',
-    category: 'Safety'
+    category: 'Safety',
+    createAction: (navigate) => () => navigate('/safety/briefing')
   },
-  
-  // Voice & AI
   {
     key: ' ',
     cmd: true,
-    action: () => {
+    description: 'Toggle Voice Command',
+    category: 'AI',
+    createAction: () => () => {
       const event = new CustomEvent('toggleVoiceCommand');
       window.dispatchEvent(event);
-    },
-    description: 'Toggle Voice Command',
-    category: 'AI'
+    }
   },
   {
     key: 'a',
     cmd: true,
     shift: true,
-    action: () => {
+    description: 'Toggle AI Assistant',
+    category: 'AI',
+    createAction: () => () => {
       const event = new CustomEvent('toggleAIAssistant');
       window.dispatchEvent(event);
-    },
-    description: 'Toggle AI Assistant',
-    category: 'AI'
+    }
   },
-  
-  // System
   {
     key: 'Escape',
-    action: () => {
+    description: 'Close Modal/Dialog',
+    category: 'System',
+    createAction: () => () => {
       const event = new CustomEvent('closeModal');
       window.dispatchEvent(event);
-    },
-    description: 'Close Modal/Dialog',
-    category: 'System'
+    }
   },
   {
     key: 'r',
     cmd: true,
     shift: true,
-    action: () => window.location.reload(),
     description: 'Refresh Page',
-    category: 'System'
+    category: 'System',
+    createAction: () => () => window.location.reload()
   },
   {
     key: '?',
     shift: true,
-    action: () => {
+    description: 'Show Keyboard Shortcuts',
+    category: 'System',
+    createAction: () => () => {
       const event = new CustomEvent('showKeyboardShortcuts');
       window.dispatchEvent(event);
-    },
-    description: 'Show Keyboard Shortcuts',
-    category: 'System'
+    }
   }
 ];
 
 export const useKeyboardShortcuts = (additionalShortcuts: Shortcut[] = []) => {
   const navigate = useNavigate();
+  const baseShortcuts = useMemo<Shortcut[]>(
+    () =>
+      baseShortcutDefinitions.map((definition) => ({
+        ...definition,
+        action: definition.createAction(navigate),
+      })),
+    [navigate]
+  );
+
+  const allShortcuts = useMemo(
+    () => [...baseShortcuts, ...additionalShortcuts],
+    [baseShortcuts, additionalShortcuts]
+  );
   
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     // Don't trigger shortcuts when typing in inputs
@@ -141,8 +150,6 @@ export const useKeyboardShortcuts = (additionalShortcuts: Shortcut[] = []) => {
       return;
     }
 
-    const allShortcuts = [...shortcuts, ...additionalShortcuts];
-    
     for (const shortcut of allShortcuts) {
       const cmdKey = navigator.platform.includes('Mac') ? event.metaKey : event.ctrlKey;
       
@@ -159,14 +166,14 @@ export const useKeyboardShortcuts = (additionalShortcuts: Shortcut[] = []) => {
         break;
       }
     }
-  }, [additionalShortcuts]);
+  }, [allShortcuts]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleKeyPress]);
 
-  return { shortcuts: [...shortcuts, ...additionalShortcuts] };
+  return { shortcuts: allShortcuts };
 };
 
 // Keyboard shortcuts help modal component
@@ -184,7 +191,9 @@ export const KeyboardShortcutsModal: React.FC = () => {
 
   if (!isOpen) return null;
 
-  const formatKey = (shortcut: Shortcut) => {
+  const shortcutsToRender = baseShortcutDefinitions;
+
+  const formatKey = (shortcut: ShortcutDefinition) => {
     const keys = [];
     if (shortcut.cmd) keys.push(isMac ? '⌘' : 'Ctrl');
     if (shortcut.ctrl) keys.push('Ctrl');
@@ -199,7 +208,7 @@ export const KeyboardShortcutsModal: React.FC = () => {
     return keys.join(isMac ? '' : '+');
   };
 
-  const categories = Array.from(new Set(shortcuts.map(s => s.category)));
+  const categories = Array.from(new Set(shortcutsToRender.map(s => s.category)));
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -228,7 +237,7 @@ export const KeyboardShortcutsModal: React.FC = () => {
                 {category}
               </h3>
               <div className="space-y-2">
-                {shortcuts
+                {shortcutsToRender
                   .filter(s => s.category === category)
                   .map((shortcut, idx) => (
                     <div

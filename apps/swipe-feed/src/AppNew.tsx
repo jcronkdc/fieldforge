@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -20,12 +20,12 @@ const WorkingLandingPage = () => {
             Construction Management Platform
           </p>
           <div className="space-x-4">
-            <a href="/login" className="inline-block px-8 py-3 bg-amber-500 hover:bg-amber-600 rounded-lg font-semibold">
+            <Link to="/login" className="inline-block px-8 py-3 bg-amber-500 hover:bg-amber-600 rounded-lg font-semibold">
               Sign In
-            </a>
-            <a href="/signup" className="inline-block px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold">
+            </Link>
+            <Link to="/signup" className="inline-block px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold">
               Get Started
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -35,9 +35,10 @@ const WorkingLandingPage = () => {
 
 // Simple Dashboard
 const SimpleDashboard = () => {
+  const navigate = useNavigate();
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.href = '/';
+    navigate('/', { replace: true });
   };
 
   return (
@@ -108,7 +109,7 @@ export function AppNew() {
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white">Loading...</p>
+          <p className="text-white">Loading FieldForge</p>
         </div>
       </div>
     );

@@ -23,13 +23,13 @@ export const LoginPage: React.FC = () => {
 
     try {
       await signIn(email, password);
-      
+
       setSuccess(true);
       setTimeout(() => {
         navigate('/dashboard');
       }, 1000);
     } catch (error: any) {
-      setError(error.message || 'Failed to sign in');
+      setError(error.message || 'Sign in failed. Try again.');
     } finally {
       setLoading(false);
     }
@@ -69,18 +69,18 @@ export const LoginPage: React.FC = () => {
           <form onSubmit={handleLogin} className="space-y-6">
             {/* Error/Success Messages */}
             {error && (
-              <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg">
-                <div className="flex items-center space-x-2 text-red-400">
-                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+              <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg" role="alert">
+                <div className="flex items-center gap-2 text-red-400" id="login-error">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
                   <p className="text-sm">{error}</p>
                 </div>
                 {error.includes('Invalid login credentials') && email === 'justincronk@pm.me' && (
                   <div className="mt-2 pt-2 border-t border-red-500/30">
                     <p className="text-xs text-red-300">
                       Admin account may not be set up yet.{' '}
-                      <a href="/admin-setup" className="underline hover:text-red-200">
-                        Click here to set up admin account
-                      </a>
+                      <Link to="/admin-setup" className="link">
+                        Set up admin account
+                      </Link>
                     </p>
                   </div>
                 )}
@@ -88,16 +88,16 @@ export const LoginPage: React.FC = () => {
             )}
             
             {success && (
-              <div className="flex items-center space-x-2 p-3 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                <p className="text-sm">Login successful! Redirecting...</p>
+              <div className="flex items-center gap-2 rounded-lg border border-green-500/50 bg-green-500/10 p-3 text-green-400" role="status">
+                <CheckCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+                <p className="text-sm">Login successful. Redirecting.</p>
               </div>
             )}
 
             {/* Email Input */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-                Email Address
+              <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-300">
+                Email address
               </label>
               <input
                 id="email"
@@ -107,12 +107,14 @@ export const LoginPage: React.FC = () => {
                 placeholder="foreman@construction.com"
                 required
                 className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                aria-invalid={Boolean(error)}
+                aria-describedby={error ? 'login-error' : undefined}
               />
             </div>
 
             {/* Password Input */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
+              <label htmlFor="password" className="mb-2 block text-sm font-medium text-slate-300">
                 Password
               </label>
               <div className="relative">
@@ -124,11 +126,14 @@ export const LoginPage: React.FC = () => {
                   placeholder="Enter your password"
                   required
                   className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all pr-12"
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? 'login-error' : undefined}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300"
+                  className="btn btn-ghost absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-slate-300"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -137,15 +142,16 @@ export const LoginPage: React.FC = () => {
 
             {/* Remember & Forgot */}
             <div className="flex items-center justify-between">
-              <label className="flex items-center">
+              <label htmlFor="remember-me" className="flex items-center">
                 <input
                   type="checkbox"
+                  id="remember-me"
                   className="w-4 h-4 bg-slate-800 border-slate-700 rounded text-amber-500 focus:ring-amber-500"
                 />
                 <span className="ml-2 text-sm text-slate-400">Remember me</span>
               </label>
-              <a href="#" className="text-sm text-amber-500 hover:text-amber-400">
-                Forgot password?
+              <a href="#" className="link text-sm">
+                Reset password
               </a>
             </div>
 
@@ -153,15 +159,15 @@ export const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="btn btn-primary w-full justify-center"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Signing in...
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+                  Signing in
                 </>
               ) : (
-                'Sign In'
+                'Sign in'
               )}
             </button>
 
@@ -169,15 +175,15 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={handleDemoLogin}
-              className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-lg transition-colors border border-slate-700"
+              className="btn btn-secondary w-full justify-center"
             >
-              Try Demo Account
+              Try demo account
             </button>
 
             {/* Sign Up Link */}
             <p className="text-center text-sm text-slate-400">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-amber-500 hover:text-amber-400 font-medium">
+              Don&apos;t have an account?{' '}
+              <Link to="/signup" className="link font-medium">
                 Sign up
               </Link>
             </p>

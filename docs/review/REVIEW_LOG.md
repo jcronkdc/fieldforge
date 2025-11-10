@@ -487,6 +487,39 @@ Initialized new cycle on 2025-11-10.
 
 - Monitor weekly scheduler CI job and plan next review cycle kickoff.
 
+## Batch 30 — Router consolidation
+
+**Files reviewed**
+
+- apps/swipe-feed/src/AppSafe.tsx
+- apps/swipe-feed/src/hooks/useKeyboardShortcuts.tsx
+- apps/swipe-feed/src/components/voice/VoiceCommandInterface.tsx
+- apps/swipe-feed/src/components/dashboard/QuickTestButton.tsx
+- apps/swipe-feed/src/AppNew.tsx
+- apps/swipe-feed/src/components/auth/LoginPage.tsx
+
+
+
+**Findings**
+
+- Multiple components invoked `window.location.*` for in-app navigation, causing full reloads and broken history state.
+- Voice command and keyboard shortcut systems navigated via hard reloads, bypassing the router.
+- Legacy landing/auth views still shipped internal `<a>` anchors that should be `<Link>` components.
+- App shell lacked scroll restoration, so Back/Forward preserved scroll position inconsistently.
+
+
+
+**Changes made**
+
+- Ensured a single `BrowserRouter` wrapper handles navigation and added a scroll-to-top helper on route changes.
+- Refactored keyboard shortcuts, voice commands, and quick-test CTA to use `useNavigate`.
+- Converted internal anchors in `AppNew` and `LoginPage` to `<Link>` for SPA navigation.
+
+
+
+**Follow-ups**
+
+- Audit remaining legacy modules (e.g., diagnostics flows, middleware fallbacks) for direct `window.location` usage during future cleanup.
 
 
 ## Batch 29 — Static Scan

@@ -6,11 +6,13 @@
 import React, { useState } from 'react';
 import { Icons } from '../icons/Icons';
 import { TestExecutionPanel } from './TestExecutionPanel';
+import { useNavigate } from 'react-router-dom';
 
 export const QuickTestButton: React.FC = () => {
   const [showPanel, setShowPanel] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [lastStatus, setLastStatus] = useState<'idle' | 'passed' | 'failed'>('idle');
+  const navigate = useNavigate();
 
   // Load last status from localStorage
   React.useEffect(() => {
@@ -155,7 +157,7 @@ export const QuickTestButton: React.FC = () => {
                 onClick={() => {
                   setShowPanel(false);
                   // Navigate to full dashboard
-                  window.location.href = '/dashboard#testing';
+                  navigate('/dashboard#testing');
                 }}
                 className="w-full px-4 py-2 text-left text-sm text-white hover:bg-gray-700 rounded transition-colors flex items-center gap-2"
               >
@@ -164,7 +166,7 @@ export const QuickTestButton: React.FC = () => {
               </button>
               <div className="border-t border-gray-700 pt-1 mt-1">
                 <div className="px-4 py-2 text-xs text-gray-400">
-                  {isRunning ? 'Testing...' : 
+                  {isRunning ? 'Testing' : 
                    lastStatus === 'passed' ? '✅ Last test passed' :
                    lastStatus === 'failed' ? '❌ Last test failed' :
                    'Ready to test'}

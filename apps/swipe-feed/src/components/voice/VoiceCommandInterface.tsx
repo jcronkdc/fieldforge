@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Mic, MicOff, Volume2, AlertCircle, CheckCircle } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Pill } from '../ui/Pill';
+import { useNavigate } from 'react-router-dom';
 
 interface VoiceCommand {
   command: string;
@@ -20,95 +21,9 @@ export const VoiceCommandInterface: React.FC = () => {
   const [feedback, setFeedback] = useState('');
   const [showCommands, setShowCommands] = useState(false);
   const recognitionRef = useRef<any>(null);
+  const navigate = useNavigate();
 
-  // Voice commands configuration
-  const commands: VoiceCommand[] = [
-    {
-      command: 'create report',
-      aliases: ['new report', 'make report', 'start report'],
-      action: () => {
-        window.location.href = '/field/daily';
-        speak('Opening daily report creator');
-      },
-      category: 'Reports',
-      description: 'Create a new daily field report'
-    },
-    {
-      command: 'scan receipt',
-      aliases: ['receipt', 'capture receipt', 'new receipt'],
-      action: () => {
-        window.location.href = '/field/receipts';
-        speak('Opening receipt scanner');
-      },
-      category: 'Finance',
-      description: 'Scan and process a receipt'
-    },
-    {
-      command: 'safety check',
-      aliases: ['safety', 'safety inspection', 'check safety'],
-      action: () => {
-        window.location.href = '/safety/inspection';
-        speak('Starting safety inspection');
-      },
-      category: 'Safety',
-      description: 'Start a safety inspection'
-    },
-    {
-      command: 'show projects',
-      aliases: ['projects', 'my projects', 'list projects'],
-      action: () => {
-        window.location.href = '/projects';
-        speak('Loading your projects');
-      },
-      category: 'Projects',
-      description: 'View all projects'
-    },
-    {
-      command: 'emergency',
-      aliases: ['alert', 'emergency alert', 'send alert'],
-      action: () => {
-        // Trigger emergency alert system
-        speak('Emergency alert activated. Notifying safety team.');
-        // In production, this would trigger actual emergency protocols
-        console.log('EMERGENCY ALERT TRIGGERED');
-      },
-      category: 'Safety',
-      description: 'Send emergency alert'
-    },
-    {
-      command: 'time clock',
-      aliases: ['clock in', 'clock out', 'time'],
-      action: () => {
-        window.location.href = '/field/time';
-        speak('Opening time tracking');
-      },
-      category: 'Time',
-      description: 'Access time tracking'
-    },
-    {
-      command: 'weather',
-      aliases: ['weather report', 'check weather', 'forecast'],
-      action: () => {
-        window.location.href = '/field/weather';
-        speak('Loading weather information');
-      },
-      category: 'Field',
-      description: 'Check weather conditions'
-    },
-    {
-      command: 'help',
-      aliases: ['commands', 'what can you do', 'list commands'],
-      action: () => {
-        setShowCommands(true);
-        speak('Here are the available voice commands');
-      },
-      category: 'System',
-      description: 'Show all voice commands'
-    }
-  ];
-
-  // Text-to-speech function
-  const speak = (text: string) => {
+  const speak = useCallback((text: string) => {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 1.0;
@@ -116,7 +31,94 @@ export const VoiceCommandInterface: React.FC = () => {
       utterance.volume = 1.0;
       window.speechSynthesis.speak(utterance);
     }
-  };
+  }, []);
+
+  // Voice commands configuration
+  const commands: VoiceCommand[] = useMemo(
+    () => [
+      {
+        command: 'create report',
+        aliases: ['new report', 'make report', 'start report'],
+        action: () => {
+          navigate('/field/daily');
+          speak('Opening daily report creator');
+        },
+        category: 'Reports',
+        description: 'Create a new daily field report'
+      },
+      {
+        command: 'scan receipt',
+        aliases: ['receipt', 'capture receipt', 'new receipt'],
+        action: () => {
+          navigate('/field/receipts');
+          speak('Opening receipt scanner');
+        },
+        category: 'Finance',
+        description: 'Scan and process a receipt'
+      },
+      {
+        command: 'safety check',
+        aliases: ['safety', 'safety inspection', 'check safety'],
+        action: () => {
+          navigate('/safety/inspection');
+          speak('Starting safety inspection');
+        },
+        category: 'Safety',
+        description: 'Start a safety inspection'
+      },
+      {
+        command: 'show projects',
+        aliases: ['projects', 'my projects', 'list projects'],
+        action: () => {
+          navigate('/projects');
+          speak('Loading your projects');
+        },
+        category: 'Projects',
+        description: 'View all projects'
+      },
+      {
+        command: 'emergency',
+        aliases: ['alert', 'emergency alert', 'send alert'],
+        action: () => {
+          speak('Emergency alert activated. Notifying safety team.');
+          console.log('EMERGENCY ALERT TRIGGERED');
+        },
+        category: 'Safety',
+        description: 'Send emergency alert'
+      },
+      {
+        command: 'time clock',
+        aliases: ['clock in', 'clock out', 'time'],
+        action: () => {
+          navigate('/field/time');
+          speak('Opening time tracking');
+        },
+        category: 'Time',
+        description: 'Access time tracking'
+      },
+      {
+        command: 'weather',
+        aliases: ['weather report', 'check weather', 'forecast'],
+        action: () => {
+          navigate('/field/weather');
+          speak('Loading weather information');
+        },
+        category: 'Field',
+        description: 'Check weather conditions'
+      },
+      {
+        command: 'help',
+        aliases: ['commands', 'what can you do', 'list commands'],
+        action: () => {
+          setShowCommands(true);
+          speak('Here are the available voice commands');
+        },
+        category: 'System',
+        description: 'Show all voice commands'
+      }
+    ],
+    [navigate, speak]
+  );
 
   // Process voice command
   const processCommand = useCallback((input: string) => {
@@ -146,7 +148,7 @@ export const VoiceCommandInterface: React.FC = () => {
     setFeedback('Command not recognized. Say "help" for available commands.');
     speak('Sorry, I didn\'t understand that command. Say help for available commands.');
     return false;
-  }, [commands]);
+  }, [commands, speak]);
 
   // Initialize speech recognition
   useEffect(() => {
@@ -172,7 +174,7 @@ export const VoiceCommandInterface: React.FC = () => {
 
     recognition.onstart = () => {
       setStatus('listening');
-      setFeedback('Listening for commands...');
+      setFeedback('Listening for commands');
       setTranscript('');
       setInterimTranscript('');
     };
