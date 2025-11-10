@@ -201,10 +201,20 @@ export const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[600px]">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-400">Loading dashboard...</p>
+      <div className="space-y-6 p-6">
+        <div className="skeleton h-20 rounded-2xl border border-slate-800 bg-slate-900/50" />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <div key={idx} className="skeleton h-32 rounded-xl border border-slate-800 bg-slate-900/50" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <div className="skeleton h-64 rounded-xl border border-slate-800 bg-slate-900/50 lg:col-span-2" />
+          <div className="skeleton h-64 rounded-xl border border-slate-800 bg-slate-900/50" />
+        </div>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="skeleton h-56 rounded-xl border border-slate-800 bg-slate-900/50" />
+          <div className="skeleton h-56 rounded-xl border border-slate-800 bg-slate-900/50" />
         </div>
       </div>
     );
@@ -215,23 +225,23 @@ export const Dashboard: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Construction Dashboard</h1>
-          <p className="text-slate-400 mt-1">Demo 138kV Substation Upgrade • {new Date().toLocaleDateString()}</p>
+          <h1 className="text-3xl font-bold on-surface">Construction dashboard</h1>
+          <p className="mt-1 on-surface-muted">Demo 138kV substation upgrade • {new Date().toLocaleDateString()}</p>
         </div>
         <div className="flex items-center space-x-4">
           <Link
             to="/field"
-            className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition-colors flex items-center space-x-2"
+            className="btn btn-primary bg-amber-500 text-white hover:bg-amber-600"
           >
             <HardHat className="w-5 h-5" />
-            <span>Daily Report</span>
+            <span>Daily report</span>
           </Link>
           <Link
             to="/safety/briefing"
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors flex items-center space-x-2"
+            className="btn btn-secondary bg-green-500 text-white hover:bg-green-600"
           >
             <Shield className="w-5 h-5" />
-            <span>Safety Brief</span>
+            <span>Safety brief</span>
           </Link>
         </div>
       </div>
@@ -245,11 +255,11 @@ export const Dashboard: React.FC = () => {
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-slate-400 text-sm font-medium">{metric.title}</p>
+                <p className="on-surface-muted text-sm font-medium">{metric.title}</p>
                 <div className="flex items-baseline mt-2">
-                  <span className="text-3xl font-bold text-white">{metric.value}</span>
+                  <span className="text-3xl font-bold on-surface">{metric.value}</span>
                   {metric.unit && (
-                    <span className="text-slate-400 text-sm ml-1">{metric.unit}</span>
+                    <span className="on-surface-muted text-sm ml-1">{metric.unit}</span>
                   )}
                 </div>
                 <div className="flex items-center mt-3">
@@ -281,11 +291,11 @@ export const Dashboard: React.FC = () => {
         <div className="lg:col-span-2 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-white flex items-center">
-              <Calendar className="w-5 h-5 mr-2 text-amber-500" />
-              Project Timeline
+              <Calendar className="mr-2 w-5 h-5 text-amber-500" />
+              Project timeline
             </h2>
-            <Link to="/schedule" className="text-amber-500 hover:text-amber-400 text-sm font-medium">
-              View Full Schedule →
+            <Link to="/schedule" className="text-sm font-medium text-amber-500 hover:text-amber-400">
+              View full schedule →
             </Link>
           </div>
           
@@ -296,15 +306,15 @@ export const Dashboard: React.FC = () => {
                 <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full" style={{ width: '67%' }}></div>
               </div>
               <div className="flex justify-between mt-2">
-                <span className="text-xs text-slate-400">Start: Jan 15, 2025</span>
+                <span className="text-xs on-surface-muted">Start: Jan 15, 2025</span>
                 <span className="text-xs font-bold text-amber-500">Current: 67% Complete</span>
-                <span className="text-xs text-slate-400">End: Jul 15, 2025</span>
+                <span className="text-xs on-surface-muted">End: Jul 15, 2025</span>
               </div>
             </div>
 
             {/* Upcoming Milestones */}
             <div className="space-y-3 mt-6">
-              <h3 className="text-sm font-medium text-slate-400 uppercase tracking-wider">Upcoming Milestones</h3>
+              <h3 className="text-sm font-medium on-surface-muted uppercase tracking-wider">Upcoming Milestones</h3>
               {[
                 { name: 'Foundation Complete', date: 'Nov 15', status: 'on-track' },
                 { name: 'Equipment Delivery', date: 'Nov 20', status: 'at-risk' },
@@ -316,9 +326,9 @@ export const Dashboard: React.FC = () => {
                     <div className={`w-2 h-2 rounded-full ${
                       milestone.status === 'on-track' ? 'bg-green-500' : 'bg-orange-500'
                     }`}></div>
-                    <span className="text-white font-medium">{milestone.name}</span>
+                    <span className="on-surface font-medium">{milestone.name}</span>
                   </div>
-                  <span className="text-sm text-slate-400">{milestone.date}</span>
+                  <span className="text-sm on-surface-muted">{milestone.date}</span>
                 </div>
               ))}
             </div>
@@ -328,7 +338,7 @@ export const Dashboard: React.FC = () => {
         {/* Recent Activity */}
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-white flex items-center">
+            <h2 className="text-xl font-bold on-surface flex items-center">
               <Activity className="w-5 h-5 mr-2 text-amber-500" />
               Recent Activity
             </h2>
@@ -348,9 +358,9 @@ export const Dashboard: React.FC = () => {
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium text-sm">{activity.title}</p>
-                    <p className="text-slate-400 text-xs mt-0.5">{activity.description}</p>
-                    <div className="flex items-center mt-2 text-xs text-slate-500">
+                    <p className="on-surface font-medium text-sm">{activity.title}</p>
+                    <p className="on-surface-muted text-xs mt-0.5">{activity.description}</p>
+                    <div className="flex items-center mt-2 text-xs on-surface-muted">
                       <span>{activity.user}</span>
                       <span className="mx-2">•</span>
                       <span>{formatTime(activity.timestamp)}</span>

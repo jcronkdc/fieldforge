@@ -248,6 +248,37 @@
 
 
 
+## Batch 6 — Components (Large/Visual)
+
+**Files reviewed**
+
+- apps/swipe-feed/src/components/dashboard/FuturisticDashboard.tsx
+- apps/swipe-feed/src/components/dashboard/Dashboard.tsx
+- apps/swipe-feed/src/styles/futuristic.css
+
+
+
+**Findings**
+
+- Dashboard components relied on ad-hoc colour classes that risked sub-AA contrast on darker surfaces.
+- Fixed background attachment in legacy theme CSS caused CLS on mobile scroll.
+
+
+
+**Changes made**
+
+- Updated dashboard text styles to use shared on-surface tokens for consistent contrast.
+- Removed fixed background attachment from `cyber-grid` utility to avoid layout shifts.
+- Ensured milestone and activity sections expose readable body copy using `on-surface-muted`.
+
+
+
+**Follow-ups**
+
+- Audit additional hero components for consistent media sizing and contrast in subsequent batches.
+
+
+
 ## Batch 5 — Components (Small)
 
 **Files reviewed**

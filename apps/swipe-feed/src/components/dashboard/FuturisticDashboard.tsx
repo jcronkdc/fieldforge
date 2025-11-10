@@ -91,16 +91,16 @@ export const FuturisticDashboard: React.FC = () => {
         <header className="flex flex-col gap-6 border-b border-slate-200 pb-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-3">
             <p className="badge">Portfolio overview</p>
-            <h1 className="text-3xl font-semibold text-slate-900">
+            <h1 className="text-3xl font-semibold on-surface">
               Maintain control across every transmission and substation build
             </h1>
-            <p className="max-w-3xl text-base text-slate-600">
+            <p className="max-w-3xl text-base on-surface-muted">
               Use this dashboard to move programs forward: align construction and commissioning, surface risk, and deliver the reporting executives expect without chasing spreadsheets.
             </p>
           </div>
           <Link
             to="/analytics"
-            className="btn-secondary"
+            className="btn btn-secondary"
           >
             View executive analytics
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -135,9 +135,9 @@ export const FuturisticDashboard: React.FC = () => {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 text-white">
                 <Icon className="h-6 w-6" aria-hidden="true" />
               </div>
-              <h2 className="mt-5 text-lg font-semibold text-slate-900">{title}</h2>
-              <p className="mt-2 text-sm text-slate-600">{description}</p>
-              <Link to={to} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-slate-900 hover:underline">
+              <h2 className="mt-5 text-lg font-semibold on-surface">{title}</h2>
+              <p className="mt-2 text-sm on-surface-muted">{description}</p>
+              <Link to={to} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold on-surface hover:underline">
                 {cta}
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -170,9 +170,9 @@ export const FuturisticDashboard: React.FC = () => {
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="flex items-center gap-3 text-slate-900">
                 <HardHat className="h-6 w-6 text-slate-900" aria-hidden="true" />
-                <h2 className="text-lg font-semibold">Today’s priorities</h2>
+                <h2 className="text-lg font-semibold on-surface">Today’s priorities</h2>
               </div>
-              <p className="mt-3 text-sm text-slate-600">
+              <p className="mt-3 text-sm on-surface-muted">
                 Start with crews deploying in the next 24 hours. Confirm documents, permits, and resource plans so field leaders sign off before mobilization.
               </p>
             </div>
@@ -180,14 +180,14 @@ export const FuturisticDashboard: React.FC = () => {
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="flex items-center gap-3 text-slate-900">
                 <Calendar className="h-6 w-6 text-slate-900" aria-hidden="true" />
-                <h2 className="text-lg font-semibold">Upcoming reviews</h2>
+                <h2 className="text-lg font-semibold on-surface">Upcoming reviews</h2>
               </div>
-              <ul className="mt-4 space-y-4 text-sm text-slate-700">
+              <ul className="mt-4 space-y-4 text-sm on-surface-muted">
                 {upcomingItems.map(({ title, description, to }) => (
                   <li key={title} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                    <p className="font-semibold text-slate-900">{title}</p>
-                    <p className="mt-1 text-sm text-slate-600">{description}</p>
-                    <Link to={to} className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-slate-900 hover:underline">
+                    <p className="font-semibold on-surface">{title}</p>
+                    <p className="mt-1 text-sm on-surface-muted">{description}</p>
+                    <Link to={to} className="mt-2 inline-flex items-center gap-1 text-xs font-semibold on-surface hover:underline">
                       Go to section
                       <ArrowRight className="h-3 w-3" />
                     </Link>
