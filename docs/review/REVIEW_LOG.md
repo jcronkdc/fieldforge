@@ -450,6 +450,35 @@
 
 
 
+## Batch 15 — Backlog Grooming
+
+**Files reviewed**
+
+- docs/review/GAPS.md
+- docs/review/REVIEW_LOG.md
+
+
+
+**Findings**
+
+- Migrated all open tasks into backlog format.
+- Added owners and priorities to each carried item.
+
+
+
+**Changes made**
+
+- Updated headings and backlog bullet structure.
+- Retired the previous “Open” section in favour of the structured backlog.
+
+
+
+**Follow-ups**
+
+- Begin next nanostep focused on backlog triage and scheduling.
+
+
+
 ## Batch 5 — Components (Small)
 
 **Files reviewed**
