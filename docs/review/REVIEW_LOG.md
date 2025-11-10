@@ -487,3 +487,36 @@ Initialized new cycle on 2025-11-10.
 
 - Monitor weekly scheduler CI job and plan next review cycle kickoff.
 
+
+
+## Batch 29 — Static Scan
+
+**Files reviewed**
+
+- tools/reports/nav_scan.txt
+- tools/reports/anchor_scan.txt
+- tools/reports/briefing_scan.txt
+
+
+
+**Findings**
+
+- SPA navigation relies on numerous `window.location` assignments (e.g., `AppSafe`, `VoiceCommandInterface`, keyboard shortcuts), risking full reloads during Back/Forward.
+- Legacy internal anchors detected in `AppNew.tsx` and `LoginPage.tsx`; they bypass the router and may break history state.
+- No literal “Request a briefing” action found; briefing strings appear in landing copy only, suggesting the CTA may be mislabelled or missing event wiring.
+- Briefing-related API endpoints absent from scans; points to placeholder components rather than functional mutations.
+
+
+
+**Changes made**
+
+- None (diagnostic only).
+
+
+
+**Follow-ups**
+
+- Evaluate whether `window.location` usages should be replaced with router navigation helpers.
+- Replace internal `<a>` tags with `<Link>` components where appropriate.
+- Confirm actual CTA text/handler for briefing request and implement API call path if missing.
+

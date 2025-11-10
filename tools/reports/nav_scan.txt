@@ -1,0 +1,89 @@
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:1987:        window.history.replaceState(window.history.state, '', url.toString())
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:1987:        window.history.replaceState(window.history.state, '', url.toString())
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:451:        params = parseParametersFromURL(window.location.href)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:807:      const url = new URL(options?.url ?? window.location.href)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:939:      const url = new URL(options?.url ?? window.location.href)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:1984:        const url = new URL(window.location.href)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2053:      window.location.hash = ''
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2054:      this._debug('#_getSessionFromURL()', 'clearing window.location.hash')
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2323:        window.location.assign(data?.url)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2499:      window.location.assign(url)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:3485:            window.location.assign(response.data.redirect_url)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:3538:            window.location.assign(response.data.redirect_url)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/types.ts:216:   * On browsers you can set the URL to `window.location.href` to take
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/webauthn.errors.ts:198:    const effectiveDomain = window.location.hostname
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/webauthn.errors.ts:202:        message: `${window.location.hostname} is an invalid domain`,
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/webauthn.errors.ts:285:    const effectiveDomain = window.location.hostname
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/webauthn.errors.ts:289:        message: `${window.location.hostname} is an invalid domain`,
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/webauthn.ts:763:        rpId = typeof window !== 'undefined' ? window.location.hostname : undefined,
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/webauthn.ts:764:        rpOrigins = typeof window !== 'undefined' ? [window.location.origin] : undefined,
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/webauthn.ts:847:      rpId = typeof window !== 'undefined' ? window.location.hostname : undefined,
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/webauthn.ts:848:      rpOrigins = typeof window !== 'undefined' ? [window.location.origin] : undefined,
+apps/swipe-feed/src/AppDiagnostic.tsx:56:    window.location.reload();
+apps/swipe-feed/src/AppDiagnostic.tsx:105:          onClick={() => window.location.href = '/'}
+apps/swipe-feed/src/AppDiagnostic.tsx:120:          onClick={() => window.location.href = '/login'}
+apps/swipe-feed/src/AppNew.tsx:40:    window.location.href = '/';
+apps/swipe-feed/src/AppSafe.tsx:71:        onClick={() => window.location.reload()}
+apps/swipe-feed/src/AppSafe.tsx:168:              onClick={() => window.location.reload()}
+apps/swipe-feed/src/components/DebugClickHandler.tsx:90:                window.location.pathname = href;
+apps/swipe-feed/src/components/ErrorBoundary.tsx:69:              onClick={() => window.location.reload()}
+apps/swipe-feed/src/components/RecoveryModal.tsx:27:        window.location.reload();
+apps/swipe-feed/src/components/RecoveryModal.tsx:51:        window.location.href = '/';
+apps/swipe-feed/src/components/auth/AdminSetup.tsx:66:          emailRedirectTo: `${window.location.origin}/dashboard`
+apps/swipe-feed/src/components/auth/AdminSetup.tsx:78:            redirectTo: `${window.location.origin}/reset-password`
+apps/swipe-feed/src/components/auth/AdminSetup.tsx:134:        redirectTo: `${window.location.origin}/reset-password`
+apps/swipe-feed/src/components/auth/AuthForm.tsx:96:        setTimeout(() => window.location.reload(), 500);
+apps/swipe-feed/src/components/auth/AuthForm.tsx:104:        setTimeout(() => window.location.reload(), 500);
+apps/swipe-feed/src/components/auth/FuturisticAdminSetup.tsx:110:        redirectTo: `${window.location.origin}/reset-password`
+apps/swipe-feed/src/components/auth/FuturisticSignUp.tsx:151:          emailRedirectTo: `${window.location.origin}/welcome`,
+apps/swipe-feed/src/components/common/EnvironmentBadge.tsx:4:  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+apps/swipe-feed/src/components/common/EnvironmentBadge.tsx:15:        <span className="opacity-75">({window.location.hostname})</span>
+apps/swipe-feed/src/components/common/EnvironmentBadge.tsx:22:  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+apps/swipe-feed/src/components/common/EnvironmentBadge.tsx:23:  const isVercel = window.location.hostname.includes('vercel.app');
+apps/swipe-feed/src/components/common/EnvironmentBadge.tsx:57:          URL: {window.location.hostname}
+apps/swipe-feed/src/components/dashboard/QuickTestButton.tsx:158:                  window.location.href = '/dashboard#testing';
+apps/swipe-feed/src/components/feed/FeedCard.tsx:166:    const shareUrl = `${window.location.origin}${window.location.pathname}?feedEvent=${encodeURIComponent(event.id)}`;
+apps/swipe-feed/src/components/notifications/PushNotifications.tsx:207:          window.location.href = notification.actionUrl;
+apps/swipe-feed/src/components/social/InviteFriendsModal.tsx:49:      const baseUrl = window.location.origin;
+apps/swipe-feed/src/components/social/InviteFriendsModal.tsx:101:    window.location.href = smsUrl;
+apps/swipe-feed/src/components/social/InviteFriendsModal.tsx:114:    window.location.href = mailtoUrl;
+apps/swipe-feed/src/components/voice/VoiceCommandInterface.tsx:30:        window.location.href = '/field/daily';
+apps/swipe-feed/src/components/voice/VoiceCommandInterface.tsx:40:        window.location.href = '/field/receipts';
+apps/swipe-feed/src/components/voice/VoiceCommandInterface.tsx:50:        window.location.href = '/safety/inspection';
+apps/swipe-feed/src/components/voice/VoiceCommandInterface.tsx:60:        window.location.href = '/projects';
+apps/swipe-feed/src/components/voice/VoiceCommandInterface.tsx:82:        window.location.href = '/field/time';
+apps/swipe-feed/src/components/voice/VoiceCommandInterface.tsx:92:        window.location.href = '/field/weather';
+apps/swipe-feed/src/context/AuthContext.tsx:110:    window.location.href = '/';
+apps/swipe-feed/src/hooks/useKeyboardShortcuts.tsx:21:    action: () => window.location.href = '/dashboard',
+apps/swipe-feed/src/hooks/useKeyboardShortcuts.tsx:51:    action: () => window.location.href = '/field/daily-report',
+apps/swipe-feed/src/hooks/useKeyboardShortcuts.tsx:58:    action: () => window.location.href = '/field/receipts',
+apps/swipe-feed/src/hooks/useKeyboardShortcuts.tsx:74:    action: () => window.location.href = '/safety/briefing',
+apps/swipe-feed/src/hooks/useKeyboardShortcuts.tsx:116:    action: () => window.location.reload(),
+apps/swipe-feed/src/lib/auth.ts:34:      emailRedirectTo: window.location.origin
+apps/swipe-feed/src/lib/auth.ts:117:    redirectTo: `${window.location.origin}/reset-password`
+apps/swipe-feed/src/lib/middleware/authMiddleware.ts:194:        window.location.href = '/login';
+apps/swipe-feed/src/pages/LandingPageTest.tsx:24:              <p>Current Path: {window.location.pathname}</p>
+apps/swipe-feed/src/pages/LandingPageTest.tsx:47:                window.location.reload();
+apps/swipe-feed/src/pages/TestRouting.tsx:66:            <p className="text-white font-mono">{window.location.href}</p>
+apps/swipe-feed/src/pages/TestRouting.tsx:68:            <p className="text-white font-mono">{window.location.pathname}</p>
+apps/swipe-feed/src/tests/canonicalTestSuite.ts:26:    url: window.location.origin,
+apps/swipe-feed/src/tests/canonicalTestSuite.ts:806:        reportUrl: `${window.location.origin}/qa-test-report`
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:451:        params = parseParametersFromURL(window.location.href)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:807:      const url = new URL(options?.url ?? window.location.href)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:939:      const url = new URL(options?.url ?? window.location.href)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:1984:        const url = new URL(window.location.href)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2053:      window.location.hash = ''
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2054:      this._debug('#_getSessionFromURL()', 'clearing window.location.hash')
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2323:        window.location.assign(data?.url)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2499:      window.location.assign(url)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:3485:            window.location.assign(response.data.redirect_url)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:3538:            window.location.assign(response.data.redirect_url)
+backend/node_modules/@supabase/auth-js/src/lib/types.ts:216:   * On browsers you can set the URL to `window.location.href` to take
+backend/node_modules/@supabase/auth-js/src/lib/webauthn.errors.ts:198:    const effectiveDomain = window.location.hostname
+backend/node_modules/@supabase/auth-js/src/lib/webauthn.errors.ts:202:        message: `${window.location.hostname} is an invalid domain`,
+backend/node_modules/@supabase/auth-js/src/lib/webauthn.errors.ts:285:    const effectiveDomain = window.location.hostname
+backend/node_modules/@supabase/auth-js/src/lib/webauthn.errors.ts:289:        message: `${window.location.hostname} is an invalid domain`,
+backend/node_modules/@supabase/auth-js/src/lib/webauthn.ts:763:        rpId = typeof window !== 'undefined' ? window.location.hostname : undefined,
+backend/node_modules/@supabase/auth-js/src/lib/webauthn.ts:764:        rpOrigins = typeof window !== 'undefined' ? [window.location.origin] : undefined,
+backend/node_modules/@supabase/auth-js/src/lib/webauthn.ts:847:      rpId = typeof window !== 'undefined' ? window.location.hostname : undefined,
+backend/node_modules/@supabase/auth-js/src/lib/webauthn.ts:848:      rpOrigins = typeof window !== 'undefined' ? [window.location.origin] : undefined,

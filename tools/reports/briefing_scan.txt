@@ -1,0 +1,517 @@
+apps/swipe-feed/src/App.tsx:176:              <Route path="/safety/briefing" element={<SafetyBriefing />} />
+apps/swipe-feed/src/AppFixed.tsx:373:                  <Route path="/safety/briefing" element={<SafetyBriefing />} />
+apps/swipe-feed/src/components/daily/DailyReportForm.tsx:185:        safety_briefing_held: formData.safetyBriefingHeld,
+apps/swipe-feed/src/components/dashboard/Dashboard.tsx:240:            to="/safety/briefing"
+apps/swipe-feed/src/components/dashboard/FuturisticDashboard.tsx:207:            As you capture daily reports, safety briefings, and commercial approvals, this feed becomes the single source of truth for your executive team.
+apps/swipe-feed/src/components/layout/MainLayout.tsx:107:        { label: 'Briefings', path: '/safety/briefing' },
+apps/swipe-feed/src/components/placeholders.tsx:31:export const SafetyBriefing = () => <PlaceholderPage title="Safety Briefing" icon={Shield} description="Conduct and document safety briefings" />;
+apps/swipe-feed/src/hooks/useKeyboardShortcuts.tsx:74:    action: () => window.location.href = '/safety/briefing',
+apps/swipe-feed/src/lib/supabase.ts:60:  safety_briefing_held: boolean;
+apps/swipe-feed/src/pages/FuturisticElectricalLanding.tsx:114:              Request briefing
+apps/swipe-feed/src/pages/FuturisticElectricalLanding.tsx:151:                Schedule briefing
+apps/swipe-feed/src/pages/FuturisticElectricalLanding.tsx:321:              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-300">Executive briefing</p>
+apps/swipe-feed/src/pages/FuturisticElectricalLanding.tsx:346:            <span>Executive briefings: leadership@fieldforge.app</span>
+apps/swipe-feed/src/pages/LandingPage.tsx:98:      content: 'New AR safety briefing just dropped. Review it in the app to stay aligned. 🥽⚡',
+apps/swipe-feed/src/tests/AcquisitionEvaluation.tsx:273:      notes: 'Predictive safety alerts, digital briefings'
+apps/swipe-feed/src/components/common/FuturisticToast.tsx:17:export const toastStore = {
+apps/swipe-feed/src/components/common/FuturisticToast.tsx:47:  return useSyncExternalStore(toastStore.subscribe, toastStore.getSnapshot);
+apps/swipe-feed/src/components/common/FuturisticToast.tsx:82:              onClick={() => toastStore.dismiss(toast.id)}
+apps/swipe-feed/src/components/common/FuturisticToast.tsx:98:    return toastStore.push({ kind: "success", text });
+apps/swipe-feed/src/components/common/FuturisticToast.tsx:101:    return toastStore.push({ kind: "error", text });
+apps/swipe-feed/src/components/common/FuturisticToast.tsx:104:    return toastStore.push({ kind: "info", text });
+apps/swipe-feed/src/components/common/FuturisticToast.tsx:107:    return toastStore.push({ kind: "info", text, timeout: undefined });
+apps/swipe-feed/src/components/common/FuturisticToast.tsx:110:    toastStore.dismiss(id);
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:370:        console.error(
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2203:        console.error(err)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2579:            console.error(error)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2607:          console.error('Error getting user data:', getUserError)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2623:      console.error(err)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2708:          console.error(errors[i])
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2793:      console.error('removing visibilitychange callback failed', e)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2926:            console.error(
+apps/swipe-feed/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2970:      console.error('_handleVisibilityChange', error)
+apps/swipe-feed/node_modules/@supabase/auth-js/src/lib/fetch.ts:188:    console.error(e)
+apps/swipe-feed/node_modules/@supabase/storage-js/src/lib/vectors/VectorBucketApi.ts:67:   *   console.error('Failed to create bucket:', error.message)
+apps/swipe-feed/node_modules/@supabase/storage-js/src/lib/vectors/VectorBucketApi.ts:194:   *   console.error('Must delete all indexes first')
+apps/swipe-feed/node_modules/@supabase/storage-js/src/packages/StorageAnalyticsApi.ts:51:   *   console.error('Failed to create analytics bucket:', error.message)
+apps/swipe-feed/node_modules/@supabase/storage-js/src/packages/StorageAnalyticsApi.ts:164:   *   console.error('Failed to delete bucket:', error.message)
+apps/swipe-feed/node_modules/its-fine/src/index.tsx:78:const error = console.error
+apps/swipe-feed/node_modules/its-fine/src/index.tsx:79:console.error = function () {
+apps/swipe-feed/node_modules/its-fine/src/index.tsx:82:    console.error = error
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/AnimationClip.js:194:			console.error( 'THREE.AnimationClip: No animation in JSONLoader data.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/AnimationObjectGroup.js:164:				console.error( 'THREE.AnimationObjectGroup: Different objects with the same UUID ' +
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/KeyframeTrack.js:259:			console.error( 'THREE.KeyframeTrack: Invalid value size in track.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/KeyframeTrack.js:271:			console.error( 'THREE.KeyframeTrack: Track is empty.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/KeyframeTrack.js:284:				console.error( 'THREE.KeyframeTrack: Time is not a valid number.', this, i, currTime );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/KeyframeTrack.js:292:				console.error( 'THREE.KeyframeTrack: Out of order keys.', this, i, currTime, prevTime );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/KeyframeTrack.js:312:						console.error( 'THREE.KeyframeTrack: Value is not a valid number.', this, i, value );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:455:						console.error( 'THREE.PropertyBinding: Can not bind to material as node does not have a material.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:462:						console.error( 'THREE.PropertyBinding: Can not bind to material.materials as node.material does not have a materials array.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:475:						console.error( 'THREE.PropertyBinding: Can not bind to bones as node does not have a skeleton.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:510:						console.error( 'THREE.PropertyBinding: Can not bind to material as node does not have a material.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:517:						console.error( 'THREE.PropertyBinding: Can not bind to material.map as node.material does not have a map.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:529:						console.error( 'THREE.PropertyBinding: Can not bind to objectName of node undefined.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:543:					console.error( 'THREE.PropertyBinding: Trying to bind to objectIndex of objectName, but is undefined.', this, targetObject );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:561:			console.error( 'THREE.PropertyBinding: Trying to update property for track: ' + nodeName +
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:596:					console.error( 'THREE.PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/animation/PropertyBinding.js:603:					console.error( 'THREE.PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.morphAttributes.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/core/BufferGeometry.js:341:			console.error( 'THREE.BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/core/BufferGeometry.js:392:			console.error( 'THREE.BufferGeometry.computeBoundingBox(): Computed min/max have NaN values. The "position" attribute is likely to have NaN values.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/core/BufferGeometry.js:411:			console.error( 'THREE.BufferGeometry.computeBoundingSphere(): GLBufferAttribute requires a manual bounding sphere.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/core/BufferGeometry.js:502:				console.error( 'THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values.', this );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/core/BufferGeometry.js:523:			console.error( 'THREE.BufferGeometry: .computeTangents() failed. Missing required attributes (index, position, normal or uv)' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/core/Object3D.js:329:			console.error( 'THREE.Object3D.add: object can\'t be added as a child of itself.', object );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/core/Object3D.js:348:			console.error( 'THREE.Object3D.add: object not an instance of THREE.Object3D.', object );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/core/Raycaster.js:53:			console.error( 'THREE.Raycaster: Unsupported camera type: ' + camera.type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/extras/PMREMGenerator.js:501:			console.error(
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/geometries/ExtrudeGeometry.js:171:				if ( ! vec ) console.error( 'THREE.ExtrudeGeometry: vec does not exist' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/loaders/AnimationLoader.js:35:					console.error( e );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/loaders/AudioLoader.js:53:				console.error( e );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/loaders/BufferGeometryLoader.js:43:					console.error( e );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/loaders/DataTextureLoader.js:47:					console.error( error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/loaders/MaterialLoader.js:61:					console.error( e );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/loaders/ObjectLoader.js:97:				console.error( 'THREE:ObjectLoader: Can\'t parse ' + url + '.', error.message );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/loaders/ObjectLoader.js:109:				console.error( 'THREE.ObjectLoader: Can\'t load ' + url );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/loaders/nodes/NodeLoader.js:37:					console.error( e );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/loaders/nodes/NodeLoader.js:119:			console.error( 'THREE.NodeLoader: Node type not found:', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/nodes/accessors/CubeTextureNode.js:43:			console.error( 'THREE.CubeTextureNode: Mapping "%s" not supported.', texture.mapping );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/nodes/accessors/SceneNode.js:71:			console.error( 'THREE.SceneNode: Unknown scope:', scope );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/nodes/core/NodeBuilder.js:1331:				console.error( `NodeMaterial: Material "${ material.type }" is not compatible.` );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/nodes/display/ToneMappingNode.js:50:			console.error( 'ToneMappingNode: Unsupported Tone Mapping configuration.', toneMapping );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/objects/Sprite.js:69:			console.error( 'THREE.Sprite: "Raycaster.camera" needs to be set in order to raycast against sprites.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/WebGLRenderer.js:270:			console.error( 'THREE.WebGLRenderer: ' + error.message );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/WebGLRenderer.js:697:			console.error( 'THREE.WebGLRenderer: A WebGL context could not be created. Reason: ', event.statusMessage );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/WebGLRenderer.js:1139:				console.error( 'THREE.WebGLRenderer.render: camera is not an instance of THREE.Camera.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/WebGLRenderer.js:2407:				console.error( 'THREE.WebGLRenderer.readRenderTargetPixels: renderTarget is not THREE.WebGLRenderTarget.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/WebGLRenderer.js:2432:						console.error( 'THREE.WebGLRenderer.readRenderTargetPixels: renderTarget is not in RGBA or implementation defined format.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/WebGLRenderer.js:2439:						console.error( 'THREE.WebGLRenderer.readRenderTargetPixels: renderTarget is not in UnsignedByteType or implementation defined type.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/Background.js:106:			console.error( 'THREE.Renderer: Unsupported background configuration.', background );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/Bindings.js:165:					console.error( 'Bindings._update: binding should be available:', binding, updated, texture, binding.textureNode.value, needsBindingsUpdate );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/Info.js:59:			console.error( 'THREE.WebGPUInfo: Unknown object type.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/Renderer.js:436:		console.error( errorMessage );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/Renderer.js:1326:				console.error( 'THREE.Renderer.copyFramebufferToTexture: Invalid rectangle.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/Renderer.js:1426:				console.error( 'THREE.Renderer: Objects of type THREE.LineLoop are not supported. Please use THREE.Line or THREE.LineSegments.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/UniformsGroup.js:141:		console.error( 'THREE.WebGPUUniformsGroup: Unsupported uniform type.', uniform );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/extras/PMREMGenerator.js:521:			console.error( 'blur direction must be either latitudinal or longitudinal!' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/nodes/Nodes.js:308:					console.error( 'WebGPUNodes: Unsupported background configuration.', background );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/nodes/Nodes.js:355:					console.error( 'WebGPUNodes: Unsupported fog configuration.', fog );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/common/nodes/Nodes.js:394:					console.error( 'Nodes: Unsupported environment configuration.', environment );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl-fallback/WebGLBackend.js:1008:					console.error(
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl-fallback/nodes/GLSLNodeBuilder.js:331:			console.error( `WebGPURenderer: THREE.DepthTexture.compareFunction() does not support ${ shaderStage } shader.` );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl-fallback/utils/WebGLState.js:246:							console.error( 'THREE.WebGLState: Invalid blending: ', blending );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl-fallback/utils/WebGLState.js:272:							console.error( 'THREE.WebGLState: Invalid blending: ', blending );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLInfo.js:43:				console.error( 'THREE.WebGLInfo: Unknown draw mode:', mode );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLProgram.js:943:					console.error(
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:674:							console.error( 'THREE.WebGLState: Invalid blending: ', blending );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:700:							console.error( 'THREE.WebGLState: Invalid blending: ', blending );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:987:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:1001:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:1015:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:1029:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:1043:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:1057:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:1071:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:1085:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:1099:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLState.js:1113:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLTextures.js:2131:				console.error( 'THREE.WebGLTextures: Unsupported texture color space:', colorSpace );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgl/WebGLUniformsGroups.js:83:		console.error( 'THREE.WebGLRenderer: Maximum number of simultaneously usable uniforms groups reached.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/WebGPUBackend.js:1517:			console.error( 'WebGPUBackend: copyFramebufferToTexture: Source and destination formats do not match.', sourceGPU.format, destinationGPU.format );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/nodes/WGSLNodeBuilder.js:208:			console.error( `WebGPURenderer: THREE.VideoTexture does not support ${ shaderStage } shader.` );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/nodes/WGSLNodeBuilder.js:307:			console.error( `WebGPURenderer: THREE.TextureNode.gradient() does not support ${ shaderStage } shader.` );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/nodes/WGSLNodeBuilder.js:321:			console.error( `WebGPURenderer: THREE.DepthTexture.compareFunction() does not support ${ shaderStage } shader.` );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/nodes/WGSLNodeBuilder.js:353:			console.error( `WebGPURenderer: THREE.TextureNode.biasNode does not support ${ shaderStage } shader.` );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUAttributeUtils.js:294:			console.error( 'THREE.WebGPUAttributeUtils: Vertex format not supported yet.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUBindingUtils.js:131:				console.error( `WebGPUBindingUtils: Unsupported binding "${ binding }".` );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUPipelineUtils.js:343:			console.error( 'THREE.WebGPURenderer: Invalid blending: ', blending );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUPipelineUtils.js:408:				console.error( 'THREE.WebGPURenderer: Blend factor not supported.', blend );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUPipelineUtils.js:457:				console.error( 'THREE.WebGPURenderer: Invalid stencil function.', stencilFunc );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUPipelineUtils.js:504:				console.error( 'THREE.WebGPURenderer: Invalid stencil operation.', stencilOperation );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUPipelineUtils.js:539:				console.error( 'THREE.WebGPUPipelineUtils: Blend equation not supported.', blendEquation );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUPipelineUtils.js:578:				console.error( 'THREE.WebGPUPipelineUtils: Unknown material.side value.', material.side );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUPipelineUtils.js:640:					console.error( 'THREE.WebGPUPipelineUtils: Invalid depth function.', depthFunc );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:956:				console.error( 'WebGPURenderer: Unsupported texture format.', format );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1000:						console.error( 'WebGPURenderer: Unsupported texture type with RGBAFormat.', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1015:						console.error( 'WebGPURenderer: Unsupported texture type with RGBFormat.', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1058:						console.error( 'WebGPURenderer: Unsupported texture type with RedFormat.', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1101:						console.error( 'WebGPURenderer: Unsupported texture type with RGFormat.', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1124:						console.error( 'WebGPURenderer: Unsupported texture type with DepthFormat.', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1142:							console.error( 'WebGPURenderer: Depth textures with DepthStencilFormat + FloatType can only be used with the "depth32float-stencil8" GPU feature.' );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1151:						console.error( 'WebGPURenderer: Unsupported texture type with DepthStencilFormat.', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1170:						console.error( 'WebGPURenderer: Unsupported texture type with RedIntegerFormat.', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1189:						console.error( 'WebGPURenderer: Unsupported texture type with RGIntegerFormat.', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1208:						console.error( 'WebGPURenderer: Unsupported texture type with RGBAIntegerFormat.', type );
+apps/swipe-feed/node_modules/stats-gl/node_modules/three/src/renderers/webgpu/utils/WebGPUTextureUtils.js:1215:				console.error( 'WebGPURenderer: Unsupported texture format.', format );
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/index.js:14:    console.error('[deprecation] Running tailwindcss without -i, please provide an input file.')
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/index.js:19:    console.error(`Specified input file ${args['--input']} does not exist.`)
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/index.js:24:    console.error(`Specified config file ${args['--config']} does not exist.`)
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/index.js:45:      console.error(e)
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/plugin.js:284:          console.error()
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/plugin.js:285:          console.error('Rebuilding...')
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/plugin.js:370:        console.error()
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/plugin.js:371:        console.error('Done in', (end - start) / BigInt(1e6) + 'ms.')
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/plugin.js:388:            console.error(err)
+apps/swipe-feed/node_modules/tailwindcss/src/cli/build/watching.js:93:        console.error(e.toString())
+apps/swipe-feed/node_modules/three/src/animation/AnimationClip.js:194:			console.error( 'THREE.AnimationClip: No animation in JSONLoader data.' );
+apps/swipe-feed/node_modules/three/src/animation/AnimationObjectGroup.js:164:				console.error( 'THREE.AnimationObjectGroup: Different objects with the same UUID ' +
+apps/swipe-feed/node_modules/three/src/animation/KeyframeTrack.js:259:			console.error( 'THREE.KeyframeTrack: Invalid value size in track.', this );
+apps/swipe-feed/node_modules/three/src/animation/KeyframeTrack.js:271:			console.error( 'THREE.KeyframeTrack: Track is empty.', this );
+apps/swipe-feed/node_modules/three/src/animation/KeyframeTrack.js:284:				console.error( 'THREE.KeyframeTrack: Time is not a valid number.', this, i, currTime );
+apps/swipe-feed/node_modules/three/src/animation/KeyframeTrack.js:292:				console.error( 'THREE.KeyframeTrack: Out of order keys.', this, i, currTime, prevTime );
+apps/swipe-feed/node_modules/three/src/animation/KeyframeTrack.js:312:						console.error( 'THREE.KeyframeTrack: Value is not a valid number.', this, i, value );
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:455:						console.error( 'THREE.PropertyBinding: Can not bind to material as node does not have a material.', this );
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:462:						console.error( 'THREE.PropertyBinding: Can not bind to material.materials as node.material does not have a materials array.', this );
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:475:						console.error( 'THREE.PropertyBinding: Can not bind to bones as node does not have a skeleton.', this );
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:510:						console.error( 'THREE.PropertyBinding: Can not bind to material as node does not have a material.', this );
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:517:						console.error( 'THREE.PropertyBinding: Can not bind to material.map as node.material does not have a map.', this );
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:529:						console.error( 'THREE.PropertyBinding: Can not bind to objectName of node undefined.', this );
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:543:					console.error( 'THREE.PropertyBinding: Trying to bind to objectIndex of objectName, but is undefined.', this, targetObject );
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:561:			console.error( 'THREE.PropertyBinding: Trying to update property for track: ' + nodeName +
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:596:					console.error( 'THREE.PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.', this );
+apps/swipe-feed/node_modules/three/src/animation/PropertyBinding.js:603:					console.error( 'THREE.PropertyBinding: Can not bind to morphTargetInfluences because node does not have a geometry.morphAttributes.', this );
+apps/swipe-feed/node_modules/three/src/core/BufferGeometry.js:303:			console.error( 'THREE.BufferGeometry.computeBoundingBox(): GLBufferAttribute requires a manual bounding box. Alternatively set "mesh.frustumCulled" to "false".', this );
+apps/swipe-feed/node_modules/three/src/core/BufferGeometry.js:354:			console.error( 'THREE.BufferGeometry.computeBoundingBox(): Computed min/max have NaN values. The "position" attribute is likely to have NaN values.', this );
+apps/swipe-feed/node_modules/three/src/core/BufferGeometry.js:373:			console.error( 'THREE.BufferGeometry.computeBoundingSphere(): GLBufferAttribute requires a manual bounding sphere. Alternatively set "mesh.frustumCulled" to "false".', this );
+apps/swipe-feed/node_modules/three/src/core/BufferGeometry.js:464:				console.error( 'THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values.', this );
+apps/swipe-feed/node_modules/three/src/core/BufferGeometry.js:485:			console.error( 'THREE.BufferGeometry: .computeTangents() failed. Missing required attributes (index, position, normal or uv)' );
+apps/swipe-feed/node_modules/three/src/core/Object3D.js:326:			console.error( 'THREE.Object3D.add: object can\'t be added as a child of itself.', object );
+apps/swipe-feed/node_modules/three/src/core/Object3D.js:346:			console.error( 'THREE.Object3D.add: object not an instance of THREE.Object3D.', object );
+apps/swipe-feed/node_modules/three/src/core/Raycaster.js:50:			console.error( 'THREE.Raycaster: Unsupported camera type: ' + camera.type );
+apps/swipe-feed/node_modules/three/src/extras/PMREMGenerator.js:489:			console.error(
+apps/swipe-feed/node_modules/three/src/geometries/ExtrudeGeometry.js:171:				if ( ! vec ) console.error( 'THREE.ExtrudeGeometry: vec does not exist' );
+apps/swipe-feed/node_modules/three/src/loaders/AnimationLoader.js:35:					console.error( e );
+apps/swipe-feed/node_modules/three/src/loaders/AudioLoader.js:53:				console.error( e );
+apps/swipe-feed/node_modules/three/src/loaders/BufferGeometryLoader.js:43:					console.error( e );
+apps/swipe-feed/node_modules/three/src/loaders/DataTextureLoader.js:47:					console.error( error );
+apps/swipe-feed/node_modules/three/src/loaders/MaterialLoader.js:61:					console.error( e );
+apps/swipe-feed/node_modules/three/src/loaders/ObjectLoader.js:97:				console.error( 'THREE:ObjectLoader: Can\'t parse ' + url + '.', error.message );
+apps/swipe-feed/node_modules/three/src/loaders/ObjectLoader.js:109:				console.error( 'THREE.ObjectLoader: Can\'t load ' + url );
+apps/swipe-feed/node_modules/three/src/objects/Sprite.js:69:			console.error( 'THREE.Sprite: "Raycaster.camera" needs to be set in order to raycast against sprites.' );
+apps/swipe-feed/node_modules/three/src/renderers/WebGLRenderer.js:307:			console.error( 'THREE.WebGLRenderer: ' + error.message );
+apps/swipe-feed/node_modules/three/src/renderers/WebGLRenderer.js:731:			console.error( 'THREE.WebGLRenderer: A WebGL context could not be created. Reason: ', event.statusMessage );
+apps/swipe-feed/node_modules/three/src/renderers/WebGLRenderer.js:1141:				console.error( 'THREE.WebGLRenderer.render: camera is not an instance of THREE.Camera.' );
+apps/swipe-feed/node_modules/three/src/renderers/WebGLRenderer.js:2311:				console.error( 'THREE.WebGLRenderer.readRenderTargetPixels: renderTarget is not THREE.WebGLRenderTarget.' );
+apps/swipe-feed/node_modules/three/src/renderers/WebGLRenderer.js:2336:						console.error( 'THREE.WebGLRenderer.readRenderTargetPixels: renderTarget is not in RGBA or implementation defined format.' );
+apps/swipe-feed/node_modules/three/src/renderers/WebGLRenderer.js:2347:						console.error( 'THREE.WebGLRenderer.readRenderTargetPixels: renderTarget is not in UnsignedByteType or implementation defined type.' );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLBufferRenderer.js:39:				console.error( 'THREE.WebGLBufferRenderer: using THREE.InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.' );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLIndexedBufferRenderer.js:48:				console.error( 'THREE.WebGLIndexedBufferRenderer: using THREE.InstancedBufferGeometry but hardware does not support extension ANGLE_instanced_arrays.' );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLInfo.js:43:				console.error( 'THREE.WebGLInfo: Unknown draw mode:', mode );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLLights.js:425:					console.error( 'THREE.WebGLRenderer: Unable to use RectAreaLight. Missing WebGL extensions.' );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLProgram.js:925:					console.error(
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:669:							console.error( 'THREE.WebGLState: Invalid blending: ', blending );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:695:							console.error( 'THREE.WebGLState: Invalid blending: ', blending );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:982:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:996:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:1010:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:1024:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:1038:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:1052:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:1066:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:1080:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:1094:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLState.js:1108:			console.error( 'THREE.WebGLState:', error );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLTextures.js:799:						console.error( 'WebGLRenderer: Floating point depth texture requires WebGL2.' );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLTextures.js:1831:					console.error( 'THREE.WebGLTextures: THREE.Data3DTexture and THREE.DataArrayTexture only supported with WebGL2.' );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLTextures.js:2084:				console.error( 'THREE.WebGLTextures: Unsupported texture color space:', colorSpace );
+apps/swipe-feed/node_modules/three/src/renderers/webgl/WebGLUniformsGroups.js:83:		console.error( 'THREE.WebGLRenderer: Maximum number of simultaneously usable uniforms groups reached.' );
+apps/swipe-feed/node_modules/troika-three-text/src/FontResolver.js:52:      console.error(`Failure loading font ${url}`, err)
+apps/swipe-feed/node_modules/troika-worker-utils/src/workerBootstrap.js:36:        console.error('worker module init function failed to rehydrate')
+apps/swipe-feed/node_modules/troika-worker-utils/src/workerBootstrap.js:46:        console.error(err)
+apps/swipe-feed/node_modules/troika-worker-utils/src/workerBootstrap.js:75:        console.error(err)
+apps/swipe-feed/node_modules/troika-worker-utils/src/workerBootstrap.js:93:      console.error(err)
+apps/swipe-feed/src/AppFixed.tsx:283:        console.error('Error initializing auth:', error);
+apps/swipe-feed/src/AppNew.tsx:85:        console.error('AppNew: Error getting session:', error);
+apps/swipe-feed/src/AppSafe.tsx:103:            console.error('Auth error:', error);
+apps/swipe-feed/src/AppSafe.tsx:112:        console.error('Unexpected auth error:', err);
+apps/swipe-feed/src/AppSafe.tsx:142:          console.error('Service worker registration failed:', err);
+apps/swipe-feed/src/components/ErrorBoundary.tsx:33:    console.error('ErrorBoundary caught an error:', error, errorInfo);
+apps/swipe-feed/src/components/RecoveryModal.tsx:31:      console.error('Soft reset error:', error);
+apps/swipe-feed/src/components/RecoveryModal.tsx:55:      console.error('Hard reset error:', error);
+apps/swipe-feed/src/components/RecoveryModal.tsx:74:      console.error('Export error:', error);
+apps/swipe-feed/src/components/auth/AuthForm.tsx:136:      console.error("[auth] submit error", error);
+apps/swipe-feed/src/components/auth/FuturisticAdminSetup.tsx:44:      console.error('Check error:', error);
+apps/swipe-feed/src/components/auth/FuturisticAdminSetup.tsx:98:      console.error('Creation error:', error);
+apps/swipe-feed/src/components/auth/FuturisticAdminSetup.tsx:118:      console.error('Reset error:', error);
+apps/swipe-feed/src/components/auth/FuturisticLogin.tsx:28:      console.error('Login error:', error);
+apps/swipe-feed/src/components/auth/FuturisticSignUp.tsx:202:      console.error('Signup error:', error);
+apps/swipe-feed/src/components/daily/DailyReportForm.tsx:215:      console.error('Error saving daily report:', error);
+apps/swipe-feed/src/components/dashboard/QuickTestButton.tsx:59:      console.error('Quick test failed:', error);
+apps/swipe-feed/src/components/dashboard/SavedSessionsWidget.tsx:35:        console.error('Failed to load saved sessions');
+apps/swipe-feed/src/components/documents/RFIManager.tsx:74:      console.error('Error fetching RFIs:', error);
+apps/swipe-feed/src/components/documents/RFIManager.tsx:110:      console.error('Error submitting RFI:', error);
+apps/swipe-feed/src/components/equipment/EquipmentTracker.tsx:84:      console.error('Error fetching equipment:', error);
+apps/swipe-feed/src/components/feed/FeedCard.tsx:108:      console.error("like toggle failed", error);
+apps/swipe-feed/src/components/feed/FeedCard.tsx:124:      console.error("repost toggle failed", error);
+apps/swipe-feed/src/components/feed/FeedCard.tsx:176:      console.error("share failed", error);
+apps/swipe-feed/src/components/notifications/PushNotifications.tsx:85:      console.error('Failed to subscribe to push notifications:', error);
+apps/swipe-feed/src/components/receipts/ReceiptManager.tsx:49:      console.error('Failed to load data:', error);
+apps/swipe-feed/src/components/receipts/ReceiptScanner.tsx:148:      console.error('OCR failed:', err);
+apps/swipe-feed/src/components/receipts/ReceiptScanner.tsx:267:      console.error('Failed to save receipt:', err);
+apps/swipe-feed/src/components/safety/ArcFlashCalculator.tsx:227:      console.error('Error saving arc flash data:', error);
+apps/swipe-feed/src/components/safety/JSAForm.tsx:128:      console.error('Error submitting JSA:', error);
+apps/swipe-feed/src/components/safety/SwitchingOrderForm.tsx:147:      console.error('Error submitting switching order:', error);
+apps/swipe-feed/src/components/voice/VoiceCommandInterface.tsx:245:        console.error('Failed to start voice recognition', error);
+apps/swipe-feed/src/context/AuthContext.tsx:72:        console.error("Error getting session:", error);
+apps/swipe-feed/src/hooks/useAuth.ts:79:      console.error('Failed to load user profile:', error);
+apps/swipe-feed/src/lib/api.ts:47:    console.error("Failed to parse JSON response", error);
+apps/swipe-feed/src/lib/api.ts:83:    console.error("Network request failed", error);
+apps/swipe-feed/src/lib/middleware/authMiddleware.ts:40:    console.error('Authentication check failed:', error);
+apps/swipe-feed/src/lib/middleware/authMiddleware.ts:61:    console.error('Role check failed:', error);
+apps/swipe-feed/src/lib/middleware/authMiddleware.ts:86:    console.error('Project access check failed:', error);
+apps/swipe-feed/src/lib/middleware/authMiddleware.ts:114:    console.error('Project management check failed:', error);
+apps/swipe-feed/src/lib/middleware/authMiddleware.ts:155:    console.error('Receipt approval check failed:', error);
+apps/swipe-feed/src/lib/middleware/authMiddleware.ts:180:    console.error('Safety access check failed:', error);
+apps/swipe-feed/src/lib/middleware/authMiddleware.ts:219:    console.error('Failed to get user company:', error);
+apps/swipe-feed/src/lib/middleware/authMiddleware.ts:233:    console.error('Failed to refresh session:', error);
+apps/swipe-feed/src/lib/profile.ts:33:        console.error('Error parsing stored profile:', e);
+apps/swipe-feed/src/lib/services/emailService.ts:81:      console.error('Failed to send receipt email:', error);
+apps/swipe-feed/src/lib/services/emailService.ts:120:        console.error('Failed to log email:', error);
+apps/swipe-feed/src/lib/services/emailService.ts:133:      console.error('Email service error:', error);
+apps/swipe-feed/src/lib/services/imageEnhancer.ts:71:      console.error('Image enhancement failed:', error);
+apps/swipe-feed/src/lib/services/imageEnhancer.ts:283:      console.error('Failed to stamp receipt:', error);
+apps/swipe-feed/src/lib/services/locationService.ts:65:      console.error('Google Places API key not configured');
+apps/swipe-feed/src/lib/services/locationService.ts:137:      console.error('Geolocation is not supported');
+apps/swipe-feed/src/lib/services/locationService.ts:151:        console.error('Location tracking error:', error);
+apps/swipe-feed/src/lib/services/locationService.ts:433:      console.error('Error fetching structure location:', error);
+apps/swipe-feed/src/lib/services/ocrService.ts:43:      console.error('Failed to initialize OCR service:', error);
+apps/swipe-feed/src/lib/services/ocrService.ts:60:      console.error('Failed to load cost codes:', error);
+apps/swipe-feed/src/lib/services/ocrService.ts:110:      console.error('OCR processing failed:', error);
+apps/swipe-feed/src/lib/services/ocrService.ts:284:      console.error('Failed to upload receipt image:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:114:      console.error('Error creating project:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:148:      console.error('Error fetching projects:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:165:      console.error('Error fetching project:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:188:      console.error('Error archiving project:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:215:      console.error('Error fetching project team:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:235:      console.error('Error adding team member:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:267:      console.error('Error inviting team member:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:287:      console.error('Error accepting invitation:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:304:      console.error('Error updating team member role:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:321:      console.error('Error removing team member:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:338:      console.error('Error creating crew:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:373:      console.error('Error fetching crews:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:396:      console.error('Error adding crew member:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:416:      console.error('Error removing crew member:', error);
+apps/swipe-feed/src/lib/services/projectService.ts:438:      console.error('Error fetching user role:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:83:      console.error('Failed to create receipt:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:100:      console.error('Failed to fetch cost codes:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:131:      console.error('Failed to fetch receipts:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:153:      console.error('Failed to fetch receipt:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:174:      console.error('Failed to update receipt:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:217:      console.error('Failed to update receipt with OCR:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:270:      console.error('Failed to approve receipt:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:290:      console.error('Failed to reject receipt:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:306:      console.error('Failed to delete receipt:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:335:      console.error('Failed to create expense report:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:355:      console.error('Failed to add receipts to report:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:388:      console.error('Failed to fetch expense reports:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:418:      console.error('Failed to fetch cost code analytics:', error);
+apps/swipe-feed/src/lib/services/receiptService.ts:443:      console.error('Failed to bulk approve receipts:', error);
+apps/swipe-feed/src/lib/services/weatherService.ts:76:      console.error('Weather API key not configured');
+apps/swipe-feed/src/lib/services/weatherService.ts:112:      console.error('Error fetching weather:', error);
+apps/swipe-feed/src/lib/services/weatherService.ts:146:      console.error('Error fetching forecast:', error);
+apps/swipe-feed/src/lib/services/weatherService.ts:335:        console.error('Error sending weather alert:', error);
+apps/swipe-feed/src/lib/services/weatherService.ts:338:      console.error('Error in sendWeatherAlert:', error);
+apps/swipe-feed/src/lib/xaiGrokIntegration.ts:90:      console.error('WARNING: XAI_API_KEY not found in environment variables');
+apps/swipe-feed/src/lib/xaiGrokIntegration.ts:198:      console.error('[GROK API] Error:', error);
+apps/swipe-feed/src/lib/xaiGrokIntegration.ts:267:      console.error('[GROK API] Error:', error);
+apps/swipe-feed/src/lib/xaiGrokIntegration.ts:351:        console.error('[GROK API] API Error:', error);
+apps/swipe-feed/src/lib/xaiGrokIntegration.ts:377:      console.error('[GROK API] Network Error:', error);
+apps/swipe-feed/src/lib/xaiGrokIntegration.ts:440:      console.error(`[ALERT] LOSING MONEY on generation! User: ${record.userId}, Loss: $${Math.abs(record.profit)}`);
+apps/swipe-feed/src/lib/xaiGrokIntegration.ts:452:    console.error('[ADMIN ALERT] Unprofitable generation detected!', record);
+apps/swipe-feed/src/pages/QATestRunner.tsx:43:      console.error('Test suite failed:', error);
+apps/swipe-feed/src/pages/QATestRunner.tsx:76:      console.error('Canonical test suite failed:', error);
+apps/swipe-feed/src/pages/SystemTestRunner.tsx:39:      console.error('Test runner error:', error);
+apps/swipe-feed/src/pages/TestRunner.tsx:57:      console.error('Test runner error:', error);
+apps/swipe-feed/src/pages/WelcomePage.tsx:58:      console.error('Auth check error:', error);
+apps/swipe-feed/src/scripts/createAdminAccount.ts:72:    console.error('Error creating admin account:', error);
+apps/swipe-feed/src/scripts/createAdminAccount.ts:113:    console.error('Error updating profile:', profileError);
+apps/swipe-feed/src/scripts/createAdminAccount.ts:149:createAdminAccount().catch(console.error);
+apps/swipe-feed/src/scripts/createAdminUser.ts:41:        console.error('❌ Sign in failed:', signInError.message);
+apps/swipe-feed/src/scripts/createAdminUser.ts:53:      console.error('❌ Error creating user:', signUpError.message);
+apps/swipe-feed/src/scripts/createAdminUser.ts:91:          console.error('❌ Error updating profile:', profileError.message);
+apps/swipe-feed/src/scripts/createAdminUser.ts:107:    console.error('❌ Unexpected error:', error);
+apps/swipe-feed/src/scripts/setupAdmin.mjs:92:    console.error('\n❌ Setup failed:', error.message);
+apps/swipe-feed/src/tests/authenticationTests.ts:353:    console.error('❌ Demo account error:', error);
+apps/swipe-feed/src/tests/authenticationTests.ts:383:    console.error('❌ Admin account error:', error);
+apps/swipe-feed/src/tests/fullSystemTest.ts:20:    error: (...args: any[]) => console.error('[ERROR]', ...args),
+apps/swipe-feed/src/tests/fullSystemTest.ts:394:          this.console.error(`   ↳ FAILED: ${test.name} - ${test.message || test.error}`);
+apps/swipe-feed/src/tests/integration.test.ts:318:  runIntegrationTests().catch(console.error);
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:370:        console.error(
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2203:        console.error(err)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2579:            console.error(error)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2607:          console.error('Error getting user data:', getUserError)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2623:      console.error(err)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2708:          console.error(errors[i])
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2793:      console.error('removing visibilitychange callback failed', e)
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2926:            console.error(
+backend/node_modules/@supabase/auth-js/src/GoTrueClient.ts:2970:      console.error('_handleVisibilityChange', error)
+backend/node_modules/@supabase/auth-js/src/lib/fetch.ts:188:    console.error(e)
+backend/node_modules/@supabase/storage-js/src/lib/vectors/VectorBucketApi.ts:67:   *   console.error('Failed to create bucket:', error.message)
+backend/node_modules/@supabase/storage-js/src/lib/vectors/VectorBucketApi.ts:194:   *   console.error('Must delete all indexes first')
+backend/node_modules/@supabase/storage-js/src/packages/StorageAnalyticsApi.ts:51:   *   console.error('Failed to create analytics bucket:', error.message)
+backend/node_modules/@supabase/storage-js/src/packages/StorageAnalyticsApi.ts:164:   *   console.error('Failed to delete bucket:', error.message)
+backend/node_modules/pg-protocol/src/serializer.ts:81:    console.error('Warning! Postgres only supports 63 characters for query names.')
+backend/node_modules/pg-protocol/src/serializer.ts:82:    console.error('You supplied %s (%s)', name, name.length)
+backend/node_modules/pg-protocol/src/serializer.ts:83:    console.error('This can cause conflicts and silent errors executing queries')
+backend/src/beta/betaRepository.ts:164:    console.error('Error processing referral bonus:', error);
+backend/src/beta/betaRoutes.ts:33:    console.error("Error checking registration:", error);
+backend/src/beta/betaRoutes.ts:50:    console.error("Error getting beta status:", error);
+backend/src/beta/betaRoutes.ts:85:    console.error("Error granting daily bonus:", error);
+backend/src/beta/betaRoutes.ts:104:    console.error("Error getting beta user info:", error);
+backend/src/beta/betaRoutes.ts:139:    console.error("Error processing referral:", error);
+backend/src/beta/betaRoutes.ts:152:    console.error("Error getting leaderboard:", error);
+backend/src/beta/betaRoutes.ts:177:    console.error("Error tracking activity:", error);
+backend/src/creative/characterRoutes.ts:23:      console.error("[creative] character list error", error);
+backend/src/creative/characterRoutes.ts:36:      console.error("[creative] character detail error", error);
+backend/src/creative/characterRoutes.ts:58:      console.error("[creative] create character error", error);
+backend/src/creative/characterRoutes.ts:77:      console.error("[creative] add character version error", error);
+backend/src/creative/characterRoutes.ts:99:      console.error("[creative] upsert relationship error", error);
+backend/src/creative/creativeEnginesRoutes.ts:34:      console.error("Error converting to screenplay:", error);
+backend/src/creative/creativeEnginesRoutes.ts:46:      console.error("Error fetching screenplays:", error);
+backend/src/creative/creativeEnginesRoutes.ts:56:      console.error("Error fetching screenplay:", error);
+backend/src/creative/creativeEnginesRoutes.ts:70:      console.error("Error exporting screenplay:", error);
+backend/src/creative/creativeEnginesRoutes.ts:93:      console.error("Error converting to song:", error);
+backend/src/creative/creativeEnginesRoutes.ts:105:      console.error("Error fetching songs:", error);
+backend/src/creative/creativeEnginesRoutes.ts:115:      console.error("Error adding collaborator:", error);
+backend/src/creative/creativeEnginesRoutes.ts:138:      console.error("Error converting to poem:", error);
+backend/src/creative/creativeEnginesRoutes.ts:150:      console.error("Error fetching poems:", error);
+backend/src/creative/creativeEnginesRoutes.ts:169:      console.error("Error creating anthology:", error);
+backend/src/creative/creativeEnginesRoutes.ts:209:      console.error("Error generating prologue:", error);
+backend/src/creative/creativeEnginesRoutes.ts:230:      console.error("Error generating epilogue:", error);
+backend/src/creative/creativeEnginesRoutes.ts:251:      console.error("Error generating table of contents:", error);
+backend/src/creative/creativeEnginesRoutes.ts:272:      console.error("Error generating character profiles:", error);
+backend/src/creative/creativeEnginesRoutes.ts:293:      console.error("Error generating marketing copy:", error);
+backend/src/creative/creativeEnginesRoutes.ts:314:      console.error("Error fetching enhancements:", error);
+backend/src/creative/creativeEnginesRoutes.ts:328:      console.error("Error fetching AI tiers:", error);
+backend/src/creative/creativeEnginesRoutes.ts:343:      console.error("Error fetching user tier:", error);
+backend/src/creative/creativeEnginesRoutes.ts:363:      console.error("Error upgrading tier:", error);
+backend/src/creative/storyRoutes.ts:33:      console.error("[creative] story timeline error", error);
+backend/src/creative/storyRoutes.ts:47:      console.error("[creative] story chapters error", error);
+backend/src/creative/storyRoutes.ts:68:      console.error("[creative] story add chapter error", error);
+backend/src/creative/storyRoutes.ts:89:      console.error("[creative] story update chapter error", error);
+backend/src/creative/storyRoutes.ts:109:      console.error("[creative] story remove chapter error", error);
+backend/src/creative/storyRoutes.ts:123:      console.error("[creative] story editor load error", error);
+backend/src/creative/storyRoutes.ts:150:      console.error("[creative] story editor save error", error);
+backend/src/creative/storyRoutes.ts:164:      console.error("[creative] story comments load error", error);
+backend/src/creative/storyRoutes.ts:185:      console.error("[creative] story add comment error", error);
+backend/src/creative/storyRoutes.ts:205:      console.error("[creative] story delete comment error", error);
+backend/src/creative/storyRoutes.ts:219:      console.error("[creative] story lore error", error);
+backend/src/creative/storyRoutes.ts:239:      console.error("[creative] story audit load error", error);
+backend/src/das/dasRepository.ts:728:      console.error(`Failed to process payout ${payout.id}:`, error);
+backend/src/das/dasRoutes.ts:26:      console.error("Error registering brand:", error);
+backend/src/das/dasRoutes.ts:40:      console.error("Error fetching brand:", error);
+backend/src/das/dasRoutes.ts:52:      console.error("Error listing brands:", error);
+backend/src/das/dasRoutes.ts:75:      console.error("Error submitting proposal:", error);
+backend/src/das/dasRoutes.ts:89:      console.error("Error fetching proposal:", error);
+backend/src/das/dasRoutes.ts:104:      console.error("Error listing proposals:", error);
+backend/src/das/dasRoutes.ts:127:      console.error("Error casting vote:", error);
+backend/src/das/dasRoutes.ts:145:      console.error("Error fetching user votes:", error);
+backend/src/das/dasRoutes.ts:160:      console.error("Error creating voting cycle:", error);
+backend/src/das/dasRoutes.ts:171:      console.error("Error fetching current voting cycle:", error);
+backend/src/das/dasRoutes.ts:183:      console.error("Error listing voting cycles:", error);
+backend/src/das/dasRoutes.ts:201:      console.error("Error fetching campaign:", error);
+backend/src/das/dasRoutes.ts:212:      console.error("Error listing campaigns:", error);
+backend/src/das/dasRoutes.ts:227:      console.error("Error creating ad content:", error);
+backend/src/das/dasRoutes.ts:241:      console.error("Error fetching ad content:", error);
+backend/src/das/dasRoutes.ts:252:      console.error("Error fetching eligible ads:", error);
+backend/src/das/dasRoutes.ts:275:      console.error("Error recording engagement:", error);
+backend/src/das/dasRoutes.ts:290:      console.error("Error fetching user engagements:", error);
+backend/src/das/dasRoutes.ts:312:      console.error("Error fetching user preferences:", error);
+backend/src/das/dasRoutes.ts:326:      console.error("Error updating user preferences:", error);
+backend/src/das/dasRoutes.ts:345:      console.error("Error distributing revenue:", error);
+backend/src/das/dasRoutes.ts:360:      console.error("Error fetching user payouts:", error);
+backend/src/das/dasRoutes.ts:371:      console.error("Error fetching revenue stats:", error);
+backend/src/das/dasRoutes.ts:394:      console.error("Error submitting feedback:", error);
+backend/src/das/dasRoutes.ts:413:      console.error("Error reporting violation:", error);
+backend/src/das/dasRoutes.ts:429:      console.error("Error fetching dashboard stats:", error);
+backend/src/das/dasRoutes.ts:440:      console.error("Error fetching transparency report:", error);
+backend/src/das/dasRoutes.ts:466:      console.error("Error fetching audit log:", error);
+backend/src/das/dasRoutes.ts:480:      console.error("Error verifying audit chain:", error);
+backend/src/feed/feedRoutes.ts:40:      console.error("[api] feed list", error);
+backend/src/feed/feedRoutes.ts:57:      console.error("[api] feed like", error);
+backend/src/feed/feedRoutes.ts:74:      console.error("[api] feed unlike", error);
+backend/src/feed/feedRoutes.ts:88:      console.error("[api] feed comments list", error);
+backend/src/feed/feedRoutes.ts:105:      console.error("[api] feed comment create", error);
+backend/src/feed/feedRoutes.ts:122:      console.error("[api] feed repost", error);
+backend/src/feed/feedRoutes.ts:139:      console.error("[api] feed repost delete", error);
+backend/src/feedback/feedbackRoutes.ts:29:      console.error("Error submitting feedback:", error);
+backend/src/feedback/feedbackRoutes.ts:40:      console.error("Error fetching user feedback:", error);
+backend/src/feedback/feedbackRoutes.ts:56:      console.error("Error fetching all feedback:", error);
+backend/src/feedback/feedbackRoutes.ts:74:      console.error("Error exporting feedback:", error);
+backend/src/masks/loader.ts:40:  console.error("Failed to register mask", error);
+backend/src/messaging/messagingRoutes.ts:36:      console.error("[messaging] get conversations error", error);
+backend/src/messaging/messagingRoutes.ts:53:      console.error("[messaging] create direct conversation error", error);
+backend/src/messaging/messagingRoutes.ts:75:      console.error("[messaging] create group conversation error", error);
+backend/src/messaging/messagingRoutes.ts:100:      console.error("[messaging] create project conversation error", error);
+backend/src/messaging/messagingRoutes.ts:125:      console.error("[messaging] get messages error", error);
+backend/src/messaging/messagingRoutes.ts:156:      console.error("[messaging] send message error", error);
+backend/src/messaging/messagingRoutes.ts:180:      console.error("[messaging] mark as read error", error);
+backend/src/messaging/messagingRoutes.ts:207:      console.error("[messaging] add reaction error", error);
+backend/src/messaging/messagingRoutes.ts:234:      console.error("[messaging] remove reaction error", error);
+backend/src/messaging/messagingRoutes.ts:259:      console.error("[messaging] update typing error", error);
+backend/src/messaging/messagingRoutes.ts:272:      console.error("[messaging] get typing indicators error", error);
+backend/src/messaging/messagingRoutes.ts:297:      console.error("[messaging] add participants error", error);
+backend/src/messaging/messagingRoutes.ts:316:      console.error("[messaging] leave conversation error", error);
+backend/src/mythacoin/mythacoinRoutes.ts:16:      console.error("[mythacoin] summary error", error);
+backend/src/mythacoin/mythacoinRoutes.ts:36:      console.error("[mythacoin] transactions error", error);
+backend/src/mythacoin/mythacoinRoutes.ts:56:      console.error("[mythacoin] reward error", error);
+backend/src/realtime/ablyOptimized.ts:66:      console.error('[ably] Connection failed:', error);
+backend/src/realtime/ablyOptimized.ts:117:      console.error('[ably] Batch publish failed:', error);
+backend/src/realtime/ablyOptimized.ts:137:          console.error('[ably] All publish attempts failed');
+backend/src/realtime/ablyOptimized.ts:180:      console.error(`[ably] Error getting presence for ${channel}:`, error);
+backend/src/scripts/runAngryLipsSimulation.ts:213:  console.error("[sim] Error", error);
+backend/src/server.ts:114:    console.error("[api] feed stream", error);
+backend/src/server.ts:145:    console.error("[api] activate error", error);
+backend/src/server.ts:168:    console.error("[api] end session error", error);
+backend/src/server.ts:188:    console.error("[api] professor critique error", error);
+backend/src/server.ts:214:    console.error("[api] professor critique history error", error);
+backend/src/server.ts:230:      console.error("[api] timeline error", error);
+backend/src/server.ts:244:    console.error("[api] get chapters error", error);
+backend/src/server.ts:266:    console.error("[api] add chapter error", error);
+backend/src/server.ts:288:    console.error("[api] update chapter error", error);
+backend/src/server.ts:309:    console.error("[api] remove chapter error", error);
+backend/src/server.ts:323:    console.error("[api] editor fetch error", error);
+backend/src/server.ts:361:    console.error("[api] editor save error", error);
+backend/src/server.ts:376:    console.error("[api] ai action error", error);
+backend/src/server.ts:390:    console.error("[api] get comments error", error);
+backend/src/server.ts:412:    console.error("[api] add comment error", error);
+backend/src/server.ts:433:    console.error("[api] delete comment error", error);
+backend/src/server.ts:444:    console.error("[api] lore error", error);
+backend/src/server.ts:456:    console.error("[api] notifications error", error);
+backend/src/server.ts:473:    console.error("[api] angry lips list sessions", error);
+backend/src/server.ts:486:    console.error("[api] angry lips get session", error);
+backend/src/server.ts:496:    console.error("[api] angry lips list participants", error);
+backend/src/server.ts:514:    console.error("[api] angry lips invite participants", error);
+backend/src/server.ts:534:    console.error("[api] angry lips respond invitation", error);
+backend/src/server.ts:551:    console.error("[api] angry lips start session", error);
+backend/src/server.ts:568:    console.error("[api] angry lips advance turn", error);
+backend/src/server.ts:582:    console.error("[api] angry lips summarize", error);
+backend/src/server.ts:596:    console.error("[api] angry lips ai story", error);
+backend/src/server.ts:614:    console.error("[api] angry lips publish", error);
+backend/src/server.ts:626:    console.error("[api] angry lips feed", error);
+backend/src/server.ts:682:    console.error("[api] angry lips create session", error);
+backend/src/server.ts:700:    console.error("[api] angry lips submit turn", error);
+backend/src/server.ts:718:    console.error("[api] angry lips auto-fill", error);
+backend/src/server.ts:733:    console.error("[api] angry lips log event", error);
+backend/src/server.ts:753:    console.error("[api] angry lips complete session", error);
+backend/src/server.ts:764:    console.error("[api] angry lips token request", error);
+backend/src/server.ts:771:  console.error('[api] unhandled error:', err);
+backend/src/social/socialRoutes.ts:29:      console.error("[social] list bookworms error", error);
+backend/src/social/socialRoutes.ts:43:      console.error("[social] remove bookworm error", error);
+backend/src/social/socialRoutes.ts:61:      console.error("[social] list requests error", error);
+backend/src/social/socialRoutes.ts:91:      console.error("[social] create request error", error);
+backend/src/social/socialRoutes.ts:115:      console.error("[social] respond request error", error);
+backend/src/social/socialRoutes.ts:132:      console.error("[social] lookup profile error", error);
+backend/src/sparks/sparksPurchaseRepository.ts:329:    console.error('Error redeeming gift code:', error);
+backend/src/sparks/sparksRoutes.ts:37:    console.error('Error fetching packages:', error);
+backend/src/sparks/sparksRoutes.ts:64:    console.error('Error fetching user Sparks data:', error);
+backend/src/sparks/sparksRoutes.ts:121:    console.error('Error processing purchase:', error);
+backend/src/sparks/sparksRoutes.ts:172:    console.error('Error creating subscription:', error);
+backend/src/sparks/sparksRoutes.ts:194:    console.error('Error cancelling subscription:', error);
+backend/src/sparks/sparksRoutes.ts:228:    console.error('Error using Sparks:', error);
+backend/src/sparks/sparksRoutes.ts:256:    console.error('Error claiming daily bonus:', error);
+backend/src/sparks/sparksRoutes.ts:277:    console.error('Error fetching usage stats:', error);
+backend/src/sparks/sparksRoutes.ts:298:    console.error('Error processing referral:', error);
+backend/src/story/notificationRepository.ts:21:    console.error("[notifications] failed to log", error);
+backend/src/worker/hourglass-worker.ts:49:      console.error("[hourglass] error", error);
+backend/src/worker/hourglass-worker.ts:328:  console.error("[hourglass] fatal", error);
