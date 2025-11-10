@@ -166,6 +166,30 @@ npm run dev
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:3001
 
+7. **Build for production**
+```bash
+cd apps/swipe-feed
+npm run build
+# or run strict mode with full checks
+npm run build:strict
+```
+
+## ✅ Development Quality Checks
+
+From `apps/swipe-feed/` you can run the following project guards:
+
+- `npm run lint:ui-copy` — ensure UI text contains no placeholder ellipses.
+- `npm run lint:media` — verify media elements include explicit dimensions.
+- `npm run lint:copy` — enforce product copy guidelines.
+- `npm run lint` — run all UI/media/copy checks plus TypeScript type checking.
+- `npm run test` — execute Vitest + Testing Library smoke tests.
+- `npm run test:watch` — run the test suite in watch mode during development.
+
+## 📒 Review Artifacts
+
+- [Micro-review log](docs/review/REVIEW_LOG.md)
+- [Open review gaps](docs/review/GAPS.md)
+
 ## 📱 Mobile Application
 
 FieldForge is built as a Progressive Web App (PWA) with full offline capabilities:

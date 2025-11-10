@@ -380,6 +380,37 @@
 
 
 
+## Batch 10 — Docs
+
+**Files reviewed**
+
+- README.md
+- docs/review/REVIEW_LOG.md
+- docs/review/GAPS.md
+
+
+
+**Findings**
+
+- README lacked references to the newly added lint/test tooling and review artifacts.
+- No central section documenting quality gates for contributors.
+
+
+
+**Changes made**
+
+- Updated README quick start to mention production builds and added a “Development quality checks” section.
+- Linked README to the micro-review log and gaps tracker for ongoing visibility.
+- Logged documentation updates in the review record.
+
+
+
+**Follow-ups**
+
+- Consider adding backend setup automation (scripts/docker) to simplify onboarding in future documentation passes.
+
+
+
 ## Batch 5 — Components (Small)
 
 **Files reviewed**
