@@ -1,6 +1,6 @@
-const isBrowser = typeof window !== 'undefined';
+const isBrowser: boolean = typeof window !== 'undefined';
 
-const safeExecute = (fn: () => void) => {
+const safeExecute = (fn: () => void): void => {
   try {
     fn();
   } catch (error) {
@@ -8,7 +8,7 @@ const safeExecute = (fn: () => void) => {
   }
 };
 
-const getStorageSize = (storage: Storage) => {
+const getStorageSize = (storage: Storage): number => {
   let total = 0;
   for (let i = 0; i < storage.length; i += 1) {
     const key = storage.key(i);
@@ -25,8 +25,13 @@ export interface SafeStorageInfo {
   totalKeys: number;
 }
 
-export const SafeStorage = {
-  clearCorruptedData(storage: Storage) {
+export const SafeStorage: {
+  clearCorruptedData(storage: Storage): void;
+  clearAppData(): void;
+  exportStorageData(): string;
+  getStorageInfo(): SafeStorageInfo;
+} = {
+  clearCorruptedData(storage: Storage): void {
     if (!isBrowser) return;
 
     const keysToRemove: string[] = [];
@@ -46,7 +51,7 @@ export const SafeStorage = {
     keysToRemove.forEach((key) => safeExecute(() => storage.removeItem(key)));
   },
 
-  clearAppData() {
+  clearAppData(): void {
     if (!isBrowser) return;
 
     safeExecute(() => localStorage.clear());

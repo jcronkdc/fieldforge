@@ -101,3 +101,32 @@
 - Ensure components leverage the `@/` alias in future refactors.
 - Document any required VITE_BASE_URL/VITE_DEV_PORT env variables for deployments.
 
+
+
+## Batch 2 — Shared Libs / Utils (part 1)
+
+**Files reviewed**
+
+- apps/swipe-feed/src/utils/storageUtils.ts
+- apps/swipe-feed/src/utils/viewport-animate.ts
+
+
+
+**Findings**
+
+- Helpers lacked explicit return types.
+- Animation observer uses a 200px root margin that should be revisited.
+
+
+
+**Changes made**
+
+- storageUtils: added explicit return types and tightened SafeStorage typing.
+- viewport-animate: added return type annotation.
+
+
+
+**Follow-ups**
+
+- Review rootMargin value in future animation batch (tracked in GAPS).
+
