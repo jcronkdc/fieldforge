@@ -345,6 +345,41 @@
 
 
 
+## Batch 9 — Tests
+
+**Files reviewed**
+
+- apps/swipe-feed/package.json
+- apps/swipe-feed/vite.config.ts
+- apps/swipe-feed/src/tests/setupTests.ts
+- apps/swipe-feed/src/__tests__/Landing.test.tsx
+- apps/swipe-feed/src/__tests__/Dashboard.test.tsx
+- apps/swipe-feed/src/__tests__/GridHeroBackdrop.test.tsx
+- docs/review/GAPS.md
+
+
+
+**Findings**
+
+- No unit-level smoke coverage existed for primary pages or hero visuals.
+- Project lacked a Vitest harness and React Testing Library bindings, making future regression tests harder to add.
+
+
+
+**Changes made**
+
+- Added Vitest/Testing Library dependencies, scripts, and Vite test config with jsdom setup.
+- Implemented smoke tests for landing and dashboard flows plus an inline snapshot for `GridHeroBackdrop`.
+- Documented remaining auth/API error coverage gaps in `docs/review/GAPS.md`.
+
+
+
+**Follow-ups**
+
+- Expand tests to cover authenticated routing, Supabase error surfaces, and fetch wrapper failures in later batches.
+
+
+
 ## Batch 5 — Components (Small)
 
 **Files reviewed**

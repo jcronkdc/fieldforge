@@ -29,5 +29,11 @@ export default defineConfig(({ mode }) => {
       port: Number.isNaN(devPort) ? 5173 : devPort,
       host: "0.0.0.0",
     },
+    test: {
+      environment: "jsdom",
+      globals: true,
+      setupFiles: "./src/tests/setupTests.ts",
+      css: true,
+    },
   };
 });
