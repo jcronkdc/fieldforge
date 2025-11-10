@@ -79,44 +79,35 @@ function App() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
   useEffect(() => {
-    console.log('App.tsx: Initializing...');
-    
-    // Check session
-    supabase.auth.getSession()
+    supabase.auth
+      .getSession()
       .then(({ data: { session } }) => {
-        console.log('App.tsx: Session check complete', { hasSession: !!session });
         setSession(session);
         setLoading(false);
       })
-      .catch((error) => {
-        console.error('App.tsx: Error getting session:', error);
-        setLoading(false); // Make sure to set loading to false even on error
+      .catch(() => {
+        setLoading(false);
       });
 
-    // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('App.tsx: Auth state changed', { event, hasSession: !!session });
-      setSession(session);
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession);
       setLoading(false);
     });
 
-    // Listen for online/offline status
     const handleOnline = () => setIsOffline(false);
     const handleOffline = () => setIsOffline(true);
-    
+
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // Register service worker for PWA
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js').catch(console.error);
+      navigator.serviceWorker.register('/service-worker.js').catch(() => undefined);
     }
 
-    // Request notification permission
     if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission();
+      void Notification.requestPermission();
     }
 
     return () => {
@@ -126,16 +117,13 @@ function App() {
     };
   }, []);
 
-  console.log('App.tsx: Render state', { loading, hasSession: !!session });
-
   if (loading) {
-    console.log('App.tsx: Showing loading screen');
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h1 className="text-2xl font-bold text-white">FieldForge</h1>
-          <p className="text-slate-400 mt-2">Initializing Construction Management System...</p>
+          <p className="text-slate-400 mt-2">Initializing construction management system</p>
         </div>
       </div>
     );
@@ -149,15 +137,10 @@ function App() {
         
         <Routes>
           {/* Public Landing Page */}
-          <Route path="/" element={
-            session ? (
-              console.log('App.tsx: User has session, redirecting to dashboard'),
-              <Navigate to="/dashboard" replace />
-            ) : (
-              console.log('App.tsx: No session, showing landing page'),
-              <SimpleLandingPage />
-            )
-          } />
+          <Route
+            path="/"
+            element={session ? <Navigate to="/dashboard" replace /> : <SimpleLandingPage />}
+          />
           
           {/* Auth Routes */}
           <Route path="/login" element={

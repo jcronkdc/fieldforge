@@ -186,3 +186,32 @@
 
 - Monitor gesture threshold constants during mobile QA; adjust if feedback suggests tweaks.
 
+
+
+## Batch 4 — Layout (App Shell)
+
+**Files reviewed**
+
+- apps/swipe-feed/src/components/layout/MainLayout.tsx
+- apps/swipe-feed/src/App.tsx
+
+
+
+**Findings**
+
+- App shell lacked main landmark and theme preference persistence.
+- Console noise present in App shell; no skip target for new skip link.
+
+
+
+**Changes made**
+
+- MainLayout: main landmark, theme toggle honoring system preference, theme persistence.
+- App.tsx: cleaned console noise and ensured skip link target is in place.
+
+
+
+**Follow-ups**
+
+- Consider extracting theme management into a dedicated hook/provider for reuse.
+

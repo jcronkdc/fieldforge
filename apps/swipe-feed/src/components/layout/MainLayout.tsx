@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Session } from '@supabase/supabase-js';
 import { supabase } from '../../lib/supabase';
@@ -6,7 +6,7 @@ import {
   LayoutDashboard, HardHat, Shield, Package, ClipboardCheck,
   FileText, Calendar, Cloud, MessageSquare, Map, Brain,
   Settings, LogOut, Menu, X, Bell, Zap, Users, AlertTriangle,
-  Activity, Wrench, Truck, Building2, Radio, ChevronDown
+  Activity, Wrench, Truck, Building2, Radio, ChevronDown, Sun, Moon
 } from 'lucide-react';
 import { PushNotifications } from '../notifications/PushNotifications';
 import { NotificationCenter } from '../notifications/NotificationCenter';
@@ -22,9 +22,27 @@ interface MainLayoutProps {
   session: Session;
 }
 
+const THEME_STORAGE_KEY = 'fieldforge_theme';
+
 export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof document === 'undefined') return 'dark';
+    const stored = localStorage.getItem(THEME_STORAGE_KEY) as 'light' | 'dark' | null;
+    if (stored === 'light' || stored === 'dark') return stored;
+    return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  });
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
   const location = useLocation();
   const navigate = useNavigate();
   const user = session.user;
@@ -281,7 +299,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col lg:ml-68">
         {/* Top Bar */}
-        <header className="h-20 bg-white/90 backdrop-blur border-b border-slate-200 px-5 flex items-center justify-between shadow-[0_6px_18px_rgba(15,23,42,0.08)]">
+        <header className="h-20 bg-white/90 backdrop-blur border-b border-slate-200 px-5 flex items-center justify-between shadow-[0_6px_18px_rgba(15,23,42,0.08)]" role="banner">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -318,6 +336,15 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
               Emergency
             </button>
             <PushNotifications />
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+              aria-label="Toggle theme"
+              type="button"
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {theme === 'dark' ? 'Light' : 'Dark'}
+            </button>
             <Link to="/settings" className="p-2 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">
               <Settings className="w-5 h-5" />
             </Link>
@@ -325,7 +352,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto">
+        <main id="main" className="flex-1 overflow-y-auto">
           <div className="max-w-[1920px] mx-auto">
             <Outlet />
           </div>
