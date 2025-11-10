@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0f14" />
+    <title>FieldForge — AI-Powered T&D Construction Management</title>
+    <meta name="description" content="Plan, track, and deliver transmission & substation work with AI-assisted scheduling, field data capture, QA, and reporting.">
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Primary Meta Tags -->
-    <title>FieldForge - AI-Powered T&D Construction Management Platform | Electrical Infrastructure Software</title>
     <meta name="title" content="FieldForge - AI-Powered T&D Construction Management Platform | Electrical Infrastructure Software">
-    <meta name="description" content="Revolutionary AI construction management software for transmission lines, distribution systems & substations. 34% efficiency gains, 45% safer operations. Voice-controlled field operations, smart OCR, real-time project tracking. Enterprise-ready platform for electrical contractors.">
     <meta name="keywords" content="construction management software, electrical construction, transmission lines, distribution systems, substations, T&D construction, AI construction, voice control construction, electrical infrastructure, power grid construction, utility construction, construction safety software, field management software, construction efficiency, smart construction, digital construction, construction automation, electrical contractors software, power line construction, substation automation, grid modernization, construction technology, enterprise construction software, construction project management, field operations software, construction OCR, construction AI, electrical project management">
     <meta name="author" content="FieldForge by Cronk Companies LLC">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -59,6 +61,18 @@
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     >
+    <link rel="preload" as="image" href="/hero-backdrop.svg" type="image/svg+xml">
+    <style id="critical-styles">
+      :root { color-scheme: light; }
+      body { margin: 0; font-family: "Rajdhani", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; background: #ffffff; color: #0f172a; }
+      .hero-shell { max-width: 72rem; margin: 0 auto; padding: 5rem 1.5rem 6rem; display: flex; flex-direction: column; gap: 3.5rem; }
+      @media (min-width: 1024px) { .hero-shell { flex-direction: row; align-items: center; justify-content: space-between; } }
+      .hero-title { font-family: "Orbitron", "Rajdhani", "Inter", sans-serif; font-weight: 600; font-size: clamp(2.5rem, 4vw, 3.5rem); line-height: 1.1; margin-bottom: 1.5rem; }
+      .hero-text { font-size: 1.125rem; line-height: 1.6; color: #475569; max-width: 38rem; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+      .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 999px; background: linear-gradient(135deg, #0f4c81 0%, #143f66 100%); color: #ffffff; font-weight: 600; text-decoration: none; }
+      .btn-ghost { display: inline-flex; align-items: center; justify-content: center; padding: 0.5rem 1rem; border-radius: 999px; border: 1px solid rgba(15, 76, 129, 0.12); color: #466086; font-weight: 500; text-decoration: none; }
+    </style>
     
     <!-- Mobile App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -67,7 +81,7 @@
     <meta name="application-name" content="FieldForge">
     <meta name="msapplication-TileColor" content="#00d4ff">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
-    <meta name="theme-color" content="#00d4ff">
+    <meta name="theme-color" content="#0b0f14">
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json">
@@ -288,6 +302,7 @@
     <link rel="alternate" type="application/rss+xml" title="FieldForge Updates" href="/feed.xml">
   </head>
   <body>
+    <a class="skip-to-content" href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     
