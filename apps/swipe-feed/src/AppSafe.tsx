@@ -270,6 +270,7 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
                     <Route path="/field/weather" element={<WeatherDashboard />} />
                     <Route path="/substations" element={<SubstationManager />} />
                     <Route path="/crews" element={<NationwideCrewManager />} />
+                    <Route path="/messages" element={<TeamMessaging />} />
                     <Route path="*" element={<Navigate to="/dashboard" replace />} />
                   </Route>
                 </>
