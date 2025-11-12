@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowRight,
@@ -75,23 +75,6 @@ const earlyAdopterBenefits = [
 
 export const NewElectricalLanding: React.FC = () => {
   const navigate = useNavigate();
-
-  // Safe navigation handlers
-  const handleGetStarted = useCallback(() => {
-    try {
-      navigate('/signup');
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
-  }, [navigate]);
-
-  const handleSignIn = useCallback(() => {
-    try {
-      navigate('/login');
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
-  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -344,7 +327,7 @@ export const NewElectricalLanding: React.FC = () => {
                         <h3 className="text-2xl font-bold text-white leading-tight">{feature.title}</h3>
                         <div className="flex items-center gap-2 mt-1">
                           <div className="w-12 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
-                          <span className="text-xs text-blue-300 font-mono">SYS_{String(index + 1).padStart(3, '0')}</span>
+                          <span className="text-xs text-blue-300 font-mono">SYS_{(index + 1).toString().padStart(3, '0')}</span>
                         </div>
                       </div>
                     </div>
