@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowRight,
@@ -75,6 +75,22 @@ const earlyAdopterBenefits = [
 
 export const NewElectricalLanding: React.FC = () => {
   const navigate = useNavigate();
+  
+  const handleSignupClick = useCallback(() => {
+    try {
+      navigate('/signup');
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  }, [navigate]);
+  
+  const handleLoginClick = useCallback(() => {
+    try {
+      navigate('/login');
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -170,13 +186,13 @@ export const NewElectricalLanding: React.FC = () => {
           
           <div className="flex items-center gap-4">
             <button 
-              onClick={() => navigate('/login')}
+              onClick={handleLoginClick}
               className="px-6 py-2 text-white hover:text-blue-300 transition-colors font-medium"
             >
               Sign In
             </button>
             <button 
-              onClick={() => navigate('/signup')}
+              onClick={handleSignupClick}
               className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
             >
               Get Started
@@ -212,14 +228,14 @@ export const NewElectricalLanding: React.FC = () => {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
                 <button 
-                  onClick={() => navigate('/signup')}
+                  onClick={handleSignupClick}
                   className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-xl shadow-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   Join Early Access
                   <ArrowRight className="h-5 w-5" />
                 </button>
                 <button 
-                  onClick={() => navigate('/login')}
+                  onClick={handleLoginClick}
                   className="px-8 py-4 bg-slate-800/50 backdrop-blur-sm border border-slate-600 text-white text-lg font-semibold rounded-xl hover:bg-slate-700/50 transition-all flex items-center justify-center gap-2"
                 >
                   Learn More
@@ -443,14 +459,14 @@ export const NewElectricalLanding: React.FC = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
-              onClick={() => navigate('/signup')}
+              onClick={handleSignupClick}
               className="px-8 py-4 bg-white text-blue-600 text-lg font-bold rounded-xl shadow-xl hover:bg-blue-50 transition-all transform hover:scale-105 flex items-center justify-center gap-2"
             >
               Join Early Access
               <ArrowRight className="h-5 w-5" />
             </button>
             <button 
-              onClick={() => navigate('/login')}
+              onClick={handleLoginClick}
               className="px-8 py-4 bg-transparent border-2 border-white text-white text-lg font-bold rounded-xl hover:bg-white hover:text-blue-600 transition-all flex items-center justify-center gap-2"
             >
               Sign In
