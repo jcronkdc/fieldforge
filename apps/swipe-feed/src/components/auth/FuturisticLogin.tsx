@@ -60,7 +60,7 @@ export const FuturisticLogin: React.FC = () => {
           </div>
 
           <h1 className="mt-8 text-3xl font-semibold text-slate-900">Sign in to continue</h1>
-          <p className="mt-3 text-sm text-slate-600">
+          <p className="mt-3 text-sm text-slate-700">
             Enter your credentials to access the FieldForge control surface. Multi-factor authentication and SSO are available on enterprise plans.
           </p>
 
@@ -69,7 +69,7 @@ export const FuturisticLogin: React.FC = () => {
               <Shield className="h-5 w-5" />
               <p className="text-sm font-semibold">Built for regulated environments</p>
             </div>
-            <p className="mt-3 text-xs text-slate-600">
+            <p className="mt-3 text-xs text-slate-700">
               SOC 2, SSO, and detailed audit trails ensure compliance with utility and regulator standards.
             </p>
           </div>
@@ -86,7 +86,7 @@ export const FuturisticLogin: React.FC = () => {
 
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-semibold text-slate-900 mb-2">
                   Email address
                 </label>
                 <div className="relative">
@@ -106,7 +106,7 @@ export const FuturisticLogin: React.FC = () => {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-2">
+                <label htmlFor="password" className="block text-sm font-semibold text-slate-900 mb-2">
                   Password
                 </label>
                 <div className="relative">

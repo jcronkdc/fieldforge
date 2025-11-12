@@ -8,6 +8,7 @@ import "./styles.css";
 import "./styles/futuristic.css";
 import "./styles/futuristic-master.css";
 import "./styles/premium-animations.css";
+import "./styles/contrast-fixes.css";
 import { pauseOffscreen } from "./utils/viewport-animate";
 
 // Import acquisition tests for $10B valuation

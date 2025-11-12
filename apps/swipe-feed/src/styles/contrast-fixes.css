@@ -1,0 +1,96 @@
+/* Text Contrast Fixes for FieldForge */
+
+/* Override light gray text with better contrast */
+
+/* General text improvements */
+.text-slate-500 {
+  color: rgb(71 85 105) !important; /* Darker slate-600 */
+}
+
+.text-slate-400 {
+  color: rgb(100 116 139) !important; /* Darker slate-500 */
+}
+
+.text-gray-500 {
+  color: rgb(75 85 99) !important; /* Darker gray-600 */
+}
+
+.text-gray-400 {
+  color: rgb(107 114 128) !important; /* Darker gray-500 */
+}
+
+/* On white backgrounds, use even darker text */
+.bg-white .text-slate-600,
+.bg-white .text-slate-500,
+.bg-white .text-slate-400 {
+  color: rgb(51 65 85) !important; /* Much darker slate-700 */
+}
+
+.bg-white .text-gray-600,
+.bg-white .text-gray-500,
+.bg-white .text-gray-400 {
+  color: rgb(55 65 81) !important; /* Much darker gray-700 */
+}
+
+/* Ensure readable text on light backgrounds */
+.bg-slate-50 .text-slate-500,
+.bg-slate-100 .text-slate-500,
+.bg-gray-50 .text-gray-500,
+.bg-gray-100 .text-gray-500 {
+  color: rgb(51 65 85) !important;
+}
+
+/* Form labels and important text */
+label,
+.form-label {
+  color: rgb(51 65 85) !important;
+  font-weight: 600 !important;
+}
+
+/* Description text */
+.description-text,
+p.text-slate-600,
+p.text-gray-600 {
+  color: rgb(71 85 105) !important;
+}
+
+/* Ensure sufficient contrast for accessibility */
+.text-muted {
+  color: rgb(75 85 99) !important;
+}
+
+.text-secondary {
+  color: rgb(71 85 105) !important;
+}
+
+/* Button text on light buttons */
+.bg-white button,
+.bg-slate-50 button,
+.bg-gray-50 button {
+  color: rgb(30 41 59) !important;
+}
+
+/* Input placeholders */
+input::placeholder,
+textarea::placeholder {
+  color: rgb(100 116 139) !important;
+}
+
+/* Navigation text */
+nav .text-slate-500,
+nav .text-gray-500 {
+  color: rgb(71 85 105) !important;
+}
+
+/* Card text */
+.card .text-slate-600,
+.card .text-gray-600 {
+  color: rgb(51 65 85) !important;
+}
+
+/* Ensure all text meets WCAG AA contrast ratio (4.5:1) */
+.bg-white,
+.bg-slate-50,
+.bg-gray-50 {
+  color: rgb(30 41 59) !important; /* Dark text on light backgrounds */
+}

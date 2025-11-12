@@ -102,7 +102,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
             </span>
             <div>
               <p className="text-xl font-semibold text-slate-900">FieldForge</p>
-              <p className="text-xs font-medium uppercase tracking-[0.3em] text-slate-500">Grid Construction Platform</p>
+              <p className="text-xs font-medium uppercase tracking-[0.3em] text-slate-700">Grid Construction Platform</p>
             </div>
           </div>
 
@@ -134,7 +134,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
             <p className="hero-text text-lg text-slate-600">
               FieldForge delivers the execution discipline of the largest utilities with the speed of a modern SaaS platform. Align engineering, construction, testing, and commissioning on a single source of truth that project executives can rely on.
             </p>
-            <ul className="space-y-3 text-base text-slate-600">
+            <ul className="space-y-3 text-base text-slate-800">
               {highlights.map((item) => (
                 <li key={item} className="flex items-start gap-3">
                   <CheckCircle className="mt-1 h-5 w-5 text-slate-900" aria-hidden="true" focusable="false" />
@@ -157,7 +157,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
             <div className="absolute -left-8 top-10 hidden h-32 w-32 rounded-full bg-gradient-to-br from-indigo-200/40 to-cyan-200/40 blur-3xl lg:block" />
             <div className="absolute -right-6 bottom-6 hidden h-24 w-24 rounded-full bg-gradient-to-br from-emerald-200/40 to-slate-200/40 blur-3xl lg:block" />
             <div className="relative">
-              <p className="text-sm font-semibold text-slate-500 uppercase">Live executive telemetry</p>
+              <p className="text-sm font-semibold text-slate-700 uppercase">Live executive telemetry</p>
               <p className="mt-3 text-lg font-medium text-slate-800">
                 Utilities running FieldForge close outage packages 2.4× faster than with legacy systems.
               </p>
@@ -178,7 +178,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
               </div>
               <div className="mt-6 rounded-2xl border border-slate-200 bg-white/90 p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Live site indicators</p>
-                <div className="mt-3 grid gap-3 text-sm text-slate-600">
+                <div className="mt-3 grid gap-3 text-sm text-slate-800">
                   {telemetry.map(({ label, value, status }, index) => (
                     <div
                       key={label}
@@ -206,8 +206,8 @@ export const FuturisticElectricalLanding: React.FC = () => {
 
       <section className="island border-b border-slate-200 bg-white/80 lg:bg-white/70 lg:backdrop-blur">
         <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Trusted by leaders modernising the grid</p>
-          <div className="mt-5 flex flex-wrap items-center gap-x-10 gap-y-4 text-sm font-semibold text-slate-500 lg:text-base">
+          <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-700">Trusted by leaders modernising the grid</p>
+          <div className="mt-5 flex flex-wrap items-center gap-x-10 gap-y-4 text-sm font-semibold text-slate-700 lg:text-base">
             {logos.map((logo) => (
               <span key={logo} className="uppercase tracking-[0.2em] text-slate-400">{logo}</span>
             ))}
@@ -222,7 +222,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
             <h2 className="mt-4 text-3xl font-semibold text-slate-900">
               Replace point solutions with a program-level operating model
             </h2>
-            <p className="mt-4 text-base text-slate-600">
+            <p className="mt-4 text-base text-slate-800">
               FieldForge captures the detail executives expect while staying simple for crews in the field. Every workflow—from outage switching to commercial governance—runs on a single set of data.
             </p>
           </div>
@@ -230,7 +230,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
             {capabilityColumns.map(({ title, items }) => (
               <div key={title} className="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
-                <ul className="mt-4 space-y-3 text-sm text-slate-600">
+                <ul className="mt-4 space-y-3 text-sm text-slate-800">
                   {items.map((item) => (
                     <li key={item} className="flex items-start gap-3">
                       <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-slate-400" />
@@ -250,7 +250,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
             <div className="space-y-6">
               <p className="badge">Why utilities switch</p>
               <h2 className="text-3xl font-semibold text-slate-900">From capital programs to storm response, FieldForge outperforms legacy suites</h2>
-              <p className="text-base text-slate-600">
+              <p className="text-base text-slate-800">
                 We built the platform around the realities of grid construction: multi-party coordination, regulator expectations, and relentless capital delivery targets. No more compromising between field adoption and executive reporting.
               </p>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -278,7 +278,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
               {proofPoints.map(({ heading, copy }) => (
                 <div key={heading} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
                   <h3 className="text-lg font-semibold text-slate-900">{heading}</h3>
-                  <p className="mt-3 text-sm text-slate-600">{copy}</p>
+                  <p className="mt-3 text-sm text-slate-800">{copy}</p>
                 </div>
               ))}
             </div>
@@ -338,7 +338,7 @@ export const FuturisticElectricalLanding: React.FC = () => {
 
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-slate-500 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-          <div className="flex items-center gap-2 text-slate-600">
+          <div className="flex items-center gap-2 text-slate-800">
             <Zap className="h-5 w-5 text-slate-900" aria-hidden="true" />
             <span>FieldForge</span>
           </div>
