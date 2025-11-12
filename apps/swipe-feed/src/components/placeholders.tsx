@@ -31,7 +31,8 @@ export { TimeTracking } from './time/TimeTracking';
 // Safety Management
 // SafetyHub is now a real component - see ./safety/SafetyHub.tsx
 export { SafetyHub } from './safety/SafetyHub';
-export const SafetyBriefing = () => <PlaceholderPage title="Safety Briefing" icon={Shield} description="Conduct and document safety briefings" />;
+// SafetyBriefing is now a real component - see ./safety/SafetyBriefing.tsx
+export { SafetyBriefing } from './safety/SafetyBriefing';
 export const IncidentReporting = () => <PlaceholderPage title="Incident Reporting" icon={AlertTriangle} description="Report and track safety incidents" />;
 export const PermitManagement = () => <PlaceholderPage title="Permit Management" icon={FileText} description="Manage work permits and clearances" />;
 
@@ -57,11 +58,13 @@ export const ThreeWeekLookahead = () => <PlaceholderPage title="3-Week Lookahead
 export const OutageCoordination = () => <PlaceholderPage title="Outage Coordination" icon={Calendar} description="Plan and coordinate system outages" />;
 
 // Weather & Environmental
-export const WeatherDashboard = () => <PlaceholderPage title="Weather Dashboard" icon={Cloud} description="Weather monitoring and forecasts" />;
+// WeatherDashboard is now a real component - see ./weather/WeatherDashboard.tsx
+export { WeatherDashboard } from './weather/WeatherDashboard';
 export const EnvironmentalCompliance = () => <PlaceholderPage title="Environmental Compliance" icon={Cloud} description="Environmental monitoring and compliance" />;
 
 // Communication
-export const TeamMessaging = () => <PlaceholderPage title="Team Messaging" icon={MessageSquare} description="Real-time team communication" />;
+// TeamMessaging is now a real component - see ./messaging/TeamMessaging.tsx
+export { TeamMessaging } from './messaging/TeamMessaging';
 export const EmergencyAlerts = () => <PlaceholderPage title="Emergency Alerts" icon={AlertTriangle} description="Emergency broadcast system" />;
 
 // 3D Visualization

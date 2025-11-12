@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { authenticateRequest } from '../../middleware/auth.js';
 import { query } from '../../database.js';
 import { logAuditEvent } from '../../middleware/auditLog.js';
+import { v4 as randomUUID } from 'uuid';
 // File upload configuration for Vercel (no local storage)
 const allowedFileTypes = [
   'application/pdf',

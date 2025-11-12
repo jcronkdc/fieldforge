@@ -21,6 +21,7 @@ import { createQAQCRouter } from "./construction/qaqc/qaqcRoutes.js";
 import { createDocumentRouter } from "./construction/documents/documentRoutes.js";
 import { createSchedulingRouter } from "./construction/scheduling/schedulingRoutes.js";
 import { createReportingRouter } from "./construction/reporting/reportingRoutes.js";
+import { createReceiptRouter } from "./construction/receipts/receiptRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -112,6 +113,9 @@ app.use("/api/scheduling", createSchedulingRouter());
 
 // Reporting System - PDF GENERATION & DASHBOARDS ✅
 app.use("/api/reporting", createReportingRouter());
+
+// Receipt Management - EXPENSE TRACKING WITH APPROVAL ✅
+app.use("/api/receipts", createReceiptRouter());
 
 // Feedback endpoint (keep this - useful for any platform)
 app.use("/api/feedback", createFeedbackRouter());

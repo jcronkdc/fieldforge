@@ -4,6 +4,7 @@ import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
 import { AuthProvider } from './components/auth/AuthProvider';
 import { VoiceCommandInterface } from './components/voice/VoiceCommandInterface';
+import { Toaster } from 'react-hot-toast';
 import './styles/animations.css';
 import './styles/ai-animations.css';
 
@@ -135,6 +136,28 @@ function App() {
     <AuthProvider>
       <Router>
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#1f2937',
+                color: '#fff',
+              },
+              success: {
+                iconTheme: {
+                  primary: '#10b981',
+                  secondary: '#fff',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: '#fff',
+                },
+              },
+            }}
+          />
           {isOffline && <OfflineIndicator />}
         
         <Routes>

@@ -437,7 +437,7 @@ export const DocumentHub: React.FC = () => {
                   </div>
                   <p className="text-sm font-medium text-gray-900 truncate">{doc.name}</p>
                   <p className="text-xs text-gray-500 mt-1">{formatFileSize(doc.size)}</p>
-                  <p className="text-xs text-gray-500">{new Date(doc.created_at), 'MMM d')}</p>
+                    <p className="text-xs text-gray-500">{new Date(doc.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                 </div>
                 <div className="flex border-t">
                   <button
