@@ -46,7 +46,7 @@ import { AcquisitionEvaluation } from './tests/AcquisitionEvaluation';
 import { WelcomePage } from './pages/WelcomePage';
 
 // Placeholder components
-import { ReceiptManager, DailyOperations, TimeTracking, WeatherDashboard } from './components/placeholders';
+import { ReceiptManager, DailyOperations, TimeTracking, WeatherDashboard, TeamMessaging } from './components/placeholders';
 
 // Field operations
 import { FieldOperationsIndex } from './pages/FieldOperationsIndex';

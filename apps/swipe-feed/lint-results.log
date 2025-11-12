@@ -1,0 +1,28 @@
+
+> fieldforge@1.0.0 lint
+> npm run lint:ui-copy && npm run lint:media && npm run lint:copy && npm run lint:backlog && npm run type-check
+
+
+> fieldforge@1.0.0 lint:ui-copy
+> node ../../tools/scripts/check-no-ellipsis.mjs
+
+✅ No literal ellipses found.
+
+> fieldforge@1.0.0 lint:media
+> node ../../tools/scripts/check-media-dimensions.mjs
+
+✅ All media elements provide intrinsic dimensions.
+
+> fieldforge@1.0.0 lint:copy
+> node ../../tools/scripts/check-copy-style.mjs
+
+✅ Copy style check passed.
+
+> fieldforge@1.0.0 lint:backlog
+> node ../../tools/scripts/check-backlog.mjs
+
+
+> fieldforge@1.0.0 type-check
+> tsc --noEmit
+
+src/AppSafe.tsx(273,55): error TS2304: Cannot find name 'TeamMessaging'.

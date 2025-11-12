@@ -1,0 +1,5 @@
+
+> fieldforge@1.0.0 type-check
+> tsc --noEmit
+
+src/AppSafe.tsx(273,55): error TS2304: Cannot find name 'TeamMessaging'.
