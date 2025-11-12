@@ -22,6 +22,18 @@ export function loadEnv(): Env {
   if (process.env.NODE_ENV !== "production") {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     require("dotenv").config();
+    
+    // Development defaults for missing environment variables
+    if (!process.env.DATABASE_URL) {
+      console.warn('[DEV] DATABASE_URL not set, using default PostgreSQL connection');
+      process.env.DATABASE_URL = 'postgresql://postgres:postgres@localhost:5432/fieldforge_dev';
+    }
+    if (!process.env.SUPABASE_URL) {
+      console.warn('[DEV] SUPABASE_URL not set, authentication will be limited in development');
+    }
+    if (!process.env.SUPABASE_SERVICE_KEY) {
+      console.warn('[DEV] SUPABASE_SERVICE_KEY not set, authentication will be limited in development');
+    }
   }
 
   const {
@@ -45,7 +57,10 @@ export function loadEnv(): Env {
   } = process.env;
 
   if (!DATABASE_URL) {
-    throw new Error("DATABASE_URL env var is required for the hourglass worker");
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("DATABASE_URL env var is required in production");
+    }
+    console.error('⚠️ DATABASE_URL not set - database features will not work');
   }
 
   return {

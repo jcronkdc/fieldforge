@@ -97,15 +97,35 @@ export async function authenticateRequest(req: Request, res: Response, next: Nex
         logTokenVerification(undefined, false, req, error instanceof Error ? error.message : 'Unknown error');
         return res.status(401).json({ error: 'Authentication failed' });
       }
-    } else {
-      // Development: Allow with headers or demo user
-      req.user = {
-        id: req.headers['x-user-id'] as string || 'demo_user',
-        email: req.headers['x-user-email'] as string || 'demo@mythatron.com',
-        role: req.headers['x-user-role'] as string || 'user',
-      };
-      next();
+  } else {
+    // Development: More flexible authentication
+    if (supabaseAdmin && token) {
+      // If Supabase is configured in dev, use it
+      try {
+        const { data, error } = await supabaseAdmin.auth.getUser(token);
+        if (error) {
+          console.warn('[auth] Dev mode Supabase auth failed:', error.message);
+        } else if (data?.user) {
+          req.user = {
+            id: data.user.id,
+            email: data.user.email || 'unknown',
+            role: data.user.role || 'user',
+          };
+          return next();
+        }
+      } catch (error) {
+        console.warn('[auth] Dev mode Supabase auth error:', error);
+      }
     }
+    
+    // Fallback to headers or demo user in development
+    req.user = {
+      id: req.headers['x-user-id'] as string || 'demo_user',
+      email: req.headers['x-user-email'] as string || 'demo@fieldforge.com',
+      role: req.headers['x-user-role'] as string || 'user',
+    };
+    next();
+  }
   } else {
     if (isProduction) {
       // Production: Require authentication
