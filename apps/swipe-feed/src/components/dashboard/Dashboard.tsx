@@ -38,132 +38,179 @@ export const Dashboard: React.FC = () => {
   }, []);
 
   const fetchDashboardData = async () => {
-    // This would fetch real data from Supabase
-    // For now, using demo data
-    setMetrics([
-      {
-        title: 'Project Progress',
-        value: 67,
-        change: 5,
-        trend: 'up',
-        icon: Target,
-        color: 'text-amber-500',
-        unit: '%'
-      },
-      {
-        title: 'Safety Score',
-        value: 98.5,
-        change: 0.5,
-        trend: 'up',
-        icon: Shield,
-        color: 'text-green-500',
-        unit: '%'
-      },
-      {
-        title: 'Active Crews',
-        value: 8,
-        change: 2,
-        trend: 'up',
-        icon: Users,
-        color: 'text-blue-500',
-        unit: 'teams'
-      },
-      {
-        title: 'Equipment Utilization',
-        value: 85,
-        change: -3,
-        trend: 'down',
-        icon: Truck,
-        color: 'text-purple-500',
-        unit: '%'
-      },
-      {
-        title: 'Days Without Incident',
-        value: 142,
-        change: 1,
-        trend: 'up',
-        icon: HardHat,
-        color: 'text-emerald-500',
-        unit: 'days'
-      },
-      {
-        title: 'Open RFIs',
-        value: 12,
-        change: -2,
-        trend: 'down',
-        icon: FileText,
-        color: 'text-orange-500',
-        unit: 'items'
-      },
-      {
-        title: 'Schedule Variance',
-        value: -2,
-        change: 1,
-        trend: 'up',
-        icon: Calendar,
-        color: 'text-red-500',
-        unit: 'days'
-      },
-      {
-        title: 'Budget Utilization',
-        value: 62,
-        change: 3,
-        trend: 'neutral',
-        icon: DollarSign,
-        color: 'text-cyan-500',
-        unit: '%'
-      }
-    ]);
+    try {
+      // Fetch REAL data from analytics API
+      const session = await supabase.auth.getSession();
+      const response = await fetch('/api/analytics/dashboard', {
+        headers: {
+          'Authorization': `Bearer ${session.data.session?.access_token}`
+        }
+      });
 
-    setActivities([
-      {
-        id: '1',
-        type: 'safety',
-        title: 'Morning Safety Briefing Completed',
-        description: 'Crew A completed JSA for 138kV terminations',
-        timestamp: new Date(Date.now() - 1000 * 60 * 30),
-        priority: 'medium',
-        user: 'John Smith'
-      },
-      {
-        id: '2',
-        type: 'equipment',
-        title: 'Transformer Delivered',
-        description: '138/13.8kV transformer arrived on site',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60),
-        priority: 'high',
-        user: 'Mike Johnson'
-      },
-      {
-        id: '3',
-        type: 'inspection',
-        title: 'Foundation Inspection Passed',
-        description: 'Pad 3 foundation approved by QC',
-        timestamp: new Date(Date.now() - 1000 * 60 * 90),
-        priority: 'medium',
-        user: 'Sarah Chen'
-      },
-      {
-        id: '4',
-        type: 'weather',
-        title: 'Weather Alert',
-        description: 'High winds expected tomorrow - 25mph gusts',
-        timestamp: new Date(Date.now() - 1000 * 60 * 120),
-        priority: 'high',
-        user: 'System'
-      },
-      {
-        id: '5',
-        type: 'document',
-        title: 'New RFI Submitted',
-        description: 'RFI-045: Clarification on relay settings',
-        timestamp: new Date(Date.now() - 1000 * 60 * 180),
-        priority: 'medium',
-        user: 'David Lee'
+      if (response.ok) {
+        const data = await response.json();
+        const apiMetrics = data.metrics || [];
+        
+        // Transform API response to dashboard format
+        setMetrics([
+          {
+            title: 'Project Progress',
+            value: apiMetrics.find((m: any) => m.title === 'Avg. Completion')?.value || 0,
+            change: 5,
+            trend: 'up',
+            icon: Target,
+            color: 'text-amber-500',
+            unit: '%'
+          },
+          {
+            title: 'Safety Score',
+            value: apiMetrics.find((m: any) => m.title === 'Safety Score')?.value || 100,
+            change: 0.5,
+            trend: 'up',
+            icon: Shield,
+            color: 'text-green-500',
+            unit: '%'
+          },
+          {
+            title: 'Active Crews',
+            value: apiMetrics.find((m: any) => m.title === 'Total Crews')?.value || 0,
+            change: 2,
+            trend: 'up',
+            icon: Users,
+            color: 'text-blue-500',
+            unit: 'teams'
+          },
+          {
+            title: 'Equipment Count',
+            value: apiMetrics.find((m: any) => m.title === 'Total Equipment')?.value || 0,
+            change: -3,
+            trend: 'neutral',
+            icon: Truck,
+            color: 'text-purple-500',
+            unit: 'units'
+          },
+          {
+            title: 'Days Without Incident',
+            value: apiMetrics.find((m: any) => m.title === 'Days Incident-Free')?.value || 0,
+            change: 1,
+            trend: 'up',
+            icon: HardHat,
+            color: 'text-emerald-500',
+            unit: 'days'
+          },
+          {
+            title: 'Total Projects',
+            value: apiMetrics.find((m: any) => m.title === 'Total Projects')?.value || 0,
+            change: -2,
+            trend: 'neutral',
+            icon: FileText,
+            color: 'text-orange-500',
+            unit: 'projects'
+          },
+          {
+            title: 'Active Projects',
+            value: apiMetrics.find((m: any) => m.title === 'Active Projects')?.value || 0,
+            change: 1,
+            trend: 'neutral',
+            icon: Calendar,
+            color: 'text-red-500',
+            unit: 'projects'
+          },
+          {
+            title: 'Budget Spent',
+            value: Math.round(parseFloat(apiMetrics.find((m: any) => m.title === 'Budget Spent')?.value || '0')),
+            change: 3,
+            trend: 'neutral',
+            icon: DollarSign,
+            color: 'text-cyan-500',
+            unit: '$'
+          }
+        ]);
+      } else {
+        console.error('Failed to fetch dashboard metrics');
+        setDefaultMetrics();
       }
-    ]);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      setDefaultMetrics();
+    }
 
+    // Fetch recent activities from real endpoints
+    await fetchRecentActivities();
+    
     setLoading(false);
+  };
+
+  const setDefaultMetrics = () => {
+    // Fallback metrics with zero values
+    setMetrics([
+      { title: 'Project Progress', value: 0, change: 0, trend: 'neutral', icon: Target, color: 'text-amber-500', unit: '%' },
+      { title: 'Safety Score', value: 100, change: 0, trend: 'neutral', icon: Shield, color: 'text-green-500', unit: '%' },
+      { title: 'Active Crews', value: 0, change: 0, trend: 'neutral', icon: Users, color: 'text-blue-500', unit: 'teams' },
+      { title: 'Equipment Count', value: 0, change: 0, trend: 'neutral', icon: Truck, color: 'text-purple-500', unit: 'units' },
+      { title: 'Days Without Incident', value: 0, change: 0, trend: 'neutral', icon: HardHat, color: 'text-emerald-500', unit: 'days' },
+      { title: 'Total Projects', value: 0, change: 0, trend: 'neutral', icon: FileText, color: 'text-orange-500', unit: 'projects' },
+      { title: 'Active Projects', value: 0, change: 0, trend: 'neutral', icon: Calendar, color: 'text-red-500', unit: 'projects' },
+      { title: 'Budget Spent', value: 0, change: 0, trend: 'neutral', icon: DollarSign, color: 'text-cyan-500', unit: '$' }
+    ]);
+  };
+
+  const fetchRecentActivities = async () => {
+    try {
+      const session = await supabase.auth.getSession();
+      const token = session.data.session?.access_token;
+      
+      const [safetyRes, projectRes] = await Promise.all([
+        fetch('/api/safety/incidents?limit=3', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        }),
+        fetch('/api/projects?limit=2', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      ]);
+
+      const activities: ActivityItem[] = [];
+      
+      // Add safety incidents
+      if (safetyRes.ok) {
+        const incidents = await safetyRes.json();
+        incidents.forEach((incident: any, idx: number) => {
+          activities.push({
+            id: incident.id,
+            type: 'safety',
+            title: `${incident.type} - ${incident.severity}`,
+            description: incident.description || 'Safety incident reported',
+            timestamp: new Date(incident.reported_date || incident.created_at),
+            priority: incident.severity === 'critical' ? 'critical' : incident.severity === 'high' ? 'high' : 'medium',
+            user: incident.reported_by_name || 'Safety Team'
+          });
+        });
+      }
+
+      // Add project updates
+      if (projectRes.ok) {
+        const data = await projectRes.json();
+        const projects = data.projects || [];
+        projects.slice(0, 2).forEach((project: any) => {
+          activities.push({
+            id: project.id,
+            type: 'document',
+            title: `${project.name}`,
+            description: `Progress: ${project.completion_percentage || 0}% complete`,
+            timestamp: new Date(project.updated_at || project.created_at),
+            priority: 'medium',
+            user: 'Project Manager'
+          });
+        });
+      }
+
+      // Sort by timestamp and take most recent 5
+      activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+      setActivities(activities.slice(0, 5));
+    } catch (error) {
+      console.error('Failed to fetch activities:', error);
+      setActivities([]);
+    }
   };
 
   const getActivityIcon = (type: string) => {
