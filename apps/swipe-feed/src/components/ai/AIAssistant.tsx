@@ -3,7 +3,7 @@ import {
   Brain, Sparkles, Send, Mic, MicOff, Volume2, VolumeX,
   Zap, TrendingUp, AlertTriangle, CheckCircle, Info,
   ChevronDown, ChevronUp, Cpu, Activity, Bot, Loader2,
-  Shield, Calendar, Users, Wrench, FileText, Map
+  Shield, Calendar, Users, Wrench, FileText, Map, X
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -43,6 +43,7 @@ export const AIAssistant: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<AISuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [isVisible, setIsVisible] = useState(false); // Start closed
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
@@ -163,12 +164,26 @@ export const AIAssistant: React.FC = () => {
     { label: 'Weather Impact', icon: Activity, query: 'How will weather affect our work?' }
   ];
 
+  // Show floating button when assistant is hidden
+  if (!isVisible) {
+    return (
+      <button
+        onClick={() => setIsVisible(true)}
+        className="fixed bottom-4 right-4 z-50 w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all flex items-center justify-center"
+        aria-label="Open AI Assistant"
+      >
+        <Brain className="w-8 h-8 text-white" />
+        <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+      </button>
+    );
+  }
+
   return (
     <div className={`fixed bottom-4 right-4 z-50 ${isMinimized ? 'w-auto' : 'w-96'}`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-t-2xl p-4 cursor-pointer" onClick={() => setIsMinimized(!isMinimized)}>
+      <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-t-2xl p-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setIsMinimized(!isMinimized)}>
             <div className="relative">
               <Brain className="w-8 h-8 text-white" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
@@ -178,7 +193,22 @@ export const AIAssistant: React.FC = () => {
               <p className="text-purple-100 text-xs">Always learning, always helping</p>
             </div>
           </div>
-          {isMinimized ? <ChevronUp className="w-5 h-5 text-white" /> : <ChevronDown className="w-5 h-5 text-white" />}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsMinimized(!isMinimized)}
+              className="text-white/80 hover:text-white transition-colors"
+              aria-label={isMinimized ? "Expand" : "Minimize"}
+            >
+              {isMinimized ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            </button>
+            <button
+              onClick={() => setIsVisible(false)}
+              className="text-white/80 hover:text-white transition-colors"
+              aria-label="Close AI Assistant"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </div>
 

@@ -31,8 +31,8 @@ interface Props {
 }
 
 export const OmniGuideProvider: React.FC<Props> = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(true); // Always open by default
-  const [isMinimized, setIsMinimized] = useState(true); // Start minimized
+  const [isOpen, setIsOpen] = useState(false); // Start closed by default
+  const [isMinimized, setIsMinimized] = useState(false); // Start expanded when opened
   const [queryHistory, setQueryHistory] = useState<string[]>([]);
 
   const toggleOmniGuide = useCallback(() => {
