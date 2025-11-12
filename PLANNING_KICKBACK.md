@@ -462,4 +462,120 @@ ALTER TABLE auth.users ENABLE TRIGGER on_auth_user_created;
 
 ---
 
+## ⚠️ SUPABASE SECURITY WARNINGS
+
+**Issue Date:** November 12, 2025  
+**Reference ID:** F3 - SUPABASE CONFIG  
+**Status:** ⚠️ **SECURITY WARNINGS FOUND**
+
+### Function Search Path Vulnerabilities
+
+**Issue:** Functions with mutable search_path (security risk)  
+**Level:** WARN  
+**Category:** SECURITY  
+
+### Affected Functions:
+
+1. **Function:** `public.handle_updated_at`
+   - **Issue:** Has a role mutable search_path
+   - **Risk:** Could be exploited for privilege escalation
+   
+2. **Function:** `public.handle_new_user`  
+   - **Issue:** Has a role mutable search_path
+   - **Risk:** Could be exploited for privilege escalation
+   - **Note:** This function is also blocking user creation
+
+### Fix Required:
+
+Update both functions to set explicit search_path:
+
+```sql
+-- Fix handle_updated_at function
+CREATE OR REPLACE FUNCTION public.handle_updated_at()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$;
+
+-- Fix handle_new_user function  
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+BEGIN
+  -- existing function body
+  RETURN NEW;
+END;
+$$;
+```
+
+**Remediation:** https://supabase.com/docs/guides/database/database-linter?lint=0011_function_search_path_mutable
+
+**Impact:** Medium - These warnings don't block functionality but represent security best practice violations
+
+---
+
+## 🚨 SOCIAL FEED NOT WORKING
+
+**Issue Date:** November 12, 2025  
+**Reference ID:** F4 - SOCIAL FEED  
+**Status:** ❌ **FUNCTIONALITY BROKEN**
+
+### Social Feed Component Issue
+
+**Issue:** Social feed shows no posts / not functioning  
+**Root Cause Analysis:**
+
+1. **Authentication Issue:**
+   - User cannot login (demo user doesn't exist)
+   - Social feed requires authenticated user to fetch posts
+
+2. **Database Tables Missing:**
+   - Frontend expects these tables:
+     - `feed_posts`
+     - `feed_reactions`
+     - `feed_comments`
+     - `projects`
+     - `project_team`
+   - These tables may not exist in Supabase
+
+3. **API Mismatch:**
+   - Backend `/api/social` routes handle "bookworms" (connections)
+   - Frontend `SocialFeed` component expects feed posts
+   - No backend endpoints for creating/fetching feed posts
+
+### Technical Details:
+
+**Frontend Component:** `apps/swipe-feed/src/components/feed/SocialFeed.tsx`
+- Fetches from `feed_posts` table with joins
+- Requires authenticated user
+- Expects project association
+
+**Backend Routes:** `backend/src/social/socialRoutes.ts`
+- Only handles connection requests and bookworms
+- No feed post endpoints
+
+### Fix Required:
+
+1. **Immediate:** Create demo user to allow login
+2. **Database:** Run Supabase migrations to create feed tables
+3. **Backend:** Add feed post endpoints or update frontend to use existing API
+
+### Verification:
+- Cannot verify without authentication working
+- Need to check Supabase tables exist
+- Need to verify API endpoints match frontend expectations
+
+**Impact:** High - Core feature completely non-functional
+
+---
+
 *🔒 Security mission accomplished. Users' data is now properly protected.*
