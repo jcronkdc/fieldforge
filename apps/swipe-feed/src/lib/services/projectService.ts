@@ -110,8 +110,16 @@ class ProjectService {
       }
 
       return data;
-    } catch (error) {
-      console.error('Error creating project:', error);
+    } catch (error: any) {
+      console.error('[ProjectService] Error creating project:', error);
+      // Log more details for debugging
+      if (error?.code === '42P01') {
+        console.error('[ProjectService] Table "projects" does not exist in database');
+      } else if (error?.message?.includes('Not authenticated')) {
+        console.error('[ProjectService] User not authenticated - cannot create project');
+      } else if (error?.code === '42501') {
+        console.error('[ProjectService] Permission denied - check RLS policies on projects table');
+      }
       return null;
     }
   }

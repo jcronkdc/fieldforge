@@ -32,18 +32,9 @@ async function authenticateRequest(req, res, next) {
         if (isProduction) {
             // Production: Verify JWT token with Supabase
             if (!supabaseAdmin) {
-                console.warn('[auth] Supabase not configured - falling back to header-based auth');
-                // Fallback to header-based auth if Supabase not configured
-                const userId = req.headers['x-user-id'];
-                if (!userId) {
-                    return res.status(401).json({ error: 'Invalid authentication token' });
-                }
-                req.user = {
-                    id: userId,
-                    email: req.headers['x-user-email'] || undefined,
-                    role: req.headers['x-user-role'] || 'user',
-                };
-                return next();
+                console.error('[auth] CRITICAL: Supabase not configured in production - authentication cannot proceed');
+                (0, auditLog_1.logAuthFailure)(undefined, 'supabase_not_configured', req, 'Supabase admin client not initialized');
+                return res.status(500).json({ error: 'Authentication service unavailable' });
             }
             try {
                 // Verify token with Supabase
@@ -87,10 +78,31 @@ async function authenticateRequest(req, res, next) {
             }
         }
         else {
-            // Development: Allow with headers or demo user
+            // Development: More flexible authentication
+            if (supabaseAdmin && token) {
+                // If Supabase is configured in dev, use it
+                try {
+                    const { data, error } = await supabaseAdmin.auth.getUser(token);
+                    if (error) {
+                        console.warn('[auth] Dev mode Supabase auth failed:', error.message);
+                    }
+                    else if (data?.user) {
+                        req.user = {
+                            id: data.user.id,
+                            email: data.user.email || 'unknown',
+                            role: data.user.role || 'user',
+                        };
+                        return next();
+                    }
+                }
+                catch (error) {
+                    console.warn('[auth] Dev mode Supabase auth error:', error);
+                }
+            }
+            // Fallback to headers or demo user in development
             req.user = {
                 id: req.headers['x-user-id'] || 'demo_user',
-                email: req.headers['x-user-email'] || 'demo@mythatron.com',
+                email: req.headers['x-user-email'] || 'demo@fieldforge.com',
                 role: req.headers['x-user-role'] || 'user',
             };
             next();

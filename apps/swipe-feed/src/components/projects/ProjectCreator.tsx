@@ -49,7 +49,8 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
         toast.success('Project created.');
         onProjectCreated(project);
       } else {
-        const message = 'Project creation failed. Try again.';
+        const message = 'Project creation failed. Check console for details.';
+        console.error('[ProjectCreator] Project creation returned null - check authentication and database tables');
         setError(message);
         toast.error(message);
       }

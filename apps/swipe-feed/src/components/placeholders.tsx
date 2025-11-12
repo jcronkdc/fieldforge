@@ -24,10 +24,12 @@ export const SafetyMetrics = () => <PlaceholderPage title="Safety Metrics" icon=
 // Field Operations
 export const DailyOperations = () => <PlaceholderPage title="Daily Operations" icon={HardHat} description="Manage daily field activities and reports" />;
 export const CrewManagement = () => <PlaceholderPage title="Crew Management" icon={Users} description="Track crew assignments and productivity" />;
-export const TimeTracking = () => <PlaceholderPage title="Time Tracking" icon={Timer} description="Record and manage work hours" />;
+// TimeTracking is now a real component - see ./time/TimeTracking.tsx
+export { TimeTracking } from './time/TimeTracking';
 
 // Safety Management
-export const SafetyHub = () => <PlaceholderPage title="Safety Hub" icon={Shield} description="Central safety management dashboard" />;
+// SafetyHub is now a real component - see ./safety/SafetyHub.tsx
+export { SafetyHub } from './safety/SafetyHub';
 export const SafetyBriefing = () => <PlaceholderPage title="Safety Briefing" icon={Shield} description="Conduct and document safety briefings" />;
 export const IncidentReporting = () => <PlaceholderPage title="Incident Reporting" icon={AlertTriangle} description="Report and track safety incidents" />;
 export const PermitManagement = () => <PlaceholderPage title="Permit Management" icon={FileText} description="Manage work permits and clearances" />;

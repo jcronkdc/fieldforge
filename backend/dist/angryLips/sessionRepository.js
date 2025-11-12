@@ -229,6 +229,8 @@ async function startSession(sessionId, hostId) {
     const client = await database_js_1.default.connect();
     try {
         await client.query("BEGIN");
+        // Use SERIALIZABLE isolation level to prevent race conditions
+        await client.query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
         await ensureHostPrivileges(sessionId, hostId);
         const sessionResult = await client.query(`select * from public.angry_lips_sessions where id = $1`, [sessionId]);
         if (sessionResult.rowCount === 0) {
@@ -288,6 +290,8 @@ async function advanceTurn(sessionId, hostId) {
     const client = await database_js_1.default.connect();
     try {
         await client.query("BEGIN");
+        // Use SERIALIZABLE isolation level to prevent race conditions
+        await client.query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
         await ensureHostPrivileges(sessionId, hostId);
         const sessionResult = await client.query(`select * from public.angry_lips_sessions where id = $1`, [sessionId]);
         if (sessionResult.rowCount === 0) {

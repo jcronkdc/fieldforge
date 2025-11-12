@@ -49,6 +49,76 @@ export function createStoryRouter() {
     }
   });
 
+  // Get story comments
+  router.get("/comments", async (req, res) => {
+    const branchId = typeof req.query.branchId === "string" ? req.query.branchId : undefined;
+    if (!branchId) {
+      return res.status(400).json({ error: "branchId is required" });
+    }
+    try {
+      const comments = await getStoryComments(branchId);
+      res.json({ items: comments });
+    } catch (error) {
+      console.error("[api] get comments error", error);
+      res.status(500).json({ error: "Failed to load comments" });
+    }
+  });
+
+  // Add story comment
+  router.post("/comments", async (req, res) => {
+    const { branchId, nodeId, body, authorId } = req.body ?? {};
+    if (!branchId || typeof nodeId !== "number" || !body) {
+      return res.status(400).json({ error: "branchId, nodeId and body required" });
+    }
+    try {
+      const comment = await addStoryComment(branchId, nodeId, body, authorId);
+      await recordAuditEvent({
+        entityType: "story_branch",
+        entityId: branchId,
+        action: "comment_added",
+        actorId: authorId,
+        metadata: { nodeId, commentId: comment.id },
+      });
+      res.status(201).json(comment);
+    } catch (error) {
+      console.error("[api] add comment error", error);
+      res.status(500).json({ error: "Failed to add comment" });
+    }
+  });
+
+  // Delete story comment
+  router.delete("/comments/:id", async (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) {
+      return res.status(400).json({ error: "Invalid comment id" });
+    }
+    try {
+      await deleteStoryComment(id);
+      await recordAuditEvent({
+        entityType: "story_comment",
+        entityId: String(id),
+        action: "comment_removed",
+        actorId: req.query.actorId as string | undefined,
+      });
+      res.status(204).send();
+    } catch (error) {
+      console.error("[api] delete comment error", error);
+      res.status(500).json({ error: "Failed to delete comment" });
+    }
+  });
+
+  // Get world lore
+  router.get("/lore", async (req, res) => {
+    const worldId = typeof req.query.worldId === "string" ? req.query.worldId : "city-of-thousand-codes";
+    try {
+      const lore = await getWorldLore(worldId);
+      res.json(lore);
+    } catch (error) {
+      console.error("[api] get lore error", error);
+      res.status(500).json({ error: "Failed to load world lore" });
+    }
+  });
+
   router.post("/chapters", async (req, res) => {
     const { branchId, title, actorId } = req.body ?? {};
     if (!branchId || !title) {

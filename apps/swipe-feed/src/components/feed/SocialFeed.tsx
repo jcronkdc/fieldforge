@@ -56,23 +56,41 @@ export const SocialFeed: React.FC = () => {
   }, []);
 
   const fetchProjects = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
-
-    const { data } = await supabase
-      .from('projects')
-      .select(`
-        *,
-        project_team!inner(user_id)
-      `)
-      .eq('project_team.user_id', user.id)
-      .eq('project_team.status', 'active');
-
-    if (data) {
-      setProjects(data);
-      if (data.length > 0) {
-        setSelectedProject(data[0].id);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        console.warn('[SocialFeed] No authenticated user');
+        return;
       }
+
+      const { data, error } = await supabase
+        .from('projects')
+        .select(`
+          *,
+          project_team!inner(user_id)
+        `)
+        .eq('project_team.user_id', user.id)
+        .eq('project_team.status', 'active');
+
+      if (error) {
+        console.error('[SocialFeed] Error fetching projects:', error);
+        // Check if tables exist
+        if (error.code === '42P01') {
+          console.error('[SocialFeed] Tables "projects" or "project_team" do not exist');
+        }
+        return;
+      }
+
+      if (data) {
+        setProjects(data);
+        if (data.length > 0) {
+          setSelectedProject(data[0].id);
+        } else {
+          console.warn('[SocialFeed] User has no active projects');
+        }
+      }
+    } catch (error) {
+      console.error('[SocialFeed] Unexpected error fetching projects:', error);
     }
   };
 
@@ -228,8 +246,11 @@ export const SocialFeed: React.FC = () => {
                     value={selectedProject || ''}
                     onChange={(e) => setSelectedProject(e.target.value)}
                     className="px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-sm text-white focus:border-amber-500 focus:outline-none"
+                    disabled={projects.length === 0}
                   >
-                    <option value="" disabled>Select Project</option>
+                    <option value="" disabled>
+                      {projects.length === 0 ? 'No projects available' : 'Select Project'}
+                    </option>
                     {projects.map((project) => (
                       <option key={project.id} value={project.id}>
                         {project.name}

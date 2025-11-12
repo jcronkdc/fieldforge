@@ -32,5 +32,13 @@ function securityHeaders(req, res, next) {
     }
     // Remove server identification
     res.removeHeader('X-Powered-By');
+    // Session security headers
+    res.setHeader('X-Session-Security', 'strict');
+    // Prevent caching of sensitive data
+    if (req.path.startsWith('/api')) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+    }
     next();
 }

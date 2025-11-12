@@ -1,7 +1,7 @@
 {
-  "name": "mythatron-backend",
+  "name": "fieldforge-backend",
   "version": "0.1.0",
-  "description": "MythaTron Backend API",
+  "description": "FieldForge Construction Platform Backend API",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
