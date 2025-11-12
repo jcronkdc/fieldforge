@@ -7,53 +7,12 @@ import { requestLogger } from "./middleware/requestLogger.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import { authenticateRequest } from "./middleware/auth.js";
 import { validateRequestBody, validateQueryParams } from "./middleware/inputValidation.js";
-import { maskRegistry } from "./masks/registry.js";
-import { capture } from "./worker/analytics.js";
-import type { ActivateMaskInput } from "./masks/types.js";
 import { loadEnv } from "./worker/env.js";
-import { generateProfessorCritique } from "./masks/professorService.js";
-import { fetchProfessorCritiques } from "./masks/professorRepository.js";
-import { getSampleTimeline } from "./story/sampleTimeline.js";
-import {
-  getTimeline,
-  getChapters,
-  addChapter,
-  updateChapter,
-  removeChapter,
-  getStoryNodes,
-  saveStoryNodes,
-  getStoryComments,
-  addStoryComment,
-  deleteStoryComment,
-  getWorldLore,
-  type StoryNode,
-} from "./story/storyRepository.js";
-import { logStoryNotification, fetchStoryNotifications } from "./story/notificationRepository.js";
-import {
-  createSession as createAngryLipsSession,
-  getSession as getAngryLipsSession,
-  listSessions as listAngryLipsSessions,
-  submitTurn as submitAngryLipsTurn,
-  autoFillTurn as autoFillAngryLipsTurn,
-  logTurnEvent as logAngryLipsTurnEvent,
-  completeSession as completeAngryLipsSession,
-  inviteParticipants as inviteAngryLipsParticipants,
-  respondToInvitation as respondAngryLipsInvitation,
-  listSessionParticipants as listAngryLipsParticipants,
-  startSession as startAngryLipsSession,
-  advanceTurn as advanceAngryLipsTurn,
-  summarizeSession as summarizeAngryLipsSession,
-  generateAiStory as generateAngryLipsStory,
-  publishVaultEntry as publishAngryLipsEntry,
-  listPublishedEntries as listAngryLipsPublishedEntries,
-} from "./angryLips/sessionRepository.js";
-import { createTokenRequest as createRealtimeTokenRequest } from "./realtime/ablyPublisher.js";
+// Router imports only - no repository imports
 import { createStoryRouter } from "./creative/storyRoutes.js";
 import { createCharacterRouter } from "./creative/characterRoutes.js";
-import { recordAuditEvent, enqueueCoherenceEvent } from "./creative/auditRepository.js";
-import { runCreativeCompletion } from "./creative/aiClient.js";
 import { createSocialRouter } from "./social/socialRoutes.js";
-import { listStreamEvents } from "./feed/feedRepository.js";
+import { runCreativeCompletion } from "./creative/aiClient.js";
 import { createMythacoinRouter } from "./mythacoin/mythacoinRoutes.js";
 import { createFeedRouter } from "./feed/feedRoutes.js";
 import { createMessagingRouter } from "./messaging/messagingRoutes.js";
@@ -62,6 +21,7 @@ import { createFeedbackRouter } from "./feedback/feedbackRoutes.js";
 import { createCreativeEnginesRouter } from "./creative/creativeEnginesRoutes.js";
 import betaRouter from "./beta/betaRoutes.js";
 import sparksRouter from "./sparks/sparksRoutes.js";
+import { createAngryLipsRouter } from "./routes/angryLipsRoutes.js";
 
 /**
  * © 2025 Cronk Companies, LLC. All Rights Reserved.
@@ -129,6 +89,7 @@ app.use("/api/feedback", createFeedbackRouter());
 app.use("/api/creative/engines", createCreativeEnginesRouter());
 app.use("/api/beta", betaRouter);
 app.use("/api/sparks", sparksRouter);
+app.use("/api/angry-lips", createAngryLipsRouter());
 
 // Feed stream endpoint moved to feedRoutes.js
 
