@@ -52,8 +52,8 @@ export const ProjectSchedule = () => <PlaceholderPage title="Project Schedule" i
 export const ThreeWeekLookahead = () => <PlaceholderPage title="3-Week Lookahead" icon={Calendar} description="Short-term planning and coordination" />;
 export const OutageCoordination = () => <PlaceholderPage title="Outage Coordination" icon={Calendar} description="Plan and coordinate system outages" />;
 
-// Weather & Environmental
-export const WeatherDashboard = () => <PlaceholderPage title="Weather Dashboard" icon={Cloud} description="Weather monitoring and forecasts" />;
+// Weather & Environmental - Now Functional
+export { WeatherCenter as WeatherDashboard } from './weather/WeatherCenter';
 export const EnvironmentalCompliance = () => <PlaceholderPage title="Environmental Compliance" icon={Cloud} description="Environmental monitoring and compliance" />;
 
 // Communication

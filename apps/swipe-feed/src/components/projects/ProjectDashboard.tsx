@@ -16,7 +16,8 @@ import {
   Settings,
   MoreVertical,
   Archive,
-  Star
+  Star,
+  MessageSquare
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
