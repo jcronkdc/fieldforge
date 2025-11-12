@@ -23,7 +23,8 @@ export const SafetyMetrics = () => <PlaceholderPage title="Safety Metrics" icon=
 
 // Field Operations
 export const DailyOperations = () => <PlaceholderPage title="Daily Operations" icon={HardHat} description="Manage daily field activities and reports" />;
-export const CrewManagement = () => <PlaceholderPage title="Crew Management" icon={Users} description="Track crew assignments and productivity" />;
+// CrewManagement is now a real component - see ./crew/CrewManagement.tsx
+export { CrewManagement } from './crew/CrewManagement';
 // TimeTracking is now a real component - see ./time/TimeTracking.tsx
 export { TimeTracking } from './time/TimeTracking';
 
@@ -35,12 +36,13 @@ export const IncidentReporting = () => <PlaceholderPage title="Incident Reportin
 export const PermitManagement = () => <PlaceholderPage title="Permit Management" icon={FileText} description="Manage work permits and clearances" />;
 
 // Equipment & Materials
-export const EquipmentHub = () => <PlaceholderPage title="Equipment Hub" icon={Package} description="Equipment tracking and management" />;
+// EquipmentHub is now a real component - see ./equipment/EquipmentHub.tsx
+export { EquipmentHub } from './equipment/EquipmentHub';
 export const MaterialInventory = () => <PlaceholderPage title="Material Inventory" icon={Package} description="Track material stock and usage" />;
 export const EquipmentMaintenance = () => <PlaceholderPage title="Equipment Maintenance" icon={Wrench} description="Schedule and track maintenance" />;
 
-// QAQC
-export const QAQCHub = () => <PlaceholderPage title="QAQC Hub" icon={ClipboardCheck} description="Quality control dashboard" />;
+// QAQC - Now a real component with inspection tracking
+export { QAQCHub } from './qaqc/QAQCHub';
 export const InspectionManager = () => <PlaceholderPage title="Inspection Manager" icon={ClipboardCheck} description="Schedule and document inspections" />;
 export const TestingDashboard = () => <PlaceholderPage title="Testing Dashboard" icon={ClipboardCheck} description="Equipment testing and results" />;
 

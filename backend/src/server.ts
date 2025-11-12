@@ -17,8 +17,8 @@ import { createEquipmentRouter } from "./routes/equipmentRoutes.js";
 import { createSafetyRouter } from "./construction/safety/safetyRoutes.js";
 import { createAnalyticsRouter } from "./construction/analytics/analyticsRoutes.js";
 import { createCrewRouter } from "./construction/crews/crewRoutes.js";
+import { createQAQCRouter } from "./construction/qaqc/qaqcRoutes.js";
 // TODO: Add these as we build them:
-// import { createQAQCRouter } from "./routes/qaqcRoutes.js";
 // import { createSchedulingRouter } from "./routes/schedulingRoutes.js";
 // import { createDocumentRouter } from "./routes/documentRoutes.js";
 // import { createAnalyticsRouter } from "./routes/analyticsRoutes.js";
@@ -103,8 +103,10 @@ app.use("/api/analytics", createAnalyticsRouter());
 // Crew Management - COMPLETE WITH CERTIFICATIONS ✅
 app.use("/api/crews", createCrewRouter());
 
+// QAQC Inspection System - LIVE WITH TESTING ✅
+app.use("/api/qaqc", createQAQCRouter());
+
 // TODO: Implement these construction routes
-// app.use("/api/qaqc", createQAQCRouter());
 // app.use("/api/scheduling", createSchedulingRouter());
 // app.use("/api/documents", createDocumentRouter());
 // app.use("/api/reporting", createReportingRouter());
