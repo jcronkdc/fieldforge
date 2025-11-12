@@ -1,10 +1,12 @@
 import express, { type Request, type Response } from "express";
 import cors from "cors";
-import { apiLimiter } from "./middleware/rateLimit.js";
+import { apiLimiter, authLimiter, sensitiveOperationLimiter } from "./middleware/rateLimit.js";
 import { securityHeaders } from "./middleware/securityHeaders.js";
 import { requestIdMiddleware } from "./middleware/requestId.js";
 import { requestLogger } from "./middleware/requestLogger.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
+import { authenticateRequest } from "./middleware/auth.js";
+import { validateRequestBody, validateQueryParams } from "./middleware/inputValidation.js";
 import { maskRegistry } from "./masks/registry.js";
 import { capture } from "./worker/analytics.js";
 import type { ActivateMaskInput } from "./masks/types.js";
@@ -81,7 +83,7 @@ const app = express();
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
     ? (process.env.ALLOWED_ORIGINS?.split(',') || process.env.CORS_ORIGIN?.split(',') || ['https://fieldforge.vercel.app']).filter(Boolean)
-    : true, // Allow all origins in development
+    : process.env.ALLOWED_ORIGINS?.split(',').filter(Boolean) || true, // In development, prefer env var if set, otherwise allow all
   credentials: true,
   maxAge: 86400, // 24 hours
 };
@@ -89,6 +91,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Input validation middleware (apply after body parsing)
+app.use(validateRequestBody);
+app.use(validateQueryParams);
 
 // Security middleware (order matters - apply early)
 app.use(requestIdMiddleware); // Add request ID for tracing
@@ -102,6 +108,14 @@ app.use('/api', apiLimiter);
 app.get("/health", (_req: Request, res: Response) => {
   res.json({ status: "ok", service: "mythatron-api", timestamp: new Date().toISOString() });
 });
+
+// Apply authentication middleware to ALL API routes (except health check)
+app.use('/api', authenticateRequest);
+
+// Apply granular rate limiting for sensitive/compute-intensive endpoints
+app.use("/api/creative/engines", sensitiveOperationLimiter);
+app.use("/api/mythacoin", sensitiveOperationLimiter);
+app.use("/api/sparks", sensitiveOperationLimiter);
 
 // API routes
 app.use("/api/creative/story", createStoryRouter());

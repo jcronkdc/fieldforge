@@ -48,18 +48,9 @@ export async function authenticateRequest(req: Request, res: Response, next: Nex
     if (isProduction) {
       // Production: Verify JWT token with Supabase
       if (!supabaseAdmin) {
-        console.warn('[auth] Supabase not configured - falling back to header-based auth');
-        // Fallback to header-based auth if Supabase not configured
-        const userId = req.headers['x-user-id'] as string;
-        if (!userId) {
-          return res.status(401).json({ error: 'Invalid authentication token' });
-        }
-        req.user = {
-          id: userId,
-          email: req.headers['x-user-email'] as string || undefined,
-          role: req.headers['x-user-role'] as string || 'user',
-        };
-        return next();
+        console.error('[auth] CRITICAL: Supabase not configured in production - authentication cannot proceed');
+        logAuthFailure(undefined, 'supabase_not_configured', req, 'Supabase admin client not initialized');
+        return res.status(500).json({ error: 'Authentication service unavailable' });
       }
       
       try {

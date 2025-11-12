@@ -90,15 +90,27 @@ export function errorHandler(
   // Send error response
   const isProduction = process.env.NODE_ENV === 'production';
   
+  // Sanitize error message for production to prevent information disclosure
+  let errorMessage = err.message;
+  if (isProduction && !isOperational) {
+    errorMessage = 'An internal server error occurred';
+  } else if (isProduction) {
+    // Remove potential sensitive information from error messages
+    errorMessage = errorMessage
+      .replace(/\/[^\s]+/g, '[path]') // Remove file paths
+      .replace(/at\s+[^\s]+\s+\([^)]+\)/g, '[stack]') // Remove stack traces
+      .replace(/:\d+:\d+/g, ':[line]') // Remove line numbers
+      .replace(/password|secret|key|token|api[_-]?key/gi, '[redacted]'); // Remove sensitive keywords
+  }
+  
   res.status(statusCode).json({
     error: {
-      message: isProduction && !isOperational
-        ? 'An internal server error occurred'
-        : err.message,
+      message: errorMessage,
       code: (err as AppError).code,
       requestId,
       ...(process.env.NODE_ENV === 'development' && {
         stack: err.stack,
+        originalMessage: err.message,
       }),
     },
   });

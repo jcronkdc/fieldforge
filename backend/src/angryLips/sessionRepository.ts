@@ -307,6 +307,8 @@ export async function startSession(sessionId: string, hostId: string): Promise<A
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+    // Use SERIALIZABLE isolation level to prevent race conditions
+    await client.query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
 
     await ensureHostPrivileges(sessionId, hostId);
 
@@ -388,6 +390,8 @@ export async function advanceTurn(sessionId: string, hostId: string): Promise<An
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+    // Use SERIALIZABLE isolation level to prevent race conditions
+    await client.query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
 
     await ensureHostPrivileges(sessionId, hostId);
 
