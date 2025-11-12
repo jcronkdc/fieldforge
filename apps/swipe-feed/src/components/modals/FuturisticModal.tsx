@@ -185,7 +185,7 @@ export const FuturisticConfirmModal: React.FC<ConfirmModalProps> = ({
 // Loading Modal
 export const FuturisticLoadingModal: React.FC<{ isOpen: boolean; message?: string }> = ({ 
   isOpen, 
-  message = 'PROCESSING...' 
+  message = 'PROCESSING' 
 }) => {
   return (
     <FuturisticModal isOpen={isOpen} onClose={() => {}} size="sm" showCloseButton={false}>

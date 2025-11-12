@@ -5,14 +5,15 @@
 
 import { Router, Request, Response } from "express";
 import * as feedbackRepository from "./feedbackRepository.js";
+import { authenticateRequest } from "../middleware/auth.js";
 
 export function createFeedbackRouter(): Router {
   const router = Router();
 
   // Submit feedback
-  router.post("/submit", async (req: Request, res: Response) => {
+  router.post("/submit", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       
       const feedback = await feedbackRepository.submitFeedback({
         userId,

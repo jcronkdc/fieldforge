@@ -92,7 +92,7 @@ export function AuthForm({
         }
         
         // Show success message briefly then reload
-        setStatusMessage("Welcome back! Redirecting...");
+        setStatusMessage("Welcome back. Redirecting.");
         setTimeout(() => window.location.reload(), 500);
       } else {
         // Demo sign up
@@ -100,7 +100,7 @@ export function AuthForm({
         localStorage.setItem('mythatron_user_email', normalizedEmail);
         localStorage.setItem('mythatron_user_id', normalizedEmail.split('@')[0]);
         localStorage.setItem('mythatron_sparks', '500');
-        setStatusMessage("Demo account created! Redirecting...");
+        setStatusMessage("Demo account created. Redirecting.");
         setTimeout(() => window.location.reload(), 500);
       }
       return;
@@ -127,7 +127,7 @@ export function AuthForm({
         if (error) {
           setErrors({ general: error.message });
         } else if (data.session) {
-          setStatusMessage("Account created! You are now signed in.");
+          setStatusMessage("Account created. You are now signed in.");
         } else {
           setStatusMessage("Check your inbox to confirm the email we just sent.");
         }
@@ -200,7 +200,7 @@ export function AuthForm({
 
       <div className="flex flex-col gap-3">
         <Button type="submit" variant="primary" disabled={busy}>
-          {busy ? "One sec..." : mode === "sign-in" ? "Sign In" : "Create Account"}
+          {busy ? "One sec" : mode === "sign-in" ? "Sign In" : "Create Account"}
         </Button>
         {errors.general ? <p role="alert" className="text-xs text-rose-400">{errors.general}</p> : null}
         {statusMessage ? <p role="status" className="text-xs text-aurora-200">{statusMessage}</p> : null}

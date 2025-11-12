@@ -647,7 +647,7 @@ export class SparksEconomyEngine {
    * Adjust dynamic pricing based on current metrics
    */
   private adjustDynamicPricing(): void {
-    console.log('🔄 Adjusting dynamic pricing...');
+    console.log('🔄 Adjusting dynamic pricing');
     
     // Update margin calculation
     this.updateCurrentMargin();

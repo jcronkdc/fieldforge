@@ -8,6 +8,8 @@ import {
 import { receiptService, Receipt as ReceiptType, CostCode } from '../../lib/services/receiptService';
 import { ReceiptScanner } from './ReceiptScanner';
 import { formatDistanceToNow } from 'date-fns';
+import { EmptyState } from '../EmptyState';
+import { toast } from '../common/FuturisticToast';
 
 interface ReceiptManagerProps {
   projectId?: string;
@@ -45,6 +47,7 @@ export const ReceiptManager: React.FC<ReceiptManagerProps> = ({ projectId }) => 
       }
     } catch (error) {
       console.error('Failed to load data:', error);
+      toast.error('Receipts failed to load. Try again.');
     } finally {
       setLoading(false);
     }
@@ -54,6 +57,9 @@ export const ReceiptManager: React.FC<ReceiptManagerProps> = ({ projectId }) => 
     const success = await receiptService.approveReceipt(receiptId);
     if (success) {
       loadData();
+      toast.success('Receipt approved.');
+    } else {
+      toast.error('Approval failed. Try again.');
     }
   };
 
@@ -63,6 +69,9 @@ export const ReceiptManager: React.FC<ReceiptManagerProps> = ({ projectId }) => 
       const success = await receiptService.rejectReceipt(receiptId, reason);
       if (success) {
         loadData();
+        toast.info('Receipt flagged.');
+      } else {
+        toast.error('Rejection failed. Try again.');
       }
     }
   };
@@ -74,6 +83,9 @@ export const ReceiptManager: React.FC<ReceiptManagerProps> = ({ projectId }) => 
     if (success) {
       setSelectedReceipts([]);
       loadData();
+      toast.success('Receipts approved.');
+    } else {
+      toast.error('Bulk approval failed. Try again.');
     }
   };
 
@@ -83,6 +95,9 @@ export const ReceiptManager: React.FC<ReceiptManagerProps> = ({ projectId }) => 
     const success = await receiptService.deleteReceipt(receiptId);
     if (success) {
       loadData();
+      toast.success('Receipt deleted.');
+    } else {
+      toast.error('Delete failed. Try again.');
     }
   };
 
@@ -120,21 +135,39 @@ export const ReceiptManager: React.FC<ReceiptManagerProps> = ({ projectId }) => 
     }
   };
 
+  if (loading) {
+    return (
+      <div className="space-y-6 p-6">
+        <div className="skeleton h-20 rounded-xl border border-gray-800 bg-gray-900/50" />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, idx) => (
+            <div key={idx} className="skeleton h-28 rounded-xl border border-gray-800 bg-gray-900/50" />
+          ))}
+        </div>
+        <div className="skeleton h-14 rounded-xl border border-gray-800 bg-gray-900/50" />
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div className="skeleton h-64 rounded-xl border border-gray-800 bg-gray-900/40" />
+          <div className="skeleton h-64 rounded-xl border border-gray-800 bg-gray-900/40" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-white">Receipt Management</h1>
-            <p className="text-gray-400 mt-1">Scan, track, and manage expense receipts</p>
+            <h1 className="text-3xl font-bold text-white">Receipt management</h1>
+            <p className="mt-1 text-gray-400">Scan, track, and manage expense receipts.</p>
           </div>
           <button
             onClick={() => setShowScanner(true)}
-            className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg font-semibold text-white hover:shadow-lg hover:shadow-cyan-500/25 transition-all flex items-center space-x-2"
+            className="btn btn-primary bg-gradient-to-r from-cyan-500 to-purple-600 text-white hover:shadow-cyan-500/25"
           >
             <Camera className="w-5 h-5" />
-            <span>Scan Receipt</span>
+            <span>Scan receipt</span>
           </button>
         </div>
 
@@ -185,7 +218,7 @@ export const ReceiptManager: React.FC<ReceiptManagerProps> = ({ projectId }) => 
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search receipts..."
+              placeholder="Search receipts"
               className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
             />
           </div>
@@ -440,11 +473,19 @@ export const ReceiptManager: React.FC<ReceiptManagerProps> = ({ projectId }) => 
               </div>
               
               {selectedReceipt.image_url && (
-                <img
-                  src={selectedReceipt.image_url}
-                  alt="Receipt"
-                  className="w-full rounded-lg mb-4"
-                />
+                <div className="mb-4">
+                  <div className="aspect-4-3 overflow-hidden rounded-lg">
+                    <img
+                      src={selectedReceipt.image_url}
+                      alt="Receipt"
+                      width={800}
+                      height={600}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </div>
               )}
               
               <div className="space-y-4">

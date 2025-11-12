@@ -6,12 +6,16 @@ import type {
   AngryLipsFeedEntryResponse,
 } from "./types";
 
+import { getAuthHeaders } from './authHeaders';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
+  const authHeaders = await getAuthHeaders();
   const response = await fetch(`${API_BASE}${url}`, {
     headers: {
       "Content-Type": "application/json",
+      ...authHeaders,
       ...(options?.headers ?? {}),
     },
     ...options,

@@ -59,7 +59,7 @@ class FieldForgeQATestSuite {
    * Test Authentication System
    */
   private async testAuthentication(): Promise<void> {
-    console.log('\n📋 Testing Authentication System...');
+    console.log('\n📋 Testing Authentication System');
     
     // Check if Supabase is configured
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -94,7 +94,7 @@ class FieldForgeQATestSuite {
    * Test Landing Page
    */
   private async testLandingPage(): Promise<void> {
-    console.log('\n📋 Testing Landing Page...');
+    console.log('\n📋 Testing Landing Page');
     
     // Check if landing page components exist
     const components = [
@@ -118,7 +118,7 @@ class FieldForgeQATestSuite {
    * Test Dashboard
    */
   private async testDashboard(): Promise<void> {
-    console.log('\n📋 Testing Dashboard...');
+    console.log('\n📋 Testing Dashboard');
     
     const dashboardFeatures = [
       'Sidebar Navigation',
@@ -141,7 +141,7 @@ class FieldForgeQATestSuite {
    * Test Project Management
    */
   private async testProjectManagement(): Promise<void> {
-    console.log('\n📋 Testing Project Management...');
+    console.log('\n📋 Testing Project Management');
     
     const projectFeatures = [
       'Create Project',
@@ -165,7 +165,7 @@ class FieldForgeQATestSuite {
    * Test Receipt Scanner
    */
   private async testReceiptScanner(): Promise<void> {
-    console.log('\n📋 Testing Receipt Scanner...');
+    console.log('\n📋 Testing Receipt Scanner');
     
     const scannerFeatures = [
       'OCR Processing',
@@ -189,7 +189,7 @@ class FieldForgeQATestSuite {
    * Test Social Feed
    */
   private async testSocialFeed(): Promise<void> {
-    console.log('\n📋 Testing Social Feed...');
+    console.log('\n📋 Testing Social Feed');
     
     const feedFeatures = [
       'Post Creation',
@@ -213,7 +213,7 @@ class FieldForgeQATestSuite {
    * Test Real-Time Analytics
    */
   private async testRealTimeAnalytics(): Promise<void> {
-    console.log('\n📋 Testing Real-Time Analytics...');
+    console.log('\n📋 Testing Real-Time Analytics');
     
     const analyticsFeatures = [
       'Live Metrics',
@@ -237,7 +237,7 @@ class FieldForgeQATestSuite {
    * Test Voice Commands
    */
   private async testVoiceCommands(): Promise<void> {
-    console.log('\n📋 Testing Voice Commands...');
+    console.log('\n📋 Testing Voice Commands');
     
     const voiceFeatures = [
       'Speech Recognition',
@@ -264,7 +264,7 @@ class FieldForgeQATestSuite {
    * Test Gesture Controls
    */
   private async testGestureControls(): Promise<void> {
-    console.log('\n📋 Testing Gesture Controls...');
+    console.log('\n📋 Testing Gesture Controls');
     
     const gestureFeatures = [
       'Swipe Detection',
@@ -288,7 +288,7 @@ class FieldForgeQATestSuite {
    * Test Performance
    */
   private async testPerformance(): Promise<void> {
-    console.log('\n📋 Testing Performance...');
+    console.log('\n📋 Testing Performance');
     
     // Measure performance metrics
     if (typeof window !== 'undefined' && window.performance) {

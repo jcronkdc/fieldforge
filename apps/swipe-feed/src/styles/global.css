@@ -94,13 +94,13 @@ button[type="submit"]:not(.btn-secondary):not(.btn-ghost) {
   font-weight: 600;
   border: 1px solid #0f4c81;
   transition: all 0.2s ease;
-  box-shadow: 0 6px 16px rgba(15, 76, 129, 0.18);
+  box-shadow: 0 calc(var(--fx-intensity, 1) * 6px) calc(var(--fx-intensity, 1) * 16px) rgba(15, 76, 129, 0.18);
 }
 
 .btn-primary:hover,
 button[type="submit"]:not(.btn-secondary):not(.btn-ghost):hover {
   background: linear-gradient(135deg, #0f4c81 0%, #0a3456 100%);
-  box-shadow: 0 10px 24px rgba(15, 76, 129, 0.22);
+  box-shadow: 0 calc(var(--fx-intensity, 1) * 10px) calc(var(--fx-intensity, 1) * 24px) rgba(15, 76, 129, 0.22);
   transform: translateY(-2px);
 }
 
@@ -160,7 +160,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: #0f4c81;
-  box-shadow: 0 0 0 4px rgba(15, 76, 129, 0.12);
+  box-shadow: 0 0 0 calc(var(--fx-intensity, 1) * 4px) rgba(15, 76, 129, 0.12);
 }
 
 input::placeholder,
@@ -175,11 +175,11 @@ textarea::placeholder {
   border: 1px solid #e3e9f2;
   border-radius: 20px;
   padding: 1.75rem;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 calc(var(--fx-intensity, 1) * 12px) calc(var(--fx-intensity, 1) * 32px) rgba(15, 23, 42, 0.06);
 }
 
 .shadow-elevated {
-  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 calc(var(--fx-intensity, 1) * 18px) calc(var(--fx-intensity, 1) * 48px) rgba(15, 23, 42, 0.08);
 }
 
 .section-muted {
@@ -269,7 +269,7 @@ textarea::placeholder {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-6px);
+    transform: translateY(calc(var(--fx-intensity, 1) * -6px));
   }
 }
 
@@ -278,14 +278,14 @@ textarea::placeholder {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(4px);
+    transform: translateY(calc(var(--fx-intensity, 1) * 4px));
   }
 }
 
 @keyframes fadeInSoft {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(calc(var(--fx-intensity, 1) * 12px));
   }
   to {
     opacity: 1;
@@ -295,17 +295,25 @@ textarea::placeholder {
 
 .animate-float-slow {
   animation: floatSlow 8s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .animate-float-slower {
   animation: floatSlower 10s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .animate-fade-in {
   animation: fadeInSoft 0.9s ease forwards;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 
 .animate-fade-in-delay {
   animation: fadeInSoft 1s ease forwards;
   animation-delay: 0.2s;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }

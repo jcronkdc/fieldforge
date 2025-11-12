@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import * as dasRepository from "./dasRepository.js";
 import { getAuditLog, verifyAuditChain } from "./dasAudit.js";
+import { authenticateRequest } from "../middleware/auth.js";
 
 export function createDasRouter(): Router {
   const router = Router();
@@ -10,11 +11,11 @@ export function createDasRouter(): Router {
   // ============================================================================
 
   // Register a new brand
-  router.post("/brands", async (req: Request, res: Response) => {
+  router.post("/brands", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const brand = await dasRepository.registerBrand({
@@ -59,11 +60,11 @@ export function createDasRouter(): Router {
   // ============================================================================
 
   // Submit a proposal
-  router.post("/proposals", async (req: Request, res: Response) => {
+  router.post("/proposals", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const proposal = await dasRepository.submitProposal({
@@ -111,11 +112,11 @@ export function createDasRouter(): Router {
   // ============================================================================
 
   // Cast a vote
-  router.post("/votes", async (req: Request, res: Response) => {
+  router.post("/votes", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const vote = await dasRepository.castVote({
@@ -259,11 +260,11 @@ export function createDasRouter(): Router {
   // ============================================================================
 
   // Record engagement
-  router.post("/engagements", async (req: Request, res: Response) => {
+  router.post("/engagements", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const engagement = await dasRepository.recordEngagement({
@@ -378,11 +379,11 @@ export function createDasRouter(): Router {
   // ============================================================================
 
   // Submit brand feedback
-  router.post("/feedback", async (req: Request, res: Response) => {
+  router.post("/feedback", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const feedback = await dasRepository.submitBrandFeedback({
@@ -397,11 +398,11 @@ export function createDasRouter(): Router {
   });
 
   // Report violation
-  router.post("/violations", async (req: Request, res: Response) => {
+  router.post("/violations", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const violation = await dasRepository.reportViolation({
@@ -420,9 +421,12 @@ export function createDasRouter(): Router {
   // ============================================================================
 
   // Get dashboard stats
-  router.get("/dashboard/stats", async (req: Request, res: Response) => {
+  router.get("/dashboard/stats", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
       const stats = await dasRepository.getDashboardStats(userId);
       res.json(stats);
     } catch (error) {

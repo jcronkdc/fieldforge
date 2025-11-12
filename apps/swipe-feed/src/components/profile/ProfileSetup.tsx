@@ -23,9 +23,6 @@ interface ProfileSetupProps {
 }
 
 export function ProfileSetup({ user, onComplete }: ProfileSetupProps) {
-  if (!user) {
-    return <div className="text-center text-white py-12 text-2xl">Loading profile...</div>;
-  }
   const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState(() => {
     const email = user?.email;
@@ -216,7 +213,7 @@ export function ProfileSetup({ user, onComplete }: ProfileSetupProps) {
             {error ? <p className="text-xs text-rose-400">{error}</p> : null}
 
             <Button type="submit" variant="primary" disabled={busy}>
-              {busy ? "Saving profile..." : "Save profile and continue"}
+              {busy ? "Saving profile" : "Save profile and continue"}
             </Button>
           </form>
         </div>

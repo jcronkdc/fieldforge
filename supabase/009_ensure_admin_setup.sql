@@ -2,11 +2,57 @@
 -- This migration ensures all necessary tables and permissions are in place
 
 -- First, ensure user_profiles table has all required columns
-ALTER TABLE user_profiles 
-ADD COLUMN IF NOT EXISTS full_name TEXT GENERATED ALWAYS AS (first_name || ' ' || last_name) STORED,
-ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user',
-ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false,
-ADD COLUMN IF NOT EXISTS address TEXT;
+-- Note: These should already exist if setup_fieldforge.sql was run with the updated schema
+-- This migration ensures they exist for existing databases
+
+DO $$
+BEGIN
+    -- Add full_name generated column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'user_profiles' AND column_name = 'full_name'
+    ) THEN
+        ALTER TABLE user_profiles 
+        ADD COLUMN full_name TEXT GENERATED ALWAYS AS (first_name || ' ' || last_name) STORED;
+    END IF;
+
+    -- Add role column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'user_profiles' AND column_name = 'role'
+    ) THEN
+        ALTER TABLE user_profiles 
+        ADD COLUMN role TEXT DEFAULT 'user' NOT NULL;
+    ELSE
+        -- Ensure NOT NULL constraint exists
+        ALTER TABLE user_profiles 
+        ALTER COLUMN role SET DEFAULT 'user',
+        ALTER COLUMN role SET NOT NULL;
+    END IF;
+
+    -- Add is_admin column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'user_profiles' AND column_name = 'is_admin'
+    ) THEN
+        ALTER TABLE user_profiles 
+        ADD COLUMN is_admin BOOLEAN DEFAULT false NOT NULL;
+    ELSE
+        -- Ensure NOT NULL constraint exists
+        ALTER TABLE user_profiles 
+        ALTER COLUMN is_admin SET DEFAULT false,
+        ALTER COLUMN is_admin SET NOT NULL;
+    END IF;
+
+    -- Add address column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'user_profiles' AND column_name = 'address'
+    ) THEN
+        ALTER TABLE user_profiles 
+        ADD COLUMN address TEXT;
+    END IF;
+END $$;
 
 -- Ensure companies table has type column that allows parent/subsidiary
 DO $$

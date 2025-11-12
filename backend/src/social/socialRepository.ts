@@ -1,8 +1,8 @@
-import { Pool } from "pg";
 import { loadEnv } from "../worker/env.js";
+import { query } from "../database.js";
+import pool from "../database.js";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 export type ConnectionRequestStatus = "pending" | "accepted" | "declined" | "cancelled";
 

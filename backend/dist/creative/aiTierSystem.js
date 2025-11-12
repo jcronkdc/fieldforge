@@ -10,22 +10,18 @@ exports.consumeAITokens = consumeAITokens;
 exports.upgradeTier = upgradeTier;
 exports.getAvailableTiers = getAvailableTiers;
 exports.resetMonthlyTokens = resetMonthlyTokens;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = require("../database.js");
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
-async function query(text, params) {
-    return pool.query(text, params);
-}
 // Check if user has access to a feature
 async function checkUserAITier(userId, feature) {
-    const result = await query(`SELECT s.*, t.features, t.tier_level
+    const result = await (0, database_js_1.query)(`SELECT s.*, t.features, t.tier_level
      FROM user_ai_subscriptions s
      JOIN ai_tiers t ON s.tier_id = t.id
      WHERE s.user_id = $1 AND s.status = 'active'`, [userId]);
     if (result.rows.length === 0) {
         // Check free tier
-        const freeResult = await query(`SELECT features FROM ai_tiers WHERE tier_level = 0`);
+        const freeResult = await (0, database_js_1.query)(`SELECT features FROM ai_tiers WHERE tier_level = 0`);
         const freeFeatures = freeResult.rows[0]?.features || {};
         return freeFeatures[feature] === true;
     }
@@ -34,13 +30,13 @@ async function checkUserAITier(userId, feature) {
 }
 // Get user's current tier
 async function getUserTier(userId) {
-    const result = await query(`SELECT t.*
+    const result = await (0, database_js_1.query)(`SELECT t.*
      FROM user_ai_subscriptions s
      JOIN ai_tiers t ON s.tier_id = t.id
      WHERE s.user_id = $1 AND s.status = 'active'`, [userId]);
     if (result.rows.length === 0) {
         // Return free tier
-        const freeResult = await query(`SELECT * FROM ai_tiers WHERE tier_level = 0`);
+        const freeResult = await (0, database_js_1.query)(`SELECT * FROM ai_tiers WHERE tier_level = 0`);
         return freeResult.rows[0];
     }
     return result.rows[0];
@@ -48,14 +44,14 @@ async function getUserTier(userId) {
 // Consume AI tokens
 async function consumeAITokens(userId, feature, tokensUsed, modelUsed = 'claude-3-haiku') {
     // Get user's subscription
-    const subResult = await query(`SELECT * FROM user_ai_subscriptions 
+    const subResult = await (0, database_js_1.query)(`SELECT * FROM user_ai_subscriptions 
      WHERE user_id = $1 AND status = 'active'`, [userId]);
     let subscription = subResult.rows[0];
     if (!subscription) {
         // Create free tier subscription
-        const freeTierResult = await query(`SELECT * FROM ai_tiers WHERE tier_level = 0`);
+        const freeTierResult = await (0, database_js_1.query)(`SELECT * FROM ai_tiers WHERE tier_level = 0`);
         const freeTier = freeTierResult.rows[0];
-        const createSubResult = await query(`INSERT INTO user_ai_subscriptions (
+        const createSubResult = await (0, database_js_1.query)(`INSERT INTO user_ai_subscriptions (
         user_id, tier_id, tokens_remaining, payment_method
       ) VALUES ($1, $2, $3, 'sparks')
       RETURNING *`, [userId, freeTier.id, freeTier.monthly_tokens]);
@@ -66,30 +62,30 @@ async function consumeAITokens(userId, feature, tokensUsed, modelUsed = 'claude-
         throw new Error("Insufficient AI tokens. Please upgrade your tier.");
     }
     // Update token usage
-    await query(`UPDATE user_ai_subscriptions
+    await (0, database_js_1.query)(`UPDATE user_ai_subscriptions
      SET tokens_used = tokens_used + $1,
          tokens_remaining = tokens_remaining - $1,
          updated_at = NOW()
      WHERE user_id = $2`, [tokensUsed, userId]);
     // Log usage
-    await query(`INSERT INTO ai_usage_log (
+    await (0, database_js_1.query)(`INSERT INTO ai_usage_log (
       user_id, feature, model_used, tokens_consumed
     ) VALUES ($1, $2, $3, $4)`, [userId, feature, modelUsed, tokensUsed]);
 }
 // Upgrade user tier
 async function upgradeTier(userId, tierId, paymentMethod) {
     // Get tier details
-    const tierResult = await query(`SELECT * FROM ai_tiers WHERE id = $1`, [tierId]);
+    const tierResult = await (0, database_js_1.query)(`SELECT * FROM ai_tiers WHERE id = $1`, [tierId]);
     const tier = tierResult.rows[0];
     if (!tier) {
         throw new Error("Invalid tier");
     }
     // Check if user has existing subscription
-    const existingResult = await query(`SELECT * FROM user_ai_subscriptions WHERE user_id = $1`, [userId]);
+    const existingResult = await (0, database_js_1.query)(`SELECT * FROM user_ai_subscriptions WHERE user_id = $1`, [userId]);
     let subscription;
     if (existingResult.rows.length > 0) {
         // Update existing subscription
-        const result = await query(`UPDATE user_ai_subscriptions
+        const result = await (0, database_js_1.query)(`UPDATE user_ai_subscriptions
        SET tier_id = $1,
            tokens_remaining = $2,
            tokens_used = 0,
@@ -104,7 +100,7 @@ async function upgradeTier(userId, tierId, paymentMethod) {
     }
     else {
         // Create new subscription
-        const result = await query(`INSERT INTO user_ai_subscriptions (
+        const result = await (0, database_js_1.query)(`INSERT INTO user_ai_subscriptions (
         user_id, tier_id, tokens_remaining, payment_method,
         subscription_end
       ) VALUES ($1, $2, $3, $4, NOW() + INTERVAL '30 days')
@@ -115,13 +111,13 @@ async function upgradeTier(userId, tierId, paymentMethod) {
 }
 // Get available tiers
 async function getAvailableTiers() {
-    const result = await query(`SELECT * FROM ai_tiers ORDER BY tier_level`);
+    const result = await (0, database_js_1.query)(`SELECT * FROM ai_tiers ORDER BY tier_level`);
     return result.rows;
 }
 // Check and reset monthly tokens
 async function resetMonthlyTokens() {
     // Reset tokens for all active subscriptions that have passed their period
-    await query(`UPDATE user_ai_subscriptions s
+    await (0, database_js_1.query)(`UPDATE user_ai_subscriptions s
      SET tokens_used = 0,
          tokens_remaining = t.monthly_tokens,
          subscription_start = NOW(),
@@ -132,7 +128,7 @@ async function resetMonthlyTokens() {
      AND s.subscription_end < NOW()
      AND s.auto_renew = true`);
     // Expire subscriptions that don't auto-renew
-    await query(`UPDATE user_ai_subscriptions
+    await (0, database_js_1.query)(`UPDATE user_ai_subscriptions
      SET status = 'expired'
      WHERE status = 'active'
      AND subscription_end < NOW()

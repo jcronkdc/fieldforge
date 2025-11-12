@@ -3,12 +3,12 @@
  * Sparks Purchase System - Like Roblox Robux
  */
 
-import { Pool } from "pg";
 import { loadEnv } from "../worker/env.js";
 import Stripe from "stripe";
+import { query } from "../database.js";
+import pool from "../database.js";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 // Initialize Stripe
 const stripeKey = process.env.STRIPE_SECRET_KEY || '';
@@ -20,10 +20,6 @@ const stripe = stripeKey ? new Stripe(stripeKey, {
 if (!stripeKey) {
   console.warn('⚠️  Stripe is not configured. Add STRIPE_SECRET_KEY to .env file');
   console.warn('   See backend/STRIPE_SETUP.md for instructions');
-}
-
-async function query(text: string, params?: any[]) {
-  return pool.query(text, params);
 }
 
 export interface SparksPackage {

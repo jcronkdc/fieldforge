@@ -9,6 +9,7 @@ import * as songEngine from "./songEngine.js";
 import * as poetryEngine from "./poetryEngine.js";
 import * as storyEnhancements from "./storyEnhancements.js";
 import * as aiTierSystem from "./aiTierSystem.js";
+import { authenticateRequest } from "../middleware/auth.js";
 
 export function createCreativeEnginesRouter(): Router {
   const router = Router();
@@ -17,11 +18,11 @@ export function createCreativeEnginesRouter(): Router {
   // SCREENPLAY ENGINE ROUTES
   // ============================================================================
 
-  router.post("/screenplay/convert", async (req: Request, res: Response) => {
+  router.post("/screenplay/convert", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const screenplay = await screenplayEngine.convertToScreenplay({
@@ -76,11 +77,11 @@ export function createCreativeEnginesRouter(): Router {
   // SONG ENGINE ROUTES
   // ============================================================================
 
-  router.post("/song/convert", async (req: Request, res: Response) => {
+  router.post("/song/convert", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const song = await songEngine.convertToSong({
@@ -121,11 +122,11 @@ export function createCreativeEnginesRouter(): Router {
   // POETRY ENGINE ROUTES
   // ============================================================================
 
-  router.post("/poetry/convert", async (req: Request, res: Response) => {
+  router.post("/poetry/convert", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const poem = await poetryEngine.convertToPoem({
@@ -152,11 +153,11 @@ export function createCreativeEnginesRouter(): Router {
     }
   });
 
-  router.post("/poetry/anthology", async (req: Request, res: Response) => {
+  router.post("/poetry/anthology", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const anthology = await poetryEngine.createAnthology({
@@ -192,11 +193,11 @@ export function createCreativeEnginesRouter(): Router {
   // STORY ENHANCEMENT ROUTES
   // ============================================================================
 
-  router.post("/enhancements/prologue", async (req: Request, res: Response) => {
+  router.post("/enhancements/prologue", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const prologue = await storyEnhancements.generatePrologue({
@@ -213,11 +214,11 @@ export function createCreativeEnginesRouter(): Router {
     }
   });
 
-  router.post("/enhancements/epilogue", async (req: Request, res: Response) => {
+  router.post("/enhancements/epilogue", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const epilogue = await storyEnhancements.generateEpilogue({
@@ -234,11 +235,11 @@ export function createCreativeEnginesRouter(): Router {
     }
   });
 
-  router.post("/enhancements/toc", async (req: Request, res: Response) => {
+  router.post("/enhancements/toc", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const toc = await storyEnhancements.generateTableOfContents({
@@ -255,11 +256,11 @@ export function createCreativeEnginesRouter(): Router {
     }
   });
 
-  router.post("/enhancements/characters", async (req: Request, res: Response) => {
+  router.post("/enhancements/characters", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const profiles = await storyEnhancements.generateCharacterProfiles({
@@ -276,11 +277,11 @@ export function createCreativeEnginesRouter(): Router {
     }
   });
 
-  router.post("/enhancements/marketing", async (req: Request, res: Response) => {
+  router.post("/enhancements/marketing", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const marketing = await storyEnhancements.generateMarketingCopy({
@@ -297,11 +298,11 @@ export function createCreativeEnginesRouter(): Router {
     }
   });
 
-  router.get("/enhancements/story/:storyId", async (req: Request, res: Response) => {
+  router.get("/enhancements/story/:storyId", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const enhancements = await storyEnhancements.getStoryEnhancements(
@@ -330,11 +331,11 @@ export function createCreativeEnginesRouter(): Router {
     }
   });
 
-  router.get("/ai/tier/current", async (req: Request, res: Response) => {
+  router.get("/ai/tier/current", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const tier = await aiTierSystem.getUserTier(userId);
@@ -345,11 +346,11 @@ export function createCreativeEnginesRouter(): Router {
     }
   });
 
-  router.post("/ai/tier/upgrade", async (req: Request, res: Response) => {
+  router.post("/ai/tier/upgrade", authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const userId = req.headers["x-user-id"] as string;
+      const userId = req.user?.id;
       if (!userId) {
-        return res.status(401).json({ error: "User ID required" });
+        return res.status(401).json({ error: "Authentication required" });
       }
 
       const subscription = await aiTierSystem.upgradeTier(

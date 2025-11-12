@@ -1,9 +1,10 @@
 import { Pool, PoolClient } from "pg";
 import { loadEnv } from "../worker/env.js";
 import type { ActivateMaskInput, MaskMetadata, MaskSession, MaskVersion } from "./types.js";
+import pool from "../database.js";
 
 const env = loadEnv();
-const sharedPool = new Pool({ connectionString: env.DATABASE_URL });
+const sharedPool = pool;
 
 export class MaskRegistry {
   constructor(private readonly pool: Pool = sharedPool) {}
@@ -179,22 +180,33 @@ export class MaskRegistry {
       [maskId]
     );
 
-    return result.rows.map((row) => ({
+    return result.rows.map((row: {
+      mask_id: string;
+      version: string;
+      changelog: string | null;
+      persona: string | null;
+      prompt_schema: Record<string, unknown> | null;
+      skillset: string[] | null;
+      llm_preset: string | null;
+      max_context_tokens: number | null;
+      safety_tags: string[] | null;
+    }): MaskVersion => ({
       maskId: row.mask_id,
       version: row.version,
-      changelog: row.changelog,
-      persona: row.persona,
-      promptSchema: row.prompt_schema,
+      changelog: row.changelog ?? undefined,
+      persona: (row.persona ?? {}) as Record<string, unknown>,
+      promptSchema: (row.prompt_schema ?? {}) as Record<string, unknown>,
       skillset: row.skillset ?? [],
-      llmPreset: row.llm_preset,
-      maxContextTokens: row.max_context_tokens,
+      llmPreset: row.llm_preset ?? '',
+      maxContextTokens: row.max_context_tokens ?? 0,
       safetyTags: row.safety_tags ?? [],
     }));
   }
 
-  async close(): Promise<void> {
-    await this.pool.end();
-  }
+  // Note: Using shared database pool - do not close it here
+  // async close(): Promise<void> {
+  //   await this.pool.end();
+  // }
 }
 
 export const maskRegistry = new MaskRegistry();

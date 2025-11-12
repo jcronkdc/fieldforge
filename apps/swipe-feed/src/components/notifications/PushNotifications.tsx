@@ -75,7 +75,7 @@ export const PushNotifications: React.FC = () => {
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlB64ToUint8Array(
-          process.env.REACT_APP_VAPID_PUBLIC_KEY || ''
+          import.meta.env.VITE_VAPID_PUBLIC_KEY || ''
         )
       });
       

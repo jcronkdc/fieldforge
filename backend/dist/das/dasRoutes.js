@@ -37,17 +37,18 @@ exports.createDasRouter = createDasRouter;
 const express_1 = require("express");
 const dasRepository = __importStar(require("./dasRepository.js"));
 const dasAudit_js_1 = require("./dasAudit.js");
+const auth_js_1 = require("../middleware/auth.js");
 function createDasRouter() {
     const router = (0, express_1.Router)();
     // ============================================================================
     // BRAND ENDPOINTS
     // ============================================================================
     // Register a new brand
-    router.post("/brands", async (req, res) => {
+    router.post("/brands", auth_js_1.authenticateRequest, async (req, res) => {
         try {
-            const userId = req.headers["x-user-id"];
+            const userId = req.user?.id;
             if (!userId) {
-                return res.status(401).json({ error: "User ID required" });
+                return res.status(401).json({ error: "Authentication required" });
             }
             const brand = await dasRepository.registerBrand({
                 ...req.body,
@@ -90,11 +91,11 @@ function createDasRouter() {
     // PROPOSAL ENDPOINTS
     // ============================================================================
     // Submit a proposal
-    router.post("/proposals", async (req, res) => {
+    router.post("/proposals", auth_js_1.authenticateRequest, async (req, res) => {
         try {
-            const userId = req.headers["x-user-id"];
+            const userId = req.user?.id;
             if (!userId) {
-                return res.status(401).json({ error: "User ID required" });
+                return res.status(401).json({ error: "Authentication required" });
             }
             const proposal = await dasRepository.submitProposal({
                 ...req.body,
@@ -137,11 +138,11 @@ function createDasRouter() {
     // VOTING ENDPOINTS
     // ============================================================================
     // Cast a vote
-    router.post("/votes", async (req, res) => {
+    router.post("/votes", auth_js_1.authenticateRequest, async (req, res) => {
         try {
-            const userId = req.headers["x-user-id"];
+            const userId = req.user?.id;
             if (!userId) {
-                return res.status(401).json({ error: "User ID required" });
+                return res.status(401).json({ error: "Authentication required" });
             }
             const vote = await dasRepository.castVote({
                 ...req.body,
@@ -277,11 +278,11 @@ function createDasRouter() {
     // ENGAGEMENT ENDPOINTS
     // ============================================================================
     // Record engagement
-    router.post("/engagements", async (req, res) => {
+    router.post("/engagements", auth_js_1.authenticateRequest, async (req, res) => {
         try {
-            const userId = req.headers["x-user-id"];
+            const userId = req.user?.id;
             if (!userId) {
-                return res.status(401).json({ error: "User ID required" });
+                return res.status(401).json({ error: "Authentication required" });
             }
             const engagement = await dasRepository.recordEngagement({
                 ...req.body,
@@ -380,11 +381,11 @@ function createDasRouter() {
     // FEEDBACK & ACCOUNTABILITY ENDPOINTS
     // ============================================================================
     // Submit brand feedback
-    router.post("/feedback", async (req, res) => {
+    router.post("/feedback", auth_js_1.authenticateRequest, async (req, res) => {
         try {
-            const userId = req.headers["x-user-id"];
+            const userId = req.user?.id;
             if (!userId) {
-                return res.status(401).json({ error: "User ID required" });
+                return res.status(401).json({ error: "Authentication required" });
             }
             const feedback = await dasRepository.submitBrandFeedback({
                 ...req.body,
@@ -398,11 +399,11 @@ function createDasRouter() {
         }
     });
     // Report violation
-    router.post("/violations", async (req, res) => {
+    router.post("/violations", auth_js_1.authenticateRequest, async (req, res) => {
         try {
-            const userId = req.headers["x-user-id"];
+            const userId = req.user?.id;
             if (!userId) {
-                return res.status(401).json({ error: "User ID required" });
+                return res.status(401).json({ error: "Authentication required" });
             }
             const violation = await dasRepository.reportViolation({
                 ...req.body,
@@ -419,9 +420,12 @@ function createDasRouter() {
     // DASHBOARD & ANALYTICS ENDPOINTS
     // ============================================================================
     // Get dashboard stats
-    router.get("/dashboard/stats", async (req, res) => {
+    router.get("/dashboard/stats", auth_js_1.authenticateRequest, async (req, res) => {
         try {
-            const userId = req.headers["x-user-id"];
+            const userId = req.user?.id;
+            if (!userId) {
+                return res.status(401).json({ error: "Authentication required" });
+            }
             const stats = await dasRepository.getDashboardStats(userId);
             res.json(stats);
         }

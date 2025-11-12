@@ -95,7 +95,7 @@ export const TestExecutionPanel: React.FC = () => {
             }`}
           >
             <Play className="w-4 h-4" />
-            {isRunning ? 'Running Tests...' : 'Run All Tests'}
+            {isRunning ? 'Running tests' : 'Run All Tests'}
           </button>
           <button
             onClick={resetTests}

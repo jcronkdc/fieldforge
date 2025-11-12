@@ -10,16 +10,12 @@ exports.formatPoemText = formatPoemText;
 exports.createAnthology = createAnthology;
 exports.getUserPoems = getUserPoems;
 exports.createPoetryDuel = createPoetryDuel;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
-const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
-async function query(text, params) {
-    return pool.query(text, params);
-}
+const database_js_1 = require("../database.js");
 const aiClient_js_1 = require("./aiClient.js");
 const mythacoinRepository_js_1 = require("../mythacoin/mythacoinRepository.js");
 const aiTierSystem_js_1 = require("./aiTierSystem.js");
+const env = (0, env_js_1.loadEnv)();
 const POETRY_FORMS = {
     haiku: {
         structure: '5-7-5 syllables',
@@ -140,7 +136,7 @@ Return as JSON:
         });
     });
     // Save to database
-    const result = await query(`INSERT INTO poetry_projects (
+    const result = await (0, database_js_1.query)(`INSERT INTO poetry_projects (
       user_id, title, form, theme, mood,
       stanzas, meter_analysis, rhyme_analysis,
       literary_devices, word_count, line_count,
@@ -231,7 +227,7 @@ function formatPoemText(poem) {
 }
 // Create poetry anthology
 async function createAnthology(data) {
-    const result = await query(`INSERT INTO poetry_anthology (
+    const result = await (0, database_js_1.query)(`INSERT INTO poetry_anthology (
       user_id, title, description, poem_ids,
       is_public, price_sparks
     ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -247,7 +243,7 @@ async function createAnthology(data) {
 }
 // Get user's poems
 async function getUserPoems(userId) {
-    const result = await query(`SELECT * FROM poetry_projects 
+    const result = await (0, database_js_1.query)(`SELECT * FROM poetry_projects 
      WHERE user_id = $1 
      ORDER BY created_at DESC`, [userId]);
     return result.rows;

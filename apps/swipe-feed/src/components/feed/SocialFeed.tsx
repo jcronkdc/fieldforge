@@ -9,6 +9,7 @@ import { supabase } from '../../lib/supabase';
 import { formatDistanceToNow } from 'date-fns';
 import { SwipeableCard } from '../gestures/SwipeableCard';
 import { HolographicCard } from '../holographic/HolographicCard';
+import { EmptyState } from '../EmptyState';
 
 interface FeedPost {
   id: string;
@@ -194,9 +195,10 @@ export const SocialFeed: React.FC = () => {
               </div>
               <div className="flex-1">
                 <textarea
+                  id="compose-post"
                   value={newPost}
                   onChange={(e) => setNewPost(e.target.value)}
-                  placeholder="Share an update from the field..."
+                  placeholder="Share an update from the field"
                   className="w-full bg-transparent text-white placeholder-gray-500 resize-none focus:outline-none text-lg"
                   rows={2}
                 />
@@ -209,10 +211,8 @@ export const SocialFeed: React.FC = () => {
                       <button
                         key={type.value}
                         onClick={() => setPostType(type.value)}
-                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all flex items-center space-x-1.5 ${
-                          postType === type.value
-                            ? 'bg-amber-500 text-black'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        className={`btn px-3 py-1.5 text-sm ${
+                          postType === type.value ? 'btn-primary' : 'btn-secondary'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -238,18 +238,18 @@ export const SocialFeed: React.FC = () => {
                   </select>
                   
                   <div className="flex items-center space-x-2">
-                    <button className="p-2 text-gray-400 hover:text-amber-400 transition-colors">
+                    <button className="btn btn-ghost px-2 py-2 text-gray-300 hover:text-amber-400" type="button">
                       <Image className="w-5 h-5" />
                     </button>
-                    <button className="p-2 text-gray-400 hover:text-amber-400 transition-colors">
+                    <button className="btn btn-ghost px-2 py-2 text-gray-300 hover:text-amber-400" type="button">
                       <MapPin className="w-5 h-5" />
                     </button>
                     <button
                       onClick={handlePost}
                       disabled={!newPost.trim() || !selectedProject}
-                      className="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full font-semibold text-black hover:shadow-lg hover:shadow-amber-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      Post
+                      Post update
                     </button>
                   </div>
                 </div>
@@ -262,14 +262,24 @@ export const SocialFeed: React.FC = () => {
       {/* Feed */}
       <div className="max-w-2xl mx-auto pb-20">
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
+          <div className="space-y-4 py-10">
+            {Array.from({ length: 4 }).map((_, idx) => (
+              <div key={idx} className="skeleton h-48 rounded-xl border border-gray-800 bg-gray-900/60" />
+            ))}
           </div>
         ) : posts.length === 0 ? (
-          <div className="text-center py-12">
-            <Users className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <p className="text-gray-400">No posts yet. Be the first to share!</p>
-          </div>
+          <EmptyState
+            title="No posts yet"
+            body="Share an update to brief the team."
+            action={
+              <button
+                onClick={() => document.getElementById('compose-post')?.focus()}
+                className="btn btn-primary"
+              >
+                Share update
+              </button>
+            }
+          />
         ) : (
           posts.map((post) => (
             <div
@@ -326,12 +336,18 @@ export const SocialFeed: React.FC = () => {
 
                   {/* Media */}
                   {post.media_urls && post.media_urls.length > 0 && (
-                    <div className="mt-3 rounded-xl overflow-hidden">
-                      <img
-                        src={post.media_urls[0]}
-                        alt="Post media"
-                        className="w-full h-auto"
-                      />
+                    <div className="mt-3">
+                      <div className="aspect-16-9 overflow-hidden rounded-xl">
+                        <img
+                          src={post.media_urls[0]}
+                          alt="Post media"
+                          width={1280}
+                          height={720}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -377,7 +393,7 @@ export const SocialFeed: React.FC = () => {
                       <div className="flex-1">
                         <input
                           type="text"
-                          placeholder="Add a comment..."
+                          placeholder="Add a comment"
                           className="w-full px-3 py-2 bg-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                         />
                       </div>

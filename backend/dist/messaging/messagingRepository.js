@@ -13,73 +13,69 @@ exports.updateTypingIndicator = updateTypingIndicator;
 exports.getTypingIndicators = getTypingIndicators;
 exports.addParticipantsToConversation = addParticipantsToConversation;
 exports.leaveConversation = leaveConversation;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = require("../database.js");
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
-async function query(text, params) {
-    return pool.query(text, params);
-}
 // Create or get direct conversation
 async function createOrGetDirectConversation(userId, otherUserId) {
-    const result = await query(`SELECT create_or_get_direct_conversation($1) as conversation_id`, [otherUserId]);
+    const result = await (0, database_js_1.query)(`SELECT create_or_get_direct_conversation($1) as conversation_id`, [otherUserId]);
     return result.rows[0].conversation_id;
 }
 // Create group conversation
 async function createGroupConversation(creatorId, name, description, participantIds = []) {
-    const client = await query('BEGIN');
+    const client = await (0, database_js_1.query)('BEGIN');
     try {
         // Create conversation
-        const conversationResult = await query(`INSERT INTO conversations (type, name, description, created_by)
+        const conversationResult = await (0, database_js_1.query)(`INSERT INTO conversations (type, name, description, created_by)
        VALUES ('group', $1, $2, $3)
        RETURNING *`, [name, description, creatorId]);
         const conversation = conversationResult.rows[0];
         // Add creator as admin
-        await query(`INSERT INTO conversation_participants (conversation_id, user_id, role)
+        await (0, database_js_1.query)(`INSERT INTO conversation_participants (conversation_id, user_id, role)
        VALUES ($1, $2, 'admin')`, [conversation.id, creatorId]);
         // Add other participants as members
         if (participantIds.length > 0) {
             const values = participantIds.map((id, i) => `($1, $${i + 2}, 'member')`).join(', ');
-            await query(`INSERT INTO conversation_participants (conversation_id, user_id, role)
+            await (0, database_js_1.query)(`INSERT INTO conversation_participants (conversation_id, user_id, role)
          VALUES ${values}`, [conversation.id, ...participantIds]);
         }
-        await query('COMMIT');
+        await (0, database_js_1.query)('COMMIT');
         return conversation;
     }
     catch (error) {
-        await query('ROLLBACK');
+        await (0, database_js_1.query)('ROLLBACK');
         throw error;
     }
 }
 // Create project conversation (for Angry Lips, Stories, etc.)
 async function createProjectConversation(creatorId, projectType, projectId, name, participantIds = []) {
-    const client = await query('BEGIN');
+    const client = await (0, database_js_1.query)('BEGIN');
     try {
         // Create conversation
-        const conversationResult = await query(`INSERT INTO conversations (type, name, project_type, project_id, created_by)
+        const conversationResult = await (0, database_js_1.query)(`INSERT INTO conversations (type, name, project_type, project_id, created_by)
        VALUES ('project', $1, $2, $3, $4)
        RETURNING *`, [name, projectType, projectId, creatorId]);
         const conversation = conversationResult.rows[0];
         // Add creator as admin
-        await query(`INSERT INTO conversation_participants (conversation_id, user_id, role)
+        await (0, database_js_1.query)(`INSERT INTO conversation_participants (conversation_id, user_id, role)
        VALUES ($1, $2, 'admin')`, [conversation.id, creatorId]);
         // Add other participants
         if (participantIds.length > 0) {
             const values = participantIds.map((id, i) => `($1, $${i + 2}, 'member')`).join(', ');
-            await query(`INSERT INTO conversation_participants (conversation_id, user_id, role)
+            await (0, database_js_1.query)(`INSERT INTO conversation_participants (conversation_id, user_id, role)
          VALUES ${values}`, [conversation.id, ...participantIds]);
         }
-        await query('COMMIT');
+        await (0, database_js_1.query)('COMMIT');
         return conversation;
     }
     catch (error) {
-        await query('ROLLBACK');
+        await (0, database_js_1.query)('ROLLBACK');
         throw error;
     }
 }
 // Get user's conversations with details
 async function getUserConversations(userId, limit = 50, offset = 0) {
-    const result = await query(`WITH user_conversations AS (
+    const result = await (0, database_js_1.query)(`WITH user_conversations AS (
       SELECT 
         c.*,
         cp.last_read_at,
@@ -152,7 +148,7 @@ async function getConversationMessages(conversationId, userId, limit = 50, befor
         whereClause += ` AND m.created_at < (SELECT created_at FROM messages WHERE id = $3)`;
         params.push(beforeMessageId);
     }
-    const result = await query(`WITH message_reactions AS (
+    const result = await (0, database_js_1.query)(`WITH message_reactions AS (
       SELECT 
         mr.message_id,
         mr.reaction,
@@ -187,44 +183,44 @@ async function getConversationMessages(conversationId, userId, limit = 50, befor
 }
 // Send message
 async function sendMessage(conversationId, senderId, content, messageType = 'text', metadata = {}) {
-    const result = await query(`INSERT INTO messages (conversation_id, sender_id, content, message_type, metadata)
+    const result = await (0, database_js_1.query)(`INSERT INTO messages (conversation_id, sender_id, content, message_type, metadata)
      VALUES ($1, $2, $3, $4, $5)
      RETURNING *`, [conversationId, senderId, content, messageType, metadata]);
     return result.rows[0];
 }
 // Mark conversation as read
 async function markConversationAsRead(conversationId, userId) {
-    await query(`UPDATE conversation_participants
+    await (0, database_js_1.query)(`UPDATE conversation_participants
      SET last_read_at = NOW()
      WHERE conversation_id = $1 AND user_id = $2`, [conversationId, userId]);
 }
 // Add reaction to message
 async function addMessageReaction(messageId, userId, reaction) {
-    await query(`INSERT INTO message_reactions (message_id, user_id, reaction)
+    await (0, database_js_1.query)(`INSERT INTO message_reactions (message_id, user_id, reaction)
      VALUES ($1, $2, $3)
      ON CONFLICT (message_id, user_id, reaction) DO NOTHING`, [messageId, userId, reaction]);
 }
 // Remove reaction from message
 async function removeMessageReaction(messageId, userId, reaction) {
-    await query(`DELETE FROM message_reactions
+    await (0, database_js_1.query)(`DELETE FROM message_reactions
      WHERE message_id = $1 AND user_id = $2 AND reaction = $3`, [messageId, userId, reaction]);
 }
 // Update typing indicator
 async function updateTypingIndicator(conversationId, userId, isTyping) {
     if (isTyping) {
-        await query(`INSERT INTO typing_indicators (conversation_id, user_id, started_at)
+        await (0, database_js_1.query)(`INSERT INTO typing_indicators (conversation_id, user_id, started_at)
        VALUES ($1, $2, NOW())
        ON CONFLICT (conversation_id, user_id) 
        DO UPDATE SET started_at = NOW()`, [conversationId, userId]);
     }
     else {
-        await query(`DELETE FROM typing_indicators
+        await (0, database_js_1.query)(`DELETE FROM typing_indicators
        WHERE conversation_id = $1 AND user_id = $2`, [conversationId, userId]);
     }
 }
 // Get typing indicators for conversation
 async function getTypingIndicators(conversationId) {
-    const result = await query(`SELECT 
+    const result = await (0, database_js_1.query)(`SELECT 
       ti.user_id,
       up.username,
       up.display_name
@@ -237,14 +233,14 @@ async function getTypingIndicators(conversationId) {
 // Add participants to conversation
 async function addParticipantsToConversation(conversationId, participantIds, addedBy) {
     // Verify user is admin
-    const adminCheck = await query(`SELECT role FROM conversation_participants
+    const adminCheck = await (0, database_js_1.query)(`SELECT role FROM conversation_participants
      WHERE conversation_id = $1 AND user_id = $2`, [conversationId, addedBy]);
     if (!adminCheck.rows[0] || adminCheck.rows[0].role !== 'admin') {
         throw new Error('Only admins can add participants');
     }
     // Add participants
     const values = participantIds.map((id, i) => `($1, $${i + 2}, 'member')`).join(', ');
-    await query(`INSERT INTO conversation_participants (conversation_id, user_id, role)
+    await (0, database_js_1.query)(`INSERT INTO conversation_participants (conversation_id, user_id, role)
      VALUES ${values}
      ON CONFLICT (conversation_id, user_id) DO NOTHING`, [conversationId, ...participantIds]);
     // Send system message
@@ -252,7 +248,7 @@ async function addParticipantsToConversation(conversationId, participantIds, add
 }
 // Leave conversation
 async function leaveConversation(conversationId, userId) {
-    await query(`DELETE FROM conversation_participants
+    await (0, database_js_1.query)(`DELETE FROM conversation_participants
      WHERE conversation_id = $1 AND user_id = $2`, [conversationId, userId]);
     // Send system message
     await sendMessage(conversationId, userId, 'Left the conversation', 'system');

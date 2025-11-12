@@ -26,7 +26,7 @@ export class AuthenticationTests {
    * Run all authentication tests
    */
   async runAllTests(): Promise<TestResult[]> {
-    console.log('🔒 Starting Authentication Integration Tests...\n');
+    console.log('🔒 Starting Authentication Integration Tests\n');
     
     // Reset results
     this.results = [];
@@ -337,7 +337,7 @@ export async function runAuthenticationTests(): Promise<TestResult[]> {
 // Demo credentials test
 export async function testDemoAccount(): Promise<boolean> {
   try {
-    console.log('🔐 Testing demo account access...');
+    console.log('🔐 Testing demo account access');
     
     const result = await auth.signInDemo();
     
@@ -358,7 +358,7 @@ export async function testDemoAccount(): Promise<boolean> {
 // Admin account test
 export async function testAdminAccount(): Promise<boolean> {
   try {
-    console.log('👑 Testing admin account access...');
+    console.log('👑 Testing admin account access');
     
     const result = await auth.signIn('justincronk@pm.me', 'Junuh2014!');
     

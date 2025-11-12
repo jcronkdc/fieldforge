@@ -9,7 +9,7 @@ const adminEmail = 'justincronk@pm.me';
 const adminPassword = 'Junuh2014!';
 
 async function createAdminUser() {
-  console.log('🔧 Setting up admin user for FieldForge...\n');
+  console.log('🔧 Setting up admin user for FieldForge\n');
   
   try {
     // You need to use the service role key for admin operations
@@ -36,7 +36,7 @@ async function createAdminUser() {
 
     if (signUpError) {
       if (signUpError.message.includes('already registered')) {
-        console.log('⚠️  User already exists, updating password...');
+        console.log('⚠️  User already exists, updating password');
         
         // Update the existing user's password
         const { data: updateData, error: updateError } = await supabase.auth.admin.updateUserById(
@@ -56,7 +56,7 @@ async function createAdminUser() {
     }
 
     // Create or update user profile
-    console.log('\n📝 Setting up user profile...');
+    console.log('\n📝 Setting up user profile');
     const { error: profileError } = await supabase
       .from('user_profiles')
       .upsert({

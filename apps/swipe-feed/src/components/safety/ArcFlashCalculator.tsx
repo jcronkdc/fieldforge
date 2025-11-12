@@ -222,7 +222,7 @@ export const ArcFlashCalculator: React.FC = () => {
 
       if (error) throw error;
       
-      alert('Arc flash data saved successfully!');
+      alert('Arc flash data saved successfully.');
     } catch (error) {
       console.error('Error saving arc flash data:', error);
       alert('Error saving data. Please try again.');
@@ -466,7 +466,7 @@ export const ArcFlashCalculator: React.FC = () => {
                   className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
-                  {isSaving ? 'Saving...' : 'Save to Database'}
+                  {isSaving ? 'Saving' : 'Save to Database'}
                 </button>
                 <button
                   onClick={() => window.print()}

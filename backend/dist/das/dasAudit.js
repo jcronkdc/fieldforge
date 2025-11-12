@@ -3,17 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createDasAuditEntry = createDasAuditEntry;
 exports.verifyAuditChain = verifyAuditChain;
 exports.getAuditLog = getAuditLog;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
-const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
-async function query(text, params) {
-    return pool.query(text, params);
-}
+const database_js_1 = require("../database.js");
 const crypto_1 = require("crypto");
+const env = (0, env_js_1.loadEnv)();
 async function createDasAuditEntry(data) {
     // Get previous hash for chain
-    const previousResult = await query(`SELECT event_hash FROM das_audit_log 
+    const previousResult = await (0, database_js_1.query)(`SELECT event_hash FROM das_audit_log 
      ORDER BY created_at DESC 
      LIMIT 1`);
     const previousHash = previousResult.rows[0]?.event_hash || '';
@@ -27,7 +23,7 @@ async function createDasAuditEntry(data) {
     // Generate hash
     const currentHash = (0, crypto_1.createHash)('sha256').update(hashInput).digest('hex');
     // Insert audit entry
-    const result = await query(`INSERT INTO das_audit_log (
+    const result = await (0, database_js_1.query)(`INSERT INTO das_audit_log (
       event_type, event_category, actor_id,
       affected_entity_type, affected_entity_id,
       event_data, event_hash, previous_hash
@@ -56,7 +52,7 @@ async function verifyAuditChain(startDate, endDate) {
         params.push(startDate, endDate);
     }
     sql += ` ORDER BY created_at ASC`;
-    const result = await query(sql, params);
+    const result = await (0, database_js_1.query)(sql, params);
     const entries = result.rows;
     const verificationResults = [];
     let isChainValid = true;
@@ -130,6 +126,6 @@ async function getAuditLog(filters) {
         sql += ` LIMIT $${paramIndex++}`;
         params.push(filters.limit);
     }
-    const result = await query(sql, params);
+    const result = await (0, database_js_1.query)(sql, params);
     return result.rows;
 }

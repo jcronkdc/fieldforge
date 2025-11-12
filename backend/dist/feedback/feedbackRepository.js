@@ -12,15 +12,11 @@ exports.submitFeedback = submitFeedback;
 exports.getUserFeedback = getUserFeedback;
 exports.getAllFeedback = getAllFeedback;
 exports.exportFeedbackToText = exportFeedbackToText;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = require("../database.js");
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
-async function query(text, params) {
-    return pool.query(text, params);
-}
 async function submitFeedback(data) {
-    const result = await query(`INSERT INTO user_feedback (
+    const result = await (0, database_js_1.query)(`INSERT INTO user_feedback (
       user_id, username, feedback_type, subject, content,
       page_context, user_agent, priority
     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -38,7 +34,7 @@ async function submitFeedback(data) {
     return result.rows[0];
 }
 async function getUserFeedback(userId) {
-    const result = await query(`SELECT * FROM user_feedback 
+    const result = await (0, database_js_1.query)(`SELECT * FROM user_feedback 
      WHERE user_id = $1 
      ORDER BY created_at DESC`, [userId]);
     return result.rows;
@@ -60,10 +56,10 @@ async function getAllFeedback(status, type, limit = 100) {
     }
     sql += ` ORDER BY f.created_at DESC LIMIT $${paramIndex}`;
     params.push(limit);
-    const result = await query(sql, params);
+    const result = await (0, database_js_1.query)(sql, params);
     return result.rows;
 }
 async function exportFeedbackToText(startDate, endDate) {
-    const result = await query(`SELECT export_feedback_to_text($1, $2) as feedback_text`, [startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), endDate || new Date()]);
+    const result = await (0, database_js_1.query)(`SELECT export_feedback_to_text($1, $2) as feedback_text`, [startDate || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), endDate || new Date()]);
     return result.rows[0].feedback_text;
 }

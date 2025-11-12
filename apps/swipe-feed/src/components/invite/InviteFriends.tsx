@@ -168,7 +168,7 @@ export const InviteFriends: React.FC = () => {
 
   // Share on social
   const shareOnSocial = (platform: string) => {
-    const message = `Join me on MythaTron - the creative platform where stories evolve! ${inviteLink}`;
+    const message = `Join me on MythaTron - the creative platform where stories evolve. ${inviteLink}`;
     const encodedMessage = encodeURIComponent(message);
     const encodedUrl = encodeURIComponent(inviteLink);
 
@@ -214,7 +214,7 @@ export const InviteFriends: React.FC = () => {
                 Earn Sparks for Every Friend
               </h3>
               <p className="text-white/60 text-sm">
-                Get 25 Sparks when your friend joins + 50 Sparks when they create their first story!
+                Get 25 Sparks when your friend joins + 50 Sparks when they create their first story.
               </p>
             </div>
             <div className="text-center">
@@ -291,7 +291,7 @@ export const InviteFriends: React.FC = () => {
                 <textarea
                   value={personalMessage}
                   onChange={(e) => setPersonalMessage(e.target.value)}
-                  placeholder="Hey! I've been creating amazing stories on MythaTron. You should join me..."
+                  placeholder="Hey, I've been creating amazing stories on MythaTron. You should join me"
                   className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:bg-white/10 focus:border-purple-500/50 focus:outline-none h-24 resize-none"
                 />
               </div>
@@ -302,12 +302,12 @@ export const InviteFriends: React.FC = () => {
                 disabled={sending}
                 className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {sending ? 'Sending Invitations...' : 'Send Invitations'}
+                {sending ? 'Sending Invitations' : 'Send Invitations'}
               </button>
 
               {showSuccess && (
                 <div className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg">
-                  ✅ Invitations sent successfully! You'll earn Sparks when your friends join.
+                  ✅ Invitations sent successfully. You will earn Sparks when your friends join.
                 </div>
               )}
             </div>
@@ -329,7 +329,7 @@ export const InviteFriends: React.FC = () => {
                     onClick={copyToClipboard}
                     className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 rounded-lg transition-all"
                   >
-                    {copySuccess ? '✓ Copied!' : 'Copy'}
+                    {copySuccess ? '✓ Copied' : 'Copy'}
                   </button>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export const InviteFriends: React.FC = () => {
 
               <div className="p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
                 <p className="text-sm">
-                  <span className="text-purple-400">Pro tip:</span> This link never expires and tracks all your referrals automatically!
+                  <span className="text-purple-400">Pro tip:</span> This link never expires and tracks all your referrals automatically.
                 </p>
               </div>
             </div>
@@ -401,7 +401,7 @@ export const InviteFriends: React.FC = () => {
               <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
                 <p className="text-sm text-white/60 mb-2">Your message will include:</p>
                 <p className="text-xs text-white/40 italic">
-                  "Join me on MythaTron - the creative platform where stories evolve! {inviteLink}"
+                  "Join me on MythaTron - the creative platform where stories evolve. {inviteLink}"
                 </p>
               </div>
             </div>

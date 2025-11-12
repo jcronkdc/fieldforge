@@ -13,11 +13,11 @@ exports.handleStripeWebhook = handleStripeWebhook;
 exports.redeemGiftCode = redeemGiftCode;
 exports.getUserPurchaseHistory = getUserPurchaseHistory;
 exports.checkSpendingLimit = checkSpendingLimit;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
 const stripe_1 = __importDefault(require("stripe"));
+const database_js_1 = require("../database.js");
+const database_js_2 = __importDefault(require("../database.js"));
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
 // Initialize Stripe
 const stripeKey = process.env.STRIPE_SECRET_KEY || '';
 const stripe = stripeKey ? new stripe_1.default(stripeKey, {
@@ -28,12 +28,9 @@ if (!stripeKey) {
     console.warn('⚠️  Stripe is not configured. Add STRIPE_SECRET_KEY to .env file');
     console.warn('   See backend/STRIPE_SETUP.md for instructions');
 }
-async function query(text, params) {
-    return pool.query(text, params);
-}
 // Get available Sparks packages
 async function getSparksPackages() {
-    const result = await query(`SELECT *, 
+    const result = await (0, database_js_1.query)(`SELECT *, 
      sparks_amount + FLOOR(sparks_amount * bonus_percentage / 100.0) as total_sparks
      FROM sparks_packages 
      WHERE active = true 
@@ -43,7 +40,7 @@ async function getSparksPackages() {
 // Create Stripe checkout session for Sparks purchase
 async function createSparksCheckoutSession(data) {
     // Get package details
-    const packageResult = await query(`SELECT * FROM sparks_packages WHERE id = $1 AND active = true`, [data.packageId]);
+    const packageResult = await (0, database_js_1.query)(`SELECT * FROM sparks_packages WHERE id = $1 AND active = true`, [data.packageId]);
     if (packageResult.rows.length === 0) {
         throw new Error("Package not found");
     }
@@ -78,7 +75,7 @@ async function createSparksCheckoutSession(data) {
         }
     });
     // Create purchase record
-    await query(`INSERT INTO sparks_purchases (
+    await (0, database_js_1.query)(`INSERT INTO sparks_purchases (
       user_id, package_id, sparks_amount, bonus_amount,
       total_sparks, price_paid, payment_method, status
     ) VALUES ($1, $2, $3, $4, $5, $6, 'stripe', 'pending')
@@ -126,7 +123,7 @@ async function handleStripeWebhook(payload, signature) {
         case 'payment_intent.payment_failed': {
             const paymentIntent = event.data.object;
             // Mark purchase as failed
-            await query(`UPDATE sparks_purchases 
+            await (0, database_js_1.query)(`UPDATE sparks_purchases 
          SET status = 'failed' 
          WHERE stripe_payment_intent_id = $1`, [paymentIntent.id]);
             break;
@@ -135,7 +132,7 @@ async function handleStripeWebhook(payload, signature) {
 }
 // Complete a purchase and credit Sparks
 async function completePurchase(data) {
-    const client = await pool.connect();
+    const client = await database_js_2.default.connect();
     try {
         await client.query('BEGIN');
         // Get purchase details
@@ -181,7 +178,7 @@ async function completePurchase(data) {
 }
 // Redeem gift code
 async function redeemGiftCode(data) {
-    const client = await pool.connect();
+    const client = await database_js_2.default.connect();
     try {
         await client.query('BEGIN');
         // Check if code is valid
@@ -239,7 +236,7 @@ async function redeemGiftCode(data) {
 }
 // Get user's purchase history
 async function getUserPurchaseHistory(userId, limit = 10) {
-    const result = await query(`SELECT p.*, pkg.name as package_name
+    const result = await (0, database_js_1.query)(`SELECT p.*, pkg.name as package_name
      FROM sparks_purchases p
      JOIN sparks_packages pkg ON p.package_id = pkg.id
      WHERE p.user_id = $1
@@ -249,7 +246,7 @@ async function getUserPurchaseHistory(userId, limit = 10) {
 }
 // Check spending limits (parental controls)
 async function checkSpendingLimit(userId, amount) {
-    const result = await query(`SELECT * FROM sparks_spending_limits 
+    const result = await (0, database_js_1.query)(`SELECT * FROM sparks_spending_limits 
      WHERE user_id = $1 AND enabled = true`, [userId]);
     if (result.rows.length === 0) {
         return { allowed: true, requiresApproval: false };
@@ -261,7 +258,7 @@ async function checkSpendingLimit(userId, amount) {
     }
     // Check daily limit
     if (limits.daily_limit) {
-        const dailyResult = await query(`SELECT COALESCE(SUM(price_paid), 0) as daily_total
+        const dailyResult = await (0, database_js_1.query)(`SELECT COALESCE(SUM(price_paid), 0) as daily_total
        FROM sparks_purchases
        WHERE user_id = $1
        AND created_at >= NOW() - INTERVAL '24 hours'
@@ -272,7 +269,7 @@ async function checkSpendingLimit(userId, amount) {
     }
     // Check monthly limit
     if (limits.monthly_limit) {
-        const monthlyResult = await query(`SELECT COALESCE(SUM(price_paid), 0) as monthly_total
+        const monthlyResult = await (0, database_js_1.query)(`SELECT COALESCE(SUM(price_paid), 0) as monthly_total
        FROM sparks_purchases
        WHERE user_id = $1
        AND created_at >= DATE_TRUNC('month', NOW())

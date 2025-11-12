@@ -190,15 +190,16 @@ export class AIMoodDirector {
       moodifiedStory = moodifiedStory.replace(/\./g, '!');
       moodifiedStory = moodifiedStory.replace(/,/g, ' —');
     } else if (mood.energy < 0.3) {
-      moodifiedStory = moodifiedStory.replace(/!/g, '...');
-      moodifiedStory = moodifiedStory.replace(/\?/g, '...?');
+      moodifiedStory = moodifiedStory.replace(/!/g, '…');
+      moodifiedStory = moodifiedStory.replace(/\?/g, '…?');
+      moodifiedStory = moodifiedStory.replace(/\. /g, '… ');
     }
     
     // Add mood-specific narrative beats
     if (mood.pacing === 'fast') {
       moodifiedStory = moodifiedStory.replace(/\. /g, '! ');
     } else if (mood.pacing === 'slow') {
-      moodifiedStory = moodifiedStory.replace(/\. /g, '... ');
+      moodifiedStory = moodifiedStory.replace(/\. /g, '… ');
     }
     
     // Add emotional descriptors
@@ -392,8 +393,8 @@ export class NarrativeContinuityEngine {
   }
   
   private generateStorySummary(story: string): string {
-    // Simple summary: first 50 characters + "..."
-    return story.substring(0, 50) + '...';
+    // Simple summary: first 50 characters + "…"
+    return `${story.substring(0, 50)}…`;
   }
   
   private assessStoryImpact(story: string, lore: LoreBible): 'minor' | 'major' | 'universe-altering' {
@@ -427,7 +428,7 @@ export class NarrativeContinuityEngine {
       .filter(o => o.significance === 'legendary');
     
     legendaryObjects.forEach(obj => {
-      prompts.push(`The legendary ${obj.name} returns...`);
+      prompts.push(`The legendary ${obj.name} returns triumphant`);
     });
     
     return prompts;

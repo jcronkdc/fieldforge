@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getTimeline = getTimeline;
 exports.getChapters = getChapters;
@@ -11,12 +14,12 @@ exports.getStoryComments = getStoryComments;
 exports.addStoryComment = addStoryComment;
 exports.deleteStoryComment = deleteStoryComment;
 exports.getWorldLore = getWorldLore;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = require("../database.js");
+const database_js_2 = __importDefault(require("../database.js"));
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
 async function getTimeline(worldId) {
-    const result = await pool.query(`
+    const result = await (0, database_js_1.query)(`
       select id, parent_branch_id, title, coalesce(author_id, '@unknown') as author_id, status, to_char(created_at, 'YYYY-MM-DD') as created
       from public.story_branches
       where world_id = $1
@@ -35,7 +38,7 @@ async function getTimeline(worldId) {
     }));
 }
 async function getChapters(branchId) {
-    const result = await pool.query(`
+    const result = await (0, database_js_1.query)(`
       select id, branch_id, order_index, title, status
       from public.story_chapters
       where branch_id = $1
@@ -50,12 +53,12 @@ async function getChapters(branchId) {
     }));
 }
 async function addChapter(branchId, title) {
-    const { rows } = await pool.query(`
+    const result = await (0, database_js_1.query)(`
       insert into public.story_chapters (branch_id, order_index, title)
       values ($1, (select coalesce(max(order_index), -1) + 1 from public.story_chapters where branch_id = $1), $2)
       returning id, branch_id, order_index, title, status
     `, [branchId, title]);
-    const row = rows[0];
+    const row = result.rows[0];
     return {
         id: row.id,
         branchId: row.branch_id,
@@ -78,14 +81,14 @@ async function updateChapter(id, data) {
     if (fields.length === 0)
         return;
     values.push(id);
-    await pool.query(`update public.story_chapters set ${fields.join(", ")} where id = $${fields.length + 1}`, values);
+    await (0, database_js_1.query)(`update public.story_chapters set ${fields.join(", ")} where id = $${fields.length + 1}`, values);
 }
 async function removeChapter(id) {
-    await pool.query(`delete from public.story_chapters where id = $1`, [id]);
+    await (0, database_js_1.query)(`delete from public.story_chapters where id = $1`, [id]);
 }
 async function getStoryNodes(branchId) {
-    const { rows } = await pool.query(`select id, branch_id, order_index, content from public.story_nodes where branch_id = $1 order by order_index asc`, [branchId]);
-    return rows.map((row) => ({
+    const result = await (0, database_js_1.query)(`select id, branch_id, order_index, content from public.story_nodes where branch_id = $1 order by order_index asc`, [branchId]);
+    return result.rows.map((row) => ({
         id: row.id,
         branchId: row.branch_id,
         orderIndex: row.order_index,
@@ -93,7 +96,7 @@ async function getStoryNodes(branchId) {
     }));
 }
 async function saveStoryNodes(branchId, nodes) {
-    const client = await pool.connect();
+    const client = await database_js_2.default.connect();
     try {
         await client.query("BEGIN");
         const keptIds = [];
@@ -133,11 +136,11 @@ async function saveStoryNodes(branchId, nodes) {
     }
 }
 async function getStoryComments(branchId) {
-    const { rows } = await pool.query(`select id, branch_id, node_id, coalesce(author_id, '@reader') as author_id, body, to_char(created_at, 'YYYY-MM-DD HH24:MI') as created
+    const result = await (0, database_js_1.query)(`select id, branch_id, node_id, coalesce(author_id, '@reader') as author_id, body, to_char(created_at, 'YYYY-MM-DD HH24:MI') as created
      from public.story_comments
      where branch_id = $1
      order by created_at asc`, [branchId]);
-    return rows.map((row) => ({
+    return result.rows.map((row) => ({
         id: row.id,
         branchId: row.branch_id,
         nodeId: row.node_id,
@@ -147,10 +150,10 @@ async function getStoryComments(branchId) {
     }));
 }
 async function addStoryComment(branchId, nodeId, body, authorId) {
-    const { rows } = await pool.query(`insert into public.story_comments (branch_id, node_id, author_id, body)
+    const result = await (0, database_js_1.query)(`insert into public.story_comments (branch_id, node_id, author_id, body)
      values ($1, $2, $3, $4)
      returning id, branch_id, node_id, coalesce(author_id, '@reader') as author_id, body, to_char(created_at, 'YYYY-MM-DD HH24:MI') as created`, [branchId, nodeId, authorId ?? "@reader", body]);
-    const row = rows[0];
+    const row = result.rows[0];
     return {
         id: row.id,
         branchId: row.branch_id,
@@ -161,11 +164,11 @@ async function addStoryComment(branchId, nodeId, body, authorId) {
     };
 }
 async function deleteStoryComment(id) {
-    await pool.query(`delete from public.story_comments where id = $1`, [id]);
+    await (0, database_js_1.query)(`delete from public.story_comments where id = $1`, [id]);
 }
 async function getWorldLore(worldId) {
-    const { rows } = await pool.query(`select id, world_id, lore_type, name, summary from public.world_lore where world_id = $1 order by name asc`, [worldId]);
-    return rows.map((row) => ({
+    const result = await (0, database_js_1.query)(`select id, world_id, lore_type, name, summary from public.world_lore where world_id = $1 order by name asc`, [worldId]);
+    return result.rows.map((row) => ({
         id: row.id,
         worldId: row.world_id,
         loreType: row.lore_type,

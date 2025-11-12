@@ -1,13 +1,8 @@
-import { Pool } from "pg";
 import { loadEnv } from "../worker/env.js";
+import { query } from "../database.js";
+import { createHash } from "crypto";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
-
-async function query(text: string, params?: any[]) {
-  return pool.query(text, params);
-}
-import { createHash } from "crypto";
 
 export async function createDasAuditEntry(data: {
   eventType: string;

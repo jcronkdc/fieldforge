@@ -15,14 +15,14 @@ export const RecoveryModal: React.FC<RecoveryModalProps> = ({ isOpen, onClose })
   
   const handleSoftReset = async () => {
     setIsProcessing(true);
-    setStatus('Clearing corrupted data...');
+    setStatus('Clearing corrupted data');
     
     try {
       // Clear only corrupted data
       SafeStorage.clearCorruptedData(localStorage);
       SafeStorage.clearCorruptedData(sessionStorage);
       
-      setStatus('✅ Corrupted data cleared! Refreshing...');
+      setStatus('✅ Corrupted data cleared. Refreshing.');
       setTimeout(() => {
         window.location.reload();
       }, 1500);
@@ -40,13 +40,13 @@ export const RecoveryModal: React.FC<RecoveryModalProps> = ({ isOpen, onClose })
     }
     
     setIsProcessing(true);
-    setStatus('Clearing all app data...');
+    setStatus('Clearing all app data');
     
     try {
       // Clear everything
       SafeStorage.clearAppData();
       
-      setStatus('✅ All data cleared! Redirecting to homepage...');
+      setStatus('✅ All data cleared. Redirecting.');
       setTimeout(() => {
         window.location.href = '/';
       }, 1500);

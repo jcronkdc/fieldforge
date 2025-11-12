@@ -32,7 +32,7 @@ async function main() {
     };
     await registry_js_1.maskRegistry.registerMask(metadata, version);
     console.log(`Registered mask ${metadata.maskId} version ${version.version}`);
-    await registry_js_1.maskRegistry.close();
+    // Note: Using shared database pool - do not close it here
 }
 main().catch((error) => {
     console.error("Failed to register mask", error);

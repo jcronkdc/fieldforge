@@ -1,14 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.insertProfessorCritique = insertProfessorCritique;
-exports.closeProfessorRepository = closeProfessorRepository;
 exports.fetchProfessorCritiques = fetchProfessorCritiques;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = require("../database.js");
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
 async function insertProfessorCritique(record) {
-    await pool.query(`
+    await (0, database_js_1.query)(`
       insert into public.professor_critiques (
         story_id,
         user_id,
@@ -44,9 +42,10 @@ async function insertProfessorCritique(record) {
         record.customTone ?? null,
     ]);
 }
-async function closeProfessorRepository() {
-    await pool.end();
-}
+// Note: Using shared database pool - do not close it here
+// export async function closeProfessorRepository(): Promise<void> {
+//   await pool.end();
+// }
 async function fetchProfessorCritiques(params) {
     const limit = Math.min(Math.max(params.limit ?? 20, 1), 100);
     const offset = Math.max(params.offset ?? 0, 0);
@@ -61,7 +60,7 @@ async function fetchProfessorCritiques(params) {
         values.push(params.userId);
     }
     const whereClause = conditions.length > 0 ? `where ${conditions.join(" and ")}` : "";
-    const result = await pool.query(`
+    const result = await (0, database_js_1.query)(`
       select id, story_id, user_id, project_id, mask_session_id, mask_id, mask_version, mode, tone, summary, strengths, risks, suggestions, scores, metrics, custom_tone, created_at
       from public.professor_critiques
       ${whereClause}
@@ -70,7 +69,7 @@ async function fetchProfessorCritiques(params) {
       offset $${values.length + 2}
     `, [...values, limit, offset]);
     return result.rows.map((row) => ({
-        id: row.id,
+        id: Number(row.id),
         storyId: row.story_id ?? undefined,
         userId: row.user_id ?? undefined,
         projectId: row.project_id ?? undefined,

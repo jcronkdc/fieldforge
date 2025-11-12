@@ -28,15 +28,15 @@ export const SignUpPage: React.FC = () => {
 
   const validateStep1 = () => {
     if (!formData.email || !formData.password || !formData.confirmPassword) {
-      setError('Please fill in all required fields');
+      setError('Complete the required fields.');
       return false;
     }
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters');
+      setError('Password must be at least eight characters.');
       return false;
     }
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError('Passwords do not match.');
       return false;
     }
     return true;
@@ -44,7 +44,7 @@ export const SignUpPage: React.FC = () => {
 
   const validateStep2 = () => {
     if (!formData.firstName || !formData.lastName || !formData.company || !formData.jobTitle) {
-      setError('Please fill in all required fields');
+      setError('Complete the required fields.');
       return false;
     }
     return true;
@@ -79,7 +79,7 @@ export const SignUpPage: React.FC = () => {
         navigate('/dashboard');
       }, 2000);
     } catch (error: any) {
-      setError(error.message || 'Failed to create account');
+      setError(error.message || 'Account creation failed. Try again.');
     } finally {
       setLoading(false);
     }
@@ -122,56 +122,65 @@ export const SignUpPage: React.FC = () => {
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
           {/* Error/Success Messages */}
           {error && (
-            <div className="flex items-center space-x-2 p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 mb-4">
-              <AlertCircle className="w-5 h-5 flex-shrink-0" />
-              <p className="text-sm">{error}</p>
+            <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-500/50 bg-red-500/10 p-3 text-red-400" role="alert">
+              <AlertCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              <p className="text-sm" id="signup-error">
+                {error}
+              </p>
             </div>
           )}
           
           {success && (
-            <div className="flex items-center space-x-2 p-3 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400 mb-4">
-              <CheckCircle className="w-5 h-5 flex-shrink-0" />
-              <p className="text-sm">Account created! Check your email to verify.</p>
+            <div className="mb-4 flex items-center gap-2 rounded-lg border border-green-500/50 bg-green-500/10 p-3 text-green-400" role="status">
+              <CheckCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              <p className="text-sm">Account created. Check your email to verify.</p>
             </div>
           )}
 
           {/* Step 1: Account Details */}
           {step === 1 && (
             <div className="space-y-4">
-              <h2 className="text-xl font-bold text-white mb-4">Account Details</h2>
+              <h2 className="mb-4 text-xl font-bold text-white">Account details</h2>
               
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label htmlFor="signup-email" className="mb-2 block text-sm font-medium text-slate-300">
                   <Mail className="w-4 h-4 inline mr-1" />
-                  Email Address *
+                  Email address *
                 </label>
                 <input
+                  id="signup-email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => updateFormData('email', e.target.value)}
                   placeholder="foreman@construction.com"
                   required
                   className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? 'signup-error' : undefined}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label htmlFor="signup-password" className="mb-2 block text-sm font-medium text-slate-300">
                   Password *
                 </label>
                 <div className="relative">
                   <input
+                    id="signup-password"
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={(e) => updateFormData('password', e.target.value)}
                     placeholder="Minimum 8 characters"
                     required
                     className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent pr-12"
+                    aria-invalid={Boolean(error)}
+                    aria-describedby={error ? 'signup-error' : undefined}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300"
+                    className="btn btn-ghost absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-slate-300"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -179,16 +188,19 @@ export const SignUpPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
-                  Confirm Password *
+                <label htmlFor="signup-confirm-password" className="mb-2 block text-sm font-medium text-slate-300">
+                  Confirm password *
                 </label>
                 <input
+                  id="signup-confirm-password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.confirmPassword}
                   onChange={(e) => updateFormData('confirmPassword', e.target.value)}
                   placeholder="Re-enter password"
                   required
                   className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? 'signup-error' : undefined}
                 />
               </div>
             </div>
@@ -197,15 +209,16 @@ export const SignUpPage: React.FC = () => {
           {/* Step 2: Profile Information */}
           {step === 2 && (
             <div className="space-y-4">
-              <h2 className="text-xl font-bold text-white mb-4">Profile Information</h2>
+              <h2 className="mb-4 text-xl font-bold text-white">Profile information</h2>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                  <label htmlFor="signup-first-name" className="mb-2 block text-sm font-medium text-slate-300">
                     <User className="w-4 h-4 inline mr-1" />
-                    First Name *
+                    First name *
                   </label>
                   <input
+                    id="signup-first-name"
                     type="text"
                     value={formData.firstName}
                     onChange={(e) => updateFormData('firstName', e.target.value)}
@@ -216,10 +229,11 @@ export const SignUpPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    Last Name *
+                  <label htmlFor="signup-last-name" className="mb-2 block text-sm font-medium text-slate-300">
+                    Last name *
                   </label>
                   <input
+                    id="signup-last-name"
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => updateFormData('lastName', e.target.value)}
@@ -231,11 +245,12 @@ export const SignUpPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label htmlFor="signup-phone" className="mb-2 block text-sm font-medium text-slate-300">
                   <Phone className="w-4 h-4 inline mr-1" />
-                  Phone Number
+                  Phone number
                 </label>
                 <input
+                  id="signup-phone"
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => updateFormData('phone', e.target.value)}
@@ -245,11 +260,12 @@ export const SignUpPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label htmlFor="signup-company" className="mb-2 block text-sm font-medium text-slate-300">
                   <Building2 className="w-4 h-4 inline mr-1" />
                   Company *
                 </label>
                 <input
+                  id="signup-company"
                   type="text"
                   value={formData.company}
                   onChange={(e) => updateFormData('company', e.target.value)}
@@ -260,11 +276,12 @@ export const SignUpPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label htmlFor="signup-job-title" className="mb-2 block text-sm font-medium text-slate-300">
                   <Briefcase className="w-4 h-4 inline mr-1" />
-                  Job Title *
+                  Job title *
                 </label>
                 <input
+                  id="signup-job-title"
                   type="text"
                   value={formData.jobTitle}
                   onChange={(e) => updateFormData('jobTitle', e.target.value)}
@@ -275,10 +292,11 @@ export const SignUpPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label htmlFor="signup-employee-id" className="mb-2 block text-sm font-medium text-slate-300">
                   Employee ID
                 </label>
                 <input
+                  id="signup-employee-id"
                   type="text"
                   value={formData.employeeId}
                   onChange={(e) => updateFormData('employeeId', e.target.value)}
@@ -295,9 +313,9 @@ export const SignUpPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
-                className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
+                className="btn btn-ghost"
               >
-                ← Back
+                Back
               </button>
             )}
             
@@ -305,19 +323,19 @@ export const SignUpPage: React.FC = () => {
               type="button"
               onClick={handleNext}
               disabled={loading}
-              className="ml-auto px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+              className="btn btn-primary ml-auto flex items-center gap-2"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Creating Account...
+                  <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
+                  Creating account
                 </>
               ) : step === 2 ? (
-                'Create Account'
+                'Create account'
               ) : (
                 <>
                   Next
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  <ArrowRight className="h-5 w-5" aria-hidden="true" />
                 </>
               )}
             </button>
@@ -327,7 +345,7 @@ export const SignUpPage: React.FC = () => {
         {/* Sign In Link */}
         <p className="text-center text-sm text-slate-400 mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-amber-500 hover:text-amber-400 font-medium">
+          <Link to="/login" className="link font-medium">
             Sign in
           </Link>
         </p>

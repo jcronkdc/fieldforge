@@ -1,9 +1,9 @@
-import { Pool } from "pg";
 import { loadEnv } from "../worker/env.js";
 import type { FeedEventType, FeedEvent as StreamFeedEvent } from "./types.js";
+import { query } from "../database.js";
+import pool from "../database.js";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 const DEFAULT_PAGE_SIZE = 20;
 

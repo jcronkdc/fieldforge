@@ -1,9 +1,9 @@
-import { Pool } from "pg";
 import { loadEnv } from "../worker/env.js";
+import { query } from "../database.js";
+import pool from "../database.js";
 import { recordAuditEvent, enqueueCoherenceEvent } from "./auditRepository.js";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 export interface CharacterSummary {
   id: string;
@@ -119,7 +119,17 @@ function mapRelationshipRow(row: any): CharacterRelationship {
 }
 
 export async function listCharacters(worldId: string, limit = 50): Promise<CharacterSummary[]> {
-  const { rows } = await pool.query(
+  const result = await query<{
+    id: string;
+    world_id: string;
+    display_name: string;
+    tagline: string | null;
+    summary: string | null;
+    tags: string[];
+    canonical_version_id: string | null;
+    created_by: string | null;
+    created_at: Date;
+  }>(
     `
       select id, world_id, display_name, tagline, summary, tags, canonical_version_id, created_by, created_at
       from public.characters
@@ -129,11 +139,21 @@ export async function listCharacters(worldId: string, limit = 50): Promise<Chara
     `,
     [worldId, Math.max(1, Math.min(limit, 200))]
   );
-  return rows.map(mapCharacterRow);
+  return result.rows.map(mapCharacterRow);
 }
 
 export async function getCharacter(characterId: string): Promise<CharacterDetail | null> {
-  const characterResult = await pool.query(
+  const characterResult = await query<{
+    id: string;
+    world_id: string;
+    display_name: string;
+    tagline: string | null;
+    summary: string | null;
+    tags: string[];
+    canonical_version_id: string | null;
+    created_by: string | null;
+    created_at: Date;
+  }>(
     `
       select id, world_id, display_name, tagline, summary, tags, canonical_version_id, created_by, created_at
       from public.characters
@@ -143,7 +163,16 @@ export async function getCharacter(characterId: string): Promise<CharacterDetail
   );
   if (characterResult.rowCount === 0) return null;
 
-  const versionsResult = await pool.query(
+  const versionsResult = await query<{
+    id: string;
+    character_id: string;
+    title: string;
+    summary: string | null;
+    traits: Record<string, unknown>;
+    notes: string | null;
+    created_by: string | null;
+    created_at: Date;
+  }>(
     `
       select id, character_id, title, summary, traits, notes, created_by, created_at
       from public.character_versions
@@ -153,7 +182,16 @@ export async function getCharacter(characterId: string): Promise<CharacterDetail
     [characterId]
   );
 
-  const relationshipsResult = await pool.query(
+  const relationshipsResult = await query<{
+    id: string;
+    character_id: string;
+    target_character_id: string;
+    relationship_type: string;
+    strength: number;
+    context: string | null;
+    created_by: string | null;
+    created_at: Date;
+  }>(
     `
       select id, character_id, target_character_id, relationship_type, strength, context, created_by, created_at
       from public.character_relationships
@@ -322,7 +360,16 @@ export async function upsertRelationship({
   context,
   createdBy,
 }: UpsertRelationshipInput): Promise<CharacterRelationship> {
-  const result = await pool.query(
+  const result = await query<{
+    id: string;
+    character_id: string;
+    target_character_id: string;
+    relationship_type: string;
+    strength: number;
+    context: string | null;
+    created_by: string | null;
+    created_at: Date;
+  }>(
     `
       insert into public.character_relationships
         (character_id, target_character_id, relationship_type, strength, context, created_by)

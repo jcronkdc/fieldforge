@@ -53,7 +53,7 @@ export class ErrorBoundary extends Component<Props, State> {
               An error occurred while loading this page. Please try refreshing or contact support if the issue persists.
             </p>
             
-            {process.env.NODE_ENV === 'development' && (
+            {import.meta.env.DEV && (
               <details className="mt-4">
                 <summary className="cursor-pointer text-amber-500 hover:text-amber-400">
                   Show error details (development only)

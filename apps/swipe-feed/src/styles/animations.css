@@ -232,32 +232,48 @@
 /* Glass Morphism Enhanced */
 .glass-morphism {
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(var(--fx-blur-strong)) saturate(calc(1.2 + (var(--fx-intensity, 1) * 0.4)));
+  -webkit-backdrop-filter: blur(var(--fx-blur-strong)) saturate(calc(1.2 + (var(--fx-intensity, 1) * 0.4)));
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 255, 255, 0.1);
+  box-shadow: 0 calc(var(--fx-intensity, 1) * 8px) calc(var(--fx-intensity, 1) * 32px) 0 rgba(0, 255, 255, 0.1);
 }
 
 /* Neon Glow Effects */
 .neon-glow-cyan {
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5),
-              0 0 40px rgba(0, 255, 255, 0.3),
-              0 0 60px rgba(0, 255, 255, 0.1),
-              inset 0 0 20px rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 calc(var(--fx-intensity, 1) * 20px) rgba(0, 255, 255, 0.5),
+              0 0 calc(var(--fx-intensity, 1) * 40px) rgba(0, 255, 255, 0.3),
+              0 0 calc(var(--fx-intensity, 1) * 60px) rgba(0, 255, 255, 0.1),
+              inset 0 0 calc(var(--fx-intensity, 1) * 20px) rgba(0, 255, 255, 0.1);
 }
 
 .neon-glow-purple {
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5),
-              0 0 40px rgba(139, 92, 246, 0.3),
-              0 0 60px rgba(139, 92, 246, 0.1),
-              inset 0 0 20px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 0 calc(var(--fx-intensity, 1) * 20px) rgba(139, 92, 246, 0.5),
+              0 0 calc(var(--fx-intensity, 1) * 40px) rgba(139, 92, 246, 0.3),
+              0 0 calc(var(--fx-intensity, 1) * 60px) rgba(139, 92, 246, 0.1),
+              inset 0 0 calc(var(--fx-intensity, 1) * 20px) rgba(139, 92, 246, 0.1);
 }
 
 .neon-glow-pink {
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5),
-              0 0 40px rgba(236, 72, 153, 0.3),
-              0 0 60px rgba(236, 72, 153, 0.1),
-              inset 0 0 20px rgba(236, 72, 153, 0.1);
+  box-shadow: 0 0 calc(var(--fx-intensity, 1) * 20px) rgba(236, 72, 153, 0.5),
+              0 0 calc(var(--fx-intensity, 1) * 40px) rgba(236, 72, 153, 0.3),
+              0 0 calc(var(--fx-intensity, 1) * 60px) rgba(236, 72, 153, 0.1),
+              inset 0 0 calc(var(--fx-intensity, 1) * 20px) rgba(236, 72, 153, 0.1);
+}
+
+@media (max-width: 640px) {
+  .glass-morphism {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 calc(var(--fx-intensity, 1) * 6px) calc(var(--fx-intensity, 1) * 18px) rgba(0, 255, 255, 0.12);
+    background: rgba(15, 23, 42, 0.65);
+  }
+
+  .neon-glow-cyan,
+  .neon-glow-purple,
+  .neon-glow-pink {
+    box-shadow: 0 0 calc(var(--fx-intensity, 1) * 18px) currentColor,
+                inset 0 0 calc(var(--fx-intensity, 1) * 10px) currentColor;
+  }
 }
 
 /* Data Grid Pattern */

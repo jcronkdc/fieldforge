@@ -30,8 +30,8 @@ interface BranchTurnRow {
   recipient_discord_webhook: string | null;
 }
 
+import pool from "../database.js";
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
 const LOOP_INTERVAL_MS = Number(process.env.HOURGLASS_INTERVAL_MS ?? 30_000);
 const WARNING_THRESHOLD_MS = Number(process.env.HOURGLASS_WARNING_MS ?? 60_000);
 

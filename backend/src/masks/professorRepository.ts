@@ -1,12 +1,11 @@
-import { Pool } from "pg";
 import type { ProfessorCritiqueRecord, ProfessorCritiqueHistoryRow } from "./types.js";
 import { loadEnv } from "../worker/env.js";
+import { query } from "../database.js";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 export async function insertProfessorCritique(record: ProfessorCritiqueRecord): Promise<void> {
-  await pool.query(
+  await query(
     `
       insert into public.professor_critiques (
         story_id,
@@ -46,9 +45,10 @@ export async function insertProfessorCritique(record: ProfessorCritiqueRecord): 
   );
 }
 
-export async function closeProfessorRepository(): Promise<void> {
-  await pool.end();
-}
+// Note: Using shared database pool - do not close it here
+// export async function closeProfessorRepository(): Promise<void> {
+//   await pool.end();
+// }
 
 export async function fetchProfessorCritiques(params: {
   storyId?: string;
@@ -74,7 +74,25 @@ export async function fetchProfessorCritiques(params: {
 
   const whereClause = conditions.length > 0 ? `where ${conditions.join(" and ")}` : "";
 
-  const result = await pool.query(
+  const result = await query<{
+    id: string;
+    story_id: string | null;
+    user_id: string | null;
+    project_id: string | null;
+    mask_session_id: string;
+    mask_id: string;
+    mask_version: string;
+    mode: string;
+    tone: string;
+    summary: string | null;
+    strengths: string[];
+    risks: string[];
+    suggestions: string[];
+    scores: Record<string, unknown>;
+    metrics: Record<string, unknown>;
+    custom_tone: string | null;
+    created_at: string;
+  }>(
     `
       select id, story_id, user_id, project_id, mask_session_id, mask_id, mask_version, mode, tone, summary, strengths, risks, suggestions, scores, metrics, custom_tone, created_at
       from public.professor_critiques
@@ -87,7 +105,7 @@ export async function fetchProfessorCritiques(params: {
   );
 
   return result.rows.map((row) => ({
-    id: row.id,
+    id: Number(row.id),
     storyId: row.story_id ?? undefined,
     userId: row.user_id ?? undefined,
     projectId: row.project_id ?? undefined,

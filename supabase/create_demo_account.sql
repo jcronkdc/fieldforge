@@ -71,7 +71,9 @@ BEGIN
     last_name,
     job_title,
     phone,
-    company_id
+    company_id,
+    role,
+    is_admin
   )
   VALUES (
     demo_user_id,
@@ -80,7 +82,9 @@ BEGIN
     'User',
     'Project Manager',
     '555-0100',
-    demo_company_id
+    demo_company_id,
+    'user',
+    false
   )
   ON CONFLICT (id) DO UPDATE
   SET 
@@ -88,6 +92,8 @@ BEGIN
     last_name = 'User',
     job_title = 'Project Manager',
     company_id = demo_company_id,
+    role = COALESCE(user_profiles.role, 'user'),
+    is_admin = COALESCE(user_profiles.is_admin, false),
     updated_at = now();
   
   -- Add to demo project as project manager

@@ -8,16 +8,12 @@ exports.convertToSong = convertToSong;
 exports.formatSongText = formatSongText;
 exports.getUserSongs = getUserSongs;
 exports.addCollaborator = addCollaborator;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
-const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
-async function query(text, params) {
-    return pool.query(text, params);
-}
+const database_js_1 = require("../database.js");
 const aiClient_js_1 = require("./aiClient.js");
 const mythacoinRepository_js_1 = require("../mythacoin/mythacoinRepository.js");
 const aiTierSystem_js_1 = require("./aiTierSystem.js");
+const env = (0, env_js_1.loadEnv)();
 // Convert story to song
 async function convertToSong(data) {
     // Check user's AI tier
@@ -72,7 +68,7 @@ Return as JSON:
     // Analyze meter
     const meterAnalysis = analyzeMeter(songData.structure);
     // Save to database
-    const result = await query(`INSERT INTO song_projects (
+    const result = await (0, database_js_1.query)(`INSERT INTO song_projects (
       user_id, title, genre, mood, structure, lyrics,
       rhyme_scheme, meter_pattern, tempo, key_signature,
       ai_generated
@@ -203,14 +199,14 @@ function formatSongText(song) {
 }
 // Get user's songs
 async function getUserSongs(userId) {
-    const result = await query(`SELECT * FROM song_projects 
+    const result = await (0, database_js_1.query)(`SELECT * FROM song_projects 
      WHERE user_id = $1 
      ORDER BY created_at DESC`, [userId]);
     return result.rows;
 }
 // Add collaboration
 async function addCollaborator(data) {
-    const result = await query(`INSERT INTO song_collaborations (
+    const result = await (0, database_js_1.query)(`INSERT INTO song_collaborations (
       song_id, collaborator_id, role, contribution_percentage
     ) VALUES ($1, $2, $3, $4)
     ON CONFLICT (song_id, collaborator_id) 

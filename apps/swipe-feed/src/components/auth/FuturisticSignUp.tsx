@@ -135,12 +135,12 @@ export const FuturisticSignUp: React.FC = () => {
     e.preventDefault();
     
     if (!termsAccepted) {
-      toast.error('Please accept the Terms of Service');
+      toast.error('Accept the terms to continue.');
       return;
     }
 
     setLoading(true);
-    const loadingId = toast.loading('Creating your account...');
+    const loadingId = toast.loading('Creating account.');
 
     try {
       // Sign up with Supabase Auth
@@ -193,7 +193,7 @@ export const FuturisticSignUp: React.FC = () => {
       
       // Show success and redirect
       setStep(4);
-      toast.success('Account created successfully!');
+      toast.success('Account created.');
       
       // Send welcome email (this would be handled by Supabase email templates)
       // In production, configure email templates in Supabase Dashboard
@@ -201,7 +201,7 @@ export const FuturisticSignUp: React.FC = () => {
     } catch (error: any) {
       console.error('Signup error:', error);
       toast.dismiss(loadingId);
-      toast.error(error.message || 'Failed to create account');
+      toast.error('Account creation failed. Try again.');
     } finally {
       setLoading(false);
     }
@@ -265,7 +265,7 @@ export const FuturisticSignUp: React.FC = () => {
             {step === 1 && 'Create Your Account'}
             {step === 2 && 'Professional Information'}
             {step === 3 && 'Customize Your Experience'}
-            {step === 4 && 'Welcome Aboard!'}
+            {step === 4 && 'Welcome aboard'}
           </p>
         </div>
 
@@ -533,7 +533,7 @@ export const FuturisticSignUp: React.FC = () => {
                     onClick={() => setStep(1)}
                     className="flex-1 py-3 px-4 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-all duration-200"
                   >
-                    BACK
+                    Back
                   </button>
                   <button
                     type="submit"
@@ -655,7 +655,7 @@ export const FuturisticSignUp: React.FC = () => {
                     ) : (
                       <>
                         <UserPlus className="w-5 h-5" />
-                        <span>CREATE ACCOUNT</span>
+                        <span>Create account</span>
                       </>
                     )}
                   </button>
@@ -671,16 +671,16 @@ export const FuturisticSignUp: React.FC = () => {
                 </div>
                 
                 <h2 className="text-2xl font-bold text-white mb-3 font-['Orbitron']">
-                  WELCOME TO FIELDFORGE!
+                  Welcome to FieldForge
                 </h2>
                 
                 <p className="text-gray-300 mb-6">
-                  Your account has been created successfully.
+                  Account created.
                 </p>
                 
                 <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg mb-6">
                   <p className="text-amber-400 text-sm">
-                    📧 <strong>Check your email!</strong> We've sent a confirmation link to:
+                    📧 <strong>Check your email.</strong> We've sent a confirmation link to:
                   </p>
                   <p className="text-white font-mono mt-1">{formData.email}</p>
                 </div>
@@ -695,26 +695,26 @@ export const FuturisticSignUp: React.FC = () => {
                     className="w-full py-3 px-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-cyan-500/25 transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center space-x-2 group font-['Orbitron']"
                   >
                     <Shield className="w-5 h-5" />
-                    <span>GO TO LOGIN</span>
+                    <span>Go to login</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                   
                   <button
                     onClick={async () => {
-                      const loadingId = toast.loading('Resending confirmation email...');
+            const loadingId = toast.loading('Sending confirmation email.');
                       try {
                         // This would resend confirmation email via Supabase
                         await new Promise(resolve => setTimeout(resolve, 2000));
                         toast.dismiss(loadingId);
-                        toast.success('Confirmation email sent!');
+                        toast.success('Confirmation email sent.');
                       } catch (error) {
                         toast.dismiss(loadingId);
-                        toast.error('Failed to resend email');
+                        toast.error('Resend failed. Try again.');
                       }
                     }}
                     className="w-full py-3 px-4 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-all duration-200"
                   >
-                    Resend Confirmation Email
+                    Resend confirmation email
                   </button>
                 </div>
               </div>

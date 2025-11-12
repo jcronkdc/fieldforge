@@ -1,4 +1,4 @@
-import { Pool, PoolClient } from "pg";
+import { PoolClient } from "pg";
 import { loadEnv } from "../worker/env.js";
 import { generateTemplate, TemplateOptions, TemplateLength } from "./templateGenerator.js";
 import {
@@ -20,9 +20,10 @@ import { publishSessionEvent, publishTurnEvent } from "../realtime/ablyPublisher
 import { runCreativeCompletion } from "../creative/aiClient.js";
 import { recordMythacoinTransaction } from "../mythacoin/mythacoinRepository.js";
 import { createProjectConversation } from "../messaging/messagingRepository.js";
+import { query } from "../database.js";
+import pool from "../database.js";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 export interface CreateSessionResult {
   session: AngryLipsSessionWithTurns;

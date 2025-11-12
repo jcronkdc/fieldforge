@@ -25,7 +25,7 @@ async function createAdminAccount() {
     }
   });
 
-  console.log('Creating admin account for Justin Cronk...');
+  console.log('Creating admin account for Justin Cronk');
 
   try {
     // Create the user account
@@ -43,7 +43,7 @@ async function createAdminAccount() {
 
     if (userError) {
       if (userError.message.includes('already registered')) {
-        console.log('User already exists. Updating profile...');
+        console.log('User already exists. Updating profile');
         
         // Get existing user
         const { data: { users } } = await supabase.auth.admin.listUsers();

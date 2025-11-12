@@ -8,6 +8,7 @@ import { projectService, Project } from '../../lib/services/projectService';
 import { ProjectCreator } from './ProjectCreator';
 import { TeamManager } from './TeamManager';
 import { CrewManager } from './CrewManager';
+import { EmptyState } from '../EmptyState';
 
 export const ProjectManager: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -123,16 +124,16 @@ export const ProjectManager: React.FC = () => {
                 <Building2 className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">Project Management</h1>
-                <p className="text-gray-400 text-sm">Manage your construction projects and teams</p>
+                <h1 className="text-2xl font-bold text-white">Project management</h1>
+                <p className="text-gray-400 text-sm">Manage construction projects and teams</p>
               </div>
             </div>
             <button
               onClick={handleCreateProject}
-              className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-200 flex items-center space-x-2"
+              className="btn btn-primary"
             >
               <FolderPlus className="w-5 h-5" />
-              <span>New Project</span>
+              <span>Create project</span>
             </button>
           </div>
 
@@ -142,47 +143,42 @@ export const ProjectManager: React.FC = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search projects by name or number..."
+                placeholder="Search projects"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                className="w-full rounded-xl border border-gray-600 bg-gray-700/50 pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
               />
             </div>
             <button
               onClick={() => setShowArchived(!showArchived)}
-              className={`px-4 py-2 rounded-xl font-medium transition-all duration-200 flex items-center space-x-2 ${
-                showArchived
-                  ? 'bg-gray-600 text-white'
-                  : 'bg-gray-700/50 text-gray-400 hover:text-white'
-              }`}
+              className={`btn btn-secondary ${showArchived ? '!bg-gray-600 !text-white' : ''}`}
             >
               <Archive className="w-5 h-5" />
-              <span>{showArchived ? 'Hide' : 'Show'} Archived</span>
+              <span>{showArchived ? 'Hide archived' : 'Show archived'}</span>
             </button>
           </div>
         </div>
 
         {/* Projects Grid */}
         {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, idx) => (
+              <div key={idx} className="skeleton h-48 rounded-2xl border border-gray-700/40 bg-gray-800/40" />
+            ))}
           </div>
         ) : filteredProjects.length === 0 ? (
-          <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-12 text-center border border-gray-700/50">
-            <Folder className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">No Projects Found</h3>
-            <p className="text-gray-400 mb-6">
-              {searchTerm ? 'Try adjusting your search terms' : 'Get started by creating your first project'}
-            </p>
-            {!searchTerm && (
-              <button
-                onClick={handleCreateProject}
-                className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-200"
-              >
-                Create First Project
-              </button>
-            )}
-          </div>
+          <EmptyState
+            title="No projects yet"
+            body={searchTerm ? 'Adjust your filters to find a project.' : 'Create a project to start coordinating crews.'}
+            action={
+              !searchTerm ? (
+                <button onClick={handleCreateProject} className="btn btn-primary">
+                  <FolderPlus className="mr-1.5 h-4 w-4" />
+                  Create project
+                </button>
+              ) : null
+            }
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
@@ -213,7 +209,8 @@ export const ProjectManager: React.FC = () => {
                         e.stopPropagation();
                         // Handle menu
                       }}
-                      className="p-1 hover:bg-gray-700 rounded-lg transition-colors"
+                      className="btn btn-ghost px-2 py-2"
+                      aria-label="Project actions"
                     >
                       <MoreVertical className="w-5 h-5 text-gray-400" />
                     </button>

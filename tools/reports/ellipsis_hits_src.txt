@@ -1,0 +1,38 @@
+apps/swipe-feed/src/tests/fullSystemTest.ts:352:this.console.log('🚀 Starting FieldForge System Tests...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:27:console.log('🚀 Starting Acquisition Evaluation Tests for $10B Valuation...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:59:console.log('📊 Testing Market Opportunity...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:93:console.log('🎯 Testing Product-Market Fit...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:124:console.log('🔧 Testing Technology Stack...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:169:console.log('💰 Testing Financial Metrics...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:205:console.log('⚡ Testing Quanta Services Specific Alignment...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:249:console.log('🏆 Testing Competitive Advantages...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:283:console.log('📈 Testing Scalability...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:324:console.log('🔒 Testing Security...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:348:console.log('🎨 Testing User Experience...');
+apps/swipe-feed/src/tests/runAcquisitionTests.ts:372:console.log('💎 Testing ROI Projections...');
+apps/swipe-feed/src/tests/authenticationTests.ts:29:console.log('🔒 Starting Authentication Integration Tests...\n');
+apps/swipe-feed/src/tests/authenticationTests.ts:340:console.log('🔐 Testing demo account access...');
+apps/swipe-feed/src/tests/authenticationTests.ts:361:console.log('👑 Testing admin account access...');
+apps/swipe-feed/src/scripts/createAdminAccount.ts:28:console.log('Creating admin account for Justin Cronk...');
+apps/swipe-feed/src/scripts/createAdminAccount.ts:46:console.log('User already exists. Updating profile...');
+apps/swipe-feed/src/scripts/setupAdmin.mjs:12:console.log('🔧 Setting up admin user for FieldForge...\n');
+apps/swipe-feed/src/scripts/setupAdmin.mjs:39:console.log('⚠️  User already exists, updating password...');
+apps/swipe-feed/src/scripts/createAdminUser.ts:11:console.log('🔧 Creating admin account for Justin Cronk...');
+apps/swipe-feed/src/scripts/createAdminUser.ts:32:console.log('✅ User already exists, attempting to update profile...');
+apps/swipe-feed/src/lib/angryLipsAdvanced.ts:733:template: references.join(' ') + ' {CONTINUATION_PROMPT}...'
+apps/swipe-feed/src/lib/angryLipsAdvanced.ts:1007:assistance.push(`Definition: A ${blankType} is a word that...`);
+apps/swipe-feed/src/lib/angryLipsAI.ts:193:moodifiedStory = moodifiedStory.replace(/!/g, '...');
+apps/swipe-feed/src/lib/angryLipsAI.ts:194:moodifiedStory = moodifiedStory.replace(/\?/g, '...?');
+apps/swipe-feed/src/lib/angryLipsAI.ts:201:moodifiedStory = moodifiedStory.replace(/\. /g, '... ');
+apps/swipe-feed/src/lib/angryLipsAI.ts:395:// Simple summary: first 50 characters + "..."
+apps/swipe-feed/src/lib/angryLipsAI.ts:396:return story.substring(0, 50) + '...';
+apps/swipe-feed/src/lib/angryLipsAI.ts:430:prompts.push(`The legendary ${obj.name} returns...`);
+apps/swipe-feed/src/pages/TestRunner.tsx:93:<span>Running Tests...</span>
+apps/swipe-feed/src/lib/services/ocrService.ts:72:console.log('Processing image with mock OCR...');
+apps/swipe-feed/src/lib/sparksEconomy/engine.ts:650:console.log('🔄 Adjusting dynamic pricing...');
+apps/swipe-feed/src/components/projects/TeamManager.tsx:387:<span>Sending...</span>
+apps/swipe-feed/src/components/projects/ProjectCreator.tsx:340:<span>Creating...</span>
+apps/swipe-feed/src/components/daily/DailyReportForm.tsx:278:<option value="">Select...</option>
+apps/swipe-feed/src/components/safety/JSAForm.tsx:288:<option value="">Select hazard...</option>
+apps/swipe-feed/src/components/safety/SwitchingOrderForm.tsx:350:<option value="">Select...</option>
+apps/swipe-feed/src/components/profile/ProfileSetup.tsx:27:return <div className="text-center text-white py-12 text-2xl">Loading profile...</div>;

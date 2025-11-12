@@ -5,6 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const rateLimit_js_1 = require("./middleware/rateLimit.js");
+const securityHeaders_js_1 = require("./middleware/securityHeaders.js");
+const requestId_js_1 = require("./middleware/requestId.js");
+const requestLogger_js_1 = require("./middleware/requestLogger.js");
+const errorHandler_js_1 = require("./middleware/errorHandler.js");
 const registry_js_1 = require("./masks/registry.js");
 const analytics_js_1 = require("./worker/analytics.js");
 const env_js_1 = require("./worker/env.js");
@@ -27,6 +32,8 @@ const messagingRoutes_js_1 = require("./messaging/messagingRoutes.js");
 const dasRoutes_js_1 = require("./das/dasRoutes.js");
 const feedbackRoutes_js_1 = require("./feedback/feedbackRoutes.js");
 const creativeEnginesRoutes_js_1 = require("./creative/creativeEnginesRoutes.js");
+const betaRoutes_js_1 = __importDefault(require("./beta/betaRoutes.js"));
+const sparksRoutes_js_1 = __importDefault(require("./sparks/sparksRoutes.js"));
 /**
  * © 2025 Cronk Companies, LLC. All Rights Reserved.
  * PROPRIETARY AND CONFIDENTIAL - DO NOT DISTRIBUTE
@@ -44,14 +51,20 @@ const app = (0, express_1.default)();
 // Configure CORS with security best practices
 const corsOptions = {
     origin: process.env.NODE_ENV === 'production'
-        ? process.env.ALLOWED_ORIGINS?.split(',') || ['https://mythatron.com']
-        : true,
+        ? (process.env.ALLOWED_ORIGINS?.split(',') || process.env.CORS_ORIGIN?.split(',') || ['https://fieldforge.vercel.app']).filter(Boolean)
+        : true, // Allow all origins in development
     credentials: true,
     maxAge: 86400, // 24 hours
 };
 app.use((0, cors_1.default)(corsOptions));
 app.use(express_1.default.json({ limit: '10mb' }));
 app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
+// Security middleware (order matters - apply early)
+app.use(requestId_js_1.requestIdMiddleware); // Add request ID for tracing
+app.use(securityHeaders_js_1.securityHeaders); // Set security headers
+app.use(requestLogger_js_1.requestLogger); // Log all requests
+// Apply rate limiting to all API routes
+app.use('/api', rateLimit_js_1.apiLimiter);
 // Health check endpoint (no auth required)
 app.get("/health", (_req, res) => {
     res.json({ status: "ok", service: "mythatron-api", timestamp: new Date().toISOString() });
@@ -66,6 +79,8 @@ app.use("/api/messaging", (0, messagingRoutes_js_1.createMessagingRouter)());
 app.use("/api/das", (0, dasRoutes_js_1.createDasRouter)());
 app.use("/api/feedback", (0, feedbackRoutes_js_1.createFeedbackRouter)());
 app.use("/api/creative/engines", (0, creativeEnginesRoutes_js_1.createCreativeEnginesRouter)());
+app.use("/api/beta", betaRoutes_js_1.default);
+app.use("/api/sparks", sparksRoutes_js_1.default);
 app.get("/api/feed/stream", async (req, res) => {
     const limit = typeof req.query.limit === "string" ? Number.parseInt(req.query.limit, 10) : undefined;
     const offset = typeof req.query.offset === "string" ? Number.parseInt(req.query.offset, 10) : undefined;
@@ -680,18 +695,8 @@ app.get("/api/angry-lips/realtime/token", async (req, res) => {
     }
 });
 // Error handling middleware (must be last)
-app.use((err, _req, res, _next) => {
-    console.error('[api] unhandled error:', err);
-    res.status(500).json({
-        error: process.env.NODE_ENV === 'production'
-            ? 'Internal server error'
-            : err.message
-    });
-});
-// 404 handler
-app.use((_req, res) => {
-    res.status(404).json({ error: 'Endpoint not found' });
-});
+app.use(errorHandler_js_1.notFoundHandler); // Handle 404s
+app.use(errorHandler_js_1.errorHandler); // Handle all errors
 const port = Number(process.env.PORT ?? 4000);
 app.listen(port, () => {
     console.log(`[mythatron-api] listening on port ${port}`);

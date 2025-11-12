@@ -1,5 +1,10 @@
 import express, { type Request, type Response } from "express";
 import cors from "cors";
+import { apiLimiter } from "./middleware/rateLimit.js";
+import { securityHeaders } from "./middleware/securityHeaders.js";
+import { requestIdMiddleware } from "./middleware/requestId.js";
+import { requestLogger } from "./middleware/requestLogger.js";
+import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import { maskRegistry } from "./masks/registry.js";
 import { capture } from "./worker/analytics.js";
 import type { ActivateMaskInput } from "./masks/types.js";
@@ -53,6 +58,7 @@ import { createDasRouter } from "./das/dasRoutes.js";
 import { createFeedbackRouter } from "./feedback/feedbackRoutes.js";
 import { createCreativeEnginesRouter } from "./creative/creativeEnginesRoutes.js";
 import betaRouter from "./beta/betaRoutes.js";
+import sparksRouter from "./sparks/sparksRoutes.js";
 
 /**
  * © 2025 Cronk Companies, LLC. All Rights Reserved.
@@ -73,8 +79,8 @@ const app = express();
 // Configure CORS with security best practices
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? process.env.ALLOWED_ORIGINS?.split(',') || ['https://mythatron.com']
-    : true,
+    ? (process.env.ALLOWED_ORIGINS?.split(',') || process.env.CORS_ORIGIN?.split(',') || ['https://fieldforge.vercel.app']).filter(Boolean)
+    : true, // Allow all origins in development
   credentials: true,
   maxAge: 86400, // 24 hours
 };
@@ -82,6 +88,14 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Security middleware (order matters - apply early)
+app.use(requestIdMiddleware); // Add request ID for tracing
+app.use(securityHeaders); // Set security headers
+app.use(requestLogger); // Log all requests
+
+// Apply rate limiting to all API routes
+app.use('/api', apiLimiter);
 
 // Health check endpoint (no auth required)
 app.get("/health", (_req: Request, res: Response) => {
@@ -99,6 +113,7 @@ app.use("/api/das", createDasRouter());
 app.use("/api/feedback", createFeedbackRouter());
 app.use("/api/creative/engines", createCreativeEnginesRouter());
 app.use("/api/beta", betaRouter);
+app.use("/api/sparks", sparksRouter);
 
 app.get("/api/feed/stream", async (req: Request, res: Response) => {
   const limit = typeof req.query.limit === "string" ? Number.parseInt(req.query.limit, 10) : undefined;
@@ -525,7 +540,7 @@ app.post("/api/angry-lips/sessions/:sessionId/respond", async (req: Request, res
     return res.status(400).json({ error: "Invalid action" });
   }
   try {
-    const participant = await respondAngryLipsInvitation(req.params.sessionId, userId, action as any);
+    const participant = await respondAngryLipsInvitation(req.params.sessionId, userId, action as "accept" | "decline" | "left");
     if (!participant) {
       return res.status(404).json({ error: "Invitation not found" });
     }
@@ -607,7 +622,7 @@ app.post("/api/angry-lips/sessions/:sessionId/publish", async (req: Request, res
     const entry = await publishAngryLipsEntry(
       req.params.sessionId,
       hostId,
-      typeof visibility === "string" ? (visibility as any) : "public"
+      typeof visibility === "string" ? (visibility as "invite_only" | "public" | "locked") : "public"
     );
     res.json({ entry });
   } catch (error) {
@@ -767,19 +782,8 @@ app.get("/api/angry-lips/realtime/token", async (req: Request, res: Response) =>
 });
 
 // Error handling middleware (must be last)
-app.use((err: Error, _req: Request, res: Response, _next: any) => {
-  console.error('[api] unhandled error:', err);
-  res.status(500).json({ 
-    error: process.env.NODE_ENV === 'production' 
-      ? 'Internal server error' 
-      : err.message 
-  });
-});
-
-// 404 handler
-app.use((_req: Request, res: Response) => {
-  res.status(404).json({ error: 'Endpoint not found' });
-});
+app.use(notFoundHandler); // Handle 404s
+app.use(errorHandler); // Handle all errors
 
 const port = Number(process.env.PORT ?? 4000);
 

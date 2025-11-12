@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchFeedCards = fetchFeedCards;
 exports.listStreamEvents = listStreamEvents;
@@ -6,10 +9,9 @@ exports.setFeedLike = setFeedLike;
 exports.listFeedComments = listFeedComments;
 exports.createFeedComment = createFeedComment;
 exports.setFeedRepost = setFeedRepost;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = __importDefault(require("../database.js"));
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
 const DEFAULT_PAGE_SIZE = 20;
 function coercePositiveInteger(value, fallback, max = 100) {
     if (!Number.isFinite(value))
@@ -151,7 +153,7 @@ async function fetchFeedCards(options = {}) {
     const sort = options.sort === "popular" ? "popular" : "latest";
     const eventTypes = options.eventTypes?.length ? options.eventTypes : [];
     const userId = options.userId ?? null;
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       with ${buildFeedEventsCTE()}
       select
         e.id,
@@ -212,7 +214,7 @@ function mapFeedCardRow(row) {
 async function listStreamEvents(limit = DEFAULT_PAGE_SIZE, offset = 0) {
     const safeLimit = coercePositiveInteger(limit, DEFAULT_PAGE_SIZE);
     const safeOffset = Math.max(offset, 0);
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       with ${buildFeedEventsCTE()}
       select
         e.id,
@@ -250,7 +252,7 @@ async function listStreamEvents(limit = DEFAULT_PAGE_SIZE, offset = 0) {
 async function setFeedLike(eventId, userId, like) {
     if (!eventId || !userId)
         throw new Error("eventId and userId are required");
-    const client = await pool.connect();
+    const client = await database_js_1.default.connect();
     try {
         await client.query("BEGIN");
         if (like) {
@@ -278,7 +280,7 @@ async function setFeedLike(eventId, userId, like) {
 async function listFeedComments(eventId, limit = DEFAULT_PAGE_SIZE, offset = 0) {
     const safeLimit = coercePositiveInteger(limit, DEFAULT_PAGE_SIZE, 100);
     const safeOffset = Math.max(offset, 0);
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       select fc.id,
              fc.event_id,
              fc.user_id,
@@ -314,13 +316,13 @@ async function createFeedComment(eventId, userId, body) {
         throw new Error("eventId and userId are required");
     if (!body?.trim())
         throw new Error("Comment body is required");
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       insert into public.feed_comments (event_id, user_id, body)
       values ($1, $2::uuid, $3)
       returning id, event_id, user_id, body, created_at
     `, [eventId, userId, body.trim()]);
     const comment = rows[0];
-    const profile = await pool.query(`select username, display_name, avatar_url from public.user_profiles where user_id = $1`, [userId]);
+    const profile = await database_js_1.default.query(`select username, display_name, avatar_url from public.user_profiles where user_id = $1`, [userId]);
     const actorRow = profile.rows[0];
     return {
         id: comment.id,
@@ -341,7 +343,7 @@ async function createFeedComment(eventId, userId, body) {
 async function setFeedRepost(eventId, userId, repost) {
     if (!eventId || !userId)
         throw new Error("eventId and userId are required");
-    const client = await pool.connect();
+    const client = await database_js_1.default.connect();
     try {
         await client.query("BEGIN");
         if (repost) {

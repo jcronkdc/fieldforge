@@ -8,16 +8,12 @@ exports.convertToScreenplay = convertToScreenplay;
 exports.formatScreenplayText = formatScreenplayText;
 exports.getUserScreenplays = getUserScreenplays;
 exports.getScreenplayWithScenes = getScreenplayWithScenes;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
-const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
-async function query(text, params) {
-    return pool.query(text, params);
-}
+const database_js_1 = require("../database.js");
 const aiClient_js_1 = require("./aiClient.js");
 const mythacoinRepository_js_1 = require("../mythacoin/mythacoinRepository.js");
 const aiTierSystem_js_1 = require("./aiTierSystem.js");
+const env = (0, env_js_1.loadEnv)();
 // Format story as screenplay
 async function convertToScreenplay(data) {
     // Check user's AI tier
@@ -71,7 +67,7 @@ Return as JSON with structure:
     await (0, aiTierSystem_js_1.consumeAITokens)(data.userId, 'screenplay', 4000);
     const screenplayData = JSON.parse(response.content);
     // Save to database
-    const result = await query(`INSERT INTO screenplay_projects (
+    const result = await (0, database_js_1.query)(`INSERT INTO screenplay_projects (
       user_id, title, logline, genre, format, 
       screenplay_data, ai_generated, page_count
     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -88,7 +84,7 @@ Return as JSON with structure:
     const screenplay = result.rows[0];
     // Save individual scenes
     for (const scene of screenplayData.scenes) {
-        await query(`INSERT INTO screenplay_scenes (
+        await (0, database_js_1.query)(`INSERT INTO screenplay_scenes (
         screenplay_id, scene_number, scene_heading,
         action_lines, dialogue_blocks, transitions,
         scene_order
@@ -148,15 +144,15 @@ function formatScreenplayText(screenplay) {
 }
 // Get user's screenplays
 async function getUserScreenplays(userId) {
-    const result = await query(`SELECT * FROM screenplay_projects 
+    const result = await (0, database_js_1.query)(`SELECT * FROM screenplay_projects 
      WHERE user_id = $1 
      ORDER BY created_at DESC`, [userId]);
     return result.rows;
 }
 // Get screenplay with scenes
 async function getScreenplayWithScenes(screenplayId) {
-    const screenplayResult = await query(`SELECT * FROM screenplay_projects WHERE id = $1`, [screenplayId]);
-    const scenesResult = await query(`SELECT * FROM screenplay_scenes 
+    const screenplayResult = await (0, database_js_1.query)(`SELECT * FROM screenplay_projects WHERE id = $1`, [screenplayId]);
+    const scenesResult = await (0, database_js_1.query)(`SELECT * FROM screenplay_scenes 
      WHERE screenplay_id = $1 
      ORDER BY scene_order`, [screenplayId]);
     return {

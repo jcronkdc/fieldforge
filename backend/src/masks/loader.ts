@@ -33,7 +33,7 @@ async function main() {
 
   await maskRegistry.registerMask(metadata, version);
   console.log(`Registered mask ${metadata.maskId} version ${version.version}`);
-  await maskRegistry.close();
+  // Note: Using shared database pool - do not close it here
 }
 
 main().catch((error) => {

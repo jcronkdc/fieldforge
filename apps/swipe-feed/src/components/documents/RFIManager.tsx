@@ -15,6 +15,7 @@ import {
   Eye
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { EmptyState } from '../EmptyState';
 
 interface RFI {
   id: string;
@@ -102,12 +103,12 @@ export const RFIManager: React.FC = () => {
 
       if (error) throw error;
       
-      alert('RFI submitted successfully!');
+      alert('RFI submitted. Review the details before distribution.');
       setIsCreatingNew(false);
       fetchRFIs();
     } catch (error) {
       console.error('Error submitting RFI:', error);
-      alert('Error submitting RFI. Please try again.');
+      alert('Submission failed. Try again.');
     }
   };
 
@@ -167,27 +168,27 @@ export const RFIManager: React.FC = () => {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search RFIs..."
-                  className="w-full pl-10 pr-4 py-2 bg-gray-800 text-white rounded-md"
+                  placeholder="Search RFIs"
+                  className="w-full rounded-md bg-gray-800 pl-10 pr-4 py-2 text-white"
                 />
               </div>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 bg-gray-800 text-white rounded-md"
+                className="rounded-md bg-gray-800 px-4 py-2 text-white"
               >
-                <option value="all">All Status</option>
+                <option value="all">All status</option>
                 <option value="open">Open</option>
-                <option value="in_review">In Review</option>
+                <option value="in_review">In review</option>
                 <option value="responded">Responded</option>
                 <option value="closed">Closed</option>
               </select>
               <button
                 onClick={() => setIsCreatingNew(true)}
-                className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-black rounded-md flex items-center gap-2"
+                className="btn btn-primary"
               >
                 <Plus className="w-5 h-5" />
-                New RFI
+                Create RFI
               </button>
             </div>
           </div>
@@ -218,14 +219,24 @@ export const RFIManager: React.FC = () => {
 
           {/* RFI List */}
           {loading ? (
-            <div className="text-center py-12">
-              <p className="text-gray-400">Loading RFIs...</p>
-            </div>
+          <div className="grid gap-3">
+            {Array.from({ length: 5 }).map((_, idx) => (
+              <div key={idx} className="skeleton h-24 rounded-lg border border-gray-800 bg-gray-800/50" />
+            ))}
+          </div>
           ) : filteredRFIs.length === 0 ? (
-            <div className="text-center py-12">
-              <FileQuestion className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-400">No RFIs found</p>
-            </div>
+          <EmptyState
+            title="No RFIs found"
+            body={searchTerm ? 'Change your search to see other RFIs.' : 'Create an RFI to capture field questions.'}
+            action={
+              !searchTerm ? (
+                <button onClick={() => setIsCreatingNew(true)} className="btn btn-primary">
+                  <Plus className="mr-1.5 h-4 w-4" />
+                  Create RFI
+                </button>
+              ) : null
+            }
+          />
           ) : (
             <div className="space-y-3">
               {filteredRFIs.map(rfi => (
@@ -288,10 +299,10 @@ export const RFIManager: React.FC = () => {
           )}
         </>
       ) : (
-        /* Create New RFI Form */
+        /* Create new RFI form */
         <div className="bg-gray-800 rounded-lg p-6">
           <div className="mb-6">
-            <h3 className="text-xl font-semibold text-white">Create New RFI</h3>
+            <h3 className="text-xl font-semibold text-white">Create new RFI</h3>
           </div>
 
           <div className="space-y-4">

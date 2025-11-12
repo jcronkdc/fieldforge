@@ -67,13 +67,13 @@ export const FieldOperationsIndex: React.FC = () => {
                     <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-300/10 text-emerald-200">
                       <card.icon className="h-5 w-5" />
                     </span>
-                    <h2 className="text-lg font-semibold text-white group-hover:text-emerald-200">
+                    <h2 className="text-lg font-semibold text-white text-on-glow group-hover:text-emerald-200 sm:bg-transparent sm:px-0 sm:py-0">
                       {card.title}
                     </h2>
                   </div>
                   <p className="mt-3 text-sm text-slate-300">{card.description}</p>
                 </div>
-                <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-emerald-200">
+                <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-emerald-200 text-on-glow sm:bg-transparent sm:px-0 sm:py-0">
                   Open workflow
                   <span aria-hidden className="translate-y-[1px] transition group-hover:translate-x-1">→</span>
                 </span>

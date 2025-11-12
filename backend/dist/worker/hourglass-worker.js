@@ -1,13 +1,15 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const pg_1 = require("pg");
 const date_fns_1 = require("date-fns");
 const env_js_1 = require("./env.js");
 const notifications_js_1 = require("./notifications.js");
 const aiFallback_js_1 = require("./aiFallback.js");
 const analytics_js_1 = require("./analytics.js");
+const database_js_1 = __importDefault(require("../database.js"));
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
 const LOOP_INTERVAL_MS = Number(process.env.HOURGLASS_INTERVAL_MS ?? 30_000);
 const WARNING_THRESHOLD_MS = Number(process.env.HOURGLASS_WARNING_MS ?? 60_000);
 let isRunning = false;
@@ -29,13 +31,13 @@ async function main() {
     };
     await tick();
     if (runOnce) {
-        await pool.end();
+        await database_js_1.default.end();
         return;
     }
     setInterval(tick, LOOP_INTERVAL_MS);
 }
 async function processBatch() {
-    const client = await pool.connect();
+    const client = await database_js_1.default.connect();
     try {
         const result = await client.query(`
         select

@@ -14,6 +14,7 @@ import {
   checkBetaUserLimit,
   updateActivityScore
 } from "./betaRepository.js";
+import { authenticateRequest } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -55,12 +56,12 @@ router.get("/status", async (req, res) => {
 /**
  * Claim daily login bonus
  */
-router.post("/daily-bonus", async (req, res) => {
+router.post("/daily-bonus", authenticateRequest, async (req, res) => {
   try {
-    const userId = req.body.userId || req.headers["x-user-id"];
+    const userId = req.user?.id;
     
     if (!userId) {
-      return res.status(401).json({ error: "User ID required" });
+      return res.status(401).json({ error: "Authentication required" });
     }
     
     const bonusAmount = await grantDailyLoginBonus(userId);

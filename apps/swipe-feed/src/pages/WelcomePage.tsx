@@ -19,7 +19,7 @@ export const WelcomePage: React.FC = () => {
     
     if (error) {
       setVerificationStatus('error');
-      toast.error(errorDescription || 'Verification failed');
+      toast.error(errorDescription || 'Verification failed. Try again.');
       setLoading(false);
       return;
     }
@@ -49,15 +49,15 @@ export const WelcomePage: React.FC = () => {
           setUserInfo({ ...user, profile });
         }
         
-        toast.success('Email verified successfully!');
+        toast.success('Email verified.');
       } else {
         setVerificationStatus('error');
-        toast.error('No authenticated user found');
+        toast.error('No signed-in user. Sign in again.');
       }
     } catch (error: any) {
       console.error('Auth check error:', error);
       setVerificationStatus('error');
-      toast.error('Failed to verify authentication');
+      toast.error('Authentication check failed. Try again.');
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export const WelcomePage: React.FC = () => {
   };
 
   if (loading) {
-    return <FuturisticLoader size="fullscreen" message="VERIFYING YOUR ACCOUNT..." />;
+    return <FuturisticLoader size="fullscreen" message="VERIFYING YOUR ACCOUNT" />;
   }
 
   return (
@@ -120,12 +120,12 @@ export const WelcomePage: React.FC = () => {
             </div>
 
             {/* Welcome Message */}
-            <h1 className="text-5xl font-bold font-['Orbitron'] text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-4">
-              WELCOME TO FIELDFORGE!
+            <h1 className="mb-4 text-5xl font-bold font-['Orbitron'] text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              Welcome to FieldForge
             </h1>
             
-            <p className="text-xl text-gray-300 mb-8">
-              Your email has been verified successfully
+            <p className="mb-8 text-xl text-gray-300">
+              Email verification complete.
             </p>
 
             {/* User Info Card */}
@@ -230,7 +230,7 @@ export const WelcomePage: React.FC = () => {
                 onClick={() => navigate('/signup')}
                 className="w-full py-3 px-4 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-all duration-200"
               >
-                Create New Account
+                Create new account
               </button>
             </div>
           </>

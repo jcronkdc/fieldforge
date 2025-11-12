@@ -1,9 +1,13 @@
+import { getAuthHeaders } from './authHeaders';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
 
 async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
+  const authHeaders = await getAuthHeaders();
   const response = await fetch(`${API_BASE}${path}`, {
     headers: {
       "Content-Type": "application/json",
+      ...authHeaders,
       ...(init?.headers ?? {}),
     },
     ...init,

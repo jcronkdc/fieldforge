@@ -89,9 +89,24 @@ CREATE TABLE IF NOT EXISTS user_profiles (
     photo_url TEXT,
     signature_url TEXT,
     preferences JSONB DEFAULT '{}',
+    -- Authentication and authorization columns
+    role TEXT DEFAULT 'user' NOT NULL,
+    is_admin BOOLEAN DEFAULT false NOT NULL,
+    address TEXT,
+    full_name TEXT GENERATED ALWAYS AS (first_name || ' ' || last_name) STORED,
+    -- Login tracking columns
+    email_verified_at TIMESTAMP WITH TIME ZONE,
+    last_login_at TIMESTAMP WITH TIME ZONE,
+    login_count INTEGER DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );
+
+-- Create indexes for user_profiles
+CREATE INDEX IF NOT EXISTS idx_user_profiles_email ON user_profiles(email);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_company_id ON user_profiles(company_id);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_role ON user_profiles(role);
+CREATE INDEX IF NOT EXISTS idx_user_profiles_is_admin ON user_profiles(is_admin);
 
 -- Project locations/areas
 CREATE TABLE IF NOT EXISTS project_areas (

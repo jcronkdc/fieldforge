@@ -24,7 +24,7 @@ export class AcquisitionTestSuite {
     results: AcquisitionTestResult[];
     recommendation: string;
   }> {
-    console.log('🚀 Starting Acquisition Evaluation Tests for $10B Valuation...');
+    console.log('🚀 Starting Acquisition Evaluation Tests for $10B Valuation');
     
     // Run all test categories
     await this.testMarketOpportunity();
@@ -56,7 +56,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testMarketOpportunity() {
-    console.log('📊 Testing Market Opportunity...');
+    console.log('📊 Testing Market Opportunity');
     
     // TAM Test
     this.addResult({
@@ -90,7 +90,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testProductMarketFit() {
-    console.log('🎯 Testing Product-Market Fit...');
+    console.log('🎯 Testing Product-Market Fit');
     
     // Industry Alignment
     this.addResult({
@@ -121,7 +121,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testTechnology() {
-    console.log('🔧 Testing Technology Stack...');
+    console.log('🔧 Testing Technology Stack');
     
     // Performance Test
     this.addResult({
@@ -166,7 +166,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testFinancialMetrics() {
-    console.log('💰 Testing Financial Metrics...');
+    console.log('💰 Testing Financial Metrics');
     
     // Revenue Model
     this.addResult({
@@ -202,7 +202,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testQuantaAlignment() {
-    console.log('⚡ Testing Quanta Services Specific Alignment...');
+    console.log('⚡ Testing Quanta Services Specific Alignment');
     
     // Field Worker Efficiency
     this.addResult({
@@ -246,7 +246,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testCompetitiveAdvantage() {
-    console.log('🏆 Testing Competitive Advantages...');
+    console.log('🏆 Testing Competitive Advantages');
     
     // First Mover
     this.addResult({
@@ -280,7 +280,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testScalability() {
-    console.log('📈 Testing Scalability...');
+    console.log('📈 Testing Scalability');
     
     // Database Performance
     try {
@@ -321,7 +321,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testSecurity() {
-    console.log('🔒 Testing Security...');
+    console.log('🔒 Testing Security');
     
     // Authentication
     this.addResult({
@@ -345,7 +345,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testUserExperience() {
-    console.log('🎨 Testing User Experience...');
+    console.log('🎨 Testing User Experience');
     
     // Mobile Experience
     this.addResult({
@@ -369,7 +369,7 @@ export class AcquisitionTestSuite {
   }
   
   private async testROI() {
-    console.log('💎 Testing ROI Projections...');
+    console.log('💎 Testing ROI Projections');
     
     // Year 1 ROI
     const year1Savings = 3.1; // $3.1B

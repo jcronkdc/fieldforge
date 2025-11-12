@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, Link, useNavigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -117,30 +117,34 @@ export function AppNew() {
 
   return (
     <ErrorBoundary>
-      <Router>
-        <Routes>
-          {/* Landing page - always accessible */}
-          <Route path="/" element={
+      <Routes>
+        {/* Landing page - always accessible */}
+        <Route
+          path="/"
+          element={
             session ? <Navigate to="/dashboard" replace /> : <WorkingLandingPage />
-          } />
-          
-          {/* Auth routes */}
-          <Route path="/login" element={
-            session ? <Navigate to="/dashboard" replace /> : <LoginPage />
-          } />
-          <Route path="/signup" element={
-            session ? <Navigate to="/dashboard" replace /> : <SignUpPage />
-          } />
-          
-          {/* Protected routes */}
-          <Route path="/dashboard" element={
-            session ? <SimpleDashboard /> : <Navigate to="/" replace />
-          } />
-          
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
+          }
+        />
+
+        {/* Auth routes */}
+        <Route
+          path="/login"
+          element={session ? <Navigate to="/dashboard" replace /> : <LoginPage />}
+        />
+        <Route
+          path="/signup"
+          element={session ? <Navigate to="/dashboard" replace /> : <SignUpPage />}
+        />
+
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={session ? <SimpleDashboard /> : <Navigate to="/" replace />}
+        />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </ErrorBoundary>
   );
 }

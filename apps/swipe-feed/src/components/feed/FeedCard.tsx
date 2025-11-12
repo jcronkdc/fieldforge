@@ -190,7 +190,15 @@ export function FeedCard({ event, currentUserId, onOpenSession, onRequireAuth }:
           )}
         >
           {actor?.avatarUrl ? (
-            <img src={actor.avatarUrl} alt={actorLabel} className="h-11 w-11 rounded-full object-cover" />
+            <img
+              src={actor.avatarUrl}
+              alt={actorLabel}
+              width={44}
+              height={44}
+              className="h-11 w-11 rounded-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <span>{eventLabel(event.eventType).slice(0, 2)}</span>
           )}
@@ -272,7 +280,11 @@ export function FeedCard({ event, currentUserId, onOpenSession, onRequireAuth }:
                 </div>
               </form>
               {commentsLoading ? (
-                <p className="text-xs text-slate-400">Loading comments…</p>
+                <div className="space-y-2">
+                  {Array.from({ length: 2 }).map((_, idx) => (
+                    <div key={idx} className="skeleton h-10 rounded-2xl border border-slate-800/40 bg-black/40" />
+                  ))}
+                </div>
               ) : comments.length ? (
                 <ul className="space-y-3 text-sm text-slate-200">
                   {comments.map((comment) => (

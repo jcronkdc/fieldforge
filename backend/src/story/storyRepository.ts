@@ -1,9 +1,9 @@
-import { Pool } from "pg";
 import { loadEnv } from "../worker/env.js";
+import { query } from "../database.js";
+import pool from "../database.js";
 import type { StoryTimelineNode } from "./sampleTimeline.js";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 export interface StoryChapter {
   id: number;
@@ -38,7 +38,14 @@ export interface WorldLoreEntry {
 }
 
 export async function getTimeline(worldId: string): Promise<StoryTimelineNode[]> {
-  const result = await pool.query(
+  const result = await query<{
+    id: string;
+    parent_branch_id: string | null;
+    title: string;
+    author_id: string;
+    status: string;
+    created: string;
+  }>(
     `
       select id, parent_branch_id, title, coalesce(author_id, '@unknown') as author_id, status, to_char(created_at, 'YYYY-MM-DD') as created
       from public.story_branches
@@ -52,7 +59,7 @@ export async function getTimeline(worldId: string): Promise<StoryTimelineNode[]>
     return [];
   }
 
-  return result.rows.map((row: any) => ({
+  return result.rows.map((row) => ({
     id: row.id,
     parentId: row.parent_branch_id ?? undefined,
     title: row.title,
@@ -63,7 +70,13 @@ export async function getTimeline(worldId: string): Promise<StoryTimelineNode[]>
 }
 
 export async function getChapters(branchId: string): Promise<StoryChapter[]> {
-  const result = await pool.query(
+  const result = await query<{
+    id: number;
+    branch_id: string;
+    order_index: number;
+    title: string;
+    status: string;
+  }>(
     `
       select id, branch_id, order_index, title, status
       from public.story_chapters
@@ -73,7 +86,7 @@ export async function getChapters(branchId: string): Promise<StoryChapter[]> {
     [branchId]
   );
 
-  return result.rows.map((row: any) => ({
+  return result.rows.map((row) => ({
     id: row.id,
     branchId: row.branch_id,
     orderIndex: row.order_index,
@@ -83,7 +96,13 @@ export async function getChapters(branchId: string): Promise<StoryChapter[]> {
 }
 
 export async function addChapter(branchId: string, title: string): Promise<StoryChapter> {
-  const { rows } = await pool.query(
+  const result = await query<{
+    id: number;
+    branch_id: string;
+    order_index: number;
+    title: string;
+    status: string;
+  }>(
     `
       insert into public.story_chapters (branch_id, order_index, title)
       values ($1, (select coalesce(max(order_index), -1) + 1 from public.story_chapters where branch_id = $1), $2)
@@ -92,7 +111,7 @@ export async function addChapter(branchId: string, title: string): Promise<Story
     [branchId, title]
   );
 
-  const row = rows[0] as any;
+  const row = result.rows[0];
   return {
     id: row.id,
     branchId: row.branch_id,
@@ -119,22 +138,27 @@ export async function updateChapter(id: number, data: Partial<Pick<StoryChapter,
 
   values.push(id);
 
-  await pool.query(
+  await query(
     `update public.story_chapters set ${fields.join(", ")} where id = $${fields.length + 1}`,
     values
   );
 }
 
 export async function removeChapter(id: number): Promise<void> {
-  await pool.query(`delete from public.story_chapters where id = $1`, [id]);
+  await query(`delete from public.story_chapters where id = $1`, [id]);
 }
 
 export async function getStoryNodes(branchId: string): Promise<StoryNode[]> {
-  const { rows } = await pool.query(
+  const result = await query<{
+    id: number;
+    branch_id: string;
+    order_index: number;
+    content: string;
+  }>(
     `select id, branch_id, order_index, content from public.story_nodes where branch_id = $1 order by order_index asc`,
     [branchId]
   );
-  return rows.map((row: any) => ({
+  return result.rows.map((row) => ({
     id: row.id,
     branchId: row.branch_id,
     orderIndex: row.order_index,
@@ -197,14 +221,21 @@ export async function saveStoryNodes(
 }
 
 export async function getStoryComments(branchId: string): Promise<StoryComment[]> {
-  const { rows } = await pool.query(
+  const result = await query<{
+    id: number;
+    branch_id: string;
+    node_id: number;
+    author_id: string;
+    body: string;
+    created: string;
+  }>(
     `select id, branch_id, node_id, coalesce(author_id, '@reader') as author_id, body, to_char(created_at, 'YYYY-MM-DD HH24:MI') as created
      from public.story_comments
      where branch_id = $1
      order by created_at asc`,
     [branchId]
   );
-  return rows.map((row: any) => ({
+  return result.rows.map((row) => ({
     id: row.id,
     branchId: row.branch_id,
     nodeId: row.node_id,
@@ -220,13 +251,20 @@ export async function addStoryComment(
   body: string,
   authorId?: string
 ): Promise<StoryComment> {
-  const { rows } = await pool.query(
+  const result = await query<{
+    id: number;
+    branch_id: string;
+    node_id: number;
+    author_id: string;
+    body: string;
+    created: string;
+  }>(
     `insert into public.story_comments (branch_id, node_id, author_id, body)
      values ($1, $2, $3, $4)
      returning id, branch_id, node_id, coalesce(author_id, '@reader') as author_id, body, to_char(created_at, 'YYYY-MM-DD HH24:MI') as created`,
     [branchId, nodeId, authorId ?? "@reader", body]
   );
-  const row = rows[0] as any;
+  const row = result.rows[0];
   return {
     id: row.id,
     branchId: row.branch_id,
@@ -238,15 +276,21 @@ export async function addStoryComment(
 }
 
 export async function deleteStoryComment(id: number): Promise<void> {
-  await pool.query(`delete from public.story_comments where id = $1`, [id]);
+  await query(`delete from public.story_comments where id = $1`, [id]);
 }
 
 export async function getWorldLore(worldId: string): Promise<WorldLoreEntry[]> {
-  const { rows } = await pool.query(
+  const result = await query<{
+    id: number;
+    world_id: string;
+    lore_type: string;
+    name: string;
+    summary: string;
+  }>(
     `select id, world_id, lore_type, name, summary from public.world_lore where world_id = $1 order by name asc`,
     [worldId]
   );
-  return rows.map((row: any) => ({
+  return result.rows.map((row) => ({
     id: row.id,
     worldId: row.world_id,
     loreType: row.lore_type,

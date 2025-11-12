@@ -1,7 +1,7 @@
 import React from 'react';
 import { Loader2, Sparkles } from 'lucide-react';
 
-export const FullPageLoader: React.FC<{ message?: string }> = ({ message = "Loading MythaTron..." }) => (
+export const FullPageLoader: React.FC<{ message?: string }> = ({ message = "Loading MythaTron" }) => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black flex items-center justify-center">
     <div className="text-center">
       <div className="relative">
@@ -13,7 +13,7 @@ export const FullPageLoader: React.FC<{ message?: string }> = ({ message = "Load
   </div>
 );
 
-export const InlineLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }) => (
+export const InlineLoader: React.FC<{ message?: string }> = ({ message = "Loading" }) => (
   <div className="flex items-center justify-center gap-2 py-4">
     <Loader2 className="w-4 h-4 text-purple-400 animate-spin" />
     <span className="text-purple-200">{message}</span>

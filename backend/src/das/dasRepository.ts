@@ -1,14 +1,9 @@
-import { Pool } from "pg";
 import { loadEnv } from "../worker/env.js";
-
-const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
-
-async function query(text: string, params?: any[]) {
-  return pool.query(text, params);
-}
+import { query } from "../database.js";
 import { recordTransaction } from "../mythacoin/mythacoinRepository.js";
 import { createDasAuditEntry } from "./dasAudit.js";
+
+const env = loadEnv();
 
 // ============================================================================
 // BRAND MANAGEMENT

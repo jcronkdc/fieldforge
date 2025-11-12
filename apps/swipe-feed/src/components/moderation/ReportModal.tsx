@@ -130,7 +130,7 @@ export function ReportModal({ isOpen, onClose, contentType, contentId }: ReportM
                   <textarea
                     value={details}
                     onChange={(e) => setDetails(e.target.value)}
-                    placeholder="Provide more context about this report..."
+                    placeholder="Provide more context about this report"
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:bg-white/10 focus:border-white/20 focus:outline-none resize-none h-24"
                   />
                 </div>
@@ -150,7 +150,7 @@ export function ReportModal({ isOpen, onClose, contentType, contentId }: ReportM
                 disabled={!selectedReason || submitting}
                 className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 rounded-lg font-medium transition-all text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {submitting ? 'Submitting...' : 'Submit Report'}
+                {submitting ? 'Submitting' : 'Submit Report'}
               </button>
             </div>
           </>

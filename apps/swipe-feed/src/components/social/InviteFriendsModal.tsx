@@ -55,7 +55,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
       setInviteStats(stats);
       
       // Default message
-      setMessage(`Hey! Join me on MythaTron - the creative storytelling platform where we can create amazing stories together, play Angry Lips, and build our creative network! 🚀`);
+      setMessage(`Hey, join me on MythaTron - the creative storytelling platform where we can create amazing stories together, play Angry Lips, and build our creative network. 🚀`);
     }
   }, [isOpen, userId, username]);
 
@@ -79,7 +79,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Join me on MythaTron!',
+          title: 'Join me on MythaTron',
           text: message,
           url: inviteLink,
         });
@@ -88,9 +88,8 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
         const stats = { ...inviteStats, sent: inviteStats.sent + 1 };
         setInviteStats(stats);
         localStorage.setItem('mythatron_invite_stats', JSON.stringify(stats));
-      } catch (err) {
-        // User cancelled or error occurred
-        console.log('Share cancelled or failed:', err);
+      } catch (_err) {
+        // User cancelled or share failed
       }
     }
   };
@@ -109,7 +108,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
 
   // Send via Email (native mail app)
   const sendNativeEmail = () => {
-    const subject = encodeURIComponent('Join me on MythaTron!');
+    const subject = encodeURIComponent('Join me on MythaTron');
     const body = encodeURIComponent(`${message}\n\n${inviteLink}`);
     const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
     window.location.href = mailtoUrl;
@@ -160,7 +159,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
       
       setSendingEmails(false);
       setEmailList('');
-      alert(`Successfully sent invites to ${emails.length} friends!`);
+      alert(`Successfully sent invites to ${emails.length} friends.`);
     }, 1500);
   };
 
@@ -188,10 +187,10 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
       case 'discord':
         // Discord doesn't have a direct share URL, so we copy a formatted message
         navigator.clipboard.writeText(`${message}\n\nJoin here: ${inviteLink}`);
-        alert('Discord invite message copied! Paste it in your Discord server.');
+        alert('Discord invite message copied. Paste it in your Discord server.');
         break;
       case 'email':
-        shareUrl = `mailto:?subject=${encodeURIComponent('Join me on MythaTron!')}&body=${text}%0A%0A${url}`;
+        shareUrl = `mailto:?subject=${encodeURIComponent('Join me on MythaTron')}&body=${text}%0A%0A${url}`;
         break;
     }
 
@@ -216,7 +215,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
             <div>
               <h2 className="text-2xl font-light text-white">Invite Friends</h2>
               <p className="text-sm text-white/60 mt-1">
-                Grow your creative network and earn rewards!
+                Grow your creative network and earn rewards.
               </p>
             </div>
             <button
@@ -394,7 +393,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
                         : 'bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 text-white'
                     }`}
                   >
-                    {copiedLink ? 'Copied!' : 'Copy'}
+                    {copiedLink ? 'Copied' : 'Copy'}
                   </button>
                 </div>
                 <p className="text-xs text-white/40 mt-2">
@@ -425,7 +424,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
                 <textarea
                   value={emailList}
                   onChange={(e) => setEmailList(e.target.value)}
-                  placeholder="Enter email addresses separated by commas or new lines..."
+                  placeholder="Enter email addresses separated by commas or new lines"
                   className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50 resize-none"
                   rows={4}
                 />
@@ -449,7 +448,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
                 disabled={sendingEmails || !emailList.trim()}
                 className="w-full py-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 border border-purple-500/30 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {sendingEmails ? 'Sending...' : 'Send Email Invites'}
+                {sendingEmails ? 'Sending' : 'Send Email Invites'}
               </button>
             </div>
           )}
@@ -545,7 +544,7 @@ export const InviteFriendsModal: React.FC<InviteFriendsModalProps> = ({
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/>
             </svg>
             <div className="flex-1">
-              <p className="text-sm text-white/90">Earn 50 Sparks for each friend who joins!</p>
+              <p className="text-sm text-white/90">Earn 50 Sparks for each friend who joins.</p>
               <p className="text-xs text-white/60">Plus unlock exclusive rewards at milestones</p>
             </div>
           </div>

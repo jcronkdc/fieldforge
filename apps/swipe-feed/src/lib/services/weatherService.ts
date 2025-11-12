@@ -60,7 +60,7 @@ class WeatherService {
   private apiKey: string | undefined;
   private apiUrl: string | undefined;
   private updateInterval: number = 15 * 60 * 1000; // 15 minutes
-  private updateTimer: NodeJS.Timeout | null = null;
+  private updateTimer: ReturnType<typeof setTimeout> | null = null;
   private lightningDetectionEnabled: boolean = true;
 
   constructor() {

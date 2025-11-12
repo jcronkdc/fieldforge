@@ -141,7 +141,7 @@ export const SwitchingOrderForm: React.FC = () => {
 
       if (error) throw error;
       
-      alert('Switching order submitted successfully!');
+      alert('Switching order submitted successfully.');
       // Reset or redirect
     } catch (error) {
       console.error('Error submitting switching order:', error);
@@ -347,7 +347,7 @@ export const SwitchingOrderForm: React.FC = () => {
                       onChange={(e) => updateGroundLocation(ground.id, 'equipmentType', e.target.value)}
                       className="w-full px-2 py-1 bg-gray-700 text-white rounded-md"
                     >
-                      <option value="">Select...</option>
+                      <option value="">Select equipment</option>
                       <option value="cluster_ground">Cluster Ground</option>
                       <option value="portable_ground">Portable Ground</option>
                       <option value="truck_ground">Truck Ground</option>
@@ -412,7 +412,7 @@ export const SwitchingOrderForm: React.FC = () => {
                 onChange={(e) => setFormData(prev => ({ ...prev, clearanceBoundaries: e.target.value }))}
                 className="w-full px-3 py-2 bg-gray-800 text-white rounded-md"
                 rows={4}
-                placeholder="Describe the clearance boundaries in detail..."
+                placeholder="Describe the clearance boundaries in detail"
               />
             </div>
 
@@ -425,7 +425,7 @@ export const SwitchingOrderForm: React.FC = () => {
                 onChange={(e) => setFormData(prev => ({ ...prev, specialConditions: e.target.value }))}
                 className="w-full px-3 py-2 bg-gray-800 text-white rounded-md"
                 rows={4}
-                placeholder="Any special conditions or safety considerations..."
+                placeholder="Any special conditions or safety considerations"
               />
             </div>
 
@@ -590,7 +590,7 @@ export const SwitchingOrderForm: React.FC = () => {
             disabled={isSubmitting}
             className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors disabled:opacity-50"
           >
-            {isSubmitting ? 'Submitting...' : 'Submit Switching Order'}
+            {isSubmitting ? 'Submitting' : 'Submit Switching Order'}
           </button>
         )}
       </div>

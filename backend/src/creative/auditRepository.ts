@@ -1,8 +1,7 @@
-import { Pool } from "pg";
 import { loadEnv } from "../worker/env.js";
+import { query } from "../database.js";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 export interface AuditEventInput {
   entityType: string;
@@ -29,7 +28,7 @@ export async function recordAuditEvent({
   actorId,
   metadata,
 }: AuditEventInput): Promise<void> {
-  await pool.query(
+  await query(
     `
       insert into public.creative_audit_events
         (entity_type, entity_id, action, actor_id, metadata)
@@ -52,7 +51,7 @@ export async function enqueueCoherenceEvent({
   scope,
   payload,
 }: CoherenceEventInput): Promise<void> {
-  await pool.query(
+  await query(
     `
       insert into public.creative_coherence_events
         (entity_type, entity_id, scope, payload)
@@ -69,7 +68,15 @@ export interface AuditQueryOptions {
 }
 
 export async function fetchAuditEvents({ entityType, entityId, limit = 50 }: AuditQueryOptions) {
-  const { rows } = await pool.query(
+  const result = await query<{
+    id: string;
+    entity_type: string;
+    entity_id: string;
+    action: string;
+    actor_id: string;
+    metadata: Record<string, unknown>;
+    created_at: Date;
+  }>(
     `
       select id, entity_type, entity_id, action, actor_id, metadata, created_at
       from public.creative_audit_events
@@ -80,7 +87,7 @@ export async function fetchAuditEvents({ entityType, entityId, limit = 50 }: Aud
     [entityType, entityId, Math.max(1, Math.min(limit, 200))]
   );
 
-  return rows.map(
+  return result.rows.map(
     (row: {
       id: string;
       entity_type: string;

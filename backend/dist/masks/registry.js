@@ -1,10 +1,13 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.maskRegistry = exports.MaskRegistry = void 0;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = __importDefault(require("../database.js"));
 const env = (0, env_js_1.loadEnv)();
-const sharedPool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
+const sharedPool = database_js_1.default;
 class MaskRegistry {
     pool;
     constructor(pool = sharedPool) {
@@ -153,17 +156,14 @@ class MaskRegistry {
         return result.rows.map((row) => ({
             maskId: row.mask_id,
             version: row.version,
-            changelog: row.changelog,
-            persona: row.persona,
-            promptSchema: row.prompt_schema,
+            changelog: row.changelog ?? undefined,
+            persona: (row.persona ?? {}),
+            promptSchema: (row.prompt_schema ?? {}),
             skillset: row.skillset ?? [],
-            llmPreset: row.llm_preset,
-            maxContextTokens: row.max_context_tokens,
+            llmPreset: row.llm_preset ?? '',
+            maxContextTokens: row.max_context_tokens ?? 0,
             safetyTags: row.safety_tags ?? [],
         }));
-    }
-    async close() {
-        await this.pool.end();
     }
 }
 exports.MaskRegistry = MaskRegistry;

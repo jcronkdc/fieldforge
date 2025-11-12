@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listBookworms = listBookworms;
 exports.listConnectionRequests = listConnectionRequests;
@@ -7,12 +10,11 @@ exports.respondToRequest = respondToRequest;
 exports.removeBookworm = removeBookworm;
 exports.getConnectionStats = getConnectionStats;
 exports.lookupProfileByUsername = lookupProfileByUsername;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = __importDefault(require("../database.js"));
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
 async function listBookworms(userId, limit = 12) {
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       select ub.user_id, ub.friend_id, ub.created_at,
              p.username, p.display_name, p.avatar_url
       from public.user_bookworms ub
@@ -36,7 +38,7 @@ async function listBookworms(userId, limit = 12) {
 async function listConnectionRequests(userId, direction = "inbound", limit = 20) {
     const isInbound = direction === "inbound";
     const column = isInbound ? "target_id" : "requester_id";
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       select cr.*,
              rp.username as requester_username,
              rp.display_name as requester_display_name,
@@ -58,12 +60,12 @@ async function createConnectionRequest(input) {
     if (requesterId === targetId) {
         throw new Error("You cannot invite yourself.");
     }
-    const existingFriendship = await pool.query(`select 1 from public.user_bookworms where user_id = $1 and friend_id = $2`, [requesterId, targetId]);
+    const existingFriendship = await database_js_1.default.query(`select 1 from public.user_bookworms where user_id = $1 and friend_id = $2`, [requesterId, targetId]);
     if ((existingFriendship.rowCount ?? 0) > 0) {
         throw new Error("You are already connected.");
     }
     // Check if the target already sent a pending request; auto-accept if so.
-    const reciprocalPending = await pool.query(`select * from public.connection_requests where requester_id = $1 and target_id = $2 and status = 'pending'`, [targetId, requesterId]);
+    const reciprocalPending = await database_js_1.default.query(`select * from public.connection_requests where requester_id = $1 and target_id = $2 and status = 'pending'`, [targetId, requesterId]);
     if ((reciprocalPending.rowCount ?? 0) > 0) {
         const request = mapRequestRow(reciprocalPending.rows[0]);
         await acceptRequest(request.id, requesterId, targetId);
@@ -73,7 +75,7 @@ async function createConnectionRequest(input) {
         }
         return accepted;
     }
-    const upsert = await pool.query(`
+    const upsert = await database_js_1.default.query(`
       insert into public.connection_requests (requester_id, target_id, message, status)
       values ($1, $2, $3, 'pending')
       on conflict (requester_id, target_id)
@@ -87,7 +89,7 @@ async function createConnectionRequest(input) {
     return mapRequestRow(upsert.rows[0]);
 }
 async function respondToRequest(input) {
-    const request = await pool.query(`select * from public.connection_requests where id = $1`, [input.requestId]);
+    const request = await database_js_1.default.query(`select * from public.connection_requests where id = $1`, [input.requestId]);
     if (request.rowCount === 0) {
         return null;
     }
@@ -103,22 +105,22 @@ async function respondToRequest(input) {
             await acceptRequest(row.id, row.requester_id, row.target_id);
             break;
         case "decline":
-            await pool.query(`update public.connection_requests set status = 'declined', responded_at = timezone('utc', now()) where id = $1`, [row.id]);
+            await database_js_1.default.query(`update public.connection_requests set status = 'declined', responded_at = timezone('utc', now()) where id = $1`, [row.id]);
             break;
         case "cancel":
-            await pool.query(`update public.connection_requests set status = 'cancelled', responded_at = timezone('utc', now()) where id = $1`, [row.id]);
+            await database_js_1.default.query(`update public.connection_requests set status = 'cancelled', responded_at = timezone('utc', now()) where id = $1`, [row.id]);
             break;
     }
     return getRequestById(row.id);
 }
 async function removeBookworm(userId, friendId) {
-    await pool.query(`delete from public.user_bookworms where (user_id = $1 and friend_id = $2) or (user_id = $2 and friend_id = $1)`, [userId, friendId]);
+    await database_js_1.default.query(`delete from public.user_bookworms where (user_id = $1 and friend_id = $2) or (user_id = $2 and friend_id = $1)`, [userId, friendId]);
 }
 async function getConnectionStats(userId) {
     const [bookworms, outgoing, incoming] = await Promise.all([
-        pool.query(`select count(*) from public.user_bookworms where user_id = $1`, [userId]),
-        pool.query(`select count(*) from public.connection_requests where requester_id = $1 and status = 'pending'`, [userId]),
-        pool.query(`select count(*) from public.connection_requests where target_id = $1 and status = 'pending'`, [userId]),
+        database_js_1.default.query(`select count(*) from public.user_bookworms where user_id = $1`, [userId]),
+        database_js_1.default.query(`select count(*) from public.connection_requests where requester_id = $1 and status = 'pending'`, [userId]),
+        database_js_1.default.query(`select count(*) from public.connection_requests where target_id = $1 and status = 'pending'`, [userId]),
     ]);
     return {
         bookwormCount: Number(bookworms.rows[0].count ?? 0),
@@ -127,7 +129,7 @@ async function getConnectionStats(userId) {
     };
 }
 async function lookupProfileByUsername(username) {
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       select user_id, username, display_name, avatar_url
       from public.user_profiles
       where lower(username) = lower($1)
@@ -145,15 +147,15 @@ async function lookupProfileByUsername(username) {
     };
 }
 async function acceptRequest(requestId, requesterId, targetId) {
-    await pool.query(`update public.connection_requests set status = 'accepted', responded_at = timezone('utc', now()) where id = $1`, [requestId]);
-    await pool.query(`
+    await database_js_1.default.query(`update public.connection_requests set status = 'accepted', responded_at = timezone('utc', now()) where id = $1`, [requestId]);
+    await database_js_1.default.query(`
       insert into public.user_bookworms (user_id, friend_id)
       values ($1, $2), ($2, $1)
       on conflict do nothing
     `, [requesterId, targetId]);
 }
 async function getRequestById(id) {
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       select cr.*,
              rp.username as requester_username,
              rp.display_name as requester_display_name,

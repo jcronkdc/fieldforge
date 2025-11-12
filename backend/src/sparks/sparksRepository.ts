@@ -220,7 +220,12 @@ export class SparksRepository {
     stripeSubscriptionId?: string,
     stripeCustomerId?: string
   ): Promise<string> {
-    const periodLength = billingCycle === 'monthly' ? '1 month' : '1 year';
+    // Validate billing cycle to prevent SQL injection
+    const validPeriods: Record<'monthly' | 'yearly', string> = {
+      monthly: '1 month',
+      yearly: '1 year'
+    };
+    const periodLength = validPeriods[billingCycle] || '1 month';
     
     const result = await query<{ id: string }>(
       `INSERT INTO user_subscriptions (
@@ -230,7 +235,7 @@ export class SparksRepository {
       ) VALUES (
         $1, $2, 'active', $3,
         CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP + INTERVAL '${periodLength}',
+        CURRENT_TIMESTAMP + INTERVAL $6,
         $4, $5
       )
       ON CONFLICT (user_id, status) 
@@ -238,12 +243,12 @@ export class SparksRepository {
         tier_id = $2,
         billing_cycle = $3,
         current_period_start = CURRENT_TIMESTAMP,
-        current_period_end = CURRENT_TIMESTAMP + INTERVAL '${periodLength}',
+        current_period_end = CURRENT_TIMESTAMP + INTERVAL $6,
         stripe_subscription_id = $4,
         stripe_customer_id = $5,
         updated_at = CURRENT_TIMESTAMP
       RETURNING id`,
-      [userId, tierId, billingCycle, stripeSubscriptionId, stripeCustomerId]
+      [userId, tierId, billingCycle, stripeSubscriptionId, stripeCustomerId, periodLength]
     );
     
     return result.rows[0].id;
@@ -277,14 +282,18 @@ export class SparksRepository {
     rewardType: 'signup' | 'first_action'
   ): Promise<void> {
     const rewardAmount = rewardType === 'signup' ? 25 : 50;
-    const columnToUpdate = rewardType === 'signup' ? 'signup_rewarded' : 'first_action_rewarded';
     
-    // Check if reward already given
+    // Check if reward already given - use CASE statement to avoid dynamic column names
     const check = await query<{ rewarded: boolean }>(
-      `SELECT ${columnToUpdate} as rewarded
+      `SELECT 
+        CASE 
+          WHEN $3 = 'signup' THEN signup_rewarded
+          WHEN $3 = 'first_action' THEN first_action_rewarded
+          ELSE false
+        END as rewarded
       FROM referral_rewards
       WHERE referrer_id = $1 AND referred_id = $2`,
-      [referrerId, referredId]
+      [referrerId, referredId, rewardType]
     );
     
     if (check.rows[0]?.rewarded) {
@@ -301,12 +310,14 @@ export class SparksRepository {
       referredId
     );
     
-    // Mark as rewarded
+    // Mark as rewarded - use CASE statement to update correct column
     await query(
       `UPDATE referral_rewards
-      SET ${columnToUpdate} = true
+      SET 
+        signup_rewarded = CASE WHEN $3 = 'signup' THEN true ELSE signup_rewarded END,
+        first_action_rewarded = CASE WHEN $3 = 'first_action' THEN true ELSE first_action_rewarded END
       WHERE referrer_id = $1 AND referred_id = $2`,
-      [referrerId, referredId]
+      [referrerId, referredId, rewardType]
     );
   }
 

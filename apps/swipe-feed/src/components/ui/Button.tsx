@@ -68,7 +68,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       typeof children === 'string' ? children : undefined;
     const resolvedAriaLabel = iconOnly ? propAriaLabel ?? fallbackLabel : propAriaLabel;
 
-    if (iconOnly && !resolvedAriaLabel && process.env.NODE_ENV !== 'production') {
+    if (iconOnly && !resolvedAriaLabel && import.meta.env.DEV) {
       console.warn('Button (iconOnly) requires an aria-label for accessibility.');
     }
 

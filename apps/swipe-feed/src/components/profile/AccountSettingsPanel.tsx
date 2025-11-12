@@ -185,10 +185,10 @@ export function AccountSettingsPanel({
       return;
     }
     setInviteError(null);
-    setInviteStatus("Sending invite…");
+    setInviteStatus("Sending invite.");
     try {
       await onInviteByUsername(inviteUsername.trim(), inviteMessage.trim() || undefined);
-      setInviteStatus("Invite sent!");
+      setInviteStatus("Invite sent.");
       setInviteUsername("");
       setInviteMessage("");
     } catch (error) {

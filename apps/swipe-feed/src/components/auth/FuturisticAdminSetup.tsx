@@ -11,7 +11,7 @@ export const FuturisticAdminSetup: React.FC = () => {
 
   const adminCredentials = {
     email: 'justincronk@pm.me',
-    password: 'Junuh2014!',
+    password: 'Junuh2014',
     fullName: 'Justin Cronk',
     company: 'Brink Constructors',
     jobTitle: 'Project Manager',
@@ -193,7 +193,7 @@ export const FuturisticAdminSetup: React.FC = () => {
               <button
                 onClick={checkAdminAccount}
                 disabled={status === 'checking' || status === 'creating'}
-                className="w-full btn-secondary justify-center"
+                className="btn btn-secondary w-full justify-center"
               >
                 {status === 'checking' ? 'Checking…' : 'Check for existing admin'}
                 {status !== 'checking' && <ArrowRight className="ml-2 h-4 w-4" />}
@@ -201,14 +201,14 @@ export const FuturisticAdminSetup: React.FC = () => {
               <button
                 onClick={createAdminAccount}
                 disabled={status === 'checking' || status === 'creating' || accountExists}
-                className="w-full btn-primary justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn btn-primary w-full justify-center disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {status === 'creating' ? 'Provisioning…' : 'Create administrator account'}
                 {status !== 'creating' && <ArrowRight className="ml-2 h-4 w-4" />}
               </button>
               <button
                 onClick={resetPassword}
-                className="w-full btn-ghost justify-center text-slate-700"
+                className="btn btn-ghost w-full justify-center text-slate-700"
               >
                 Send password reset link
               </button>

@@ -349,7 +349,7 @@ export class FieldForgeSystemTest {
 
   // Run all tests
   async runAllTests(): Promise<void> {
-    this.console.log('🚀 Starting FieldForge System Tests...');
+    this.console.log('🚀 Starting FieldForge System Tests');
     this.results = [];
 
     await this.testAuthSystem();

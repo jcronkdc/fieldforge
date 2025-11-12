@@ -7,15 +7,10 @@
  * via any medium, is strictly prohibited.
  */
 
-import { Pool } from "pg";
 import { loadEnv } from "../worker/env.js";
+import { query } from "../database.js";
 
 const env = loadEnv();
-const pool = new Pool({ connectionString: env.DATABASE_URL });
-
-async function query(text: string, params?: any[]) {
-  return pool.query(text, params);
-}
 
 export interface UserFeedback {
   id?: string;

@@ -123,7 +123,7 @@ export const DebugClickHandler: React.FC = () => {
   }, []);
   
   // Visual indicator that debug mode is active
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.DEV) {
     return (
       <div className="fixed bottom-4 left-4 z-[9999] bg-red-500 text-white px-2 py-1 text-xs rounded animate-pulse">
         DEBUG MODE

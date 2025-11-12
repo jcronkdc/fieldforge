@@ -1,15 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listCharacters = listCharacters;
 exports.getCharacter = getCharacter;
 exports.createCharacter = createCharacter;
 exports.addCharacterVersion = addCharacterVersion;
 exports.upsertRelationship = upsertRelationship;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = require("../database.js");
+const database_js_2 = __importDefault(require("../database.js"));
 const auditRepository_js_1 = require("./auditRepository.js");
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
 function mapCharacterRow(row) {
     return {
         id: row.id,
@@ -48,30 +51,30 @@ function mapRelationshipRow(row) {
     };
 }
 async function listCharacters(worldId, limit = 50) {
-    const { rows } = await pool.query(`
+    const result = await (0, database_js_1.query)(`
       select id, world_id, display_name, tagline, summary, tags, canonical_version_id, created_by, created_at
       from public.characters
       where world_id = $1
       order by created_at desc
       limit $2
     `, [worldId, Math.max(1, Math.min(limit, 200))]);
-    return rows.map(mapCharacterRow);
+    return result.rows.map(mapCharacterRow);
 }
 async function getCharacter(characterId) {
-    const characterResult = await pool.query(`
+    const characterResult = await (0, database_js_1.query)(`
       select id, world_id, display_name, tagline, summary, tags, canonical_version_id, created_by, created_at
       from public.characters
       where id = $1
     `, [characterId]);
     if (characterResult.rowCount === 0)
         return null;
-    const versionsResult = await pool.query(`
+    const versionsResult = await (0, database_js_1.query)(`
       select id, character_id, title, summary, traits, notes, created_by, created_at
       from public.character_versions
       where character_id = $1
       order by created_at desc
     `, [characterId]);
-    const relationshipsResult = await pool.query(`
+    const relationshipsResult = await (0, database_js_1.query)(`
       select id, character_id, target_character_id, relationship_type, strength, context, created_by, created_at
       from public.character_relationships
       where character_id = $1
@@ -84,7 +87,7 @@ async function getCharacter(characterId) {
     };
 }
 async function createCharacter({ worldId, displayName, summary, tagline, tags, createdBy, initialVersion, }) {
-    const client = await pool.connect();
+    const client = await database_js_2.default.connect();
     try {
         await client.query("BEGIN");
         const characterResult = await client.query(`
@@ -146,7 +149,7 @@ async function createCharacter({ worldId, displayName, summary, tagline, tags, c
     }
 }
 async function addCharacterVersion({ characterId, title, summary, traits, notes, createdBy, setCanonical, }) {
-    const client = await pool.connect();
+    const client = await database_js_2.default.connect();
     try {
         await client.query("BEGIN");
         const versionResult = await client.query(`
@@ -188,7 +191,7 @@ async function addCharacterVersion({ characterId, title, summary, traits, notes,
     }
 }
 async function upsertRelationship({ characterId, targetCharacterId, relationshipType, strength, context, createdBy, }) {
-    const result = await pool.query(`
+    const result = await (0, database_js_1.query)(`
       insert into public.character_relationships
         (character_id, target_character_id, relationship_type, strength, context, created_by)
       values ($1, $2, $3, $4, $5, $6)

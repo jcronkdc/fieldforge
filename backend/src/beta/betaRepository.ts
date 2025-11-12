@@ -3,16 +3,7 @@
  * Manages beta user registration, limits, and Spark bonuses
  */
 
-import pg from "pg";
-const { Pool } = pg;
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-});
-
-const query = (text: string, params?: any[]): Promise<pg.QueryResult<any>> => {
-  return pool.query(text, params);
-};
+import { query } from "../database.js";
 
 export interface BetaStatus {
   currentUsers: number;

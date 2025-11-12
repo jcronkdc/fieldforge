@@ -4,6 +4,7 @@ import {
   FileText, DollarSign, Users, AlertCircle
 } from 'lucide-react';
 import { projectService, Project } from '../../lib/services/projectService';
+import { toast } from '../common/FuturisticToast';
 
 interface ProjectCreatorProps {
   onBack: () => void;
@@ -45,12 +46,17 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
       });
 
       if (project) {
+        toast.success('Project created.');
         onProjectCreated(project);
       } else {
-        setError('Failed to create project');
+        const message = 'Project creation failed. Try again.';
+        setError(message);
+        toast.error(message);
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred');
+      const message = err?.message ? String(err.message) : 'Project creation failed. Try again.';
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -85,8 +91,8 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                   <Building2 className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-white">Create New Project</h1>
-                  <p className="text-gray-400 text-sm">Define project details and specifications</p>
+                  <h1 className="text-2xl font-bold text-white">Create new project</h1>
+                  <p className="text-gray-400 text-sm">Define project details and specifications.</p>
                 </div>
               </div>
             </div>
@@ -96,9 +102,9 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-4 flex items-center space-x-2">
-              <AlertCircle className="w-5 h-5 text-red-400" />
-              <span className="text-red-400">{error}</span>
+            <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-4 flex items-center space-x-2" id="project-error" role="alert">
+              <AlertCircle className="w-5 h-5 text-red-400" aria-hidden="true" />
+              <span className="text-red-400 text-sm">{error}</span>
             </div>
           )}
 
@@ -106,48 +112,55 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
               <FileText className="w-5 h-5 mr-2 text-amber-500" />
-              Basic Information
+              Basic information
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Project Number <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="project-number">
+                  Project number <span className="text-red-400">*</span>
                 </label>
                 <input
+                  id="project-number"
                   type="text"
                   required
                   value={formData.project_number}
                   onChange={(e) => setFormData({ ...formData, project_number: e.target.value })}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="PRJ-2024-001"
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? 'project-error' : undefined}
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Project Name <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="project-name">
+                  Project name <span className="text-red-400">*</span>
                 </label>
                 <input
+                  id="project-name"
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="138kV Substation Upgrade"
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? 'project-error' : undefined}
                 />
               </div>
               
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-2">
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="project-description">
                   Description
                 </label>
                 <textarea
+                  id="project-description"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
-                  placeholder="Project scope and objectives..."
+                  placeholder="Project scope and objectives"
                 />
               </div>
             </div>
@@ -157,15 +170,16 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
               <Zap className="w-5 h-5 mr-2 text-amber-500" />
-              Technical Specifications
+              Technical specifications
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Project Type <span className="text-red-400">*</span>
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="project-type">
+                  Project type <span className="text-red-400">*</span>
                 </label>
                 <select
+                  id="project-type"
                   value={formData.project_type}
                   onChange={(e) => setFormData({ ...formData, project_type: e.target.value as any })}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
@@ -178,10 +192,11 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Voltage Class
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="voltage-class">
+                  Voltage class
                 </label>
                 <select
+                  id="voltage-class"
                   value={formData.voltage_class}
                   onChange={(e) => setFormData({ ...formData, voltage_class: e.target.value })}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
@@ -199,15 +214,16 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
               <Calendar className="w-5 h-5 mr-2 text-amber-500" />
-              Schedule & Contract
+              Schedule and contract
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Start Date
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="start-date">
+                  Start date
                 </label>
                 <input
+                  id="start-date"
                   type="date"
                   value={formData.start_date}
                   onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
@@ -216,10 +232,11 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  End Date
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="end-date">
+                  End date
                 </label>
                 <input
+                  id="end-date"
                   type="date"
                   value={formData.end_date}
                   onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
@@ -228,10 +245,11 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Contract Type
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="contract-type">
+                  Contract type
                 </label>
                 <select
+                  id="contract-type"
                   value={formData.contract_type}
                   onChange={(e) => setFormData({ ...formData, contract_type: e.target.value })}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
@@ -253,10 +271,11 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-2">
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="project-address">
                   Address
                 </label>
                 <input
+                  id="project-address"
                   type="text"
                   value={formData.location.address}
                   onChange={(e) => setFormData({ 
@@ -269,10 +288,11 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="project-city">
                   City
                 </label>
                 <input
+                  id="project-city"
                   type="text"
                   value={formData.location.city}
                   onChange={(e) => setFormData({ 
@@ -286,10 +306,11 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
               
               <div className="flex space-x-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                  <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="project-state">
                     State
                   </label>
                   <input
+                    id="project-state"
                     type="text"
                     value={formData.location.state}
                     onChange={(e) => setFormData({ 
@@ -302,10 +323,11 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                 </div>
                 
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-400 mb-2">
-                    ZIP
+                  <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="project-zip">
+                    Zip code
                   </label>
                   <input
+                    id="project-zip"
                     type="text"
                     value={formData.location.zip}
                     onChange={(e) => setFormData({ 
@@ -325,24 +347,24 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
             <button
               type="button"
               onClick={onBack}
-              className="px-6 py-3 bg-gray-700 rounded-xl font-medium text-white hover:bg-gray-600 transition-colors"
+              className="btn btn-secondary"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50"
+              className="btn btn-primary flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  <span>Creating...</span>
+                  <span>Creating project</span>
                 </>
               ) : (
                 <>
                   <Save className="w-5 h-5" />
-                  <span>Create Project</span>
+                  <span>Create project</span>
                 </>
               )}
             </button>

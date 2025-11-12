@@ -122,7 +122,7 @@ export const JSAForm: React.FC = () => {
 
       if (error) throw error;
 
-      alert('JSA submitted successfully!');
+      alert('JSA submitted successfully.');
       // Reset form or redirect
     } catch (error) {
       console.error('Error submitting JSA:', error);
@@ -285,7 +285,7 @@ export const JSAForm: React.FC = () => {
                       }}
                       className="w-full px-2 py-1 bg-gray-700 text-white rounded-md text-sm"
                     >
-                      <option value="">Select hazard...</option>
+                      <option value="">Select hazard</option>
                       {commonHazards.map(hazard => (
                         <option key={hazard} value={hazard}>{hazard}</option>
                       ))}

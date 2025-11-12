@@ -4,6 +4,7 @@ const DEFAULT_TIMEOUT_MS = 10000;
 export interface FetchJsonOptions extends RequestInit {
   timeoutMs?: number;
   baseUrl?: string;
+  skipTokenRefresh?: boolean; // Set to true to skip automatic token refresh on 401
 }
 
 export interface FetchJsonResult<T> {
@@ -22,15 +23,22 @@ const resolveUrl = (input: string, baseUrl: string): string => {
   return `${baseUrl}${input.startsWith("/") ? input : `/${input}`}`;
 };
 
-const buildHeaders = (initHeaders: HeadersInit | undefined, body: BodyInit | null | undefined): HeadersInit => {
+const buildHeaders = async (initHeaders: HeadersInit | undefined, body: BodyInit | null | undefined): Promise<HeadersInit> => {
   const headers = new Headers(initHeaders);
   if (body && !(body instanceof FormData) && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
-  if (isBrowser) {
-    const token = window.localStorage.getItem("auth_token");
-    if (token && !headers.has("Authorization")) {
-      headers.set("Authorization", `Bearer ${token}`);
+  if (isBrowser && !headers.has("Authorization")) {
+    // Get Supabase session token
+    try {
+      const { supabase } = await import('./supabase');
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        headers.set("Authorization", `Bearer ${session.access_token}`);
+      }
+    } catch (error) {
+      // Supabase not available, continue without auth header
+      console.warn('Could not get Supabase session for API request:', error);
     }
   }
   return headers;
@@ -62,23 +70,56 @@ export async function fetchJson<T = unknown>(input: string, options: FetchJsonOp
         ? JSON.stringify(init.body)
         : init.body;
 
-    const response = await fetch(url, {
+    const headers = await buildHeaders(init.headers, init.body ?? body);
+
+    let response = await fetch(url, {
       ...init,
       body,
       signal: controller.signal,
-      headers: buildHeaders(init.headers, init.body ?? body),
+      headers,
     });
 
     const status = response.status;
 
+    // Handle 401 Unauthorized - try to refresh token and retry once
+    if (status === 401 && isBrowser && !options.skipTokenRefresh) {
+      try {
+        const { supabase } = await import('./supabase');
+        const { data: { session }, error: refreshError } = await supabase.auth.refreshSession();
+        
+        if (!refreshError && session?.access_token) {
+          // Retry request with new token
+          const retryHeaders = new Headers(headers);
+          retryHeaders.set("Authorization", `Bearer ${session.access_token}`);
+          
+          const retryResponse = await fetch(url, {
+            ...init,
+            body,
+            signal: controller.signal,
+            headers: retryHeaders,
+          });
+          
+          if (retryResponse.ok) {
+            const data = await safeParseJson<T>(retryResponse);
+            return { data, status: retryResponse.status };
+          }
+          // If retry also fails, continue with original error
+          response = retryResponse;
+        }
+      } catch (refreshError) {
+        // Token refresh failed, continue with original error
+        console.warn('Token refresh failed:', refreshError);
+      }
+    }
+
     if (!response.ok) {
       const errorPayload = await safeParseJson<{ message?: string }>(response).catch(() => undefined);
-      const error = new Error(errorPayload?.message ?? `Request failed with status ${status}`);
-      return { error, status };
+      const error = new Error(errorPayload?.message ?? `Request failed with status ${response.status}`);
+      return { error, status: response.status };
     }
 
     const data = await safeParseJson<T>(response);
-    return { data, status };
+    return { data, status: response.status };
   } catch (error) {
     console.error("Network request failed", error);
     return { error: error instanceof Error ? error : new Error("Network request failed"), status: 0 };

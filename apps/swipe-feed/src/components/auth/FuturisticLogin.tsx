@@ -128,7 +128,7 @@ export const FuturisticLogin: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full btn-primary justify-center"
+                className="btn btn-primary w-full justify-center"
               >
                 {loading ? 'Signing in…' : 'Sign in'}
                 {!loading && <ArrowRight className="ml-2 h-4 w-4" />}

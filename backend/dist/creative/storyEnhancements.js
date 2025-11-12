@@ -10,16 +10,12 @@ exports.generateTableOfContents = generateTableOfContents;
 exports.generateCharacterProfiles = generateCharacterProfiles;
 exports.generateMarketingCopy = generateMarketingCopy;
 exports.getStoryEnhancements = getStoryEnhancements;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
+const database_js_1 = require("../database.js");
 const aiClient_js_1 = require("./aiClient.js");
 const mythacoinRepository_js_1 = require("../mythacoin/mythacoinRepository.js");
 const aiTierSystem_js_1 = require("./aiTierSystem.js");
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
-async function query(text, params) {
-    return pool.query(text, params);
-}
 const ENHANCEMENT_COSTS = {
     prologue: 40,
     epilogue: 40,
@@ -60,7 +56,7 @@ Write a prologue that draws readers in and makes them want to read more.`;
     // Consume tokens
     await (0, aiTierSystem_js_1.consumeAITokens)(data.userId, 'enhancements', 1500, 'claude-3-opus');
     // Save enhancement
-    const result = await query(`INSERT INTO story_enhancements (
+    const result = await (0, database_js_1.query)(`INSERT INTO story_enhancements (
       story_id, user_id, enhancement_type, content,
       metadata, cost_sparks, ai_model_used
     ) VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -109,7 +105,7 @@ Create an epilogue that provides satisfying closure while leaving some mystery.`
         temperature: 0.8
     });
     await (0, aiTierSystem_js_1.consumeAITokens)(data.userId, 'enhancements', 1500, 'claude-3-opus');
-    const result = await query(`INSERT INTO story_enhancements (
+    const result = await (0, database_js_1.query)(`INSERT INTO story_enhancements (
       story_id, user_id, enhancement_type, content,
       metadata, cost_sparks, ai_model_used
     ) VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -170,7 +166,7 @@ Return as JSON:
     });
     await (0, aiTierSystem_js_1.consumeAITokens)(data.userId, 'enhancements', 1000);
     const tocData = JSON.parse(response.content);
-    const result = await query(`INSERT INTO story_enhancements (
+    const result = await (0, database_js_1.query)(`INSERT INTO story_enhancements (
       story_id, user_id, enhancement_type, content,
       metadata, cost_sparks, ai_model_used
     ) VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -238,7 +234,7 @@ Return as JSON:
     });
     await (0, aiTierSystem_js_1.consumeAITokens)(data.userId, 'enhancements', 2000, 'claude-3-opus');
     const profileData = JSON.parse(response.content);
-    const result = await query(`INSERT INTO story_enhancements (
+    const result = await (0, database_js_1.query)(`INSERT INTO story_enhancements (
       story_id, user_id, enhancement_type, content,
       metadata, cost_sparks, ai_model_used
     ) VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -297,7 +293,7 @@ Return as JSON:
     });
     await (0, aiTierSystem_js_1.consumeAITokens)(data.userId, 'enhancements', 1000);
     const marketingData = JSON.parse(response.content);
-    const result = await query(`INSERT INTO story_enhancements (
+    const result = await (0, database_js_1.query)(`INSERT INTO story_enhancements (
       story_id, user_id, enhancement_type, content,
       metadata, cost_sparks, ai_model_used
     ) VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -321,7 +317,7 @@ Return as JSON:
 }
 // Get all enhancements for a story
 async function getStoryEnhancements(storyId, userId) {
-    const result = await query(`SELECT * FROM story_enhancements 
+    const result = await (0, database_js_1.query)(`SELECT * FROM story_enhancements 
      WHERE story_id = $1 AND user_id = $2
      ORDER BY created_at DESC`, [storyId, userId]);
     return result.rows;

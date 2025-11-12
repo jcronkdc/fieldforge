@@ -303,7 +303,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
               <h2 className="text-2xl font-bold text-white">Receipt Scanner</h2>
               <p className="text-cyan-100 mt-1">
                 {step === 'capture' && 'Take a photo or upload receipt'}
-                {step === 'processing' && 'Processing image with OCR...'}
+                {step === 'processing' && 'Processing image with OCR'}
                 {step === 'review' && 'Review and confirm details'}
               </p>
             </div>
@@ -386,13 +386,21 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
             <div className="text-center py-12">
               <Loader2 className="w-16 h-16 text-cyan-400 animate-spin mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">Processing Receipt</h3>
-              <p className="text-gray-400">Extracting text and analyzing content...</p>
+              <p className="text-gray-400">Extracting text and analyzing content</p>
               {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Receipt"
-                  className="mt-6 max-w-sm mx-auto rounded-lg shadow-lg"
-                />
+                <div className="mt-6 mx-auto max-w-sm">
+                  <div className="aspect-4-3 overflow-hidden rounded-lg shadow-lg">
+                    <img
+                      src={imagePreview}
+                      alt="Receipt"
+                      width={800}
+                      height={600}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </div>
               )}
             </div>
           )}
@@ -419,11 +427,17 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
               {/* Image Preview */}
               {imagePreview && (
                 <div className="bg-gray-800 rounded-lg p-4">
-                  <img
-                    src={imagePreview}
-                    alt="Receipt"
-                    className="max-w-full h-auto rounded-lg"
-                  />
+                  <div className="aspect-4-3 overflow-hidden rounded-lg">
+                    <img
+                      src={imagePreview}
+                      alt="Receipt"
+                      width={800}
+                      height={600}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
               )}
 
@@ -497,7 +511,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
                               type="text"
                               value={costCodeSearch}
                               onChange={(e) => setCostCodeSearch(e.target.value)}
-                              placeholder="Search cost codes..."
+                              placeholder="Search cost codes"
                               className="w-full pl-9 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:border-cyan-500"
                             />
                           </div>
@@ -597,7 +611,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
                     onChange={(e) => setNotes(e.target.value)}
                     rows={3}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-cyan-500 focus:outline-none"
-                    placeholder="Additional notes..."
+                    placeholder="Additional notes"
                   />
                 </div>
               </div>
@@ -618,7 +632,7 @@ export const ReceiptScanner: React.FC<ReceiptScannerProps> = ({
                   {processing ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Saving & Emailing...</span>
+                      <span>Saving & Emailing</span>
                     </>
                   ) : (
                     <>

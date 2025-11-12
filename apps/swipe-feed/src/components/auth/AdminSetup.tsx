@@ -11,13 +11,13 @@ export const AdminSetup: React.FC = () => {
   const checkAdminAccount = async () => {
     setLoading(true);
     setStatus('checking');
-    setMessage('Checking for admin account...');
+    setMessage('Checking for admin account');
 
     try {
       // Try to sign in with the admin credentials
       const { data, error } = await supabase.auth.signInWithPassword({
         email: 'justincronk@pm.me',
-        password: 'Junuh2014!'
+        password: 'Junuh2014'
       });
 
       if (error) {
@@ -31,7 +31,7 @@ export const AdminSetup: React.FC = () => {
         }
       } else if (data.user) {
         setAccountExists(true);
-        setMessage('✅ Admin account exists and credentials are correct!');
+        setMessage('✅ Admin account exists and credentials are correct.');
         setStatus('success');
         
         // Sign out after checking
@@ -48,13 +48,13 @@ export const AdminSetup: React.FC = () => {
   const createAdminAccount = async () => {
     setLoading(true);
     setStatus('creating');
-    setMessage('Creating admin account...');
+    setMessage('Creating admin account');
 
     try {
       // First, try to sign up the user
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email: 'justincronk@pm.me',
-        password: 'Junuh2014!',
+        password: 'Junuh2014',
         options: {
           data: {
             first_name: 'Justin',
@@ -88,7 +88,7 @@ export const AdminSetup: React.FC = () => {
         }
       } else {
         // Account created successfully
-        setMessage('✅ Admin account created successfully! You can now sign in.');
+        setMessage('✅ Admin account created successfully. You can now sign in.');
         setStatus('success');
         setAccountExists(true);
 
@@ -127,7 +127,7 @@ export const AdminSetup: React.FC = () => {
 
   const resetPassword = async () => {
     setLoading(true);
-    setMessage('Sending password reset email...');
+    setMessage('Sending password reset email');
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail('justincronk@pm.me', {
@@ -178,7 +178,7 @@ export const AdminSetup: React.FC = () => {
             <div className="flex items-center space-x-3">
               <Key className="w-5 h-5 text-slate-400" />
               <span className="text-slate-300">Password:</span>
-              <span className="text-white font-mono">Junuh2014!</span>
+              <span className="text-white font-mono">Junuh2014</span>
             </div>
 
             <div className="flex items-center space-x-3">
@@ -212,7 +212,7 @@ export const AdminSetup: React.FC = () => {
               {loading && status === 'checking' ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Checking Account...
+                  Checking Account
                 </>
               ) : (
                 <>
@@ -231,7 +231,7 @@ export const AdminSetup: React.FC = () => {
                 {loading && status === 'creating' ? (
                   <>
                     <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    Creating Account...
+                    Creating Account
                   </>
                 ) : (
                   <>

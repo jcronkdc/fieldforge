@@ -74,7 +74,7 @@
 
 .premium-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 calc(var(--fx-intensity, 1) * 10px) calc(var(--fx-intensity, 1) * 30px) rgba(0, 212, 255, 0.3);
 }
 
 .premium-hover-scale {
@@ -193,15 +193,16 @@
 /* Glow Pulse */
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 calc(var(--fx-intensity, 1) * 20px) rgba(0, 212, 255, 0.5);
   }
   50% {
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.8);
+    box-shadow: 0 0 calc(var(--fx-intensity, 1) * 40px) rgba(0, 212, 255, 0.8);
   }
 }
 
 .glow-pulse {
   animation: glowPulse 2s ease-in-out infinite;
+  will-change: box-shadow, opacity;
 }
 
 /* Typing Animation */

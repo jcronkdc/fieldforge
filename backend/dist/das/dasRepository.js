@@ -28,20 +28,16 @@ exports.submitBrandFeedback = submitBrandFeedback;
 exports.reportViolation = reportViolation;
 exports.getDashboardStats = getDashboardStats;
 exports.getTransparencyReport = getTransparencyReport;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
-const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
-async function query(text, params) {
-    return pool.query(text, params);
-}
+const database_js_1 = require("../database.js");
 const mythacoinRepository_js_1 = require("../mythacoin/mythacoinRepository.js");
 const dasAudit_js_1 = require("./dasAudit.js");
+const env = (0, env_js_1.loadEnv)();
 // ============================================================================
 // BRAND MANAGEMENT
 // ============================================================================
 async function registerBrand(data) {
-    const result = await query(`INSERT INTO das_brands (company_name, company_website, contact_email)
+    const result = await (0, database_js_1.query)(`INSERT INTO das_brands (company_name, company_website, contact_email)
      VALUES ($1, $2, $3)
      RETURNING *`, [data.companyName, data.companyWebsite, data.contactEmail]);
     // Create audit entry
@@ -56,7 +52,7 @@ async function registerBrand(data) {
     return result.rows[0];
 }
 async function getBrandById(brandId) {
-    const result = await query(`SELECT * FROM das_brands WHERE id = $1`, [brandId]);
+    const result = await (0, database_js_1.query)(`SELECT * FROM das_brands WHERE id = $1`, [brandId]);
     return result.rows[0];
 }
 async function listBrands(status) {
@@ -64,7 +60,7 @@ async function listBrands(status) {
         ? `SELECT * FROM das_brands WHERE status = $1 ORDER BY reputation_score DESC`
         : `SELECT * FROM das_brands ORDER BY reputation_score DESC`;
     const params = status ? [status] : [];
-    const result = await query(sql, params);
+    const result = await (0, database_js_1.query)(sql, params);
     return result.rows;
 }
 // ============================================================================
@@ -74,13 +70,13 @@ async function submitProposal(data) {
     // Get current active voting cycle if not specified
     let cycleId = data.votingCycleId;
     if (!cycleId) {
-        const cycleResult = await query(`SELECT id FROM das_voting_cycles 
+        const cycleResult = await (0, database_js_1.query)(`SELECT id FROM das_voting_cycles 
        WHERE status = 'active' 
        ORDER BY start_date DESC 
        LIMIT 1`);
         cycleId = cycleResult.rows[0]?.id;
     }
-    const result = await query(`INSERT INTO das_proposals (
+    const result = await (0, database_js_1.query)(`INSERT INTO das_proposals (
       brand_id, campaign_name, campaign_description, creative_concept,
       ethical_disclosure, target_audience, proposed_budget,
       revenue_share_percentage, campaign_duration_days,
@@ -114,7 +110,7 @@ async function submitProposal(data) {
     return result.rows[0];
 }
 async function getProposalById(proposalId) {
-    const result = await query(`SELECT p.*, b.company_name, b.reputation_score,
+    const result = await (0, database_js_1.query)(`SELECT p.*, b.company_name, b.reputation_score,
             COUNT(DISTINCT v.id) as total_votes,
             COUNT(DISTINCT v.id) FILTER (WHERE v.vote_type = 'approve') as approve_votes,
             COUNT(DISTINCT v.id) FILTER (WHERE v.vote_type = 'reject') as reject_votes
@@ -147,7 +143,7 @@ async function listProposals(cycleId, status) {
     }
     sql += ` GROUP BY p.id, b.company_name, b.reputation_score
            ORDER BY p.submission_date DESC`;
-    const result = await query(sql, params);
+    const result = await (0, database_js_1.query)(sql, params);
     return result.rows;
 }
 // ============================================================================
@@ -155,14 +151,14 @@ async function listProposals(cycleId, status) {
 // ============================================================================
 async function castVote(data) {
     // Check if user can vote
-    const canVoteResult = await query(`SELECT can_user_vote($1, $2) as can_vote`, [data.userId, data.proposalId]);
+    const canVoteResult = await (0, database_js_1.query)(`SELECT can_user_vote($1, $2) as can_vote`, [data.userId, data.proposalId]);
     if (!canVoteResult.rows[0].can_vote) {
         throw new Error("User cannot vote on this proposal");
     }
     // Get voting cycle
-    const cycleResult = await query(`SELECT voting_cycle_id FROM das_proposals WHERE id = $1`, [data.proposalId]);
+    const cycleResult = await (0, database_js_1.query)(`SELECT voting_cycle_id FROM das_proposals WHERE id = $1`, [data.proposalId]);
     // Cast vote
-    const result = await query(`INSERT INTO das_votes (
+    const result = await (0, database_js_1.query)(`INSERT INTO das_votes (
       proposal_id, user_id, vote_type, feedback, 
       ethical_concerns, voting_cycle_id
     ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -193,7 +189,7 @@ async function castVote(data) {
     return result.rows[0];
 }
 async function getUserVotes(userId, limit = 50) {
-    const result = await query(`SELECT v.*, p.campaign_name, b.company_name
+    const result = await (0, database_js_1.query)(`SELECT v.*, p.campaign_name, b.company_name
      FROM das_votes v
      JOIN das_proposals p ON v.proposal_id = p.id
      JOIN das_brands b ON p.brand_id = b.id
@@ -204,7 +200,7 @@ async function getUserVotes(userId, limit = 50) {
 }
 async function checkProposalVotingStatus(proposalId) {
     // Get voting statistics
-    const statsResult = await query(`SELECT 
+    const statsResult = await (0, database_js_1.query)(`SELECT 
       p.*,
       vc.min_votes_required,
       vc.approval_threshold,
@@ -234,15 +230,15 @@ async function checkProposalVotingStatus(proposalId) {
 }
 async function approveProposal(proposalId, approvalPercentage) {
     // Update proposal status
-    await query(`UPDATE das_proposals 
+    await (0, database_js_1.query)(`UPDATE das_proposals 
      SET status = 'approved', 
          approval_percentage = $2,
          updated_at = NOW()
      WHERE id = $1`, [proposalId, approvalPercentage]);
     // Create campaign from approved proposal
-    const proposalResult = await query(`SELECT * FROM das_proposals WHERE id = $1`, [proposalId]);
+    const proposalResult = await (0, database_js_1.query)(`SELECT * FROM das_proposals WHERE id = $1`, [proposalId]);
     const proposal = proposalResult.rows[0];
-    await query(`INSERT INTO das_campaigns (
+    await (0, database_js_1.query)(`INSERT INTO das_campaigns (
       proposal_id, brand_id, campaign_name, status,
       start_date, end_date
     ) VALUES ($1, $2, $3, 'scheduled', 
@@ -260,7 +256,7 @@ async function approveProposal(proposalId, approvalPercentage) {
     });
 }
 async function rejectProposal(proposalId, approvalPercentage, reason) {
-    await query(`UPDATE das_proposals 
+    await (0, database_js_1.query)(`UPDATE das_proposals 
      SET status = 'rejected',
          approval_percentage = $2,
          rejection_reason = $3,
@@ -280,7 +276,7 @@ async function rejectProposal(proposalId, approvalPercentage, reason) {
 // VOTING CYCLES
 // ============================================================================
 async function createVotingCycle(data) {
-    const result = await query(`INSERT INTO das_voting_cycles (
+    const result = await (0, database_js_1.query)(`INSERT INTO das_voting_cycles (
       cycle_name, cycle_type, start_date, end_date,
       min_votes_required, approval_threshold, status
     ) VALUES ($1, $2, $3, $4, $5, $6, 
@@ -301,7 +297,7 @@ async function createVotingCycle(data) {
     return result.rows[0];
 }
 async function getCurrentVotingCycle() {
-    const result = await query(`SELECT * FROM das_voting_cycles 
+    const result = await (0, database_js_1.query)(`SELECT * FROM das_voting_cycles 
      WHERE status = 'active'
      ORDER BY start_date DESC
      LIMIT 1`);
@@ -312,14 +308,14 @@ async function listVotingCycles(status) {
         ? `SELECT * FROM das_voting_cycles WHERE status = $1 ORDER BY start_date DESC`
         : `SELECT * FROM das_voting_cycles ORDER BY start_date DESC`;
     const params = status ? [status] : [];
-    const result = await query(sql, params);
+    const result = await (0, database_js_1.query)(sql, params);
     return result.rows;
 }
 // ============================================================================
 // CAMPAIGN MANAGEMENT
 // ============================================================================
 async function getCampaignById(campaignId) {
-    const result = await query(`SELECT c.*, b.company_name, b.reputation_score,
+    const result = await (0, database_js_1.query)(`SELECT c.*, b.company_name, b.reputation_score,
             p.creative_concept, p.lore_integration_plan,
             p.interactive_elements
      FROM das_campaigns c
@@ -329,7 +325,7 @@ async function getCampaignById(campaignId) {
     return result.rows[0];
 }
 async function listActiveCampaigns() {
-    const result = await query(`SELECT c.*, b.company_name, b.reputation_score
+    const result = await (0, database_js_1.query)(`SELECT c.*, b.company_name, b.reputation_score
      FROM das_campaigns c
      JOIN das_brands b ON c.brand_id = b.id
      WHERE c.status = 'active'
@@ -339,7 +335,7 @@ async function listActiveCampaigns() {
     return result.rows;
 }
 async function updateCampaignMetrics(campaignId, metrics) {
-    const result = await query(`UPDATE das_campaigns
+    const result = await (0, database_js_1.query)(`UPDATE das_campaigns
      SET performance_metrics = performance_metrics || $2,
          total_engagements = total_engagements + ($2->>'engagements')::INTEGER,
          updated_at = NOW()
@@ -351,7 +347,7 @@ async function updateCampaignMetrics(campaignId, metrics) {
 // AD CONTENT & ENGAGEMENT
 // ============================================================================
 async function createAdContent(data) {
-    const result = await query(`INSERT INTO das_ad_content (
+    const result = await (0, database_js_1.query)(`INSERT INTO das_ad_content (
       campaign_id, content_type, title, description,
       lore_context, difficulty_level, estimated_duration_minutes,
       reward_sparks, content_data, completion_criteria
@@ -371,7 +367,7 @@ async function createAdContent(data) {
     return result.rows[0];
 }
 async function getAdContent(contentId) {
-    const result = await query(`SELECT ac.*, c.campaign_name, b.company_name
+    const result = await (0, database_js_1.query)(`SELECT ac.*, c.campaign_name, b.company_name
      FROM das_ad_content ac
      JOIN das_campaigns c ON ac.campaign_id = c.id
      JOIN das_brands b ON c.brand_id = b.id
@@ -380,13 +376,13 @@ async function getAdContent(contentId) {
 }
 async function listUserEligibleAds(userId) {
     // Check user preferences
-    const prefsResult = await query(`SELECT * FROM das_user_preferences WHERE user_id = $1`, [userId]);
+    const prefsResult = await (0, database_js_1.query)(`SELECT * FROM das_user_preferences WHERE user_id = $1`, [userId]);
     const prefs = prefsResult.rows[0];
     if (!prefs?.opt_in_ads) {
         return [];
     }
     // Get eligible ads based on preferences
-    const result = await query(`SELECT ac.*, c.campaign_name, b.company_name
+    const result = await (0, database_js_1.query)(`SELECT ac.*, c.campaign_name, b.company_name
      FROM das_ad_content ac
      JOIN das_campaigns c ON ac.campaign_id = c.id
      JOIN das_brands b ON c.brand_id = b.id
@@ -426,7 +422,7 @@ async function recordEngagement(data) {
             earnedSparks = 1;
             break;
     }
-    const result = await query(`INSERT INTO das_engagements (
+    const result = await (0, database_js_1.query)(`INSERT INTO das_engagements (
       user_id, campaign_id, content_id, engagement_type,
       duration_seconds, completion_percentage, earned_sparks,
       feedback_rating, feedback_comment
@@ -463,7 +459,7 @@ async function recordEngagement(data) {
     return result.rows[0];
 }
 async function getUserEngagements(userId, limit = 50) {
-    const result = await query(`SELECT e.*, c.campaign_name, b.company_name
+    const result = await (0, database_js_1.query)(`SELECT e.*, c.campaign_name, b.company_name
      FROM das_engagements e
      JOIN das_campaigns c ON e.campaign_id = c.id
      JOIN das_brands b ON c.brand_id = b.id
@@ -476,11 +472,11 @@ async function getUserEngagements(userId, limit = 50) {
 // USER PREFERENCES
 // ============================================================================
 async function getUserPreferences(userId) {
-    const result = await query(`SELECT * FROM das_user_preferences WHERE user_id = $1`, [userId]);
+    const result = await (0, database_js_1.query)(`SELECT * FROM das_user_preferences WHERE user_id = $1`, [userId]);
     return result.rows[0];
 }
 async function updateUserPreferences(userId, preferences) {
-    const result = await query(`INSERT INTO das_user_preferences (
+    const result = await (0, database_js_1.query)(`INSERT INTO das_user_preferences (
       user_id, opt_in_ads, preferred_ad_types, blocked_brands,
       max_daily_ads, preferred_difficulty, auto_skip_after_seconds,
       share_analytics, receive_vote_notifications, payout_preferences,
@@ -517,7 +513,7 @@ async function updateUserPreferences(userId, preferences) {
 // REVENUE & PAYOUTS
 // ============================================================================
 async function distributeRevenue(campaignId, totalRevenue) {
-    const result = await query(`SELECT distribute_campaign_revenue($1, $2) as distribution_id`, [campaignId, totalRevenue]);
+    const result = await (0, database_js_1.query)(`SELECT distribute_campaign_revenue($1, $2) as distribution_id`, [campaignId, totalRevenue]);
     const distributionId = result.rows[0].distribution_id;
     // Process individual payouts
     await processPayouts(distributionId);
@@ -525,7 +521,7 @@ async function distributeRevenue(campaignId, totalRevenue) {
 }
 async function processPayouts(distributionId) {
     // Get all pending payouts for this distribution
-    const payoutsResult = await query(`SELECT * FROM das_user_payouts 
+    const payoutsResult = await (0, database_js_1.query)(`SELECT * FROM das_user_payouts 
      WHERE distribution_id = $1 AND payout_status = 'pending'`, [distributionId]);
     for (const payout of payoutsResult.rows) {
         try {
@@ -543,7 +539,7 @@ async function processPayouts(distributionId) {
                     }
                 });
                 // Update payout status
-                await query(`UPDATE das_user_payouts 
+                await (0, database_js_1.query)(`UPDATE das_user_payouts 
            SET payout_status = 'completed',
                processed_at = NOW()
            WHERE id = $1`, [payout.id]);
@@ -552,14 +548,14 @@ async function processPayouts(distributionId) {
         }
         catch (error) {
             console.error(`Failed to process payout ${payout.id}:`, error);
-            await query(`UPDATE das_user_payouts 
+            await (0, database_js_1.query)(`UPDATE das_user_payouts 
          SET payout_status = 'failed'
          WHERE id = $1`, [payout.id]);
         }
     }
 }
 async function getUserPayouts(userId, limit = 50) {
-    const result = await query(`SELECT p.*, c.campaign_name, d.total_revenue
+    const result = await (0, database_js_1.query)(`SELECT p.*, c.campaign_name, d.total_revenue
      FROM das_user_payouts p
      JOIN das_campaigns c ON p.campaign_id = c.id
      JOIN das_revenue_distribution d ON p.distribution_id = d.id
@@ -569,7 +565,7 @@ async function getUserPayouts(userId, limit = 50) {
     return result.rows;
 }
 async function getRevenueStats() {
-    const result = await query(`SELECT 
+    const result = await (0, database_js_1.query)(`SELECT 
       SUM(total_revenue) as total_revenue,
       SUM(platform_share) as total_platform_share,
       SUM(user_pool_share) as total_user_share,
@@ -584,7 +580,7 @@ async function getRevenueStats() {
 // BRAND FEEDBACK & ACCOUNTABILITY
 // ============================================================================
 async function submitBrandFeedback(data) {
-    const result = await query(`INSERT INTO das_brand_feedback (
+    const result = await (0, database_js_1.query)(`INSERT INTO das_brand_feedback (
       brand_id, campaign_id, user_id, rating,
       feedback_type, feedback_text, is_flagged, flag_reason
     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -609,7 +605,7 @@ async function submitBrandFeedback(data) {
     return result.rows[0];
 }
 async function reportViolation(data) {
-    const result = await query(`INSERT INTO das_brand_violations (
+    const result = await (0, database_js_1.query)(`INSERT INTO das_brand_violations (
       brand_id, campaign_id, violation_type,
       severity, description, reported_by
     ) VALUES ($1, $2, $3, $4, $5, $6)
@@ -622,15 +618,15 @@ async function reportViolation(data) {
         data.reportedBy
     ]);
     // Update brand reputation
-    await query(`SELECT update_brand_reputation($1)`, [data.brandId]);
+    await (0, database_js_1.query)(`SELECT update_brand_reputation($1)`, [data.brandId]);
     // Check if brand should be suspended
-    const violationsResult = await query(`SELECT COUNT(*) as violation_count,
+    const violationsResult = await (0, database_js_1.query)(`SELECT COUNT(*) as violation_count,
             COUNT(*) FILTER (WHERE severity IN ('major', 'critical')) as serious_violations
      FROM das_brand_violations
      WHERE brand_id = $1 AND resolved_at IS NULL`, [data.brandId]);
     const violations = violationsResult.rows[0];
     if (violations.serious_violations > 2 || violations.violation_count > 5) {
-        await query(`UPDATE das_brands
+        await (0, database_js_1.query)(`UPDATE das_brands
        SET status = 'suspended',
            suspension_reason = 'Multiple violations reported',
            suspension_date = NOW()
@@ -645,7 +641,7 @@ async function getDashboardStats(userId) {
     const userCondition = userId ? `WHERE user_id = $1` : '';
     const params = userId ? [userId] : [];
     // Get overall stats
-    const overallStats = await query(`SELECT 
+    const overallStats = await (0, database_js_1.query)(`SELECT 
       (SELECT COUNT(*) FROM das_brands WHERE status = 'approved') as active_brands,
       (SELECT COUNT(*) FROM das_campaigns WHERE status = 'active') as active_campaigns,
       (SELECT COUNT(*) FROM das_proposals WHERE status = 'voting') as proposals_voting,
@@ -653,7 +649,7 @@ async function getDashboardStats(userId) {
     // Get user-specific stats if userId provided
     let userStats = null;
     if (userId) {
-        const userStatsResult = await query(`SELECT 
+        const userStatsResult = await (0, database_js_1.query)(`SELECT 
         (SELECT COUNT(*) FROM das_votes WHERE user_id = $1) as total_votes,
         (SELECT COUNT(*) FROM das_engagements WHERE user_id = $1) as total_engagements,
         (SELECT SUM(payout_amount) FROM das_user_payouts WHERE user_id = $1 AND payout_status = 'completed') as total_earnings,
@@ -666,7 +662,7 @@ async function getDashboardStats(userId) {
     };
 }
 async function getTransparencyReport() {
-    const result = await query(`SELECT 
+    const result = await (0, database_js_1.query)(`SELECT 
       DATE_TRUNC('month', created_at) as month,
       SUM(total_revenue) as revenue,
       SUM(platform_share) as platform_share,

@@ -8,7 +8,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIU
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 async function createAdminAccount() {
-  console.log('🔧 Creating admin account for Justin Cronk...');
+  console.log('🔧 Creating admin account for Justin Cronk');
   
   // Create Supabase client with service role for admin operations
   const supabase = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey);
@@ -29,7 +29,7 @@ async function createAdminAccount() {
     });
 
     if (signUpError && signUpError.message.includes('already registered')) {
-      console.log('✅ User already exists, attempting to update profile...');
+      console.log('✅ User already exists, attempting to update profile');
       
       // If user exists, try to sign in to verify
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({

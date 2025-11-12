@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
 import { AuthProvider } from './components/auth/AuthProvider';
@@ -135,7 +135,7 @@ function AppSafe() {
     window.addEventListener('offline', handleOffline);
 
     // Service Worker Registration (only in production)
-    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+    if ('serviceWorker' in navigator && import.meta.env.PROD) {
       navigator.serviceWorker
         .register('/service-worker.js')
         .catch((err) => {
@@ -188,10 +188,8 @@ function AppSafe() {
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <AuthProvider>
-        <Router>
-          <ScrollToTop />
-          <AppContent session={session} isOffline={isOffline} />
-        </Router>
+        <ScrollToTop />
+        <AppContent session={session} isOffline={isOffline} />
       </AuthProvider>
     </ErrorBoundary>
   );
@@ -256,19 +254,19 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
                   <Route element={<FuturisticLayout session={session} />}>
                     <Route path="/dashboard" element={<FuturisticDashboard />} />
                     <Route path="/feed" element={<SocialFeed />} />
-              <Route path="/analytics" element={<RealTimeViz />} />
-              <Route path="/projects" element={<ProjectManager />} />
-              <Route path="/field" element={<FieldOperationsIndex />} />
-              <Route path="/field/daily" element={<DailyOperations />} />
-              <Route path="/field/daily-report" element={<DailyOperations />} />
-              <Route path="/field/crews" element={<NationwideCrewManager />} />
-              <Route path="/field/time" element={<TimeTracking />} />
-              <Route path="/field/time-tracking" element={<TimeTracking />} />
-              <Route path="/field/receipts" element={<ReceiptManager />} />
-              <Route path="/field/weather" element={<WeatherDashboard />} />
-              <Route path="/substations" element={<SubstationManager />} />
-              <Route path="/crews" element={<NationwideCrewManager />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/analytics" element={<RealTimeViz />} />
+                    <Route path="/projects" element={<ProjectManager />} />
+                    <Route path="/field" element={<FieldOperationsIndex />} />
+                    <Route path="/field/daily" element={<DailyOperations />} />
+                    <Route path="/field/daily-report" element={<DailyOperations />} />
+                    <Route path="/field/crews" element={<NationwideCrewManager />} />
+                    <Route path="/field/time" element={<TimeTracking />} />
+                    <Route path="/field/time-tracking" element={<TimeTracking />} />
+                    <Route path="/field/receipts" element={<ReceiptManager />} />
+                    <Route path="/field/weather" element={<WeatherDashboard />} />
+                    <Route path="/substations" element={<SubstationManager />} />
+                    <Route path="/crews" element={<NationwideCrewManager />} />
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
                   </Route>
                 </>
               ) : (

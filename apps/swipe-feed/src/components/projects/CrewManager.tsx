@@ -5,6 +5,7 @@ import {
   AlertCircle, Calendar, Clock, Zap
 } from 'lucide-react';
 import { projectService, Project, Crew, ProjectTeamMember } from '../../lib/services/projectService';
+import { EmptyState } from '../EmptyState';
 
 interface CrewManagerProps {
   project: Project;
@@ -116,22 +117,24 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
             <div className="flex items-center space-x-4">
               <button
                 onClick={onBack}
-                className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                className="btn btn-ghost px-2 py-2"
+                type="button"
+                aria-label="Back to project"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-400" />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-white">Crew Management</h1>
+                <h1 className="text-2xl font-bold text-white">Crew management</h1>
                 <p className="text-gray-400 text-sm">{project.name} • {project.project_number}</p>
               </div>
             </div>
             {canManageCrews && (
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-200 flex items-center space-x-2"
+                className="btn btn-primary"
               >
                 <Plus className="w-5 h-5" />
-                <span>Create Crew</span>
+                <span>Create crew</span>
               </button>
             )}
           </div>
@@ -188,23 +191,24 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
 
         {/* Crews List */}
         {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, idx) => (
+              <div key={idx} className="skeleton h-56 rounded-2xl border border-gray-700/40 bg-gray-800/40" />
+            ))}
           </div>
         ) : crews.length === 0 ? (
-          <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-12 text-center border border-gray-700/50">
-            <Users className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-white mb-2">No Crews Created</h3>
-            <p className="text-gray-400 mb-6">Create crews to organize your workforce</p>
-            {canManageCrews && (
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-200"
-              >
-                Create First Crew
-              </button>
-            )}
-          </div>
+          <EmptyState
+            title="No crews yet"
+            body="Create a crew to start assigning leaders and members."
+            action={
+              canManageCrews ? (
+                <button onClick={() => setShowCreateModal(true)} className="btn btn-primary">
+                  <Plus className="mr-1.5 h-4 w-4" />
+                  Create crew
+                </button>
+              ) : null
+            }
+          />
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {crews.map((crew) => {
@@ -223,8 +227,8 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                         <Icon className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-white text-lg">{crew.crew_name}</h3>
-                        <p className="text-sm text-gray-400">{typeConfig.label} Crew</p>
+                      <h3 className="text-lg font-semibold text-white">{crew.crew_name}</h3>
+                      <p className="text-sm text-gray-400">{typeConfig.label} crew</p>
                       </div>
                     </div>
                     {crew.is_active ? (
@@ -331,12 +335,12 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
         )}
       </div>
 
-      {/* Create Crew Modal */}
+      {/* Create crew modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold text-white">Create New Crew</h3>
+              <h3 className="text-xl font-semibold text-white">Create new crew</h3>
               <button
                 onClick={() => setShowCreateModal(false)}
                 className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
@@ -347,10 +351,11 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
             
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Crew Name
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="crew-name">
+                  Crew name
                 </label>
                 <input
+                  id="crew-name"
                   type="text"
                   value={crewData.crew_name}
                   onChange={(e) => setCrewData({ ...crewData, crew_name: e.target.value })}
@@ -360,10 +365,11 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Crew Type
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="crew-type">
+                  Crew type
                 </label>
                 <select
+                  id="crew-type"
                   value={crewData.crew_type}
                   onChange={(e) => setCrewData({ ...crewData, crew_type: e.target.value as any })}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
@@ -377,31 +383,32 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Description (Optional)
+                <label className="block text-sm font-medium text-gray-400 mb-2" htmlFor="crew-description">
+                  Description (optional)
                 </label>
                 <textarea
+                  id="crew-description"
                   value={crewData.description}
                   onChange={(e) => setCrewData({ ...crewData, description: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
-                  placeholder="Primary installation crew for high voltage equipment..."
+                  placeholder="Primary installation crew for high voltage equipment"
                 />
               </div>
               
               <div className="flex justify-end space-x-3">
                 <button
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 bg-gray-700 rounded-xl font-medium text-white hover:bg-gray-600 transition-colors"
+                  className="btn btn-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleCreateCrew}
                   disabled={!crewData.crew_name}
-                  className="px-5 py-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-200 disabled:opacity-50"
+                  className="btn btn-primary disabled:opacity-50"
                 >
-                  Create Crew
+                  Create crew
                 </button>
               </div>
             </div>

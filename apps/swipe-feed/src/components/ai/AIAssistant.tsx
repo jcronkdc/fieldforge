@@ -32,7 +32,7 @@ export const AIAssistant: React.FC = () => {
     {
       id: '1',
       role: 'assistant',
-      content: 'Hello! I\'m your AI construction assistant. I can help you with safety protocols, scheduling optimization, resource management, and real-time insights. How can I assist you today?',
+      content: 'Hello. I\'m your AI construction assistant. I can help you with safety protocols, scheduling optimization, resource management, and real-time insights. How can I assist you today?',
       timestamp: new Date()
     }
   ]);
@@ -273,7 +273,7 @@ export const AIAssistant: React.FC = () => {
                   <div className="bg-gray-800 rounded-2xl px-4 py-3 border border-gray-700">
                     <div className="flex items-center space-x-2">
                       <Loader2 className="w-4 h-4 text-purple-400 animate-spin" />
-                      <span className="text-sm text-gray-400">AI is thinking...</span>
+                      <span className="text-sm text-gray-400">AI is thinking</span>
                     </div>
                   </div>
                 </div>
@@ -324,7 +324,7 @@ export const AIAssistant: React.FC = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Ask me anything..."
+                placeholder="Ask me anything"
                 className="flex-1 px-3 py-2 bg-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
               />
               

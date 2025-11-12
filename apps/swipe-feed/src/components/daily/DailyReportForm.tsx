@@ -206,7 +206,7 @@ export const DailyReportForm: React.FC = () => {
 
       if (error) throw error;
 
-      alert(isDraft ? 'Draft saved successfully!' : 'Daily report submitted successfully!');
+      alert(isDraft ? 'Draft saved successfully.' : 'Daily report submitted successfully.');
       
       if (!isDraft) {
         // Reset form or redirect
@@ -247,7 +247,7 @@ export const DailyReportForm: React.FC = () => {
         <div className="flex items-center gap-4 text-gray-400">
           <span className="flex items-center gap-2">
             <MapPin className="w-4 h-4" />
-            {currentLocation || 'Getting location...'}
+            {currentLocation || 'Getting location'}
           </span>
           <span className="flex items-center gap-2">
             <Clock className="w-4 h-4" />
@@ -275,7 +275,7 @@ export const DailyReportForm: React.FC = () => {
                 }))}
                 className="w-full px-3 py-2 bg-gray-700 text-white rounded-md"
               >
-                <option value="">Select...</option>
+                <option value="">Select condition</option>
                 {weatherConditions.map(condition => (
                   <option key={condition} value={condition}>{condition}</option>
                 ))}
@@ -607,7 +607,7 @@ export const DailyReportForm: React.FC = () => {
                 onChange={(e) => setFormData(prev => ({ ...prev, accomplishments: e.target.value }))}
                 className="w-full px-3 py-2 bg-gray-700 text-white rounded-md"
                 rows={3}
-                placeholder="Key accomplishments and milestones..."
+                placeholder="Key accomplishments and milestones"
               />
             </div>
             
@@ -618,7 +618,7 @@ export const DailyReportForm: React.FC = () => {
                 onChange={(e) => setFormData(prev => ({ ...prev, issuesConcerns: e.target.value }))}
                 className="w-full px-3 py-2 bg-gray-700 text-white rounded-md"
                 rows={3}
-                placeholder="Any issues or concerns that need attention..."
+                placeholder="Any issues or concerns that need attention"
               />
             </div>
             
@@ -629,7 +629,7 @@ export const DailyReportForm: React.FC = () => {
                 onChange={(e) => setFormData(prev => ({ ...prev, nextShiftPriorities: e.target.value }))}
                 className="w-full px-3 py-2 bg-gray-700 text-white rounded-md"
                 rows={3}
-                placeholder="Priority items for the next shift..."
+                placeholder="Priority items for the next shift"
               />
             </div>
           </div>
@@ -665,7 +665,11 @@ export const DailyReportForm: React.FC = () => {
                   <img
                     src={URL.createObjectURL(photo)}
                     alt={`Photo ${index + 1}`}
-                    className="w-20 h-20 object-cover rounded-md"
+                    width={80}
+                    height={80}
+                    className="h-20 w-20 rounded-md object-cover"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <button
                     onClick={() => {
@@ -693,7 +697,7 @@ export const DailyReportForm: React.FC = () => {
             className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
-            {isSavingDraft ? 'Saving...' : 'Save Draft'}
+            {isSavingDraft ? 'Saving' : 'Save Draft'}
           </button>
           <button
             type="button"
@@ -702,7 +706,7 @@ export const DailyReportForm: React.FC = () => {
             className="flex-1 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-black rounded-md transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
           >
             <Send className="w-4 h-4" />
-            {isSubmitting ? 'Submitting...' : 'Submit Report'}
+            {isSubmitting ? 'Submitting' : 'Submit Report'}
           </button>
         </div>
       </div>

@@ -1,215 +1,117 @@
-import React, { useEffect, useState } from 'react';
-import { CheckCircle, XCircle, AlertCircle, Info, X, Zap } from 'lucide-react';
+import React from "react";
+import { useSyncExternalStore } from "react";
+import { CheckCircle, Info, X, XCircle } from "lucide-react";
 
-export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'loading';
+export type ToastKind = "success" | "error" | "info";
 
-interface Toast {
+type Toast = {
   id: string;
-  message: string;
-  type: ToastType;
-  duration?: number;
-}
+  kind: ToastKind;
+  text: string;
+  timeout?: number;
+};
 
-class ToastManager {
-  private listeners: Set<(toasts: Toast[]) => void> = new Set();
-  private toasts: Toast[] = [];
+const listeners = new Set<() => void>();
+let toasts: Toast[] = [];
 
-  subscribe(listener: (toasts: Toast[]) => void) {
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
-  }
+export const toastStore = {
+  subscribe(callback: () => void) {
+    listeners.add(callback);
+    return () => listeners.delete(callback);
+  },
+  getSnapshot() {
+    return toasts;
+  },
+  push(toast: Omit<Toast, "id">) {
+    const id = Math.random().toString(36).slice(2);
+    const entry: Toast = { id, timeout: 4000, ...toast };
+    toasts = [...toasts, entry];
+    listeners.forEach((listener) => listener());
 
-  private notify() {
-    this.listeners.forEach(listener => listener([...this.toasts]));
-  }
-
-  show(message: string, type: ToastType = 'info', duration = 4000) {
-    const id = Date.now().toString();
-    const toast: Toast = { id, message, type, duration };
-    this.toasts.push(toast);
-    this.notify();
-
-    if (duration > 0 && type !== 'loading') {
-      setTimeout(() => this.dismiss(id), duration);
+    if (entry.timeout) {
+      window.setTimeout(() => {
+        toasts = toasts.filter((item) => item.id !== id);
+        listeners.forEach((listener) => listener());
+      }, entry.timeout);
     }
 
     return id;
-  }
-
+  },
   dismiss(id: string) {
-    this.toasts = this.toasts.filter(t => t.id !== id);
-    this.notify();
-  }
+    toasts = toasts.filter((item) => item.id !== id);
+    listeners.forEach((listener) => listener());
+  },
+};
 
-  success(message: string, duration = 4000) {
-    return this.show(message, 'success', duration);
-  }
-
-  error(message: string, duration = 5000) {
-    return this.show(message, 'error', duration);
-  }
-
-  warning(message: string, duration = 4000) {
-    return this.show(message, 'warning', duration);
-  }
-
-  info(message: string, duration = 4000) {
-    return this.show(message, 'info', duration);
-  }
-
-  loading(message: string) {
-    return this.show(message, 'loading', 0);
-  }
+export function useToasts() {
+  return useSyncExternalStore(toastStore.subscribe, toastStore.getSnapshot);
 }
 
-export const toast = new ToastManager();
-
-const ToastIcon: React.FC<{ type: ToastType }> = ({ type }) => {
-  switch (type) {
-    case 'success':
-      return <CheckCircle className="w-5 h-5" />;
-    case 'error':
-      return <XCircle className="w-5 h-5" />;
-    case 'warning':
-      return <AlertCircle className="w-5 h-5" />;
-    case 'info':
-      return <Info className="w-5 h-5" />;
-    case 'loading':
-      return <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />;
-  }
+const ICONS: Record<ToastKind, JSX.Element> = {
+  success: <CheckCircle className="h-5 w-5 text-emerald-400" />,
+  error: <XCircle className="h-5 w-5 text-rose-400" />,
+  info: <Info className="h-5 w-5 text-cyan-400" />,
 };
 
-const getToastStyles = (type: ToastType) => {
-  switch (type) {
-    case 'success':
-      return 'border-green-500/50 shadow-green-500/20';
-    case 'error':
-      return 'border-red-500/50 shadow-red-500/20';
-    case 'warning':
-      return 'border-amber-500/50 shadow-amber-500/20';
-    case 'info':
-      return 'border-cyan-500/50 shadow-cyan-500/20';
-    case 'loading':
-      return 'border-purple-500/50 shadow-purple-500/20';
-  }
+const KIND_STYLES: Record<ToastKind, string> = {
+  success: "border-emerald-500/30 bg-emerald-500/10",
+  error: "border-rose-500/30 bg-rose-500/10",
+  info: "border-cyan-500/30 bg-cyan-500/10",
 };
 
-const getIconColor = (type: ToastType) => {
-  switch (type) {
-    case 'success':
-      return 'text-green-500';
-    case 'error':
-      return 'text-red-500';
-    case 'warning':
-      return 'text-amber-500';
-    case 'info':
-      return 'text-cyan-500';
-    case 'loading':
-      return 'text-purple-500';
-  }
-};
-
-export const FuturisticToastContainer: React.FC = () => {
-  const [toasts, setToasts] = useState<Toast[]>([]);
-
-  useEffect(() => {
-    return toast.subscribe(setToasts);
-  }, []);
+export function Toaster() {
+  const items = useToasts();
 
   return (
-    <div className="fixed top-20 right-4 z-[9999] space-y-3 pointer-events-none">
-      {toasts.map((t, index) => (
+    <div
+      aria-live="polite"
+      aria-atomic="true"
+      className="pointer-events-none fixed bottom-4 right-4 z-[2000] flex w-full max-w-sm flex-col gap-2 md:max-w-md"
+    >
+      {items.map((toast) => (
         <div
-          key={t.id}
-          className={`
-            pointer-events-auto
-            min-w-[320px] max-w-md
-            px-6 py-4 rounded-lg
-            bg-slate-900/95 backdrop-blur-xl
-            border ${getToastStyles(t.type)}
-            shadow-[0_0_30px] shadow-current
-            transform transition-all duration-300
-            animate-slideInRight
-            hover:scale-105
-            relative overflow-hidden
-            group
-          `}
-          style={{
-            animationDelay: `${index * 50}ms`
-          }}
+          key={toast.id}
+          className={`pointer-events-auto rounded-lg border px-4 py-3 shadow-lg backdrop-blur bg-surface/90 ${KIND_STYLES[toast.kind]}`}
         >
-          {/* Animated background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-          
-          {/* Electric pulse effect */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-current to-transparent animate-pulse" />
-          
-          <div className="relative flex items-start space-x-3">
-            <div className={`${getIconColor(t.type)} flex-shrink-0 mt-0.5`}>
-              <ToastIcon type={t.type} />
-            </div>
-            
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-['Exo_2'] text-sm leading-relaxed">
-                {t.message}
-              </p>
-            </div>
-
-            {t.type !== 'loading' && (
-              <button
-                onClick={() => toast.dismiss(t.id)}
-                className="flex-shrink-0 text-gray-400 hover:text-white transition-colors p-1 hover:bg-white/10 rounded"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Progress bar for auto-dismiss */}
-          {t.duration && t.duration > 0 && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black/20">
-              <div 
-                className={`h-full ${getIconColor(t.type)} bg-current`}
-                style={{
-                  animation: `shrink ${t.duration}ms linear forwards`
-                }}
-              />
-            </div>
-          )}
-
-          {/* Corner accent */}
-          <div className={`absolute top-0 right-0 w-8 h-8 ${getIconColor(t.type)}`}>
-            <Zap className="w-4 h-4 opacity-20" />
+          <div className="flex items-start gap-3">
+            <span aria-hidden="true">{ICONS[toast.kind]}</span>
+            <p className="flex-1 text-sm on-surface">{toast.text}</p>
+            <button
+              type="button"
+              className="btn btn-ghost px-2 py-1 text-sm text-slate-300 hover:text-white"
+              onClick={() => toastStore.dismiss(toast.id)}
+              aria-label="Dismiss toast"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
         </div>
       ))}
-
-      <style>{`
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(100%);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes shrink {
-          from { width: 100%; }
-          to { width: 0%; }
-        }
-      `}</style>
     </div>
   );
+}
+
+export const FuturisticToastContainer = Toaster;
+
+export const toast = {
+  success(text: string) {
+    return toastStore.push({ kind: "success", text });
+  },
+  error(text: string) {
+    return toastStore.push({ kind: "error", text });
+  },
+  info(text: string) {
+    return toastStore.push({ kind: "info", text });
+  },
+  loading(text: string) {
+    return toastStore.push({ kind: "info", text, timeout: undefined });
+  },
+  dismiss(id: string) {
+    toastStore.dismiss(id);
+  },
 };
 
-// Export convenience functions
 export const showSuccess = (message: string) => toast.success(message);
 export const showError = (message: string) => toast.error(message);
-export const showWarning = (message: string) => toast.warning(message);
 export const showInfo = (message: string) => toast.info(message);
 export const showLoading = (message: string) => toast.loading(message);

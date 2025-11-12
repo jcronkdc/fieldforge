@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from './lib/supabase';
 import { Session } from '@supabase/supabase-js';
 import { AuthProvider } from './components/auth/AuthProvider';
@@ -323,7 +323,7 @@ function AppFixed() {
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h1 className="text-2xl font-bold text-white">FieldForge</h1>
-          <p className="text-slate-400 mt-2">Loading...</p>
+          <p className="text-slate-400 mt-2">Loading FieldForge</p>
         </div>
       </div>
     );
@@ -332,11 +332,10 @@ function AppFixed() {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <Router>
-          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-            {isOffline && <OfflineIndicator />}
-            
-            <Routes>
+        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+          {isOffline && <OfflineIndicator />}
+          
+          <Routes>
               {/* Public Routes */}
               <Route path="/" element={
                 session ? <Navigate to="/dashboard" replace /> : <FuturisticElectricalLanding />
@@ -400,19 +399,18 @@ function AppFixed() {
               ) : (
                 <Route path="*" element={<Navigate to="/" replace />} />
               )}
-            </Routes>
+          </Routes>
 
-            {/* Global Components */}
-            {session && (
-              <>
-                <MobileNav />
-                <SyncStatus />
-                <VoiceCommandInterface />
-                <AIAssistant />
-              </>
-            )}
-          </div>
-        </Router>
+          {/* Global Components */}
+          {session && (
+            <>
+              <MobileNav />
+              <SyncStatus />
+              <VoiceCommandInterface />
+              <AIAssistant />
+            </>
+          )}
+        </div>
       </AuthProvider>
     </ErrorBoundary>
   );

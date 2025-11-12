@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSession = createSession;
 exports.getSession = getSession;
@@ -16,17 +19,16 @@ exports.summarizeSession = summarizeSession;
 exports.generateAiStory = generateAiStory;
 exports.publishVaultEntry = publishVaultEntry;
 exports.listPublishedEntries = listPublishedEntries;
-const pg_1 = require("pg");
 const env_js_1 = require("../worker/env.js");
 const templateGenerator_js_1 = require("./templateGenerator.js");
 const ablyPublisher_js_1 = require("../realtime/ablyPublisher.js");
 const aiClient_js_1 = require("../creative/aiClient.js");
 const mythacoinRepository_js_1 = require("../mythacoin/mythacoinRepository.js");
 const messagingRepository_js_1 = require("../messaging/messagingRepository.js");
+const database_js_1 = __importDefault(require("../database.js"));
 const env = (0, env_js_1.loadEnv)();
-const pool = new pg_1.Pool({ connectionString: env.DATABASE_URL });
 async function createSession(input) {
-    const client = await pool.connect();
+    const client = await database_js_1.default.connect();
     try {
         await client.query("BEGIN");
         const templateSource = normalizeTemplateSource(input.templateSource);
@@ -90,7 +92,7 @@ async function createSession(input) {
                     console.warn("[angry-lips] failed to create project conversation", error);
                 });
             }
-            pool
+            database_js_1.default
                 .query(`update public.user_profiles set last_session_id = $2 where user_id = $1`, [session.hostId, sessionId])
                 .catch((error) => {
                 console.warn("[profiles] failed to record last session", error);
@@ -110,18 +112,18 @@ async function createSession(input) {
     }
 }
 async function getSession(sessionId) {
-    const sessionResult = await pool.query(`select * from public.angry_lips_sessions where id = $1`, [sessionId]);
+    const sessionResult = await database_js_1.default.query(`select * from public.angry_lips_sessions where id = $1`, [sessionId]);
     if (sessionResult.rowCount === 0)
         return null;
     const session = mapSessionRow(sessionResult.rows[0]);
     const participants = await listSessionParticipants(sessionId);
-    const turnsResult = await pool.query(`select * from public.angry_lips_turns where session_id = $1 order by order_index asc`, [
+    const turnsResult = await database_js_1.default.query(`select * from public.angry_lips_turns where session_id = $1 order by order_index asc`, [
         sessionId,
     ]);
     const turnIds = turnsResult.rows.map((row) => row.id);
     let eventsByTurn = {};
     if (turnIds.length > 0) {
-        const eventsResult = await pool.query(`select * from public.angry_lips_turn_events where turn_id = any($1::uuid[]) order by created_at asc`, [turnIds]);
+        const eventsResult = await database_js_1.default.query(`select * from public.angry_lips_turn_events where turn_id = any($1::uuid[]) order by created_at asc`, [turnIds]);
         eventsByTurn = eventsResult.rows.reduce((acc, row) => {
             const event = mapTurnEventRow(row);
             if (!acc[event.turnId])
@@ -154,7 +156,7 @@ async function listSessions(options = {}) {
         paramIndex += 1;
     }
     const whereClause = conditions.length > 0 ? `where ${conditions.join(" and ")}` : "";
-    const result = await pool.query(`
+    const result = await database_js_1.default.query(`
       select *
       from public.angry_lips_sessions
       ${whereClause}
@@ -181,7 +183,7 @@ async function inviteParticipants(sessionId, hostId, participantIds) {
     if (uniqueParticipantIds.length === 0) {
         return listSessionParticipants(sessionId);
     }
-    await pool.query(`
+    await database_js_1.default.query(`
       insert into public.angry_lips_session_participants (session_id, user_id, role, status)
       select $1, unnest($2::uuid[]), 'player', 'invited'
       on conflict (session_id, user_id)
@@ -195,7 +197,7 @@ async function respondToInvitation(sessionId, userId, action) {
         decline: "declined",
         left: "left",
     };
-    const result = await pool.query(`
+    const result = await database_js_1.default.query(`
       update public.angry_lips_session_participants
       set status = $3, updated_at = timezone('utc', now())
       where session_id = $1 and user_id = $2
@@ -224,7 +226,7 @@ async function respondToInvitation(sessionId, userId, action) {
     return participant;
 }
 async function startSession(sessionId, hostId) {
-    const client = await pool.connect();
+    const client = await database_js_1.default.connect();
     try {
         await client.query("BEGIN");
         await ensureHostPrivileges(sessionId, hostId);
@@ -283,7 +285,7 @@ async function startSession(sessionId, hostId) {
     }
 }
 async function advanceTurn(sessionId, hostId) {
-    const client = await pool.connect();
+    const client = await database_js_1.default.connect();
     try {
         await client.query("BEGIN");
         await ensureHostPrivileges(sessionId, hostId);
@@ -348,7 +350,7 @@ async function advanceTurn(sessionId, hostId) {
     }
 }
 async function submitTurn({ turnId, text, handle }) {
-    const result = await pool.query(`
+    const result = await database_js_1.default.query(`
       update public.angry_lips_turns
       set status = 'submitted',
           submitted_text = $1,
@@ -364,7 +366,7 @@ async function submitTurn({ turnId, text, handle }) {
     return mapTurnRow(result.rows[0]);
 }
 async function autoFillTurn({ turnId, text, handle }) {
-    const result = await pool.query(`
+    const result = await database_js_1.default.query(`
       update public.angry_lips_turns
       set status = 'auto_filled',
           auto_fill_text = $1,
@@ -380,17 +382,17 @@ async function autoFillTurn({ turnId, text, handle }) {
     return mapTurnRow(result.rows[0]);
 }
 async function logTurnEvent(turnId, eventType, payload) {
-    const turnResult = await pool.query(`select session_id from public.angry_lips_turns where id = $1`, [turnId]);
+    const turnResult = await database_js_1.default.query(`select session_id from public.angry_lips_turns where id = $1`, [turnId]);
     if (turnResult.rowCount === 0)
         return;
-    await pool.query(`
+    await database_js_1.default.query(`
       insert into public.angry_lips_turn_events (turn_id, event_type, payload)
       values ($1,$2,$3)
     `, [turnId, eventType, JSON.stringify(payload ?? {})]);
     await (0, ablyPublisher_js_1.publishTurnEvent)(turnResult.rows[0].session_id, turnId, eventType, payload ?? {});
 }
 async function completeSession({ sessionId, storyText, title, visibility }) {
-    const client = await pool.connect();
+    const client = await database_js_1.default.connect();
     try {
         await client.query("BEGIN");
         const sessionResult = await client.query(`select * from public.angry_lips_sessions where id = $1`, [sessionId]);
@@ -454,7 +456,7 @@ async function summarizeSession(sessionId, requesterId, focus) {
         maxTokens: 240,
     });
     const summaryText = content.trim();
-    const update = await pool.query(`
+    const update = await database_js_1.default.query(`
       update public.angry_lips_vault_entries
       set summary_text = $2,
           theme_prompt = case when $3 is not null and length($3) > 0 then $3 else theme_prompt end
@@ -483,7 +485,7 @@ async function generateAiStory(sessionId, hostId, prompt) {
         maxTokens: 600,
     });
     const aiStory = content.trim();
-    const update = await pool.query(`
+    const update = await database_js_1.default.query(`
       update public.angry_lips_vault_entries
       set ai_story_text = $2,
           theme_prompt = case when $3 is not null and length($3) > 0 then $3 else theme_prompt end
@@ -497,7 +499,7 @@ async function publishVaultEntry(sessionId, hostId, visibility = "public") {
     const { storyText } = await buildSessionStory(sessionId);
     const vaultEntry = await completeSession({ sessionId, storyText, visibility });
     const publisherUuid = isValidUuid(hostId) ? hostId : null;
-    const update = await pool.query(`
+    const update = await database_js_1.default.query(`
       update public.angry_lips_vault_entries
       set visibility = $2,
           published_at = case when $2 = 'public' then coalesce(published_at, timezone('utc', now())) else null end,
@@ -510,7 +512,7 @@ async function publishVaultEntry(sessionId, hostId, visibility = "public") {
 async function listPublishedEntries(limit = 20, offset = 0) {
     const safeLimit = Math.min(Math.max(limit, 1), 100);
     const safeOffset = Math.max(offset, 0);
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       select ve.*,
              als.title as session_title,
              als.genre,
@@ -648,7 +650,7 @@ async function upsertInitialParticipants(client, sessionId, hostId, participantI
     `, [sessionId, uniqueParticipantIds]);
 }
 async function ensureHostPrivileges(sessionId, hostId) {
-    const result = await pool.query(`select 1 from public.angry_lips_sessions where id = $1 and host_id = $2`, [
+    const result = await database_js_1.default.query(`select 1 from public.angry_lips_sessions where id = $1 and host_id = $2`, [
         sessionId,
         hostId,
     ]);
@@ -660,7 +662,7 @@ async function fetchParticipantsForSessions(sessionIds) {
     if (sessionIds.length === 0) {
         return {};
     }
-    const { rows } = await pool.query(`
+    const { rows } = await database_js_1.default.query(`
       select *
       from public.angry_lips_session_participants
       where session_id = any($1::uuid[])
@@ -756,7 +758,7 @@ function isValidUuid(value) {
     return typeof value === "string" && /^[0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{12}$/.test(value);
 }
 async function loadSessionRow(sessionId, client) {
-    const runner = client ?? pool;
+    const runner = client ?? database_js_1.default;
     const result = await runner.query(`select * from public.angry_lips_sessions where id = $1`, [sessionId]);
     if (result.rowCount === 0) {
         throw new Error("Session not found");
@@ -767,7 +769,7 @@ async function ensureParticipantAccess(sessionId, userId) {
     const sessionRow = await loadSessionRow(sessionId);
     const isHost = sessionRow.host_id === userId;
     if (!isHost) {
-        const participantResult = await pool.query(`select status from public.angry_lips_session_participants where session_id = $1 and user_id = $2`, [sessionId, userId]);
+        const participantResult = await database_js_1.default.query(`select status from public.angry_lips_session_participants where session_id = $1 and user_id = $2`, [sessionId, userId]);
         if (participantResult.rowCount === 0) {
             throw new Error("You are not part of this Angry Lips session.");
         }
@@ -788,7 +790,7 @@ async function assertHostAccess(sessionId, hostId) {
 async function buildSessionStory(sessionId, client) {
     const sessionRow = await loadSessionRow(sessionId, client);
     const templateText = sessionRow.template_text ?? null;
-    const turnsResult = await (client ?? pool).query(`
+    const turnsResult = await (client ?? database_js_1.default).query(`
       select order_index, placeholder, submitted_text, auto_fill_text, part_of_speech
       from public.angry_lips_turns
       where session_id = $1

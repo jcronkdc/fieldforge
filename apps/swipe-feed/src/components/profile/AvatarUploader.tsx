@@ -73,7 +73,15 @@ export function AvatarUploader({ userId, value, onChange, disabled, label }: Ava
           )}
         >
           {previewUrl ? (
-            <img src={previewUrl} alt="Avatar preview" className="h-full w-full object-cover" />
+            <img
+              src={previewUrl}
+              alt="Avatar preview"
+              width={80}
+              height={80}
+              className="h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <span className="text-xs uppercase tracking-wide text-slate-500">No avatar</span>
           )}

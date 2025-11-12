@@ -730,7 +730,7 @@ export class EpisodicEngine {
     
     return {
       title: `The Return of ${popularElements[0]?.name || 'Mystery'}`,
-      template: references.join(' ') + ' {CONTINUATION_PROMPT}...'
+      template: `${references.join(' ')} {CONTINUATION_PROMPT} (continue the story)`
     };
   }
 }
@@ -1004,7 +1004,7 @@ export class AccessibilityEngine {
     }
     
     if (assistLevel === 'full') {
-      assistance.push(`Definition: A ${blankType} is a word that...`);
+      assistance.push(`Definition: A ${blankType} is a word that needs additional context`);
       assistance.push(`Rhymes with: mat, hat, bat`);
     }
     

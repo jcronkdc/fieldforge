@@ -40,12 +40,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createFeedbackRouter = createFeedbackRouter;
 const express_1 = require("express");
 const feedbackRepository = __importStar(require("./feedbackRepository.js"));
+const auth_js_1 = require("../middleware/auth.js");
 function createFeedbackRouter() {
     const router = (0, express_1.Router)();
     // Submit feedback
-    router.post("/submit", async (req, res) => {
+    router.post("/submit", auth_js_1.authenticateRequest, async (req, res) => {
         try {
-            const userId = req.headers["x-user-id"];
+            const userId = req.user?.id;
             const feedback = await feedbackRepository.submitFeedback({
                 userId,
                 username: req.body.username,

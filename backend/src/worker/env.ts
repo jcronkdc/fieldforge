@@ -1,5 +1,6 @@
 export interface Env {
   DATABASE_URL: string;
+  SUPABASE_URL?: string;
   SUPABASE_SERVICE_KEY?: string;
   POSTHOG_API_KEY?: string;
   AI_FALLBACK_MODEL?: string;
@@ -25,6 +26,7 @@ export function loadEnv(): Env {
 
   const {
     DATABASE_URL,
+    SUPABASE_URL,
     SUPABASE_SERVICE_KEY,
     POSTHOG_API_KEY,
     AI_FALLBACK_MODEL,
@@ -48,6 +50,7 @@ export function loadEnv(): Env {
 
   return {
     DATABASE_URL,
+    SUPABASE_URL,
     SUPABASE_SERVICE_KEY,
     POSTHOG_API_KEY,
     AI_FALLBACK_MODEL,

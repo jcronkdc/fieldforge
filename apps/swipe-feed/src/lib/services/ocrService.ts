@@ -69,7 +69,7 @@ class OCRService {
     try {
       // Mock OCR implementation
       // In production, you would use Tesseract.js or a cloud OCR service
-      console.log('Processing image with mock OCR...');
+      console.log('Processing image with mock OCR');
       
       // For demo purposes, we'll create sample data
       const mockText = `RECEIPT
