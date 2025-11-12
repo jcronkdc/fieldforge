@@ -401,4 +401,65 @@ This hostile security audit included:
 
 ---
 
+## 🚨 POST-DEPLOYMENT CONFIGURATION ISSUE
+
+**Issue Date:** November 12, 2025  
+**Reference ID:** F2 - DEPLOYMENT CONFIG  
+**Status:** ⚠️ **REQUIRES CONFIGURATION**
+
+### Login Authentication Error
+
+**Issue:** "Invalid login credentials" error on deployed Vercel app  
+**Root Cause:** Demo user account does not exist in Supabase database  
+**Impact:** Users cannot login to the deployed application  
+
+### Configuration Steps Required:
+
+1. **Environment Variables Added to Vercel:** ✅ COMPLETE
+   - VITE_SUPABASE_URL
+   - VITE_SUPABASE_ANON_KEY
+   - VITE_API_BASE_URL (empty - backend not deployed)
+
+2. **Create Demo User in Supabase:** ❌ PENDING
+   - The `handle_new_user` trigger is blocking user creation due to RLS policies
+   - Must use SQL to bypass trigger and create user directly
+
+### SQL Fix Required:
+
+```sql
+-- Disable trigger, create user, re-enable trigger
+ALTER TABLE auth.users DISABLE TRIGGER on_auth_user_created;
+
+INSERT INTO auth.users (
+  id, email, encrypted_password, email_confirmed_at,
+  created_at, updated_at, raw_user_meta_data, aud, role, confirmed_at
+) VALUES (
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'::uuid,
+  'demo@fieldforge.com',
+  crypt('FieldForge2025!Demo', gen_salt('bf')),
+  now(), now(), now(),
+  '{"first_name": "Demo", "last_name": "User"}'::jsonb,
+  'authenticated', 'authenticated', now()
+);
+
+INSERT INTO public.user_profiles (
+  user_id, first_name, last_name, email, role, created_at, updated_at
+) VALUES (
+  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'::uuid,
+  'Demo', 'User', 'demo@fieldforge.com', 'user', now(), now()
+);
+
+ALTER TABLE auth.users ENABLE TRIGGER on_auth_user_created;
+```
+
+### Verification Status:
+- ✅ Supabase connection verified
+- ✅ Environment variables working
+- ❌ Demo user creation blocked by database triggers
+- ⚠️ Database has RLS warnings but these don't block functionality
+
+**Action Required:** Run SQL script in Supabase SQL Editor to create demo user
+
+---
+
 *🔒 Security mission accomplished. Users' data is now properly protected.*
