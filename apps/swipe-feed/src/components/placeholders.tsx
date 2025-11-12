@@ -17,17 +17,17 @@ const PlaceholderPage: React.FC<{ title: string; icon: React.ElementType; descri
   </div>
 );
 
-// Dashboard Components
-export const ProjectMetrics = () => <PlaceholderPage title="Project Metrics" icon={Activity} description="Detailed project performance analytics" />;
-export const SafetyMetrics = () => <PlaceholderPage title="Safety Metrics" icon={Shield} description="Safety performance and compliance tracking" />;
+// Dashboard Components - Now Functional
+export { ProjectDashboard as ProjectMetrics } from './projects/ProjectDashboard';
+export { SafetyCenter as SafetyMetrics } from './safety/SafetyCenter';
 
-// Field Operations
-export const DailyOperations = () => <PlaceholderPage title="Daily Operations" icon={HardHat} description="Manage daily field activities and reports" />;
-export const CrewManagement = () => <PlaceholderPage title="Crew Management" icon={Users} description="Track crew assignments and productivity" />;
-export const TimeTracking = () => <PlaceholderPage title="Time Tracking" icon={Timer} description="Record and manage work hours" />;
+// Field Operations - Now Functional
+export { DailyOperationsCenter as DailyOperations } from './field/DailyOperationsCenter';
+export { IBEWCrewManager as CrewManagement } from './crew/IBEWCrewManager';
+export { TimeTrackingSystem as TimeTracking } from './time/TimeTrackingSystem';
 
-// Safety Management
-export const SafetyHub = () => <PlaceholderPage title="Safety Hub" icon={Shield} description="Central safety management dashboard" />;
+// Safety Management - Now Functional
+export { SafetyCenter as SafetyHub } from './safety/SafetyCenter';
 export const SafetyBriefing = () => <PlaceholderPage title="Safety Briefing" icon={Shield} description="Conduct and document safety briefings" />;
 export const IncidentReporting = () => <PlaceholderPage title="Incident Reporting" icon={AlertTriangle} description="Report and track safety incidents" />;
 export const PermitManagement = () => <PlaceholderPage title="Permit Management" icon={FileText} description="Manage work permits and clearances" />;
