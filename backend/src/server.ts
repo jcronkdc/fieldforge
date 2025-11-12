@@ -24,6 +24,7 @@ import {
   addStoryComment,
   deleteStoryComment,
   getWorldLore,
+  type StoryNode,
 } from "./story/storyRepository.js";
 import { logStoryNotification, fetchStoryNotifications } from "./story/notificationRepository.js";
 import {
@@ -348,7 +349,7 @@ app.post("/api/story/editor", async (req: Request, res: Response) => {
   try {
     await saveStoryNodes(
       branchId,
-      nodes.map((node: any, index: number) => ({
+      nodes.map((node: Partial<StoryNode> & { id?: number; orderIndex?: number; content?: string }, index: number) => ({
         id: typeof node.id === "number" && node.id > 0 ? node.id : undefined,
         orderIndex:
           typeof node.orderIndex === "number" && Number.isFinite(node.orderIndex)

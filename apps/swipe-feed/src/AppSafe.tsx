@@ -1,13 +1,13 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { supabase } from './lib/supabase';
-import { Session } from '@supabase/supabase-js';
+import { useRobustAuth } from './hooks/useRobustAuth';
 import { AuthProvider } from './components/auth/AuthProvider';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { VoiceCommandInterface } from './components/voice/VoiceCommandInterface';
 import { FuturisticToastContainer } from './components/common/FuturisticToast';
 import { FuturisticLoader } from './components/common/FuturisticLoader';
 import { KeyboardShortcutsModal, useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import { logEnvironmentStatus } from './lib/env-validator';
 import './styles/animations.css';
 import './styles/ai-animations.css';
 import './styles/futuristic.css';
@@ -83,54 +83,17 @@ const ErrorFallback = () => (
 );
 
 function AppSafe() {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Use the robust auth system
+  const { session, loading, error, isAuthenticated } = useRobustAuth();
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let mounted = true;
-    
-    const initializeAuth = async () => {
-      try {
-        // Set a timeout to prevent infinite loading
-        const timeoutId = setTimeout(() => {
-          if (mounted && loading) {
-            console.warn('Auth initialization timeout - proceeding without session');
-            setLoading(false);
-          }
-        }, 5000); // 5 second timeout
-
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (mounted) {
-          if (error) {
-            console.error('Auth error:', error);
-            setError(error.message);
-          } else {
-            setSession(session);
-          }
-          setLoading(false);
-          clearTimeout(timeoutId);
-        }
-      } catch (err) {
-        console.error('Unexpected auth error:', err);
-        if (mounted) {
-          setError('Failed to initialize authentication');
-          setLoading(false);
-        }
-      }
-    };
-
-    initializeAuth();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (mounted) {
-        setSession(session);
-        setError(null);
-      }
-    });
+    // Validate environment on app start
+    try {
+      logEnvironmentStatus();
+    } catch (error) {
+      console.error('Environment validation failed:', error);
+    }
 
     // Listen for online/offline status
     const handleOnline = () => setIsOffline(false);
@@ -149,8 +112,6 @@ function AppSafe() {
     }
 
     return () => {
-      mounted = false;
-      subscription.unsubscribe();
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };

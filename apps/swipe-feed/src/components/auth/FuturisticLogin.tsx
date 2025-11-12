@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
+import { signIn } from '../../lib/auth-robust';
 import { Zap, Lock, Mail, AlertCircle, ArrowRight, Shield } from 'lucide-react';
 
 export const FuturisticLogin: React.FC = () => {
@@ -12,31 +12,36 @@ export const FuturisticLogin: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('🔐 Login attempt for:', email);
+    
     setError(null);
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if (error) throw error;
-
+      await signIn(email, password);
+      console.log('🔐 Login successful, navigating to dashboard');
       navigate('/dashboard');
     } catch (error: any) {
-      console.error('Login error:', error);
-      if (error.message === 'Invalid login credentials' && email === 'justincronk@pm.me') {
-        setError(
-          <div>
-            Invalid credentials.
-            <Link to="/admin-setup" className="ml-2 text-slate-900 underline">
-              Setup admin account →
-            </Link>
-          </div>
-        );
+      console.error('🔐 Login error:', error);
+      
+      // Enhanced error handling
+      if (error.message === 'Invalid login credentials') {
+        if (email === 'justincronk@pm.me') {
+          setError(
+            <div>
+              Invalid credentials.
+              <Link to="/admin-setup" className="ml-2 text-slate-900 underline">
+                Setup admin account →
+              </Link>
+            </div>
+          );
+        } else {
+          setError('Invalid email or password. Please check your credentials and try again.');
+        }
+      } else if (error.message?.includes('Email not confirmed')) {
+        setError('Please check your email and click the confirmation link before signing in.');
       } else {
-        setError(error.message || 'An error occurred during login');
+        setError(error.message || 'An error occurred during login. Please try again.');
       }
     } finally {
       setLoading(false);
