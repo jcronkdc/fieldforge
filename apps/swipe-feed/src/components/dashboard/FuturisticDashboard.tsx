@@ -11,6 +11,7 @@ import {
   Activity,
   ShieldCheck
 } from 'lucide-react';
+import { ElectricalContractorDashboard } from './ElectricalContractorDashboard';
 import { Link } from 'react-router-dom';
 
 const telemetryCards = [
@@ -38,25 +39,33 @@ const telemetryCards = [
 ];
 
 export const FuturisticDashboard: React.FC = () => {
+  // Check if this is a new electrical contractor (like National Conductor)
+  const isNewElectricalContractor = !localStorage.getItem('fieldforge_onboarding_complete');
+  
+  if (isNewElectricalContractor) {
+    // Show specialized onboarding for electrical contractors
+    return <ElectricalContractorDashboard />;
+  }
+
   const summaryCards = [
     {
-      title: 'Programs & projects',
-      description: 'Organise structure packages, switching plans, and contract deliverables.',
-      cta: 'Open projects workspace',
-      to: '/projects',
+      title: 'Substations & Switchyards', 
+      description: 'Manage substation construction projects from 12.5kV to 500kV including switchyard installations.',
+      cta: 'View substation projects',
+      to: '/substations',
       icon: Building2
     },
     {
-      title: 'Crews & partners',
-      description: 'Onboard contractors, internal crews, and client observers with the right controls.',
-      cta: 'Manage teams',
+      title: 'IBEW Crews & Teams',
+      description: 'Coordinate union crews, specialized welders, and inspection teams for electrical construction.',
+      cta: 'Manage IBEW crews',
       to: '/crews',
       icon: Users
     },
     {
-      title: 'Safety & permits',
-      description: 'Capture tailboards, energized work approvals, and incident follow-up in one record.',
-      cta: 'View safety hub',
+      title: 'High-Voltage Safety',
+      description: 'Digital JSAs, switching orders, energized work permits, and safety briefings for electrical work.',
+      cta: 'Access safety center',
       to: '/safety',
       icon: Shield
     }

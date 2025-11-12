@@ -55,6 +55,9 @@ import { FieldOperationsIndex } from './pages/FieldOperationsIndex';
 import { SubstationManager } from './components/specialized/SubstationManager';
 import { NationwideCrewManager } from './components/specialized/NationwideCrewManager';
 
+// Onboarding for electrical contractors
+import { ElectricalContractorWelcome } from './components/onboarding/ElectricalContractorWelcome';
+
 // Offline Support
 import { OfflineIndicator } from './components/common/OfflineIndicator';
 import { SyncStatus } from './components/common/SyncStatus';
