@@ -19,10 +19,8 @@ import { createAnalyticsRouter } from "./construction/analytics/analyticsRoutes.
 import { createCrewRouter } from "./construction/crews/crewRoutes.js";
 import { createQAQCRouter } from "./construction/qaqc/qaqcRoutes.js";
 import { createDocumentRouter } from "./construction/documents/documentRoutes.js";
-// TODO: Add these as we build them:
-// import { createSchedulingRouter } from "./routes/schedulingRoutes.js";
-// import { createAnalyticsRouter } from "./routes/analyticsRoutes.js";
-// import { createReportingRouter } from "./routes/reportingRoutes.js";
+import { createSchedulingRouter } from "./construction/scheduling/schedulingRoutes.js";
+import { createReportingRouter } from "./construction/reporting/reportingRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -109,9 +107,11 @@ app.use("/api/qaqc", createQAQCRouter());
 // Document Management - UPLOAD/DOWNLOAD/SHARE ✅
 app.use("/api/documents", createDocumentRouter());
 
-// TODO: Implement these construction routes
-// app.use("/api/scheduling", createSchedulingRouter());
-// app.use("/api/reporting", createReportingRouter());
+// Project Scheduling - GANTT CHARTS & RESOURCE MGMT ✅
+app.use("/api/scheduling", createSchedulingRouter());
+
+// Reporting System - PDF GENERATION & DASHBOARDS ✅
+app.use("/api/reporting", createReportingRouter());
 
 // Feedback endpoint (keep this - useful for any platform)
 app.use("/api/feedback", createFeedbackRouter());
