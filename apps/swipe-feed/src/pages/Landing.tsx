@@ -21,7 +21,13 @@ export const Landing: React.FC = () => {
         url="https://fieldforge.app/"
         structuredData={structuredData}
       />
-      <SimpleLandingPage />
+      {/* SimpleLandingPage component was removed - using placeholder */}
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">{title}</h1>
+          <p className="text-xl text-slate-300 max-w-2xl">{description}</p>
+        </div>
+      </div>
     </>
   );
 };
