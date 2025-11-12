@@ -1,6 +1,6 @@
 import React from 'react';
 import { SEOHead, generateWebPageSchema } from '../components/seo/SEOHead';
-import { SimpleLandingPage } from './SimpleLandingPage';
+// Removed broken import - SimpleLandingPage doesn't exist
 
 const title = 'FieldForge — Enterprise-Grade Construction Management';
 const description =
