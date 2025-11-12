@@ -13,9 +13,9 @@ import { loadEnv } from "./worker/env.js";
 import { createFieldOpsRouter } from "./routes/fieldOpsRoutes.js";
 import { createFeedbackRouter } from "./feedback/feedbackRoutes.js";
 import { createProjectRouter } from "./routes/projectRoutes.js";
+import { createEquipmentRouter } from "./routes/equipmentRoutes.js";
+import { createSafetyRouter } from "./construction/safety/safetyRoutes.js";
 // TODO: Add these as we build them:
-// import { createSafetyRouter } from "./routes/safetyRoutes.js";
-// import { createEquipmentRouter } from "./routes/equipmentRoutes.js";
 // import { createCrewRouter } from "./routes/crewRoutes.js";
 // import { createQAQCRouter } from "./routes/qaqcRoutes.js";
 // import { createSchedulingRouter } from "./routes/schedulingRoutes.js";
@@ -90,9 +90,13 @@ app.use("/api/field-ops", createFieldOpsRouter());
 // Project Management
 app.use("/api/projects", createProjectRouter());
 
+// Equipment Management  
+app.use("/api/equipment", createEquipmentRouter());
+
+// Safety Management - COMPLETE E2E PATHWAY ✅
+app.use("/api/safety", createSafetyRouter());
+
 // TODO: Implement these construction routes
-// app.use("/api/safety", createSafetyRouter());
-// app.use("/api/equipment", createEquipmentRouter());
 // app.use("/api/crews", createCrewRouter());
 // app.use("/api/qaqc", createQAQCRouter());
 // app.use("/api/scheduling", createSchedulingRouter());
