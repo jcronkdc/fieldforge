@@ -324,7 +324,7 @@ export const NewElectricalLanding: React.FC = () => {
                         <h3 className="text-2xl font-bold text-white leading-tight">{feature.title}</h3>
                         <div className="flex items-center gap-2 mt-1">
                           <div className="w-12 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
-                          <span className="text-xs text-blue-300 font-mono">SYS_{index + 1:03d}</span>
+                          <span className="text-xs text-blue-300 font-mono">SYS_{(index + 1).toString().padStart(3, '0')}</span>
                         </div>
                       </div>
                     </div>
