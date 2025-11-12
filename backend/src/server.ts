@@ -15,6 +15,7 @@ import { createFeedbackRouter } from "./feedback/feedbackRoutes.js";
 import { createProjectRouter } from "./routes/projectRoutes.js";
 import { createEquipmentRouter } from "./routes/equipmentRoutes.js";
 import { createSafetyRouter } from "./construction/safety/safetyRoutes.js";
+import { createAnalyticsRouter } from "./construction/analytics/analyticsRoutes.js";
 // TODO: Add these as we build them:
 // import { createCrewRouter } from "./routes/crewRoutes.js";
 // import { createQAQCRouter } from "./routes/qaqcRoutes.js";
@@ -96,12 +97,14 @@ app.use("/api/equipment", createEquipmentRouter());
 // Safety Management - COMPLETE E2E PATHWAY ✅
 app.use("/api/safety", createSafetyRouter());
 
+// Analytics - REAL DATA, NO MORE MATH.RANDOM() ✅
+app.use("/api/analytics", createAnalyticsRouter());
+
 // TODO: Implement these construction routes
 // app.use("/api/crews", createCrewRouter());
 // app.use("/api/qaqc", createQAQCRouter());
 // app.use("/api/scheduling", createSchedulingRouter());
 // app.use("/api/documents", createDocumentRouter());
-// app.use("/api/analytics", createAnalyticsRouter());
 // app.use("/api/reporting", createReportingRouter());
 
 // Feedback endpoint (keep this - useful for any platform)
