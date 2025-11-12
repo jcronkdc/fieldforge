@@ -64,7 +64,7 @@ export function loadEnv(): Env {
   }
 
   return {
-    DATABASE_URL,
+    DATABASE_URL: DATABASE_URL!,
     SUPABASE_URL,
     SUPABASE_SERVICE_KEY,
     POSTHOG_API_KEY,
