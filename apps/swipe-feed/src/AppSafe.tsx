@@ -21,7 +21,7 @@ import { FuturisticSignUp } from './components/auth/FuturisticSignUp';
 import { FuturisticAdminSetup } from './components/auth/FuturisticAdminSetup';
 
 // Landing Page
-import { FuturisticElectricalLanding } from './pages/FuturisticElectricalLanding';
+import { NewElectricalLanding } from './pages/NewElectricalLanding';
 
 // Social & AI Components
 import { SocialFeed } from './components/feed/SocialFeed';
@@ -226,7 +226,7 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={
-                session ? <Navigate to="/dashboard" replace /> : <FuturisticElectricalLanding />
+                session ? <Navigate to="/dashboard" replace /> : <NewElectricalLanding />
               } />
               
               <Route path="/login" element={
