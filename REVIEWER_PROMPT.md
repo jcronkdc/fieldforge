@@ -1,8 +1,41 @@
-# Reviewer Instructions - Security Audit Verification
+# Reviewer Instructions - CRITICAL WORKFLOW ALIGNMENT
+
+## 🚨 GOLDEN RULE - IMMUTABLE INSTRUCTION
+
+**THERE IS ONLY ONE DOCUMENT FOR ALL TRACKING:** `PLANNING_KICKBACK.md`
+
+- ✅ **ONLY UPDATE:** `PLANNING_KICKBACK.md`
+- ❌ **NEVER CREATE:** Any new files or documents
+- ❌ **NEVER CREATE:** Summary documents, report documents, or any other documents
+- ✅ **PLANNING_KICKBACK.md** is the SINGLE SOURCE OF TRUTH for both Builder and Reviewer
+
+---
+
+## 📋 BUILDER-REVIEWER WORKFLOW ALIGNMENT
+
+### How We Work Together:
+
+1. **Builder Updates `PLANNING_KICKBACK.md`**
+   - Documents issues found (Reference ID: F1, F2, etc.)
+   - Documents fixes made
+   - Says "READY" when complete
+
+2. **You (Reviewer) Update `PLANNING_KICKBACK.md`**
+   - Read what Builder documented
+   - Verify in actual code files
+   - Update SAME document with verification results
+
+3. **The Cycle Continues**
+   - If issues found → Update `PLANNING_KICKBACK.md` → Builder fixes
+   - If all verified → Update `PLANNING_KICKBACK.md` → Mark APPROVED
+
+**NO OTHER DOCUMENTS EXIST IN THIS WORKFLOW**
+
+---
 
 **Reviewer Role:** Security Auditor  
 **Review Date:** [Current Date]  
-**Reference ID:** F1  
+**Reference ID:** Use next available (F2, F3, etc.)  
 **Status:** AWAITING REVIEW
 
 ---
@@ -16,29 +49,38 @@ You are verifying security fixes implemented by the Builder. Your job is to:
 3. **Update** the master document `PLANNING_KICKBACK.md` with verification results
 4. **Send code back to Builder** if ANY issues are found (with new reference ID)
 
-**CRITICAL:** 
-- You will update **ONLY ONE DOCUMENT** - `PLANNING_KICKBACK.md`. Do not create new documents.
+**CRITICAL - IMMUTABLE RULES:** 
+- You will update **ONLY ONE DOCUMENT** - `PLANNING_KICKBACK.md`
+- **NEVER CREATE NEW DOCUMENTS - THIS IS AN ABSOLUTE RULE**
+- **NEVER CREATE NEW FILES - THIS IS AN ABSOLUTE RULE**
 - **IF YOU FIND ISSUES:** Code MUST go back to Builder for fixes. Do NOT fix code yourself.
+- **PLANNING_KICKBACK.md is the ONLY document that exists for tracking**
 
 ---
 
 ## 📄 DOCUMENTS TO REFERENCE
 
-### Master Document (UPDATE THIS ONE):
+### THE ONLY DOCUMENT YOU CAN UPDATE:
 **File:** `PLANNING_KICKBACK.md`  
-**Action:** Update this document with your verification results
+**Action:** UPDATE ONLY THIS DOCUMENT - NO OTHER DOCUMENTS EXIST FOR UPDATES
+**GOLDEN RULE:** THIS IS THE SINGLE SOURCE OF TRUTH
 
-### Reference Documents (READ ONLY):
-1. **`SECURITY_FIXES_COMPLETE.md`** - Lists what fixes were implemented
-2. **`SECURITY_AUDIT_FAILING_TESTS.js`** - Contains the 10 security tests
-3. **Code files** - Verify fixes in actual code
+### Reference Documents (READ ONLY - NEVER UPDATE THESE):
+1. **Code files** - Verify fixes in actual code
+2. **Any other files** - READ ONLY for reference
+
+**REMEMBER:** 
+- PLANNING_KICKBACK.md is the ONLY document you update
+- DO NOT create ANY new files
+- DO NOT create ANY new documents
+- This is an IMMUTABLE RULE that CANNOT be broken
 
 ---
 
 ## 🔍 VERIFICATION PROCESS
 
 ### Step 1: Review the Fixes
-1. Open `SECURITY_FIXES_COMPLETE.md`
+1. Read `PLANNING_KICKBACK.md` for Builder's documented fixes
 2. Review all 10 fixes (F1-1 through F1-10)
 3. Note what files were changed and how
 
@@ -235,12 +277,13 @@ Before updating `PLANNING_KICKBACK.md`, verify:
    - Describe what's wrong in detail
    - Provide exact file locations and line numbers
    - Explain what needs to be fixed
+   - Assign next reference ID (F2, F3, etc.) for additional fixes
 
-3. **Request new reference ID** - Assign next reference ID (F2, F3, etc.) for additional fixes
+3. **Clearly state in same document:** "CODE MUST GO BACK TO BUILDER FOR ADDITIONAL FIXES"
 
-4. **Notify Builder** - Clearly state: "CODE MUST GO BACK TO BUILDER FOR ADDITIONAL FIXES"
+4. **Do NOT attempt to fix code yourself** - Your role is to verify, not to fix
 
-5. **Do NOT attempt to fix code yourself** - Your role is to verify, not to fix
+5. **Do NOT create new documents** - Everything stays in `PLANNING_KICKBACK.md`
 
 **Example Documentation:**
 ```markdown
@@ -295,13 +338,13 @@ Your review is complete when:
 
 ## ⚠️ CRITICAL RULES
 
-- **ONLY update:** `PLANNING_KICKBACK.md`
-- **DO NOT create:** New documents
+- **ONLY update:** `PLANNING_KICKBACK.md` - the single source of truth
+- **DO NOT create:** New documents or files ever
 - **DO NOT modify:** Code files (if issues found, send back to Builder)
 - **DO NOT delete:** Original vulnerability descriptions
 - **DO preserve:** Document structure and formatting
 - **DO verify:** Each fix in actual code before marking as fixed
-- **DO send back:** Code to Builder if ANY issues are found (with new reference ID)
+- **DO send back:** Code to Builder if ANY issues are found (document in same file with new reference ID)
 
 ---
 
@@ -324,11 +367,22 @@ When updating `PLANNING_KICKBACK.md`, maintain this structure:
 
 **END OF REVIEWER INSTRUCTIONS**
 
+## 🚨 FINAL REMINDER - GOLDEN RULE
+
+**YOU MUST ONLY UPDATE ONE DOCUMENT:** `PLANNING_KICKBACK.md`
+
+- ❌ **DO NOT CREATE NEW FILES**
+- ❌ **DO NOT CREATE NEW DOCUMENTS**
+- ✅ **ONLY UPDATE PLANNING_KICKBACK.md**
+- ✅ **THIS IS THE SINGLE SOURCE OF TRUTH**
+- ✅ **THIS IS AN IMMUTABLE, UNBREAKABLE RULE**
+
 **Remember:** 
 - Update ONLY `PLANNING_KICKBACK.md`
 - Verify fixes in actual code
 - Be thorough and accurate
-- Document clearly
+- Document clearly in PLANNING_KICKBACK.md ONLY
 - Maintain consistency
 - **IF ISSUES FOUND: Code MUST go back to Builder (do NOT fix yourself)**
-- **See `BUILDER_WORKFLOW.md` for complete workflow process**
+
+**THE BUILDER FOLLOWS THE SAME RULE - ONLY PLANNING_KICKBACK.md IS UPDATED**
