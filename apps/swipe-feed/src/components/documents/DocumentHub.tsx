@@ -1,525 +1,769 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { FileText, Upload, Download, Share2, Folder, Search, Filter, Grid, List, File, Image, FileSpreadsheet, Eye, Trash2, Plus, Loader2, X, Calendar, User, FolderOpen } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { FileText, Upload, Download, Search, Filter, Eye, Trash2, Share2, Folder, Clock, Tag } from 'lucide-react';
-import { toast } from 'react-hot-toast';
-
-interface DocumentCategory {
-  id: string;
-  name: string;
-  icon: string;
-}
+import toast from 'react-hot-toast';
 
 interface Document {
   id: string;
-  project_id: string;
-  project_name: string;
-  category: string;
-  title: string;
-  description?: string;
-  file_name: string;
+  name: string;
+  type: 'drawing' | 'report' | 'permit' | 'spec' | 'photo' | 'other';
   file_type: string;
-  file_size: number;
-  version: string;
-  tags: string[];
-  status: string;
+  size: number;
+  url: string;
+  thumbnail_url?: string;
+  project_id?: string;
+  project_name?: string;
+  folder_id?: string;
+  uploaded_by: string;
+  uploader_name?: string;
   created_at: string;
-  uploaded_by_name: string;
+  updated_at: string;
+  version: number;
+  tags: string[];
+  is_public: boolean;
   download_count: number;
-  last_accessed?: string;
+}
+
+interface Folder {
+  id: string;
+  name: string;
+  parent_id?: string;
+  document_count: number;
+  created_at: string;
 }
 
 export const DocumentHub: React.FC = () => {
   const { session } = useAuth();
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [categories, setCategories] = useState<DocumentCategory[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [currentFolder, setCurrentFolder] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<string>('');
-  const [projects, setProjects] = useState<any[]>([]);
-  const isMobile = window.innerWidth < 768;
+  const [showCreateFolder, setShowCreateFolder] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // FETCH CATEGORIES
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch('/api/documents/categories', {
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
-      });
-      
-      const data = await response.json();
-      setCategories(data);
-    } catch (error) {
-      console.error('Failed to fetch categories:', error);
-    }
-  };
+  // Form states
+  const [newFolder, setNewFolder] = useState({ name: '' });
+  const [uploadDetails, setUploadDetails] = useState({
+    type: 'drawing',
+    tags: '',
+    is_public: false
+  });
 
-  // FETCH DOCUMENTS
+  useEffect(() => {
+    fetchDocuments();
+    fetchFolders();
+  }, [currentFolder, filterType, searchTerm]);
+
   const fetchDocuments = async () => {
     try {
-      const params = new URLSearchParams({
-        ...(selectedCategory && { category: selectedCategory }),
-        ...(searchTerm && { search: searchTerm }),
-        ...(selectedProject && { project_id: selectedProject }),
-        limit: '50'
-      });
+      const params = new URLSearchParams();
+      if (currentFolder) params.append('folder_id', currentFolder);
+      if (filterType !== 'all') params.append('type', filterType);
+      if (searchTerm) params.append('search', searchTerm);
 
       const response = await fetch(`/api/documents?${params}`, {
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
+        headers: {
+          'Authorization': `Bearer ${session?.access_token}`
+        }
       });
-      
-      const data = await response.json();
-      setDocuments(data.documents);
-      setLoading(false);
+
+      if (response.ok) {
+        const data = await response.json();
+        setDocuments(data.documents || []);
+      }
     } catch (error) {
       console.error('Failed to fetch documents:', error);
-      toast.error('Failed to load documents');
+    } finally {
       setLoading(false);
     }
   };
 
-  // FETCH PROJECTS FOR FILTER
-  const fetchProjects = async () => {
+  const fetchFolders = async () => {
     try {
-      const response = await fetch('/api/projects/list', {
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
+      const response = await fetch('/api/documents/folders', {
+        headers: {
+          'Authorization': `Bearer ${session?.access_token}`
+        }
       });
-      
-      const data = await response.json();
-      setProjects(data.projects || []);
+
+      if (response.ok) {
+        const data = await response.json();
+        setFolders(data.folders || []);
+      }
     } catch (error) {
-      console.error('Failed to fetch projects:', error);
+      console.error('Failed to fetch folders:', error);
     }
   };
 
-  // UPLOAD DOCUMENT
-  const handleUpload = async (formData: any) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', uploadDetails.type);
+    formData.append('tags', uploadDetails.tags);
+    formData.append('is_public', uploadDetails.is_public.toString());
+    if (currentFolder) formData.append('folder_id', currentFolder);
+    if (localStorage.getItem('current_project_id')) {
+      formData.append('project_id', localStorage.getItem('current_project_id')!);
+    }
+
     try {
-      // Convert file to base64
-      const fileToBase64 = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => {
-            const base64 = reader.result as string;
-            resolve(base64.split(',')[1]); // Remove data:type;base64, prefix
-          };
-          reader.onerror = reject;
-        });
-      };
-
-      const base64Data = await fileToBase64(formData.file);
-
+      setUploadProgress(10);
       const response = await fetch('/api/documents/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session?.access_token}`
+        },
+        body: formData
+      });
+
+      setUploadProgress(90);
+
+      if (response.ok) {
+        setUploadProgress(100);
+        setShowUploadModal(false);
+        setUploadDetails({ type: 'drawing', tags: '', is_public: false });
+        fetchDocuments();
+        alert('Document uploaded successfully!');
+      } else {
+        const error = await response.json();
+        alert(`Upload failed: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload document');
+    } finally {
+      setUploadProgress(0);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const createFolder = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/api/documents/folders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session?.access_token}`
         },
         body: JSON.stringify({
-          project_id: formData.project_id,
-          category: formData.category,
-          title: formData.title,
-          description: formData.description,
-          file_name: formData.file.name,
-          file_type: formData.file.type,
-          file_data: base64Data,
-          tags: formData.tags || [],
-          version: formData.version || '1.0'
+          ...newFolder,
+          parent_id: currentFolder
         })
       });
 
-      if (!response.ok) throw new Error('Upload failed');
-
-      toast.success('Document uploaded successfully');
-      setShowUploadModal(false);
-      await fetchDocuments(); // Refresh list
-      
+      if (response.ok) {
+        setShowCreateFolder(false);
+        setNewFolder({ name: '' });
+        fetchFolders();
+        alert('Folder created successfully!');
+      } else {
+        const error = await response.json();
+        alert(`Failed to create folder: ${error.error}`);
+      }
     } catch (error) {
-      console.error('Upload error:', error);
-      toast.error('Failed to upload document');
+      console.error('Error creating folder:', error);
+      alert('Failed to create folder');
     }
   };
 
-  // DOWNLOAD DOCUMENT
-  const handleDownload = async (document: Document) => {
+  const downloadDocument = async (doc: Document) => {
     try {
-      const response = await fetch(`/api/documents/download/${document.id}`, {
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
+      const response = await fetch(`/api/documents/${doc.id}/download`, {
+        headers: {
+          'Authorization': `Bearer ${session?.access_token}`
+        }
       });
 
-      if (!response.ok) throw new Error('Download failed');
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = document.file_name;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-
-      toast.success('Document downloaded');
-      
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = doc.name;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
     } catch (error) {
-      toast.error('Failed to download document');
+      console.error('Download error:', error);
+      alert('Failed to download document');
     }
   };
 
-  // VIEW DOCUMENT
-  const handleView = async (document: Document) => {
+  const shareDocument = async (doc: Document) => {
     try {
-      const response = await fetch(`/api/documents/view/${document.id}`, {
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
-      });
-
-      if (!response.ok) throw new Error('View failed');
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      window.open(url, '_blank');
-      
-      setTimeout(() => window.URL.revokeObjectURL(url), 10000);
-      
-    } catch (error) {
-      toast.error('Failed to view document');
-    }
-  };
-
-  // DELETE DOCUMENT
-  const handleDelete = async (documentId: string) => {
-    if (!confirm('Are you sure you want to delete this document?')) return;
-
-    try {
-      const response = await fetch(`/api/documents/${documentId}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
-      });
-
-      if (!response.ok) throw new Error('Delete failed');
-
-      toast.success('Document deleted');
-      await fetchDocuments();
-      
-    } catch (error) {
-      toast.error('Failed to delete document');
-    }
-  };
-
-  // SHARE DOCUMENT
-  const handleShare = async (documentId: string) => {
-    try {
-      const response = await fetch(`/api/documents/${documentId}/share`, {
+      const response = await fetch(`/api/documents/${doc.id}/share`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${session?.access_token}`
-        },
-        body: JSON.stringify({ expires_in_hours: 24 })
+        }
       });
 
-      if (!response.ok) throw new Error('Share failed');
-
-      const data = await response.json();
-      const shareUrl = `${window.location.origin}${data.share_url}`;
-      
-      // Copy to clipboard
-      await navigator.clipboard.writeText(shareUrl);
-      toast.success('Share link copied to clipboard');
-      
+      if (response.ok) {
+        const data = await response.json();
+        if (navigator.share) {
+          navigator.share({
+            title: doc.name,
+            text: `Check out this document: ${doc.name}`,
+            url: data.shareUrl
+          });
+        } else {
+          navigator.clipboard.writeText(data.shareUrl);
+          alert('Share link copied to clipboard!');
+        }
+      }
     } catch (error) {
-      toast.error('Failed to share document');
+      console.error('Share error:', error);
+      alert('Failed to share document');
     }
-  };
-
-  useEffect(() => {
-    if (session) {
-      fetchCategories();
-      fetchProjects();
-      fetchDocuments();
-    }
-  }, [session, selectedCategory, searchTerm, selectedProject]);
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
   const getFileIcon = (fileType: string) => {
-    if (fileType.includes('pdf')) return '📄';
-    if (fileType.includes('image')) return '🖼️';
-    if (fileType.includes('word')) return '📝';
-    if (fileType.includes('excel')) return '📊';
-    if (fileType.includes('dwg') || fileType.includes('autocad')) return '📐';
-    if (fileType.includes('zip')) return '📦';
-    return '📎';
+    if (fileType.includes('pdf')) return <FileText className="w-8 h-8 text-red-500" />;
+    if (fileType.includes('image')) return <Image className="w-8 h-8 text-green-500" />;
+    if (fileType.includes('sheet')) return <FileSpreadsheet className="w-8 h-8 text-blue-500" />;
+    return <File className="w-8 h-8 text-gray-500" />;
   };
 
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return Math.round(bytes / 1024) + ' KB';
+    return Math.round(bytes / 1048576) + ' MB';
+  };
+
+  const documentTypes = ['all', 'drawing', 'report', 'permit', 'spec', 'photo', 'other'];
+
+  if (loading && documents.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+      </div>
+    );
+  }
+
   return (
-    <div className={isMobile ? 'p-4' : 'p-6'}>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-white">Document Hub</h1>
-        <button
-          onClick={() => setShowUploadModal(true)}
-          className="px-4 py-2 bg-amber-500 text-black rounded-lg flex items-center gap-2 min-h-[44px]"
-        >
-          <Upload className="w-4 h-4" />
-          {!isMobile && 'Upload'}
-        </button>
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Document Hub</h1>
+          <p className="text-gray-600 mt-1">Central repository for all project documents</p>
+        </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowCreateFolder(true)}
+            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2 min-h-[44px]"
+          >
+            <FolderOpen className="w-4 h-4" />
+            <span className="hidden sm:inline">New Folder</span>
+          </button>
+          <button
+            onClick={() => setShowUploadModal(true)}
+            className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center gap-2 min-h-[44px]"
+          >
+            <Upload className="w-4 h-4" />
+            <span className="hidden sm:inline">Upload</span>
+          </button>
+        </div>
       </div>
 
-      {/* Filters */}
-      <div className={isMobile ? 'space-y-4 mb-6' : 'flex gap-4 mb-6'}>
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search documents..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 min-h-[44px]"
-          />
+      {/* Stats Summary */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Total Documents</p>
+              <p className="text-2xl font-bold text-gray-900">{documents.length}</p>
+            </div>
+            <FileText className="w-8 h-8 text-amber-500" />
+          </div>
         </div>
 
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white min-h-[44px]"
-        >
-          <option value="">All Categories</option>
-          {categories.map(cat => (
-            <option key={cat.id} value={cat.id}>{cat.name}</option>
-          ))}
-        </select>
-
-        <select
-          value={selectedProject}
-          onChange={(e) => setSelectedProject(e.target.value)}
-          className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white min-h-[44px]"
-        >
-          <option value="">All Projects</option>
-          {projects.map(project => (
-            <option key={project.id} value={project.id}>{project.name}</option>
-          ))}
-        </select>
-      </div>
-
-      {/* Documents Grid */}
-      <div className={isMobile ? 'space-y-4' : 'grid grid-cols-2 lg:grid-cols-3 gap-4'}>
-        {loading ? (
-          <div className="col-span-full text-center py-8 text-gray-400">
-            Loading documents...
-          </div>
-        ) : documents.length === 0 ? (
-          <div className="col-span-full text-center py-8 text-gray-400">
-            No documents found
-          </div>
-        ) : (
-          documents.map(doc => (
-            <div
-              key={doc.id}
-              className="bg-slate-800 rounded-xl p-4 border border-slate-700 hover:border-amber-500/50 transition-colors"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl">{getFileIcon(doc.file_type)}</span>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-white text-sm line-clamp-1">
-                      {doc.title}
-                    </h3>
-                    <p className="text-xs text-gray-400">
-                      v{doc.version} • {formatFileSize(doc.file_size)}
-                    </p>
-                  </div>
-                </div>
-                <span className="text-xs px-2 py-1 bg-gray-700 rounded text-gray-300">
-                  {doc.category}
-                </span>
-              </div>
-
-              {doc.description && (
-                <p className="text-xs text-gray-400 mb-3 line-clamp-2">
-                  {doc.description}
-                </p>
-              )}
-
-              <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-                <span>{doc.project_name}</span>
-                <span>{new Date(doc.created_at).toLocaleDateString()}</span>
-              </div>
-
-              {doc.tags && doc.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {doc.tags.slice(0, 3).map((tag, idx) => (
-                    <span key={idx} className="text-xs px-2 py-1 bg-gray-700 rounded">
-                      <Tag className="w-3 h-3 inline mr-1" />
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-                <span>By {doc.uploaded_by_name}</span>
-                <span>{doc.download_count} downloads</span>
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleView(doc)}
-                  className="flex-1 px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white text-sm flex items-center justify-center gap-1 min-h-[36px]"
-                >
-                  <Eye className="w-4 h-4" />
-                  View
-                </button>
-                <button
-                  onClick={() => handleDownload(doc)}
-                  className="flex-1 px-3 py-2 bg-amber-600 hover:bg-amber-700 rounded text-white text-sm flex items-center justify-center gap-1 min-h-[36px]"
-                >
-                  <Download className="w-4 h-4" />
-                  Download
-                </button>
-                <button
-                  onClick={() => handleShare(doc.id)}
-                  className="px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white min-h-[36px]"
-                >
-                  <Share2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => handleDelete(doc.id)}
-                  className="px-3 py-2 bg-red-600 hover:bg-red-700 rounded text-white min-h-[36px]"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Total Size</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {formatFileSize(documents.reduce((sum, doc) => sum + doc.size, 0))}
+              </p>
             </div>
-          ))
-        )}
+            <Download className="w-8 h-8 text-blue-500" />
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Folders</p>
+              <p className="text-2xl font-bold text-gray-900">{folders.length}</p>
+            </div>
+            <Folder className="w-8 h-8 text-green-500" />
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">Downloads</p>
+              <p className="text-2xl font-bold text-gray-900">
+                {documents.reduce((sum, doc) => sum + doc.download_count, 0)}
+              </p>
+            </div>
+            <Share2 className="w-8 h-8 text-purple-500" />
+          </div>
+        </div>
       </div>
+
+      {/* Search and Filters */}
+      <div className="bg-white rounded-lg shadow p-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search documents..."
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+            />
+          </div>
+          
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+          >
+            {documentTypes.map(type => (
+              <option key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </option>
+            ))}
+          </select>
+
+          <div className="flex gap-2">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded transition-colors min-w-[44px] min-h-[44px] ${
+                viewMode === 'grid'
+                  ? 'bg-amber-600 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <Grid className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded transition-colors min-w-[44px] min-h-[44px] ${
+                viewMode === 'list'
+                  ? 'bg-amber-600 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <List className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Breadcrumb */}
+      {currentFolder && (
+        <div className="flex items-center gap-2 text-sm text-gray-600">
+          <button
+            onClick={() => setCurrentFolder(null)}
+            className="hover:text-amber-600 transition-colors"
+          >
+            All Documents
+          </button>
+          <span>/</span>
+          <span className="font-medium text-gray-900">
+            {folders.find(f => f.id === currentFolder)?.name}
+          </span>
+        </div>
+      )}
+
+      {/* Folders Grid */}
+      {!currentFolder && folders.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-3">Folders</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+            {folders.filter(f => !f.parent_id).map(folder => (
+              <button
+                key={folder.id}
+                onClick={() => setCurrentFolder(folder.id)}
+                className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow text-center"
+              >
+                <Folder className="w-12 h-12 text-amber-500 mx-auto mb-2" />
+                <p className="text-sm font-medium text-gray-900 truncate">{folder.name}</p>
+                <p className="text-xs text-gray-500 mt-1">{folder.document_count} items</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Documents Grid/List */}
+      {viewMode === 'grid' ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          {documents.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-lg text-gray-600">No documents found</p>
+              <p className="text-sm text-gray-500 mt-1">Upload your first document to get started</p>
+            </div>
+          ) : (
+            documents.map(doc => (
+              <div
+                key={doc.id}
+                className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => setSelectedDocument(doc)}
+              >
+                <div className="p-4">
+                  <div className="flex justify-center mb-3">
+                    {doc.thumbnail_url ? (
+                      <img src={doc.thumbnail_url} alt={doc.name} className="w-full h-32 object-cover rounded" />
+                    ) : (
+                      getFileIcon(doc.file_type)
+                    )}
+                  </div>
+                  <p className="text-sm font-medium text-gray-900 truncate">{doc.name}</p>
+                  <p className="text-xs text-gray-500 mt-1">{formatFileSize(doc.size)}</p>
+                  <p className="text-xs text-gray-500">{new Date(doc.created_at), 'MMM d')}</p>
+                </div>
+                <div className="flex border-t">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      downloadDocument(doc);
+                    }}
+                    className="flex-1 p-2 text-gray-600 hover:bg-gray-50 transition-colors"
+                  >
+                    <Download className="w-4 h-4 mx-auto" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      shareDocument(doc);
+                    }}
+                    className="flex-1 p-2 text-gray-600 hover:bg-gray-50 transition-colors border-l"
+                  >
+                    <Share2 className="w-4 h-4 mx-auto" />
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <table className="min-w-full">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Type
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Size
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Uploaded
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {documents.map(doc => (
+                <tr
+                  key={doc.id}
+                  className="hover:bg-gray-50 cursor-pointer"
+                  onClick={() => setSelectedDocument(doc)}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      {getFileIcon(doc.file_type)}
+                      <div className="ml-3">
+                        <p className="text-sm font-medium text-gray-900">{doc.name}</p>
+                        {doc.tags.length > 0 && (
+                          <div className="flex gap-1 mt-1">
+                            {doc.tags.map(tag => (
+                              <span key={tag} className="px-2 py-0.5 text-xs rounded bg-gray-100 text-gray-600">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {doc.type}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {formatFileSize(doc.size)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {new Date(doc.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          downloadDocument(doc);
+                        }}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        <Download className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          shareDocument(doc);
+                        }}
+                        className="text-green-600 hover:text-green-800"
+                      >
+                        <Share2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Upload Modal */}
       {showUploadModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 rounded-xl p-6 max-w-md w-full">
-            <h2 className="text-xl font-bold text-white mb-4">Upload Document</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <h2 className="text-xl font-bold mb-4">Upload Document</h2>
             
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const formData = new FormData(e.currentTarget);
-              handleUpload({
-                file: (e.currentTarget.querySelector('#file') as HTMLInputElement).files?.[0],
-                project_id: formData.get('project_id'),
-                category: formData.get('category'),
-                title: formData.get('title'),
-                description: formData.get('description'),
-                tags: formData.get('tags')?.toString().split(',').map(t => t.trim()),
-                version: formData.get('version')
-              });
-            }}>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">File</label>
-                  <input
-                    id="file"
-                    type="file"
-                    required
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Project</label>
-                  <select
-                    name="project_id"
-                    required
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                  >
-                    <option value="">Select project</option>
-                    {projects.map(p => (
-                      <option key={p.id} value={p.id}>{p.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Category</label>
-                  <select
-                    name="category"
-                    required
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                  >
-                    <option value="">Select category</option>
-                    {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Title</label>
-                  <input
-                    name="title"
-                    type="text"
-                    required
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Description</label>
-                  <textarea
-                    name="description"
-                    rows={3}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Tags (comma separated)</label>
-                  <input
-                    name="tags"
-                    type="text"
-                    placeholder="structural, revision, approved"
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-gray-400 mb-1">Version</label>
-                  <input
-                    name="version"
-                    type="text"
-                    defaultValue="1.0"
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                  />
-                </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Document Type
+                </label>
+                <select
+                  value={uploadDetails.type}
+                  onChange={(e) => setUploadDetails({...uploadDetails, type: e.target.value})}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                >
+                  <option value="drawing">Drawing</option>
+                  <option value="report">Report</option>
+                  <option value="permit">Permit</option>
+                  <option value="spec">Specification</option>
+                  <option value="photo">Photo</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
 
-              <div className="flex gap-3 mt-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Tags (comma-separated)
+                </label>
+                <input
+                  type="text"
+                  value={uploadDetails.tags}
+                  onChange={(e) => setUploadDetails({...uploadDetails, tags: e.target.value})}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  placeholder="e.g., electrical, phase-1, approved"
+                />
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="is_public"
+                  checked={uploadDetails.is_public}
+                  onChange={(e) => setUploadDetails({...uploadDetails, is_public: e.target.checked})}
+                  className="w-4 h-4 text-amber-600 rounded focus:ring-amber-500"
+                />
+                <label htmlFor="is_public" className="ml-2 text-sm text-gray-700">
+                  Make document publicly accessible
+                </label>
+              </div>
+
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-sm text-gray-600 mb-3">
+                  Click to select file or drag and drop
+                </p>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.dwg"
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700"
+                >
+                  Select File
+                </button>
+              </div>
+
+              {uploadProgress > 0 && (
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-amber-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowUploadModal(false);
+                  setUploadProgress(0);
+                }}
+                className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50 min-h-[44px]"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Folder Modal */}
+      {showCreateFolder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <h2 className="text-xl font-bold mb-4">Create New Folder</h2>
+            <form onSubmit={createFolder} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Folder Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newFolder.name}
+                  onChange={(e) => setNewFolder({ name: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  placeholder="e.g., Electrical Drawings"
+                />
+              </div>
+
+              <div className="flex gap-3">
                 <button
                   type="button"
-                  onClick={() => setShowUploadModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg"
+                  onClick={() => setShowCreateFolder(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50 min-h-[44px]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-amber-500 text-black rounded-lg font-semibold"
+                  className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 min-h-[44px]"
                 >
-                  Upload
+                  Create
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      {/* Document Preview Modal */}
+      {selectedDocument && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-4xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-bold">{selectedDocument.name}</h2>
+                <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                  <span className="flex items-center gap-1">
+                    <User className="w-4 h-4" />
+                    {selectedDocument.uploader_name || 'Unknown'}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-4 h-4" />
+                    {new Date(selectedDocument.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </span>
+                  <span>{formatFileSize(selectedDocument.size)}</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedDocument(null)}
+                className="p-2 hover:bg-gray-100 rounded-lg"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Document Preview */}
+            <div className="mb-4 bg-gray-100 rounded-lg p-8 text-center">
+              {selectedDocument.file_type.includes('image') ? (
+                <img
+                  src={selectedDocument.url}
+                  alt={selectedDocument.name}
+                  className="max-w-full mx-auto"
+                />
+              ) : (
+                <div>
+                  {getFileIcon(selectedDocument.file_type)}
+                  <p className="text-gray-600 mt-4">Preview not available</p>
+                </div>
+              )}
+            </div>
+
+            {/* Document Info */}
+            {selectedDocument.tags.length > 0 && (
+              <div className="mb-4">
+                <p className="text-sm font-medium text-gray-700 mb-2">Tags</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedDocument.tags.map(tag => (
+                    <span key={tag} className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => downloadDocument(selectedDocument)}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-[44px] flex items-center justify-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Download
+              </button>
+              <button
+                onClick={() => shareDocument(selectedDocument)}
+                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 min-h-[44px] flex items-center justify-center gap-2"
+              >
+                <Share2 className="w-4 h-4" />
+                Share
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
+
+
+
+

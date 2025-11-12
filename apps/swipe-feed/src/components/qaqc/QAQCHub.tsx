@@ -1,506 +1,552 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ClipboardCheck, CheckCircle, XCircle, AlertTriangle, Calendar, TrendingUp, Users, FileText, Camera, Download, Upload, Loader2, Plus } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { ClipboardCheck, AlertTriangle, CheckCircle, XCircle, FileText, TestTube, Camera, Plus, Search } from 'lucide-react';
-import { toast } from 'react-hot-toast';
-
-interface InspectionForm {
-  id: string;
-  name: string;
-  category: string;
-  description?: string;
-  status: string;
-}
+import toast from 'react-hot-toast';
 
 interface Inspection {
   id: string;
-  form_name: string;
-  project_name: string;
-  type: string;
-  status: 'in_progress' | 'completed';
-  started_at: string;
-  completed_at?: string;
-  overall_status?: 'pass' | 'fail' | 'conditional';
-  items_passed?: number;
-  items_failed?: number;
-  total_items?: number;
-  has_critical_defects?: boolean;
+  project_id: string;
+  project_name?: string;
+  inspection_type: string;
+  scheduled_date: string;
+  completed_date?: string;
+  inspector_id: string;
+  inspector_name?: string;
+  status: 'scheduled' | 'in_progress' | 'completed' | 'failed';
+  score?: number;
+  findings: Finding[];
+  photos: string[];
+  report_url?: string;
+  created_at: string;
 }
 
-interface ChecklistItem {
+interface Finding {
   id: string;
-  item_name: string;
-  category: string;
-  status: 'pending' | 'checked';
-  pass_fail?: 'pass' | 'fail' | 'na';
-  notes?: string;
+  description: string;
+  severity: 'minor' | 'major' | 'critical';
+  status: 'open' | 'resolved' | 'verified';
+  corrective_action?: string;
+  resolution_date?: string;
+  photos: string[];
+}
+
+interface QualityMetrics {
+  totalInspections: number;
+  passRate: number;
+  openFindings: number;
+  avgScore: number;
+  overdueInspections: number;
+  completionRate: number;
 }
 
 export const QAQCHub: React.FC = () => {
   const { session } = useAuth();
   const [inspections, setInspections] = useState<Inspection[]>([]);
-  const [forms, setForms] = useState<InspectionForm[]>([]);
-  const [selectedInspection, setSelectedInspection] = useState<Inspection | null>(null);
-  const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
+  const [metrics, setMetrics] = useState<QualityMetrics>({
+    totalInspections: 0,
+    passRate: 0,
+    openFindings: 0,
+    avgScore: 0,
+    overdueInspections: 0,
+    completionRate: 0
+  });
   const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<string>('');
-  const isMobile = window.innerWidth < 768;
+  const [selectedInspection, setSelectedInspection] = useState<Inspection | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [currentProjectId, setCurrentProjectId] = useState<string>('');
 
-  // FETCH REAL INSPECTION FORMS
-  const fetchForms = async () => {
-    try {
-      const response = await fetch('/api/qaqc/forms', {
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
-      });
-      
-      const data = await response.json();
-      setForms(data.forms);
-    } catch (error) {
-      console.error('Failed to fetch forms:', error);
+  // Form state for new inspection
+  const [newInspection, setNewInspection] = useState({
+    inspection_type: 'Concrete Pour',
+    scheduled_date: new Date().toISOString().split('T')[0],
+    project_id: '',
+    notes: ''
+  });
+
+  useEffect(() => {
+    if (session) {
+      fetchInspections();
+      fetchMetrics();
+      // Get current project from session or context
+      const projectId = session.user?.user_metadata?.current_project_id || '';
+      setCurrentProjectId(projectId);
+      setNewInspection(prev => ({ ...prev, project_id: projectId }));
     }
-  };
+  }, [filterStatus, session]);
 
-  // FETCH INSPECTIONS LIST
   const fetchInspections = async () => {
     try {
-      const response = await fetch('/api/qaqc/inspections?limit=20', {
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
+      const params = new URLSearchParams();
+      if (filterStatus !== 'all') params.append('status', filterStatus);
+
+      const response = await fetch(`/api/qaqc/inspections?${params}`, {
+        headers: {
+          'Authorization': `Bearer ${session?.access_token}`
+        }
       });
-      
-      const data = await response.json();
-      setInspections(data.inspections);
-      setLoading(false);
+
+      if (response.ok) {
+        const data = await response.json();
+        setInspections(data.inspections || []);
+      }
     } catch (error) {
       console.error('Failed to fetch inspections:', error);
-      toast.error('Failed to load inspections');
+    } finally {
       setLoading(false);
     }
   };
 
-  // FETCH INSPECTION DETAILS WITH CHECKLIST
-  const fetchInspectionDetails = async (inspectionId: string) => {
+  const fetchMetrics = async () => {
     try {
-      const response = await fetch(`/api/qaqc/inspections/${inspectionId}`, {
-        headers: { 'Authorization': `Bearer ${session?.access_token}` }
+      const response = await fetch('/api/qaqc/metrics', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
       });
-      
-      const data = await response.json();
-      setSelectedInspection(data.inspection);
-      setChecklist(data.checklist || []);
+
+      if (response.ok) {
+        const data = await response.json();
+        setMetrics(data);
+      }
     } catch (error) {
-      toast.error('Failed to load inspection details');
+      console.error('Failed to fetch metrics:', error);
     }
   };
 
-  // CREATE NEW INSPECTION
-  const handleCreateInspection = async (formData: any) => {
+  const createInspection = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     try {
       const response = await fetch('/api/qaqc/inspections', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         },
-        body: JSON.stringify({
-          form_id: formData.form_id,
-          project_id: formData.project_id,
-          type: formData.type || 'routine',
-          area: formData.area,
-          equipment_id: formData.equipment_id
-        })
+        body: JSON.stringify(newInspection)
       });
 
-      if (!response.ok) throw new Error('Failed to create inspection');
-
-      const newInspection = await response.json();
-      toast.success('Inspection created successfully');
-      
-      // Navigate to inspection
-      await fetchInspectionDetails(newInspection.id);
-      setShowCreateForm(false);
-      await fetchInspections(); // Refresh list
-      
+      if (response.ok) {
+        setShowCreateForm(false);
+        setNewInspection({
+          inspection_type: 'Concrete Pour',
+          scheduled_date: new Date().toISOString().split('T')[0],
+          project_id: currentProjectId,
+          notes: ''
+        });
+        fetchInspections();
+        fetchMetrics();
+        toast.success('Inspection scheduled successfully!');
+      } else {
+        const error = await response.json();
+        toast.error(`Failed to create inspection: ${error.error}`);
+      }
     } catch (error) {
+      console.error('Error creating inspection:', error);
       toast.error('Failed to create inspection');
     }
   };
 
-  // UPDATE CHECKLIST ITEM
-  const handleChecklistUpdate = async (itemId: string, status: string, passFail: string, notes?: string) => {
+  const startInspection = async (inspectionId: string) => {
     try {
-      const response = await fetch(`/api/qaqc/checklist/${itemId}`, {
+      const response = await fetch(`/api/qaqc/inspections/${inspectionId}/start`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`
-        },
-        body: JSON.stringify({
-          status: 'checked',
-          pass_fail: passFail,
-          notes
-        })
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
       });
 
-      if (!response.ok) throw new Error('Failed to update checklist');
-
-      const updatedItem = await response.json();
-      
-      // Update local state
-      setChecklist(prev => prev.map(item => 
-        item.id === itemId ? { ...item, ...updatedItem } : item
-      ));
-
-      toast.success('Checklist updated');
-      
-    } catch (error) {
-      toast.error('Failed to update checklist item');
-    }
-  };
-
-  // CREATE DEFECT
-  const handleCreateDefect = async (defectData: any) => {
-    try {
-      const response = await fetch('/api/qaqc/defects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`
-        },
-        body: JSON.stringify({
-          inspection_id: selectedInspection?.id,
-          ...defectData
-        })
-      });
-
-      if (!response.ok) throw new Error('Failed to create defect');
-
-      toast.success('Defect reported');
-      
-      // Refresh inspection details
-      if (selectedInspection) {
-        await fetchInspectionDetails(selectedInspection.id);
+      if (response.ok) {
+        fetchInspections();
+        toast.success('Inspection started!');
       }
-      
     } catch (error) {
-      toast.error('Failed to report defect');
+      console.error('Error starting inspection:', error);
     }
   };
-
-  // COMPLETE INSPECTION
-  const handleCompleteInspection = async (signature: string) => {
-    if (!selectedInspection) return;
-
-    const passCount = checklist.filter(i => i.pass_fail === 'pass').length;
-    const failCount = checklist.filter(i => i.pass_fail === 'fail').length;
-    const overallStatus = failCount === 0 ? 'pass' : 'fail';
-
-    try {
-      const response = await fetch(`/api/qaqc/inspections/${selectedInspection.id}/complete`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.access_token}`
-        },
-        body: JSON.stringify({
-          signature,
-          overall_status: overallStatus,
-          recommendations: `${passCount} items passed, ${failCount} items failed`
-        })
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error);
-      }
-
-      toast.success('Inspection completed');
-      await fetchInspections();
-      setSelectedInspection(null);
-      
-    } catch (error) {
-      toast.error(error.message || 'Failed to complete inspection');
-    }
-  };
-
-  useEffect(() => {
-    if (session) {
-      fetchForms();
-      fetchInspections();
-    }
-  }, [session]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pass': return 'text-green-500';
-      case 'fail': return 'text-red-500';
-      case 'conditional': return 'text-yellow-500';
-      default: return 'text-gray-400';
+      case 'completed': return 'bg-green-100 text-green-700';
+      case 'in_progress': return 'bg-blue-100 text-blue-700';
+      case 'failed': return 'bg-red-100 text-red-700';
+      case 'scheduled': return 'bg-gray-100 text-gray-700';
+      default: return 'bg-gray-100 text-gray-700';
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'pass': return <CheckCircle className="w-5 h-5" />;
-      case 'fail': return <XCircle className="w-5 h-5" />;
-      case 'conditional': return <AlertTriangle className="w-5 h-5" />;
-      default: return <ClipboardCheck className="w-5 h-5" />;
+  const getScoreColor = (score: number) => {
+    if (score >= 90) return 'text-green-600';
+    if (score >= 70) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getSeverityIcon = (severity: string) => {
+    switch (severity) {
+      case 'critical': return <XCircle className="w-4 h-4 text-red-500" />;
+      case 'major': return <AlertTriangle className="w-4 h-4 text-orange-500" />;
+      case 'minor': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      default: return null;
     }
   };
+
+  const inspectionTypes = [
+    'Concrete Pour',
+    'Structural Steel',
+    'Electrical Installation',
+    'Mechanical Systems',
+    'Fire Protection',
+    'Waterproofing',
+    'Insulation',
+    'Final Walkthrough'
+  ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+      </div>
+    );
+  }
 
   return (
-    <div className={isMobile ? 'p-4' : 'p-6'}>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-white">QAQC Hub</h1>
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Quality Control Hub</h1>
+          <p className="text-gray-600 mt-1">Track inspections and maintain quality standards</p>
+        </div>
         <button
           onClick={() => setShowCreateForm(true)}
-          className="px-4 py-2 bg-amber-500 text-black rounded-lg flex items-center gap-2 min-h-[44px]"
+          className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center gap-2 min-h-[44px]"
         >
           <Plus className="w-4 h-4" />
-          {!isMobile && 'New Inspection'}
+          Schedule Inspection
         </button>
       </div>
 
-      {/* Metrics Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-slate-800 rounded-xl p-4 border border-slate-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Active</p>
-              <p className="text-2xl font-bold text-white">
-                {inspections.filter(i => i.status === 'in_progress').length}
-              </p>
-            </div>
-            <ClipboardCheck className="w-8 h-8 text-amber-500" />
+      {/* Metrics Grid - Mobile Responsive */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
+          <div className="flex items-center justify-between mb-2">
+            <ClipboardCheck className="w-6 h-6 text-amber-500" />
+            <span className="text-xs text-gray-500">Total</span>
           </div>
-        </div>
-        
-        <div className="bg-slate-800 rounded-xl p-4 border border-slate-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Passed</p>
-              <p className="text-2xl font-bold text-green-500">
-                {inspections.filter(i => i.overall_status === 'pass').length}
-              </p>
-            </div>
-            <CheckCircle className="w-8 h-8 text-green-500" />
-          </div>
+          <p className="text-2xl font-bold text-gray-900">{metrics.totalInspections}</p>
+          <p className="text-xs text-gray-600 mt-1">Inspections</p>
         </div>
 
-        <div className="bg-slate-800 rounded-xl p-4 border border-slate-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Failed</p>
-              <p className="text-2xl font-bold text-red-500">
-                {inspections.filter(i => i.overall_status === 'fail').length}
-              </p>
-            </div>
-            <XCircle className="w-8 h-8 text-red-500" />
+        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
+          <div className="flex items-center justify-between mb-2">
+            <TrendingUp className="w-6 h-6 text-green-500" />
+            <span className="text-xs text-gray-500">Rate</span>
           </div>
+          <p className={`text-2xl font-bold ${getScoreColor(metrics.passRate)}`}>
+            {metrics.passRate}%
+          </p>
+          <p className="text-xs text-gray-600 mt-1">Pass Rate</p>
         </div>
 
-        <div className="bg-slate-800 rounded-xl p-4 border border-slate-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Critical</p>
-              <p className="text-2xl font-bold text-red-500">
-                {inspections.filter(i => i.has_critical_defects).length}
-              </p>
-            </div>
-            <AlertTriangle className="w-8 h-8 text-red-500" />
+        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
+          <div className="flex items-center justify-between mb-2">
+            <AlertTriangle className="w-6 h-6 text-orange-500" />
+            <span className="text-xs text-gray-500">Open</span>
           </div>
+          <p className="text-2xl font-bold text-gray-900">{metrics.openFindings}</p>
+          <p className="text-xs text-gray-600 mt-1">Findings</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
+          <div className="flex items-center justify-between mb-2">
+            <CheckCircle className="w-6 h-6 text-blue-500" />
+            <span className="text-xs text-gray-500">Score</span>
+          </div>
+          <p className={`text-2xl font-bold ${getScoreColor(metrics.avgScore)}`}>
+            {metrics.avgScore}
+          </p>
+          <p className="text-xs text-gray-600 mt-1">Avg Score</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
+          <div className="flex items-center justify-between mb-2">
+            <Calendar className="w-6 h-6 text-red-500" />
+            <span className="text-xs text-gray-500">Due</span>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{metrics.overdueInspections}</p>
+          <p className="text-xs text-gray-600 mt-1">Overdue</p>
+        </div>
+
+        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
+          <div className="flex items-center justify-between mb-2">
+            <CheckCircle className="w-6 h-6 text-purple-500" />
+            <span className="text-xs text-gray-500">Rate</span>
+          </div>
+          <p className="text-2xl font-bold text-gray-900">{metrics.completionRate}%</p>
+          <p className="text-xs text-gray-600 mt-1">Complete</p>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className={isMobile ? 'space-y-4' : 'grid grid-cols-3 gap-6'}>
-        {/* Inspections List */}
-        <div className={isMobile ? '' : 'col-span-1'}>
-          <div className="bg-slate-800 rounded-xl p-4 border border-slate-700">
-            <h2 className="text-lg font-semibold text-white mb-4">Inspections</h2>
-            
-            <div className="space-y-2 max-h-[600px] overflow-y-auto">
-              {loading ? (
-                <p className="text-gray-400">Loading inspections...</p>
-              ) : inspections.length === 0 ? (
-                <p className="text-gray-400">No inspections yet</p>
-              ) : (
-                inspections.map(inspection => (
-                  <div
-                    key={inspection.id}
-                    onClick={() => fetchInspectionDetails(inspection.id)}
-                    className={`p-3 rounded-lg cursor-pointer transition-colors ${
-                      selectedInspection?.id === inspection.id 
-                        ? 'bg-amber-500/20 border border-amber-500' 
-                        : 'bg-gray-700 hover:bg-gray-600'
-                    }`}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-white text-sm">
-                          {inspection.form_name}
-                        </h3>
-                        <p className="text-xs text-gray-400">
+      {/* Filter Tabs */}
+      <div className="bg-white rounded-lg shadow p-4">
+        <div className="flex flex-wrap gap-2">
+          {['all', 'scheduled', 'in_progress', 'completed', 'failed'].map(status => (
+            <button
+              key={status}
+              onClick={() => setFilterStatus(status)}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] ${
+                filterStatus === status
+                  ? 'bg-amber-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Inspections List */}
+      <div className="bg-white rounded-lg shadow">
+        <div className="p-4 sm:p-6 border-b">
+          <h2 className="text-lg font-semibold text-gray-900">Recent Inspections</h2>
+        </div>
+        <div className="divide-y">
+          {inspections.length === 0 ? (
+            <div className="p-8 text-center">
+              <ClipboardCheck className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+              <p className="text-gray-600">No inspections found</p>
+              <p className="text-sm text-gray-500 mt-1">Schedule your first inspection to get started</p>
+            </div>
+          ) : (
+            inspections.map(inspection => (
+              <div
+                key={inspection.id}
+                className="p-4 sm:p-6 hover:bg-gray-50 transition-colors cursor-pointer"
+                onClick={() => setSelectedInspection(inspection)}
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="font-medium text-gray-900">{inspection.inspection_type}</h3>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(inspection.status)}`}>
+                        {inspection.status.replace('_', ' ')}
+                      </span>
+                      {inspection.score !== undefined && (
+                        <span className={`text-sm font-bold ${getScoreColor(inspection.score)}`}>
+                          {inspection.score}%
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p className="flex items-center gap-2">
+                        <Calendar className="w-3 h-3" />
+                        Scheduled: {new Date(inspection.scheduled_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        {inspection.completed_date && (
+                          <span className="text-green-600">
+                            • Completed: {new Date(inspection.completed_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          </span>
+                        )}
+                      </p>
+                      {inspection.project_name && (
+                        <p className="flex items-center gap-2">
+                          <FileText className="w-3 h-3" />
                           {inspection.project_name}
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {new Date(inspection.started_at).toLocaleDateString()}
+                      )}
+                      {inspection.inspector_name && (
+                        <p className="flex items-center gap-2">
+                          <Users className="w-3 h-3" />
+                          Inspector: {inspection.inspector_name}
                         </p>
-                      </div>
-                      <div className="flex flex-col items-end">
-                        {inspection.status === 'completed' && (
-                          <div className={`flex items-center gap-1 ${getStatusColor(inspection.overall_status || '')}`}>
-                            {getStatusIcon(inspection.overall_status || '')}
-                            <span className="text-xs uppercase">{inspection.overall_status}</span>
-                          </div>
-                        )}
-                        {inspection.status === 'in_progress' && (
-                          <span className="text-xs text-yellow-400">In Progress</span>
-                        )}
-                        {inspection.has_critical_defects && (
-                          <AlertTriangle className="w-4 h-4 text-red-500 mt-1" />
-                        )}
-                      </div>
+                      )}
                     </div>
+
+                    {/* Findings Summary */}
+                    {inspection.findings && inspection.findings.length > 0 && (
+                      <div className="mt-3 flex items-center gap-4 text-sm">
+                        {['critical', 'major', 'minor'].map(severity => {
+                          const count = inspection.findings.filter(f => f.severity === severity).length;
+                          if (count === 0) return null;
+                          return (
+                            <div key={severity} className="flex items-center gap-1">
+                              {getSeverityIcon(severity)}
+                              <span className="text-gray-600">{count} {severity}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
-                ))
-              )}
-            </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    {inspection.status === 'scheduled' && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          startInspection(inspection.id);
+                        }}
+                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm min-h-[44px]"
+                      >
+                        Start
+                      </button>
+                    )}
+                    {inspection.report_url && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(inspection.report_url, '_blank');
+                        }}
+                        className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm min-h-[44px] flex items-center gap-2"
+                      >
+                        <Download className="w-4 h-4" />
+                        Report
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Create Inspection Modal */}
+      {showCreateForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full p-6">
+            <h2 className="text-xl font-bold mb-4">Schedule New Inspection</h2>
+            <form onSubmit={createInspection} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Inspection Type
+                </label>
+                <select
+                  value={newInspection.inspection_type}
+                  onChange={(e) => setNewInspection({...newInspection, inspection_type: e.target.value})}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                >
+                  {inspectionTypes.map(type => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Scheduled Date
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={newInspection.scheduled_date}
+                  onChange={(e) => setNewInspection({...newInspection, scheduled_date: e.target.value})}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Notes
+                </label>
+                <textarea
+                  value={newInspection.notes}
+                  onChange={(e) => setNewInspection({...newInspection, notes: e.target.value})}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  rows={3}
+                  placeholder="Any special requirements or areas of focus..."
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateForm(false)}
+                  className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50 min-h-[44px]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 min-h-[44px]"
+                >
+                  Schedule
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+      )}
 
-        {/* Inspection Details/Checklist */}
-        {selectedInspection && (
-          <div className={isMobile ? 'mt-4' : 'col-span-2'}>
-            <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h2 className="text-xl font-bold text-white">
-                    {selectedInspection.form_name}
-                  </h2>
-                  <p className="text-gray-400">{selectedInspection.project_name}</p>
-                </div>
-                {selectedInspection.status === 'completed' && (
-                  <div className={`flex items-center gap-2 ${getStatusColor(selectedInspection.overall_status || '')}`}>
-                    {getStatusIcon(selectedInspection.overall_status || '')}
-                    <span className="font-semibold">{selectedInspection.overall_status?.toUpperCase()}</span>
-                  </div>
-                )}
+      {/* Inspection Details Modal */}
+      {selectedInspection && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-bold">{selectedInspection.inspection_type}</h2>
+                <span className={`inline-block mt-1 px-2 py-1 rounded text-xs font-medium ${getStatusColor(selectedInspection.status)}`}>
+                  {selectedInspection.status.replace('_', ' ')}
+                </span>
               </div>
+              {selectedInspection.score !== undefined && (
+                <div className="text-center">
+                  <p className={`text-3xl font-bold ${getScoreColor(selectedInspection.score)}`}>
+                    {selectedInspection.score}%
+                  </p>
+                  <p className="text-xs text-gray-600">Score</p>
+                </div>
+              )}
+            </div>
 
-              {/* Checklist Items */}
-              {selectedInspection.status === 'in_progress' && (
+            {/* Findings */}
+            {selectedInspection.findings && selectedInspection.findings.length > 0 && (
+              <div className="mb-6">
+                <h3 className="font-medium text-gray-900 mb-3">Findings</h3>
                 <div className="space-y-3">
-                  <h3 className="text-lg font-semibold text-white mb-2">Checklist Items</h3>
-                  
-                  {checklist.map((item, index) => (
-                    <div key={item.id} className="bg-gray-700 rounded-lg p-4">
-                      <div className="flex justify-between items-start mb-2">
+                  {selectedInspection.findings.map((finding, idx) => (
+                    <div key={finding.id || idx} className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-start gap-3">
+                        {getSeverityIcon(finding.severity)}
                         <div className="flex-1">
-                          <p className="font-semibold text-white">
-                            {index + 1}. {item.item_name}
-                          </p>
-                          <p className="text-sm text-gray-400">{item.category}</p>
-                        </div>
-                        {item.status === 'checked' && (
-                          <div className={`flex items-center gap-1 ${
-                            item.pass_fail === 'pass' ? 'text-green-500' : 
-                            item.pass_fail === 'fail' ? 'text-red-500' : 'text-gray-400'
-                          }`}>
-                            {item.pass_fail === 'pass' ? <CheckCircle className="w-5 h-5" /> :
-                             item.pass_fail === 'fail' ? <XCircle className="w-5 h-5" /> :
-                             <span className="text-xs">N/A</span>}
+                          <p className="text-sm text-gray-900">{finding.description}</p>
+                          {finding.corrective_action && (
+                            <p className="text-sm text-gray-600 mt-1">
+                              <span className="font-medium">Action:</span> {finding.corrective_action}
+                            </p>
+                          )}
+                          <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                            <span className={`px-2 py-1 rounded ${
+                              finding.status === 'resolved' ? 'bg-green-100 text-green-700' :
+                              finding.status === 'verified' ? 'bg-blue-100 text-blue-700' :
+                              'bg-orange-100 text-orange-700'
+                            }`}>
+                              {finding.status}
+                            </span>
+                            {finding.resolution_date && (
+                              <span>Resolved: {new Date(finding.resolution_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                            )}
                           </div>
-                        )}
-                      </div>
-
-                      {item.status === 'pending' && (
-                        <div className="flex gap-2 mt-3">
-                          <button
-                            onClick={() => handleChecklistUpdate(item.id, 'checked', 'pass')}
-                            className="px-3 py-1 bg-green-600 text-white rounded text-sm min-h-[36px]"
-                          >
-                            Pass
-                          </button>
-                          <button
-                            onClick={() => handleChecklistUpdate(item.id, 'checked', 'fail')}
-                            className="px-3 py-1 bg-red-600 text-white rounded text-sm min-h-[36px]"
-                          >
-                            Fail
-                          </button>
-                          <button
-                            onClick={() => handleChecklistUpdate(item.id, 'checked', 'na')}
-                            className="px-3 py-1 bg-gray-600 text-white rounded text-sm min-h-[36px]"
-                          >
-                            N/A
-                          </button>
                         </div>
-                      )}
-
-                      {item.notes && (
-                        <p className="text-sm text-gray-300 mt-2">{item.notes}</p>
-                      )}
+                      </div>
                     </div>
                   ))}
-
-                  {/* Complete Inspection Button */}
-                  {checklist.every(item => item.status === 'checked') && (
-                    <div className="mt-6 pt-6 border-t border-gray-600">
-                      <button
-                        onClick={() => handleCompleteInspection('digital_signature')}
-                        className="w-full px-6 py-3 bg-amber-500 text-black rounded-lg font-semibold min-h-[48px]"
-                      >
-                        Complete Inspection
-                      </button>
-                    </div>
-                  )}
                 </div>
-              )}
-
-              {/* Results Summary for Completed */}
-              {selectedInspection.status === 'completed' && (
-                <div className="mt-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-green-500">
-                        {selectedInspection.items_passed || 0}
-                      </p>
-                      <p className="text-sm text-gray-400">Passed</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-red-500">
-                        {selectedInspection.items_failed || 0}
-                      </p>
-                      <p className="text-sm text-gray-400">Failed</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-2xl font-bold text-gray-400">
-                        {selectedInspection.total_items || 0}
-                      </p>
-                      <p className="text-sm text-gray-400">Total</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="mt-6 flex gap-3">
-                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg flex items-center gap-2 min-h-[44px]">
-                  <Camera className="w-4 h-4" />
-                  Add Photo
-                </button>
-                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg flex items-center gap-2 min-h-[44px]">
-                  <AlertTriangle className="w-4 h-4" />
-                  Report Defect
-                </button>
-                <button className="px-4 py-2 bg-gray-600 text-white rounded-lg flex items-center gap-2 min-h-[44px]">
-                  <TestTube className="w-4 h-4" />
-                  Add Test Result
-                </button>
               </div>
-            </div>
+            )}
+
+            <button
+              onClick={() => setSelectedInspection(null)}
+              className="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 min-h-[44px]"
+            >
+              Close
+            </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Play, Pause, Calendar, MapPin, Cloud, Users, DollarSign } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../auth/AuthProvider';
+import { useAuth } from '../../context/AuthContext';
 import { format, differenceInMinutes, startOfWeek, endOfWeek } from 'date-fns';
 
 interface TimeEntry {
@@ -401,3 +401,6 @@ export const TimeTracking: React.FC = () => {
     </div>
   );
 };
+
+
+

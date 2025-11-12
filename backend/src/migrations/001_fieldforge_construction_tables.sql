@@ -348,3 +348,6 @@ CREATE TRIGGER update_equipment_inventory_updated_at BEFORE UPDATE ON equipment_
 
 CREATE TRIGGER update_material_inventory_updated_at BEFORE UPDATE ON material_inventory
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+
+

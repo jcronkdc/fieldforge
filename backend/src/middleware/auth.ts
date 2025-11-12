@@ -9,17 +9,7 @@ import { loadEnv } from '../worker/env';
 import { logTokenVerification, logAuthFailure } from './auditLog';
 
 // Extend Express Request type to include user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: string;
-        email?: string;
-        role?: string;
-      };
-    }
-  }
-}
+// User type is defined in types/express.d.ts
 
 const env = loadEnv();
 

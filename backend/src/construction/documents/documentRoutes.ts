@@ -2,73 +2,106 @@ import { Router, Request, Response } from 'express';
 import { authenticateRequest } from '../../middleware/auth.js';
 import { query } from '../../database.js';
 import { logAuditEvent } from '../../middleware/auditLog.js';
-
-// File upload configuration
+// File upload configuration for Vercel (no local storage)
 const allowedFileTypes = [
   'application/pdf',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'image/jpeg',
   'image/png',
-  'image/gif',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-  'application/x-autocad',
+  'image/jpg',
   'application/dwg',
-  'image/vnd.dwg',
-  'text/plain',
-  'application/zip'
+  'application/dxf'
 ];
 
-const maxFileSize = 100 * 1024 * 1024; // 100MB
+const maxFileSize = 50 * 1024 * 1024; // 50MB
 
 export function createDocumentRouter(): Router {
   const router = Router();
 
   // ============================================================================
-  // DOCUMENT MANAGEMENT - COMPLETE E2E FUNCTIONALITY
+  // DOCUMENT MANAGEMENT ENDPOINTS - COMPLETE E2E FUNCTIONALITY
   // ============================================================================
 
-  // GET document categories
-  router.get('/categories', authenticateRequest, async (req: Request, res: Response) => {
+  // Get documents with filters
+  router.get('/', authenticateRequest, async (req: Request, res: Response) => {
     try {
-      const categories = [
-        { id: 'drawings', name: 'Drawings & Plans', icon: 'blueprint' },
-        { id: 'specs', name: 'Specifications', icon: 'document' },
-        { id: 'permits', name: 'Permits & Licenses', icon: 'certificate' },
-        { id: 'safety', name: 'Safety Documents', icon: 'shield' },
-        { id: 'contracts', name: 'Contracts', icon: 'contract' },
-        { id: 'submittals', name: 'Submittals', icon: 'upload' },
-        { id: 'rfis', name: 'RFIs', icon: 'question' },
-        { id: 'reports', name: 'Reports', icon: 'chart' },
-        { id: 'photos', name: 'Photos', icon: 'camera' },
-        { id: 'other', name: 'Other', icon: 'folder' }
-      ];
-      
-      res.json(categories);
+      const companyId = req.user?.company_id;
+      const { folder_id, type, search, project_id } = req.query;
+
+      let queryText = `
+        SELECT 
+          d.*,
+          p.name as project_name,
+          u.email as uploader_email,
+          u.raw_user_meta_data->>'full_name' as uploader_name,
+          f.name as folder_name
+        FROM documents d
+        LEFT JOIN projects p ON d.project_id = p.id
+        LEFT JOIN auth.users u ON d.uploaded_by = u.id
+        LEFT JOIN document_folders f ON d.folder_id = f.id
+        WHERE d.company_id = $1
+      `;
+
+      const params: any[] = [companyId];
+      let paramIndex = 2;
+
+      if (folder_id) {
+        queryText += ` AND d.folder_id = $${paramIndex}`;
+        params.push(folder_id);
+        paramIndex++;
+      }
+
+      if (type && type !== 'all') {
+        queryText += ` AND d.type = $${paramIndex}`;
+        params.push(type);
+        paramIndex++;
+      }
+
+      if (search) {
+        queryText += ` AND (d.name ILIKE $${paramIndex} OR d.tags::text ILIKE $${paramIndex})`;
+        params.push(`%${search}%`);
+        paramIndex++;
+      }
+
+      if (project_id) {
+        queryText += ` AND d.project_id = $${paramIndex}`;
+        params.push(project_id);
+        paramIndex++;
+      }
+
+      queryText += ` ORDER BY d.created_at DESC`;
+
+      const result = await query(queryText, params);
+      res.json({ documents: result.rows });
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch categories' });
+      console.error('[documents] Error fetching documents:', error);
+      res.status(500).json({ error: 'Failed to fetch documents' });
     }
   });
 
-  // UPLOAD document (base64 encoded)
+  // Upload document (base64 for Vercel compatibility)
   router.post('/upload', authenticateRequest, async (req: Request, res: Response) => {
     try {
       const userId = req.user?.id;
-      const companyId = req.user?.company_id || req.headers['x-company-id'];
-      const { 
-        project_id, 
-        category, 
-        title, 
-        description, 
-        tags,
-        version,
-        file_name,
+      const companyId = req.user?.company_id;
+      
+      const {
+        name,
+        file_data, // base64 encoded
         file_type,
-        file_data // base64 encoded
+        type = 'other',
+        tags = '',
+        is_public = false,
+        folder_id,
+        project_id
       } = req.body;
 
-      if (!project_id || !category || !title || !file_name || !file_type || !file_data) {
+      if (!name || !file_data || !file_type) {
         return res.status(400).json({ 
-          error: 'Missing required fields: project_id, category, title, file_name, file_type, file_data' 
+          error: 'Missing required fields: name, file_data, file_type' 
         });
       }
 
@@ -80,261 +113,164 @@ export function createDocumentRouter(): Router {
       // Decode base64 and check size
       const fileBuffer = Buffer.from(file_data, 'base64');
       if (fileBuffer.length > maxFileSize) {
-        return res.status(400).json({ error: 'File size exceeds 100MB limit' });
+        return res.status(400).json({ error: 'File size exceeds 50MB limit' });
       }
 
-      await query('BEGIN');
+      const tagsArray = tags ? tags.split(',').map((t: string) => t.trim()).filter(Boolean) : [];
 
-      try {
-        // Create document record
-        const docResult = await query(
-          `INSERT INTO documents 
-           (project_id, category, title, description, file_name, 
-            file_type, file_size, tags, version, uploaded_by, 
-            company_id, status, file_data)
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'active', $12)
-           RETURNING id, project_id, category, title, file_name, file_size, version`,
-          [project_id, category, title, description, file_name,
-           file_type, fileBuffer.length, tags || [], version || '1.0',
-           userId, companyId, fileBuffer]
-        );
+      const result = await query(
+        `INSERT INTO documents 
+         (name, type, file_type, size, file_data, project_id, folder_id,
+          uploaded_by, company_id, tags, is_public, version)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 1)
+         RETURNING id, name, type, file_type, size, created_at, tags`,
+        [name, type, file_type, fileBuffer.length, fileBuffer, 
+         project_id, folder_id, userId, companyId, tagsArray, is_public]
+      );
 
-        const document = docResult.rows[0];
+      await logAuditEvent({
+        action: 'document_uploaded',
+        user_id: userId!,
+        resource_type: 'document',
+        resource_id: result.rows[0].id,
+        ip_address: req.ip || '',
+        user_agent: req.headers['user-agent'] as string,
+        metadata: { filename: name, size: fileBuffer.length, type },
+        success: true
+      });
 
-        // Log audit event
-        await logAuditEvent({
-          action: 'document_uploaded',
-          user_id: userId,
-          resource_type: 'document',
-          resource_id: document.id,
-          ip_address: req.ip || '',
-          user_agent: req.headers['user-agent'] as string,
-          metadata: { 
-            file_name: req.file.originalname,
-            file_size: req.file.size,
-            category 
-          },
-          success: true
-        });
-
-        // If this is a new version, mark previous as superseded
-        if (version && version !== '1.0') {
-          await query(
-            `UPDATE documents 
-             SET status = 'superseded', superseded_by = $1
-             WHERE project_id = $2 AND title = $3 
-             AND id != $1 AND status = 'active'`,
-            [document.id, project_id, title]
-          );
-        }
-
-        await query('COMMIT');
-
-        res.status(201).json(document);
-      } catch (error) {
-        await query('ROLLBACK');
-        throw error;
-      }
-      
+      res.status(201).json(result.rows[0]);
     } catch (error) {
-      console.error('[documents] Error uploading:', error);
+      console.error('[documents] Error uploading document:', error);
       res.status(500).json({ error: 'Failed to upload document' });
     }
   });
 
-  // GET documents list with filters
-  router.get('/', authenticateRequest, async (req: Request, res: Response) => {
-    try {
-      const companyId = req.user?.company_id;
-      const { 
-        project_id, 
-        category, 
-        search, 
-        tags,
-        status = 'active',
-        limit = 50,
-        offset = 0 
-      } = req.query;
-
-      let queryText = `
-        SELECT 
-          d.id, d.project_id, d.category, d.title, d.description,
-          d.file_name, d.file_type, d.file_size, d.tags, d.version,
-          d.status, d.created_at, d.download_count, d.last_accessed,
-          p.name as project_name,
-          u.raw_user_meta_data->>'full_name' as uploaded_by_name
-        FROM documents d
-        JOIN projects p ON d.project_id = p.id
-        JOIN auth.users u ON d.uploaded_by = u.id
-        WHERE d.company_id = $1
-      `;
-      const params: any[] = [companyId];
-      let paramIndex = 2;
-
-      if (project_id) {
-        queryText += ` AND d.project_id = $${paramIndex}`;
-        params.push(project_id);
-        paramIndex++;
-      }
-
-      if (category) {
-        queryText += ` AND d.category = $${paramIndex}`;
-        params.push(category);
-        paramIndex++;
-      }
-
-      if (status) {
-        queryText += ` AND d.status = $${paramIndex}`;
-        params.push(status);
-        paramIndex++;
-      }
-
-      if (search) {
-        queryText += ` AND (d.title ILIKE $${paramIndex} OR d.description ILIKE $${paramIndex} OR d.file_name ILIKE $${paramIndex})`;
-        params.push(`%${search}%`);
-        paramIndex++;
-      }
-
-      if (tags && Array.isArray(tags)) {
-        queryText += ` AND d.tags && $${paramIndex}`;
-        params.push(tags);
-        paramIndex++;
-      }
-
-      queryText += ` ORDER BY d.created_at DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
-      params.push(limit, offset);
-
-      const result = await query(queryText, params);
-
-      // Get total count
-      const countQuery = queryText.replace(
-        /SELECT[\s\S]*FROM/, 
-        'SELECT COUNT(*) as total FROM'
-      ).replace(/ORDER BY[\s\S]*$/, '');
-      const countResult = await query(
-        countQuery.replace(/LIMIT[\s\S]*$/, ''), 
-        params.slice(0, -2)
-      );
-
-      res.json({
-        documents: result.rows,
-        total: parseInt(countResult.rows[0]?.total || 0),
-        limit: parseInt(limit as string),
-        offset: parseInt(offset as string)
-      });
-      
-    } catch (error) {
-      console.error('[documents] Error fetching:', error);
-      res.status(500).json({ error: 'Failed to fetch documents' });
-    }
-  });
-
-  // DOWNLOAD document
-  router.get('/download/:id', authenticateRequest, async (req: Request, res: Response) => {
+  // Download document
+  router.get('/:id/download', authenticateRequest, async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
 
       const result = await query(
-        `SELECT 
-          file_name, file_type, file_data, project_id
-         FROM documents 
-         WHERE id = $1 AND status = 'active'`,
-        [id]
-      );
-
-      if (result.rowCount === 0) {
-        return res.status(404).json({ error: 'Document not found' });
-      }
-
-      const document = result.rows[0];
-
-      // Update download count and last accessed
-      await query(
-        `UPDATE documents 
-         SET download_count = download_count + 1,
-             last_accessed = NOW()
+        `SELECT name, file_type, file_data FROM documents 
          WHERE id = $1`,
         [id]
       );
 
-      // Log download
-      await logAuditEvent({
-        action: 'document_downloaded',
-        user_id: req.user?.id,
-        resource_type: 'document',
-        resource_id: id,
-        ip_address: req.ip || '',
-        user_agent: req.headers['user-agent'] as string,
-        metadata: { file_name: document.file_name },
-        success: true
-      });
-
-      // Set headers for file download
-      res.setHeader('Content-Type', document.file_type);
-      res.setHeader('Content-Disposition', `attachment; filename="${document.file_name}"`);
-      res.send(document.file_data);
-      
-    } catch (error) {
-      console.error('[documents] Error downloading:', error);
-      res.status(500).json({ error: 'Failed to download document' });
-    }
-  });
-
-  // VIEW document (inline)
-  router.get('/view/:id', authenticateRequest, async (req: Request, res: Response) => {
-    try {
-      const { id } = req.params;
-
-      const result = await query(
-        `SELECT 
-          file_name, file_type, file_data
-         FROM documents 
-         WHERE id = $1 AND status = 'active'`,
-        [id]
-      );
-
-      if (result.rowCount === 0) {
+      if (result.rows.length === 0) {
         return res.status(404).json({ error: 'Document not found' });
       }
 
       const document = result.rows[0];
-
-      // Update last accessed
+      
+      // Update download count
       await query(
-        `UPDATE documents SET last_accessed = NOW() WHERE id = $1`,
+        `UPDATE documents 
+         SET download_count = download_count + 1 
+         WHERE id = $1`,
         [id]
       );
 
-      // Set headers for inline viewing
+      // Send file as response
       res.setHeader('Content-Type', document.file_type);
-      res.setHeader('Content-Disposition', `inline; filename="${document.file_name}"`);
+      res.setHeader('Content-Disposition', `attachment; filename="${document.name}"`);
       res.send(document.file_data);
-      
     } catch (error) {
-      console.error('[documents] Error viewing:', error);
-      res.status(500).json({ error: 'Failed to view document' });
+      console.error('[documents] Error downloading document:', error);
+      res.status(500).json({ error: 'Failed to download document' });
     }
   });
 
-  // UPDATE document metadata
+  // Share document
+  router.post('/:id/share', authenticateRequest, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { expiry_hours = 24 } = req.body;
+
+      // Create share link
+      const shareToken = randomUUID();
+      const expiryDate = new Date();
+      expiryDate.setHours(expiryDate.getHours() + expiry_hours);
+
+      await query(
+        `INSERT INTO document_shares 
+         (document_id, share_token, created_by, expires_at)
+         VALUES ($1, $2, $3, $4)`,
+        [id, shareToken, req.user?.id, expiryDate]
+      );
+
+      const shareUrl = `${process.env.FRONTEND_URL}/shared/${shareToken}`;
+      
+      res.json({ shareUrl, expiresAt: expiryDate });
+    } catch (error) {
+      console.error('[documents] Error sharing document:', error);
+      res.status(500).json({ error: 'Failed to share document' });
+    }
+  });
+
+  // Get folders
+  router.get('/folders', authenticateRequest, async (req: Request, res: Response) => {
+    try {
+      const companyId = req.user?.company_id;
+
+      const result = await query(
+        `SELECT 
+          f.*,
+          COUNT(DISTINCT d.id) as document_count
+         FROM document_folders f
+         LEFT JOIN documents d ON d.folder_id = f.id
+         WHERE f.company_id = $1
+         GROUP BY f.id
+         ORDER BY f.name`,
+        [companyId]
+      );
+
+      res.json({ folders: result.rows });
+    } catch (error) {
+      console.error('[documents] Error fetching folders:', error);
+      res.status(500).json({ error: 'Failed to fetch folders' });
+    }
+  });
+
+  // Create folder
+  router.post('/folders', authenticateRequest, async (req: Request, res: Response) => {
+    try {
+      const userId = req.user?.id;
+      const companyId = req.user?.company_id;
+      const { name, parent_id } = req.body;
+
+      if (!name) {
+        return res.status(400).json({ error: 'Folder name is required' });
+      }
+
+      const result = await query(
+        `INSERT INTO document_folders 
+         (name, parent_id, company_id, created_by)
+         VALUES ($1, $2, $3, $4)
+         RETURNING *`,
+        [name, parent_id, companyId, userId]
+      );
+
+      res.status(201).json(result.rows[0]);
+    } catch (error) {
+      console.error('[documents] Error creating folder:', error);
+      res.status(500).json({ error: 'Failed to create folder' });
+    }
+  });
+
+  // Update document
   router.put('/:id', authenticateRequest, async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const { title, description, tags, category } = req.body;
+      const { name, tags, folder_id } = req.body;
 
       const updates: string[] = [];
       const values: any[] = [];
       let paramIndex = 1;
 
-      if (title !== undefined) {
-        updates.push(`title = $${paramIndex}`);
-        values.push(title);
-        paramIndex++;
-      }
-
-      if (description !== undefined) {
-        updates.push(`description = $${paramIndex}`);
-        values.push(description);
+      if (name !== undefined) {
+        updates.push(`name = $${paramIndex}`);
+        values.push(name);
         paramIndex++;
       }
 
@@ -344,9 +280,9 @@ export function createDocumentRouter(): Router {
         paramIndex++;
       }
 
-      if (category !== undefined) {
-        updates.push(`category = $${paramIndex}`);
-        values.push(category);
+      if (folder_id !== undefined) {
+        updates.push(`folder_id = $${paramIndex}`);
+        values.push(folder_id);
         paramIndex++;
       }
 
@@ -354,124 +290,59 @@ export function createDocumentRouter(): Router {
         return res.status(400).json({ error: 'No fields to update' });
       }
 
-      updates.push('updated_at = NOW()');
       values.push(id);
+      const updateQuery = `
+        UPDATE documents 
+        SET ${updates.join(', ')}, updated_at = NOW()
+        WHERE id = $${paramIndex}
+        RETURNING *
+      `;
 
-      const result = await query(
-        `UPDATE documents 
-         SET ${updates.join(', ')} 
-         WHERE id = $${paramIndex}
-         RETURNING id, title, description, category, tags`,
-        values
-      );
+      const result = await query(updateQuery, values);
 
-      if (result.rowCount === 0) {
+      if (result.rows.length === 0) {
         return res.status(404).json({ error: 'Document not found' });
       }
 
       res.json(result.rows[0]);
-      
     } catch (error) {
-      console.error('[documents] Error updating:', error);
+      console.error('[documents] Error updating document:', error);
       res.status(500).json({ error: 'Failed to update document' });
     }
   });
 
-  // DELETE document (soft delete)
+  // Delete document
   router.delete('/:id', authenticateRequest, async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
       const userId = req.user?.id;
 
       const result = await query(
-        `UPDATE documents 
-         SET status = 'deleted', 
-             deleted_at = NOW(),
-             deleted_by = $1
-         WHERE id = $2 AND status = 'active'
-         RETURNING id, title`,
-        [userId, id]
+        `DELETE FROM documents 
+         WHERE id = $1 AND uploaded_by = $2
+         RETURNING *`,
+        [id, userId]
       );
 
-      if (result.rowCount === 0) {
-        return res.status(404).json({ error: 'Document not found' });
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Document not found or unauthorized' });
       }
 
       await logAuditEvent({
         action: 'document_deleted',
-        user_id: userId,
+        user_id: userId!,
         resource_type: 'document',
         resource_id: id,
         ip_address: req.ip || '',
         user_agent: req.headers['user-agent'] as string,
-        metadata: { title: result.rows[0].title },
+        metadata: { filename: result.rows[0].name },
         success: true
       });
 
       res.json({ message: 'Document deleted successfully' });
-      
     } catch (error) {
-      console.error('[documents] Error deleting:', error);
+      console.error('[documents] Error deleting document:', error);
       res.status(500).json({ error: 'Failed to delete document' });
-    }
-  });
-
-  // GET document history/versions
-  router.get('/:id/history', authenticateRequest, async (req: Request, res: Response) => {
-    try {
-      const { id } = req.params;
-
-      const historyQuery = `
-        SELECT 
-          d.id, d.version, d.created_at, d.status,
-          u.raw_user_meta_data->>'full_name' as uploaded_by
-        FROM documents d
-        JOIN auth.users u ON d.uploaded_by = u.id
-        WHERE d.title = (SELECT title FROM documents WHERE id = $1)
-        AND d.project_id = (SELECT project_id FROM documents WHERE id = $1)
-        ORDER BY d.created_at DESC
-      `;
-
-      const result = await query(historyQuery, [id]);
-
-      res.json({
-        versions: result.rows,
-        total: result.rowCount || 0
-      });
-      
-    } catch (error) {
-      console.error('[documents] Error fetching history:', error);
-      res.status(500).json({ error: 'Failed to fetch document history' });
-    }
-  });
-
-  // SHARE document link
-  router.post('/:id/share', authenticateRequest, async (req: Request, res: Response) => {
-    try {
-      const { id } = req.params;
-      const { expires_in_hours = 24 } = req.body;
-      const userId = req.user?.id;
-
-      // Generate share token
-      const shareToken = Math.random().toString(36).substring(2, 15) + 
-                        Math.random().toString(36).substring(2, 15);
-
-      const result = await query(
-        `INSERT INTO document_shares 
-         (document_id, shared_by, share_token, expires_at)
-         VALUES ($1, $2, $3, NOW() + INTERVAL '${expires_in_hours} hours')
-         RETURNING share_token, expires_at`,
-        [id, userId, shareToken]
-      );
-
-      res.json({
-        share_url: `/api/documents/shared/${shareToken}`,
-        expires_at: result.rows[0].expires_at
-      });
-      
-    } catch (error) {
-      console.error('[documents] Error sharing:', error);
-      res.status(500).json({ error: 'Failed to share document' });
     }
   });
 

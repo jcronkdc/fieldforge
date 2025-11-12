@@ -195,3 +195,6 @@ const SignatureCapture = ({ onSave }) => {
 - ZERO "Coming Soon" messages
 - 100% data persistence
 - 100% mobile responsive
+
+
+

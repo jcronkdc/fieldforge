@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, AlertTriangle, Activity, FileText, Users, Calendar, TrendingUp, Clock } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../auth/AuthProvider';
+import { useAuth } from '../../context/AuthContext';
 import { format, differenceInDays } from 'date-fns';
 
 interface SafetyMetrics {
@@ -477,3 +477,6 @@ export const SafetyHub: React.FC = () => {
     </div>
   );
 };
+
+
+

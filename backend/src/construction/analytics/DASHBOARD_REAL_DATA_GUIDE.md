@@ -243,3 +243,6 @@ const DashboardMetric = ({ metric }) => {
 - [ ] Loading states handled
 - [ ] Error states graceful
 - [ ] NO MORE MATH.RANDOM() ANYWHERE!
+
+
+

@@ -518,3 +518,6 @@ function calculateUtilization(resources: any[]): number {
   
   return totalUsed > 0 ? Math.round((totalUsed / totalAvailable) * 100) : 0;
 }
+
+
+

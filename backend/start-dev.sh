@@ -41,3 +41,6 @@ echo "🎯 Starting server on http://localhost:4000"
 echo "Press Ctrl+C to stop"
 echo ""
 npm run dev
+
+
+

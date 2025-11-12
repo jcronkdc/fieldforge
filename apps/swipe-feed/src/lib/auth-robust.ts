@@ -306,3 +306,6 @@ export async function refreshSession(): Promise<Session | null> {
 
 // Auto-initialize when module loads
 initializeAuth().catch(console.error);
+
+
+

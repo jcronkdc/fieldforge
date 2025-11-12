@@ -32,24 +32,28 @@ import { DashboardPage } from './pages/Dashboard';
 // Project Management
 import { ProjectManager } from './components/projects/ProjectManager';
 
-// Import all placeholder components
+// Real Components - LIVE UPDATED AS WE BUILD ✅
+import { TimeTracking } from './components/time/TimeTracking';
+import { SafetyHub } from './components/safety/SafetyHub';
+import { EquipmentHub } from './components/equipment/EquipmentHub';
+import { SafetyManagement } from './components/safety/SafetyManagement';
+import { CrewManagement } from './components/crew/CrewManagement';
+import { QAQCHub } from './components/qaqc/QAQCHub';
+import { DocumentHub } from './components/documents/DocumentHub';
+import { ReceiptManager } from './components/receipts/ReceiptManager';
+
+// Placeholder Components - TO BE REPLACED
 import {
   ProjectMetrics,
   SafetyMetrics,
   DailyOperations,
-  CrewManagement,
-  TimeTracking,
-  SafetyHub,
   SafetyBriefing,
   IncidentReporting,
   PermitManagement,
-  EquipmentHub,
   MaterialInventory,
   EquipmentMaintenance,
-  QAQCHub,
   InspectionManager,
   TestingDashboard,
-  DocumentHub,
   DrawingViewer,
   SubmittalManager,
   ProjectSchedule,
@@ -63,8 +67,7 @@ import {
   SubstationModel,
   FieldForgeAI,
   CompanySettings,
-  UserProfile,
-  ReceiptManager
+  UserProfile
 } from './components/placeholders';
 import { SettingsPage } from './pages/Settings';
 
@@ -171,8 +174,9 @@ function App() {
                   <Route path="/field/time" element={<TimeTracking />} />
                   <Route path="/field/receipts" element={<ReceiptManager />} />
               
-              {/* Safety */}
-              <Route path="/safety" element={<SafetyHub />} />
+              {/* Safety - REORGANIZED FOR BETTER FLOW */}
+              <Route path="/safety" element={<SafetyManagement />} />
+              <Route path="/safety/hub" element={<SafetyHub />} />
               <Route path="/safety/briefing" element={<SafetyBriefing />} />
               <Route path="/safety/incidents" element={<IncidentReporting />} />
               <Route path="/safety/permits" element={<PermitManagement />} />

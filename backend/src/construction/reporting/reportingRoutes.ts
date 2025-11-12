@@ -404,3 +404,6 @@ function generatePDFContent(data: any, templateId: string): string {
   
   return Buffer.from(content).toString('base64');
 }
+
+
+
