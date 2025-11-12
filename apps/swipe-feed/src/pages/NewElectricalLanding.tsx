@@ -16,10 +16,10 @@ import {
 } from 'lucide-react';
 
 const metrics = [
-  { value: '500+', label: 'Active Projects', icon: Activity },
-  { value: '10k+', label: 'Field Workers', icon: Users },
-  { value: '99.9%', label: 'System Uptime', icon: BarChart3 },
-  { value: '24/7', label: 'Support', icon: Shield }
+  { value: 'Beta', label: 'Early Access', icon: Activity },
+  { value: 'New', label: 'Platform', icon: Users },
+  { value: '2025', label: 'Launch Year', icon: BarChart3 },
+  { value: 'Live', label: 'Development', icon: Shield }
 ];
 
 const features = [
@@ -55,18 +55,21 @@ const features = [
   }
 ];
 
-const testimonials = [
+const earlyAdopterBenefits = [
   {
-    quote: "FieldForge transformed how we manage our transmission projects. The real-time visibility and safety compliance features are game-changing.",
-    author: "Sarah Chen",
-    title: "VP of Operations",
-    company: "Pacific Grid Solutions"
+    title: "Early Access",
+    description: "Be among the first to experience the next generation of electrical construction management software.",
+    icon: Star
   },
   {
-    quote: "We reduced project delays by 40% and improved safety compliance to 99.8%. The ROI was clear within the first quarter.",
-    author: "Mike Rodriguez", 
-    title: "Construction Manager",
-    company: "National Power Corp"
+    title: "Shape the Product",
+    description: "Your feedback directly influences feature development and helps build the perfect tool for your industry.",
+    icon: Settings
+  },
+  {
+    title: "Founder Access",
+    description: "Direct communication with our team and priority support as we build the platform together.",
+    icon: Users
   }
 ];
 
@@ -203,8 +206,8 @@ export const NewElectricalLanding: React.FC = () => {
               </h1>
               
               <p className="mx-auto mb-10 max-w-3xl text-xl text-slate-300 leading-relaxed">
-                The only platform built specifically for transmission, distribution, and substation projects. 
-                Streamline operations, ensure safety compliance, and deliver projects on time and under budget.
+                We're building the first platform designed specifically for electrical construction teams.
+                Join our early access program and help shape the future of T&D project management.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
@@ -212,14 +215,14 @@ export const NewElectricalLanding: React.FC = () => {
                   onClick={() => navigate('/signup')}
                   className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-xl shadow-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 flex items-center justify-center gap-2"
                 >
-                  Start Free Trial
+                  Join Early Access
                   <ArrowRight className="h-5 w-5" />
                 </button>
                 <button 
                   onClick={() => navigate('/login')}
                   className="px-8 py-4 bg-slate-800/50 backdrop-blur-sm border border-slate-600 text-white text-lg font-semibold rounded-xl hover:bg-slate-700/50 transition-all flex items-center justify-center gap-2"
                 >
-                  Watch Demo
+                  Learn More
                 </button>
               </div>
 
@@ -277,17 +280,17 @@ export const NewElectricalLanding: React.FC = () => {
               <div className="w-3 h-3 bg-green-400 rounded-full animate-ping"></div>
             </span>
             <h2 className="mt-8 text-5xl font-bold text-slate-900 lg:text-6xl leading-tight">
-              Mission-Critical
+              Building the Future of
               <br />
               <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
-                Infrastructure
+                Electrical
               </span>
               <br />
-              Management
+              Construction
             </h2>
             <p className="mt-8 text-2xl text-slate-700 max-w-4xl mx-auto leading-relaxed">
-              Advanced command and control systems for transmission lines, distribution networks, 
-              and substation construction projects.
+              We're developing next-generation tools for transmission, distribution, and substation projects.
+              Join us in revolutionizing how electrical construction gets done.
             </p>
           </div>
 
@@ -370,21 +373,21 @@ export const NewElectricalLanding: React.FC = () => {
               </div>
               
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-                <div className="bg-slate-800/50 rounded-xl p-4 border border-green-500/30">
-                  <div className="text-green-400 text-2xl font-mono font-bold">138kV</div>
+                <div className="bg-slate-800/50 rounded-xl p-4 border border-orange-500/30">
+                  <div className="text-orange-400 text-2xl font-mono font-bold">DEV</div>
                   <div className="text-slate-300 text-sm">TRANSMISSION</div>
                 </div>
-                <div className="bg-slate-800/50 rounded-xl p-4 border border-blue-500/30">
-                  <div className="text-blue-400 text-2xl font-mono font-bold">25kV</div>
+                <div className="bg-slate-800/50 rounded-xl p-4 border border-orange-500/30">
+                  <div className="text-orange-400 text-2xl font-mono font-bold">DEV</div>
                   <div className="text-slate-300 text-sm">DISTRIBUTION</div>
                 </div>
-                <div className="bg-slate-800/50 rounded-xl p-4 border border-purple-500/30">
-                  <div className="text-purple-400 text-2xl font-mono font-bold">12.47kV</div>
+                <div className="bg-slate-800/50 rounded-xl p-4 border border-orange-500/30">
+                  <div className="text-orange-400 text-2xl font-mono font-bold">DEV</div>
                   <div className="text-slate-300 text-sm">SUBSTATION</div>
                 </div>
-                <div className="bg-slate-800/50 rounded-xl p-4 border border-yellow-500/30">
-                  <div className="text-yellow-400 text-2xl font-mono font-bold">480V</div>
-                  <div className="text-slate-300 text-sm">AUXILIARY</div>
+                <div className="bg-slate-800/50 rounded-xl p-4 border border-blue-500/30">
+                  <div className="text-blue-400 text-2xl font-mono font-bold">LIVE</div>
+                  <div className="text-slate-300 text-sm">DEMO</div>
                 </div>
               </div>
             </div>
@@ -392,43 +395,36 @@ export const NewElectricalLanding: React.FC = () => {
         </div>
       </section>
 
-      {/* Social Proof Section */}
+      {/* Early Access Section */}
       <section className="bg-slate-900 py-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-6">
-              Trusted by Industry Leaders
+              Join the Early Access Program
             </h2>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              See what construction professionals are saying about FieldForge
+              Help us build the electrical construction platform you've always wanted
             </p>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-2">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700">
-                <div className="flex items-start gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                  ))}
+          <div className="grid gap-8 lg:grid-cols-3">
+            {earlyAdopterBenefits.map((benefit, index) => (
+              <div key={index} className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg mb-6">
+                  <benefit.icon className="h-8 w-8 text-white" />
                 </div>
-                <blockquote className="text-lg text-white mb-6 leading-relaxed">
-                  "{testimonial.quote}"
-                </blockquote>
-                <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">
-                      {testimonial.author.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-white">{testimonial.author}</div>
-                    <div className="text-sm text-slate-400">{testimonial.title}</div>
-                    <div className="text-sm text-blue-300">{testimonial.company}</div>
-                  </div>
-                </div>
+                <h3 className="text-xl font-bold text-white mb-4">{benefit.title}</h3>
+                <p className="text-slate-300 leading-relaxed">{benefit.description}</p>
               </div>
             ))}
+          </div>
+          
+          <div className="mt-16 text-center">
+            <div className="inline-flex items-center gap-3 bg-slate-800/50 border border-slate-700 rounded-2xl px-6 py-4">
+              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
+              <span className="text-white font-semibold">Currently in Development</span>
+              <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse shadow-lg shadow-blue-400/50"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -438,11 +434,11 @@ export const NewElectricalLanding: React.FC = () => {
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center lg:px-8">
           <h2 className="text-4xl font-bold text-white mb-6 lg:text-5xl">
-            Ready to Transform Your Construction Operations?
+            Ready to Build the Future Together?
           </h2>
           <p className="text-xl text-blue-100 mb-10 leading-relaxed">
-            Join thousands of construction professionals who trust FieldForge to deliver 
-            their most critical infrastructure projects.
+            Be part of the next generation of electrical construction management. 
+            Join our early access program and help us create something amazing.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -450,7 +446,7 @@ export const NewElectricalLanding: React.FC = () => {
               onClick={() => navigate('/signup')}
               className="px-8 py-4 bg-white text-blue-600 text-lg font-bold rounded-xl shadow-xl hover:bg-blue-50 transition-all transform hover:scale-105 flex items-center justify-center gap-2"
             >
-              Start Your Free Trial
+              Join Early Access
               <ArrowRight className="h-5 w-5" />
             </button>
             <button 
@@ -462,7 +458,7 @@ export const NewElectricalLanding: React.FC = () => {
           </div>
 
           <p className="mt-8 text-sm text-blue-200">
-            No credit card required • 14-day free trial • Cancel anytime
+            No credit card required • Early access • Help shape the future
           </p>
         </div>
       </section>
