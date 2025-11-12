@@ -46,8 +46,8 @@ export { QAQCHub } from './qaqc/QAQCHub';
 export const InspectionManager = () => <PlaceholderPage title="Inspection Manager" icon={ClipboardCheck} description="Schedule and document inspections" />;
 export const TestingDashboard = () => <PlaceholderPage title="Testing Dashboard" icon={ClipboardCheck} description="Equipment testing and results" />;
 
-// Documents
-export const DocumentHub = () => <PlaceholderPage title="Document Hub" icon={FileText} description="Central document repository" />;
+// Documents - Now with real upload/download/share functionality
+export { DocumentHub } from './documents/DocumentHub';
 export const DrawingViewer = () => <PlaceholderPage title="Drawing Viewer" icon={FileText} description="View and annotate project drawings" />;
 export const SubmittalManager = () => <PlaceholderPage title="Submittal Manager" icon={FileText} description="Manage project submittals" />;
 
