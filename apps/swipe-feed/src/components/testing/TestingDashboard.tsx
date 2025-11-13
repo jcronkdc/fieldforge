@@ -83,10 +83,10 @@ export const TestingDashboard: React.FC = () => {
   const fetchTestData = async () => {
     try {
       const [resultsRes, scheduleRes] = await Promise.all([
-        fetch(`/api/equipment/testing?range=${dateRange}${selectedType !== 'all' ? `&type=${selectedType}` : ''}`, {
+        fetch(`/api/testing?range=${dateRange}${selectedType !== 'all' ? `&type=${selectedType}` : ''}`, {
           headers: { 'Authorization': `Bearer ${session?.access_token}` }
         }),
-        fetch('/api/equipment/testing/schedule', {
+        fetch('/api/testing/schedule', {
           headers: { 'Authorization': `Bearer ${session?.access_token}` }
         })
       ]);
@@ -141,7 +141,7 @@ export const TestingDashboard: React.FC = () => {
     e.preventDefault();
     
     try {
-      const response = await fetch('/api/equipment/testing', {
+      const response = await fetch('/api/testing', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
