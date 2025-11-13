@@ -1,6 +1,6 @@
 import React from 'react';
 import { SEOHead, generateWebPageSchema } from '../components/seo/SEOHead';
-import { Settings as SettingsPlaceholder } from '../components/placeholders';
+import { Settings } from '../components/settings/Settings';
 
 const title = 'FieldForge Settings — Manage Application Preferences';
 const description =
@@ -21,7 +21,7 @@ export const SettingsPage: React.FC = () => {
         url="https://fieldforge.app/settings"
         structuredData={structuredData}
       />
-      <SettingsPlaceholder />
+      <Settings />
     </>
   );
 };
