@@ -31,7 +31,7 @@ export const Landing: React.FC = () => {
         url="https://fieldforge.app/"
         structuredData={structuredData}
       />
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center relative overflow-hidden davinci-grid">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center relative overflow-hidden davinci-grid paper-texture">
         {/* Sacred Geometry Layers */}
         <div className="absolute inset-0">
           {/* Technical Blueprint Grid */}
@@ -53,11 +53,14 @@ export const Landing: React.FC = () => {
                style={{ transform: `translateZ(${scrollY * 0.15}px)` }} />
         </div>
         
-        <div className="relative z-10 text-center max-w-4xl mx-auto px-4 depth-field">
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-4 depth-field corner-sketch">
           {/* Technical Drawing Accent */}
           <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-10">
             <Compass className="w-24 h-24 text-amber-400" style={{ transform: `rotate(${scrollY * 0.2}deg)` }} />
           </div>
+          
+          {/* Spiral Path Decoration */}
+          <div className="spiral-path" />
           
           <Link to="/showcase" className="inline-flex items-center gap-2 px-[21px] py-[13px] bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium mb-[34px] hover:bg-amber-500/30 transition-all duration-300 tech-border depth-layer-1 annotation" data-note="EXPLORE FEATURES">
             <Sparkles className="w-4 h-4" />
@@ -85,7 +88,7 @@ export const Landing: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-[21px] justify-center mb-[55px] depth-layer-1">
             <Link 
               to="/signup" 
-              className="group px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] btn-davinci touch-golden glow-renaissance relative overflow-hidden"
+              className="group px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] btn-davinci touch-golden glow-renaissance relative overflow-hidden breathe"
             >
               <span className="relative z-10">Start Free Trial</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" />
