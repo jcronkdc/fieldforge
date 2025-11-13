@@ -54,11 +54,11 @@ import { WeatherDashboard } from './components/weather/WeatherDashboard';
 import { EquipmentMaintenance } from './components/equipment/EquipmentMaintenance';
 import { InspectionManager } from './components/qaqc/InspectionManager';
 import { TestingDashboard } from './components/testing/TestingDashboard';
+import { DrawingViewer } from './components/documents/DrawingViewer';
 
 // Placeholder Components - TO BE REPLACED
 import {
   SafetyBriefing,
-  DrawingViewer,
   SubmittalManager,
   OutageCoordination,
   EnvironmentalCompliance,

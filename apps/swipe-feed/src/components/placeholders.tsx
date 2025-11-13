@@ -58,7 +58,8 @@ export { TestingDashboard } from './testing/TestingDashboard';
 
 // Documents - Now with real upload/download/share functionality
 export { DocumentHub } from './documents/DocumentHub';
-export const DrawingViewer = () => <PlaceholderPage title="Drawing Viewer" icon={FileText} description="View and annotate project drawings" />;
+// Drawing Viewer - CAD/PDF viewing with annotations
+export { DrawingViewer } from './documents/DrawingViewer';
 export const SubmittalManager = () => <PlaceholderPage title="Submittal Manager" icon={FileText} description="Manage project submittals" />;
 
 // Project Management
