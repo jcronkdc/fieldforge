@@ -31,7 +31,7 @@ export const Landing: React.FC = () => {
         url="https://fieldforge.app/"
         structuredData={structuredData}
       />
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center relative overflow-hidden davinci-grid paper-texture">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center relative overflow-hidden davinci-grid paper-texture sketch-overlay">
         {/* Sacred Geometry Layers */}
         <div className="absolute inset-0">
           {/* Technical Blueprint Grid */}
@@ -39,6 +39,9 @@ export const Landing: React.FC = () => {
             backgroundImage: `repeating-linear-gradient(0deg, rgba(218, 165, 32, 0.1) 0px, transparent 1px, transparent 61.8px, rgba(218, 165, 32, 0.1) 61.8px),
                              repeating-linear-gradient(90deg, rgba(218, 165, 32, 0.1) 0px, transparent 1px, transparent 61.8px, rgba(218, 165, 32, 0.1) 61.8px)`
           }} />
+          
+          {/* Technical Compass Rose */}
+          <div className="compass-rose top-10 right-10" />
           
           {/* Vitruvian Circle Overlay */}
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-amber-500/5" 
@@ -73,7 +76,7 @@ export const Landing: React.FC = () => {
             <div className="absolute -left-[55px] top-1/2 transform -translate-y-1/2 hidden lg:block">
               <Ruler className="w-[34px] h-[34px] text-amber-400/20" />
             </div>
-            Construction Management
+            <span className="measurement-line">Construction Management</span>
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-[#B87333] to-amber-600 text-blueprint">
               Built for the Field
@@ -101,7 +104,7 @@ export const Landing: React.FC = () => {
             </Link>
           </div>
           
-          <div className="flex flex-wrap gap-[34px] justify-center items-center text-sm text-slate-400 relative">
+          <div className="flex flex-wrap gap-[34px] justify-center items-center text-sm text-slate-400 relative mb-[55px]">
             {/* Technical Gear Decoration */}
             <div className="absolute -left-8 top-1/2 transform -translate-y-1/2 opacity-5">
               <Cog className="w-16 h-16 text-amber-400" style={{ animation: 'gear-rotate 20s linear infinite' }} />
@@ -119,6 +122,14 @@ export const Landing: React.FC = () => {
               <div className="w-[8px] h-[8px] bg-green-400 rounded-full animate-pulse" />
               <span className="text-golden-sm">45 Min Saved Daily</span>
             </div>
+          </div>
+          
+          {/* Leonardo's Wisdom */}
+          <div className="text-center opacity-30 mt-[89px]">
+            <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">
+              "Obstacles cannot crush me; every obstacle yields to stern resolve"
+            </p>
+            <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
           </div>
         </div>
       </div>

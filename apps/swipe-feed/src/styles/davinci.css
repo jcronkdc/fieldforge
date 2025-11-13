@@ -1,7 +1,9 @@
 /* FieldForge Da Vinci Design System
    Leonardo meets Construction - Mathematical Beauty for the Field
-   Golden Ratio: 1.618
+   Golden Ratio: 1.618 (φ)
    Base Unit: 8px
+   
+   "Simplicity is the ultimate sophistication" - Leonardo da Vinci
 */
 
 :root {
@@ -21,6 +23,9 @@
   --technical-ink: #1A1A1A;
   --golden-accent: #DAA520;
   --blueprint-blue: #0047AB;
+  --vitruvian-red: #8B2C1B;
+  --engineering-bronze: #CD7F32;
+  --sketch-sepia: #704214;
   
   /* Transitions following natural curves */
   --ease-natural: cubic-bezier(0.4, 0.0, 0.2, 1);
@@ -497,6 +502,249 @@
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 50 Q60 40 70 50 T90 50' stroke='%23DAA520' stroke-width='0.5' fill='none'/%3E%3Cpath d='M50 50 Q40 60 30 50 T10 50' stroke='%23DAA520' stroke-width='0.5' fill='none'/%3E%3C/svg%3E");
   background-size: 200px 200px;
   animation: subtle-shift 30s ease-in-out infinite;
+}
+
+/* Leonardo's Technical Drawing Elements */
+.technical-annotation {
+  position: relative;
+  font-family: 'Courier New', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--sketch-sepia);
+}
+
+.technical-annotation::before {
+  content: '⟵';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.3;
+}
+
+/* Engineering Measurement Marks */
+.measurement-line {
+  position: relative;
+  display: inline-block;
+}
+
+.measurement-line::before,
+.measurement-line::after {
+  content: '';
+  position: absolute;
+  height: 12px;
+  width: 1px;
+  background: var(--aged-copper);
+  opacity: 0.5;
+}
+
+.measurement-line::before {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.measurement-line::after {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Leonardo's Sketch Overlay */
+.sketch-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.sketch-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(112, 66, 20, 0.02) 10px,
+      rgba(112, 66, 20, 0.02) 11px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 10px,
+      rgba(112, 66, 20, 0.02) 10px,
+      rgba(112, 66, 20, 0.02) 11px
+    );
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+/* Vitruvian Proportion Helper */
+.vitruvian-square {
+  aspect-ratio: 1;
+  position: relative;
+}
+
+.vitruvian-rect {
+  aspect-ratio: 1.618;
+  position: relative;
+}
+
+/* Engineering Blueprint Button */
+.btn-blueprint {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0, 71, 171, 0.1) 0%, transparent 50%);
+  border: 1px solid rgba(0, 71, 171, 0.3);
+  color: var(--blueprint-blue);
+  padding: var(--space-2) var(--space-5);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.3s var(--ease-mechanical);
+}
+
+.btn-blueprint::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: var(--blueprint-blue);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-natural);
+  z-index: -1;
+}
+
+.btn-blueprint:hover {
+  color: white;
+  border-color: var(--blueprint-blue);
+  transform: translateY(-1px);
+}
+
+.btn-blueprint:hover::before {
+  opacity: 1;
+}
+
+/* Technical Compass Rose */
+.compass-rose {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  opacity: 0.1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' stroke='%23B87333' stroke-width='0.5' fill='none'/%3E%3Cpath d='M50 5 L55 45 L50 95 L45 45 Z' fill='%23B87333' opacity='0.3'/%3E%3Cpath d='M5 50 L45 45 L95 50 L45 55 Z' fill='%23B87333' opacity='0.3'/%3E%3Ctext x='50' y='10' text-anchor='middle' font-family='monospace' font-size='8' fill='%23B87333' opacity='0.5'%3EN%3C/text%3E%3C/svg%3E");
+  animation: compass-drift 60s ease-in-out infinite;
+}
+
+@keyframes compass-drift {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(5deg) scale(1.05); }
+  50% { transform: rotate(-3deg) scale(0.95); }
+  75% { transform: rotate(2deg) scale(1.02); }
+}
+
+/* Engineering Grid Card */
+.card-engineering {
+  position: relative;
+  background: 
+    linear-gradient(135deg, rgba(244, 233, 217, 0.02) 0%, transparent 100%),
+    rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(184, 115, 51, 0.2);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.card-engineering::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--aged-copper),
+    var(--aged-copper) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  opacity: 0.2;
+}
+
+/* Leonardo's Signature Animation */
+@keyframes leonardo-write {
+  0% { 
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  100% { 
+    stroke-dashoffset: 0;
+  }
+}
+
+.signature-leonardo {
+  stroke: var(--sketch-sepia);
+  stroke-width: 1;
+  fill: none;
+  animation: leonardo-write 3s ease-in-out forwards;
+}
+
+/* Construction Field Enhancements */
+.field-readable {
+  font-size: 1.125rem;
+  line-height: 1.618;
+  font-weight: 500;
+  color: var(--technical-ink);
+}
+
+.field-touch {
+  min-height: var(--space-8);
+  min-width: var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--space-1);
+}
+
+/* Status Indicators with Engineering Feel */
+.status-operational {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.status-operational::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Enhanced Navigation for Field Use */
+.nav-field {
+  position: relative;
+  padding: var(--space-3) var(--space-5);
+  font-size: 1.125rem;
+  font-weight: 600;
+  border-radius: var(--space-1);
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid transparent;
+  transition: all 0.3s var(--ease-mechanical);
+}
+
+.nav-field:hover {
+  border-color: var(--golden-accent);
+  background: rgba(218, 165, 32, 0.1);
+  transform: translateX(5px);
 }
 
 /* Print Styles - Blueprint Mode */

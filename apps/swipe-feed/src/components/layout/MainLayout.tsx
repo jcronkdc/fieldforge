@@ -13,9 +13,9 @@ import { NotificationCenter } from '../notifications/NotificationCenter';
 import { WeatherWidget } from '../weather/WeatherWidget';
 
 const headerTelemetry = [
-  { label: 'Grid load', value: '68%', tone: 'text-emerald-600' },
-  { label: 'Crews active', value: '137', tone: 'text-slate-900' },
-  { label: 'Incidents', value: '0', tone: 'text-emerald-600' }
+  { label: 'Grid load', value: '68%', tone: 'text-amber-400' },
+  { label: 'Crews active', value: '137', tone: 'text-amber-300' },
+  { label: 'Incidents', value: '0', tone: 'text-green-400' }
 ];
 
 interface MainLayoutProps {
@@ -196,28 +196,28 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
     item.subItems?.some((sub: any) => location.pathname === sub.path);
 
   return (
-    <div className="relative flex min-h-screen bg-[#f5f7fb]">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,_rgba(15,76,129,0.08),_transparent_55%),_radial-gradient(circle_at_75%_0,_rgba(17,118,161,0.12),_transparent_50%)]" aria-hidden />
+    <div className="relative flex min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_20%,_rgba(218,165,32,0.05),_transparent_55%),_radial-gradient(circle_at_75%_0,_rgba(184,115,51,0.08),_transparent_50%)]" aria-hidden />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(130deg,_rgba(15,23,42,0.08),_transparent_45%)]" aria-hidden />
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-68 bg-white border-r border-slate-200 shadow-md transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        className={`fixed inset-y-0 left-0 z-50 w-68 bg-slate-900/95 backdrop-blur-xl border-r border-amber-500/20 shadow-2xl transform transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 card-vitruvian ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         {/* Logo */}
-        <div className="h-16 flex items-center justify-between px-5 border-b border-slate-200">
+        <div className="h-16 flex items-center justify-between px-5 border-b border-amber-500/20">
           <Link to="/dashboard" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center vitruvian-square glow-renaissance">
               <Zap className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-slate-900">FieldForge</h1>
-              <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-slate-500">Grid Construction</p>
+              <h1 className="text-lg font-semibold text-amber-400">FieldForge</h1>
+              <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-amber-600/60 technical-annotation">Grid Construction</p>
             </div>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-slate-500 hover:text-slate-900"
+            className="lg:hidden text-amber-400 hover:text-amber-300"
           >
             <X className="w-5 h-5" />
           </button>
@@ -229,18 +229,18 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
             <div key={item.path}>
               <Link
                 to={item.path}
-                className={`flex items-center justify-between px-3 py-2 rounded-xl transition-all ${
+                className={`flex items-center justify-between px-3 py-2 rounded-[8px] transition-all nav-davinci ${
                   isActive(item.path) || hasActiveSubItem(item)
-                    ? 'bg-slate-900 text-white'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-amber-600 text-white shadow-lg'
+                    : 'text-amber-400/80 hover:bg-amber-500/10 hover:text-amber-400'
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <item.icon className={`w-5 h-5 ${isActive(item.path) || hasActiveSubItem(item) ? 'text-white' : 'text-slate-500'}`} />
-                  <span className="font-medium">{item.label}</span>
+                  <item.icon className={`w-5 h-5 ${isActive(item.path) || hasActiveSubItem(item) ? 'text-white' : 'text-amber-500/60'}`} />
+                  <span className="font-medium field-readable text-base">{item.label}</span>
                 </div>
                 {item.badge && (
-                  <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${item.badgeColor || 'bg-slate-200 text-slate-700'}`}>
+                  <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${item.badgeColor || 'bg-amber-500/20 text-amber-300'}`}>
                     {item.badge}
                   </span>
                 )}
@@ -268,26 +268,26 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
         </nav>
 
         {/* User Section */}
-        <div className="absolute bottom-0 left-0 right-0 border-t border-slate-200 bg-white p-4">
+        <div className="absolute bottom-0 left-0 right-0 border-t border-amber-500/20 bg-slate-900/95 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center font-semibold">
+              <div className="w-9 h-9 rounded-full bg-amber-600 text-white flex items-center justify-center font-semibold vitruvian-square">
                 {(user.email ?? 'user@fieldforge.app').charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-slate-900 truncate">
+                <p className="text-sm font-semibold text-amber-400 truncate">
                   {(() => {
                     const email = user.email ?? 'user@fieldforge.app';
                     const atIndex = email.indexOf('@');
                     return atIndex > 0 ? email.slice(0, atIndex) : email;
                   })()}
                 </p>
-                <p className="text-xs text-slate-500">Administrator</p>
+                <p className="text-xs text-amber-600/60">Administrator</p>
               </div>
             </div>
             <button
               onClick={handleSignOut}
-              className="inline-flex items-center justify-center rounded-full border border-slate-300 px-2.5 py-2 text-slate-600 hover:bg-slate-100"
+              className="inline-flex items-center justify-center rounded-full border border-amber-500/30 px-2.5 py-2 text-amber-400 hover:bg-amber-500/10 transition-all"
               title="Sign out"
             >
               <LogOut className="w-4 h-4" />
@@ -299,30 +299,30 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col lg:ml-68">
         {/* Top Bar */}
-        <header className="h-20 bg-white/90 backdrop-blur border-b border-slate-200 px-5 flex items-center justify-between shadow-[0_6px_18px_rgba(15,23,42,0.08)]" role="banner">
+        <header className="h-20 bg-slate-900/90 backdrop-blur-xl border-b border-amber-500/20 px-5 flex items-center justify-between shadow-[0_6px_18px_rgba(218,165,32,0.1)] card-engineering" role="banner">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-slate-500 hover:text-slate-900"
+              className="lg:hidden text-amber-400 hover:text-amber-300"
             >
               <Menu className="w-6 h-6" />
             </button>
 
-            <div className="flex items-center space-x-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5">
-              <Building2 className="w-4 h-4 text-slate-600" />
-              <span className="text-sm font-medium text-slate-700">Demo 138kV Substation</span>
-              <ChevronDown className="w-4 h-4 text-slate-500" />
+            <div className="flex items-center space-x-3 rounded-[8px] border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 tech-border">
+              <Building2 className="w-4 h-4 text-amber-400" />
+              <span className="text-sm font-medium text-amber-300 measurement-line">Demo 138kV Substation</span>
+              <ChevronDown className="w-4 h-4 text-amber-500" />
             </div>
 
-            <div className="hidden xl:flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-1.5">
+            <div className="hidden xl:flex items-center gap-3 rounded-[8px] border border-amber-500/30 bg-amber-500/5 px-3 py-1.5 card-engineering">
               {headerTelemetry.map(({ label, value, tone }, index) => (
                 <div key={label} className="flex items-center gap-2 pr-3">
                   <div>
-                    <p className={`text-sm font-semibold ${tone}`}>{value}</p>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-500">{label}</p>
+                    <p className={`text-sm font-semibold ${tone} measurement-line`}>{value}</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-amber-600/60 technical-annotation">{label}</p>
                   </div>
                   {index < headerTelemetry.length - 1 && (
-                    <span className="h-8 w-[1px] bg-slate-200" aria-hidden />
+                    <span className="h-8 w-[1px] bg-amber-500/20" aria-hidden />
                   )}
                 </div>
               ))}
@@ -331,21 +331,21 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
 
           <div className="flex items-center space-x-4">
             <WeatherWidget />
-            <button className="flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-900 hover:bg-slate-100">
+            <button className="flex items-center gap-2 rounded-full border border-amber-500/30 px-3 py-1.5 text-sm font-semibold text-amber-400 hover:bg-amber-500/10 transition-all btn-blueprint">
               <Radio className="w-4 h-4" />
               Emergency
             </button>
             <PushNotifications />
             <button
               onClick={toggleTheme}
-              className="flex items-center gap-2 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-900 hover:bg-slate-100"
+              className="flex items-center gap-2 rounded-full border border-amber-500/30 px-3 py-1.5 text-sm font-semibold text-amber-400 hover:bg-amber-500/10 transition-all"
               aria-label="Toggle theme"
               type="button"
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
               {theme === 'dark' ? 'Light' : 'Dark'}
             </button>
-            <Link to="/settings" className="p-2 rounded-full border border-slate-200 text-slate-600 hover:bg-slate-100">
+            <Link to="/settings" className="p-2 rounded-full border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-all">
               <Settings className="w-5 h-5" />
             </Link>
           </div>
