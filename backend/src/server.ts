@@ -34,6 +34,7 @@ import { createUserRouter } from "./routes/userRoutes.js";
 import { createSubmittalsRouter } from "./routes/submittalsRoutes.js";
 import { createOutagesRouter } from "./routes/outagesRoutes.js";
 import { createSettingsRouter } from "./routes/settingsRoutes.js";
+import { createCompanyRouter } from "./routes/companyRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -104,6 +105,9 @@ app.use("/api/users", createUserRouter());
 
 // User Settings Management - PREFERENCES & CONFIGURATION ✅
 app.use("/api/user/settings", createSettingsRouter());
+
+// Company Management - ORGANIZATION SETTINGS ✅  
+app.use("/api/company", createCompanyRouter());
 
 // Field Operations (Time tracking, daily reports, weather)
 app.use("/api/field-ops", createFieldOpsRouter());

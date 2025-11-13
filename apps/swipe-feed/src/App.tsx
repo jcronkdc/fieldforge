@@ -63,6 +63,7 @@ import { DrawingViewer } from './components/documents/DrawingViewer';
 // Real Components
 import { SubmittalManager } from './components/submittals/SubmittalManager';
 import { OutageCoordination } from './components/outages/OutageCoordination';
+import { CompanySettings } from './components/settings/CompanySettings';
 
 // Placeholder Components - TO BE REPLACED
 import {
@@ -73,7 +74,6 @@ import {
   ProjectMap3D,
   SubstationModel,
   FieldForgeAI,
-  CompanySettings,
   UserProfile
 } from './components/placeholders';
 import { SettingsPage } from './pages/Settings';
