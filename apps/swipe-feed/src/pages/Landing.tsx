@@ -124,6 +124,16 @@ export const Landing: React.FC = () => {
             </div>
           </div>
           
+          {/* Add pricing link */}
+          <div className="mt-[55px] text-center">
+            <Link
+              to="/pricing"
+              className="text-amber-400 hover:text-amber-300 font-semibold text-golden-base transition-colors annotation" data-note="TRANSPARENT"
+            >
+              View Transparent Pricing →
+            </Link>
+          </div>
+          
           {/* Leonardo's Wisdom */}
           <div className="text-center opacity-30 mt-[89px]">
             <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">

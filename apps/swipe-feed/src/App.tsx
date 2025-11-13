@@ -15,6 +15,8 @@ import { LandingPageTest } from './pages/LandingPageTest';
 import { TestRouting } from './pages/TestRouting';
 import { TestRunner } from './pages/TestRunner';
 import { ShowcasePage } from './components/showcase/ShowcasePage';
+import { PricingPage } from './components/pricing/PricingPage';
+import { ContactSales } from './components/contact/ContactSales';
 
 // Auth Components
 import { LoginPage } from './components/auth/LoginPage';
@@ -171,6 +173,12 @@ function App() {
           
           {/* Showcase Page - Public */}
           <Route path="/showcase" element={<ShowcasePage />} />
+          
+          {/* Pricing Page - Public */}
+          <Route path="/pricing" element={<PricingPage />} />
+          
+          {/* Contact/Demo Request - Public */}
+          <Route path="/contact" element={<ContactSales />} />
           
           {/* Auth Routes */}
           <Route path="/login" element={

@@ -27,6 +27,7 @@ import { createOperationsRouter } from "./construction/operations/operationsRout
 import { createTestingRouter } from "./construction/testing/testingRoutes.js";
 import { createDrawingRouter } from "./construction/drawings/drawingRoutes.js";
 import { createEquipmentTestingRouter } from "./construction/equipment/equipmentTestingRoutes.js";
+import { createLeadRouter } from "./routes/leadRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -77,7 +78,10 @@ app.get("/health", (_req: Request, res: Response) => {
   });
 });
 
-// Apply authentication middleware to ALL API routes (except health check)
+// Public lead capture endpoint (no auth required)
+app.use("/api/leads", createLeadRouter());
+
+// Apply authentication middleware to ALL API routes (except health check and leads)
 app.use('/api', authenticateRequest);
 
 // Apply granular rate limiting for sensitive/compute-intensive endpoints
