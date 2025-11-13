@@ -30,6 +30,7 @@ import { createEquipmentTestingRouter } from "./construction/equipment/equipment
 import { createLeadRouter } from "./routes/leadRoutes.js";
 import { createEnvironmentalRouter } from "./construction/environmental/environmentalRoutes.js";
 import { createEmergencyRouter } from "./construction/emergency/emergencyRoutes.js";
+import { createUserRouter } from "./routes/userRoutes.js";
 import { createSubmittalsRouter } from "./routes/submittalsRoutes.js";
 import { createOutagesRouter } from "./routes/outagesRoutes.js";
 
@@ -96,6 +97,9 @@ app.use("/api/documents/bulk", sensitiveOperationLimiter);
 // ============================================================================
 // CONSTRUCTION PLATFORM API ROUTES
 // ============================================================================
+
+// User Profile Management - COMPLETE WITH CERTIFICATIONS ✅
+app.use("/api/users", createUserRouter());
 
 // Field Operations (Time tracking, daily reports, weather)
 app.use("/api/field-ops", createFieldOpsRouter());

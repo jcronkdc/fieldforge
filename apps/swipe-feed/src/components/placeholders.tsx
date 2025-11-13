@@ -93,7 +93,8 @@ export const FieldForgeAI = () => <PlaceholderPage title="FieldForge AI Assistan
 // Settings
 export const Settings = () => <PlaceholderPage title="Settings" icon={SettingsIcon} description="Application settings and preferences" />;
 export const CompanySettings = () => <PlaceholderPage title="Company Settings" icon={Building2} description="Company configuration and management" />;
-export const UserProfile = () => <PlaceholderPage title="User Profile" icon={Users} description="Manage your profile and preferences" />;
+// UserProfile is now a real component - see ./profile/UserProfile.tsx
+export { UserProfile } from './profile/UserProfile';
 
 // Receipt Management - Now using real implementation
 export { ReceiptScanner } from './receipts/ReceiptScanner';
