@@ -107,7 +107,7 @@ vercel --prod
 1. **Build Command** - Added `--production=false` to npm install
 2. **Import Paths** - Fixed AuthContext imports in all components
 3. **Node.js Version** - Set to 18.x in both package.json files
-4. **Vercel Runtime** - Downgraded to @vercel/node@2 for Node.js 18 support
+4. **Vercel Runtime** - Removed explicit runtime from vercel.json (auto-detects from engines)
 
 ## 🚀 **BUILD PROGRESS**
 
