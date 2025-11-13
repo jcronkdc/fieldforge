@@ -44,7 +44,7 @@ import { DocumentHub } from './components/documents/DocumentHub';
 import { ReceiptManager } from './components/receipts/ReceiptManager';
 import { ProjectMetrics } from './components/analytics/ProjectMetrics';
 import { SafetyMetrics } from './components/analytics/SafetyMetrics';
-import { DailyOperations } from './components/operations/DailyOperations';
+import { DailyOperations } from './components/fieldops/DailyOperations';
 import { IncidentReporting } from './components/safety/IncidentReporting';
 import { PermitManagement } from './components/safety/PermitManagement';
 import { MaterialInventory } from './components/inventory/MaterialInventory';
@@ -53,11 +53,11 @@ import { ThreeWeekLookahead } from './components/scheduling/ThreeWeekLookahead';
 import { WeatherDashboard } from './components/weather/WeatherDashboard';
 import { EquipmentMaintenance } from './components/equipment/EquipmentMaintenance';
 import { InspectionManager } from './components/qaqc/InspectionManager';
+import { TestingDashboard } from './components/testing/TestingDashboard';
 
 // Placeholder Components - TO BE REPLACED
 import {
   SafetyBriefing,
-  TestingDashboard,
   DrawingViewer,
   SubmittalManager,
   OutageCoordination,

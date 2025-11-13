@@ -24,6 +24,7 @@ import { createReportingRouter } from "./construction/reporting/reportingRoutes.
 import { createInventoryRouter } from "./construction/inventory/inventoryRoutes.js";
 import { createReceiptRouter } from "./construction/receipts/receiptRoutes.js";
 import { createOperationsRouter } from "./construction/operations/operationsRoutes.js";
+import { createTestingRouter } from "./construction/testing/testingRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -115,6 +116,9 @@ app.use("/api/scheduling", createSchedulingRouter());
 
 // Daily Operations - FIELD REPORTS & PRODUCTIVITY ✅
 app.use("/api/operations", createOperationsRouter());
+
+// Testing Dashboard - EQUIPMENT TESTING & COMPLIANCE ✅
+app.use("/api/testing", createTestingRouter());
 
 // Reporting System - PDF GENERATION & DASHBOARDS ✅
 app.use("/api/reporting", createReportingRouter());

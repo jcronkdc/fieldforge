@@ -53,7 +53,8 @@ export { EquipmentMaintenance } from './equipment/EquipmentMaintenance';
 export { QAQCHub } from './qaqc/QAQCHub';
 // InspectionManager is now a real component - see ./qaqc/InspectionManager.tsx
 export { InspectionManager } from './qaqc/InspectionManager';
-export const TestingDashboard = () => <PlaceholderPage title="Testing Dashboard" icon={ClipboardCheck} description="Equipment testing and results" />;
+// Testing - Complete equipment testing & compliance system
+export { TestingDashboard } from './testing/TestingDashboard';
 
 // Documents - Now with real upload/download/share functionality
 export { DocumentHub } from './documents/DocumentHub';
