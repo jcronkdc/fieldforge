@@ -19,8 +19,15 @@ interface Feature {
 export const ShowcasePage: React.FC = () => {
   const [activeFeature, setActiveFeature] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   const { scrollYProgress } = useScroll();
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.3]);
+  
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const features: Feature[] = [
     {
@@ -90,14 +97,17 @@ export const ShowcasePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden davinci-grid">
         <motion.div 
           style={{ opacity }}
           className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-blue-500/10"
         />
         
-        {/* Animated Background Grid */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+        {/* Sacred Geometry Background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-amber-500/5" 
+               style={{ transform: `translate(-50%, -50%) rotate(${scrollY * 0.03}deg)` }} />
+        </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
@@ -126,17 +136,17 @@ export const ShowcasePage: React.FC = () => {
               who need to get real work done in real conditions.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-[21px] justify-center">
               <Link
                 to="/signup"
-                className="px-8 py-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+                className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-[8px] transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] btn-davinci touch-golden glow-renaissance"
               >
                 Start Free Trial
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <button
                 onClick={() => setIsPlaying(true)}
-                className="px-8 py-4 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white font-semibold rounded-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+                className="px-[34px] py-[13px] bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white font-semibold rounded-[8px] transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] tech-border touch-golden"
               >
                 <Play className="w-5 h-5" />
                 Watch 2-Min Demo
@@ -230,10 +240,10 @@ export const ShowcasePage: React.FC = () => {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   onClick={() => setActiveFeature(index)}
-                  className={`p-6 rounded-2xl cursor-pointer transition-all ${
+                  className={`p-[21px] rounded-[13px] cursor-pointer transition-all card-vitruvian ${
                     activeFeature === index
-                      ? 'bg-amber-500/20 border-2 border-amber-500'
-                      : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
+                      ? 'bg-amber-500/20 border-2 border-amber-500 depth-layer-2'
+                      : 'bg-white/5 border-2 border-transparent hover:bg-white/10 depth-layer-1'
                   }`}
                 >
                   <div className="flex items-start gap-4">

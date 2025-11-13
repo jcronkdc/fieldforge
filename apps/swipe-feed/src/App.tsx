@@ -7,6 +7,7 @@ import { VoiceCommandInterface } from './components/voice/VoiceCommandInterface'
 import { Toaster } from 'react-hot-toast';
 import './styles/animations.css';
 import './styles/ai-animations.css';
+import './styles/davinci.css';
 
 // Landing Page
 import { Landing } from './pages/Landing';

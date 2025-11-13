@@ -1,0 +1,382 @@
+/* FieldForge Da Vinci Design System
+   Leonardo meets Construction - Mathematical Beauty for the Field
+   Golden Ratio: 1.618
+   Base Unit: 8px
+*/
+
+:root {
+  /* Golden Ratio Scale */
+  --golden: 1.618;
+  --space-1: 8px;
+  --space-2: 13px;  /* 8 * 1.618 */
+  --space-3: 21px;  /* 13 * 1.618 */
+  --space-5: 34px;  /* 21 * 1.618 */
+  --space-8: 55px;  /* 34 * 1.618 */
+  --space-13: 89px; /* 55 * 1.618 */
+  
+  /* Renaissance Colors */
+  --aged-copper: #B87333;
+  --parchment: #F4E9D9;
+  --renaissance-blue: #1B3A6B;
+  --technical-ink: #1A1A1A;
+  --golden-accent: #DAA520;
+  --blueprint-blue: #0047AB;
+  
+  /* Transitions following natural curves */
+  --ease-natural: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --ease-mechanical: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Sacred Geometry Grid Overlay */
+.davinci-grid {
+  position: relative;
+  overflow: hidden;
+}
+
+.davinci-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(218, 165, 32, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(218, 165, 32, 0.03) 1px, transparent 1px);
+  background-size: 61.8px 61.8px; /* Golden ratio grid */
+  pointer-events: none;
+  z-index: 1;
+  animation: subtle-shift 60s ease-in-out infinite;
+}
+
+@keyframes subtle-shift {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-3px, 2px); }
+  50% { transform: translate(2px, -3px); }
+  75% { transform: translate(-2px, -2px); }
+}
+
+/* Technical Blueprint Overlay */
+.blueprint-overlay {
+  position: relative;
+}
+
+.blueprint-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, transparent 30%, rgba(0, 71, 171, 0.02) 70%),
+    radial-gradient(circle at 75% 75%, transparent 30%, rgba(0, 71, 171, 0.02) 70%);
+  background-size: 61.8px 61.8px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-natural);
+}
+
+.blueprint-overlay:hover::after {
+  opacity: 1;
+}
+
+/* Renaissance Depth Layers */
+.depth-field {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.depth-layer {
+  transform-origin: center;
+  will-change: transform;
+  transition: transform 0.6s var(--ease-mechanical);
+}
+
+.depth-layer-1 { 
+  transform: translateZ(0); 
+}
+
+.depth-layer-2 { 
+  transform: translateZ(20px);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.depth-layer-3 { 
+  transform: translateZ(40px);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+}
+
+/* Technical Drawing Borders */
+.tech-border {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+}
+
+.tech-border::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(45deg, 
+    var(--aged-copper) 0%, 
+    transparent 25%, 
+    transparent 75%, 
+    var(--aged-copper) 100%
+  );
+  opacity: 0.3;
+  z-index: -1;
+  animation: rotate-border 20s linear infinite;
+}
+
+@keyframes rotate-border {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Golden Ratio Buttons */
+.btn-davinci {
+  position: relative;
+  padding: var(--space-2) var(--space-5);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  overflow: hidden;
+  transition: all 0.3s var(--ease-mechanical);
+  border-radius: var(--space-1);
+}
+
+.btn-davinci::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(218, 165, 32, 0.3) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s var(--ease-natural), height 0.6s var(--ease-natural);
+}
+
+.btn-davinci:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Vitruvian Card System */
+.card-vitruvian {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(218, 165, 32, 0.1);
+  backdrop-filter: blur(20px);
+  transition: all 0.4s var(--ease-mechanical);
+  overflow: hidden;
+}
+
+.card-vitruvian::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    rgba(218, 165, 32, 0.05) 60deg,
+    transparent 120deg
+  );
+  animation: rotate-subtle 30s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate-subtle {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Fibonacci Spiral Animation */
+.fibonacci-accent {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.fibonacci-accent svg {
+  width: 100%;
+  height: 100%;
+  animation: spiral-growth 20s ease-in-out infinite;
+}
+
+@keyframes spiral-growth {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.618) rotate(180deg); }
+}
+
+/* Technical Annotations */
+.annotation {
+  position: relative;
+  display: inline-block;
+}
+
+.annotation::after {
+  content: attr(data-note);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  padding: var(--space-1) var(--space-2);
+  background: var(--parchment);
+  color: var(--technical-ink);
+  font-size: 0.75rem;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s var(--ease-natural);
+  border: 1px solid var(--aged-copper);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.annotation:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1) translateY(-8px);
+}
+
+/* Mechanical Loading States */
+.loader-mechanical {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.loader-mechanical::before,
+.loader-mechanical::after {
+  content: '';
+  position: absolute;
+  border: 2px solid var(--aged-copper);
+  border-radius: 50%;
+  animation: gear-rotate 3s linear infinite;
+}
+
+.loader-mechanical::before {
+  width: 60px;
+  height: 60px;
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+
+.loader-mechanical::after {
+  width: 40px;
+  height: 40px;
+  top: 10px;
+  left: 10px;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  animation-direction: reverse;
+}
+
+@keyframes gear-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Blueprint Text Effects */
+.text-blueprint {
+  position: relative;
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.text-blueprint::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--blueprint-blue),
+    var(--blueprint-blue) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  opacity: 0.5;
+}
+
+/* Golden Ratio Typography Scale */
+.text-golden-xs { font-size: 0.618rem; }
+.text-golden-sm { font-size: 0.875rem; }
+.text-golden-base { font-size: 1rem; }
+.text-golden-lg { font-size: 1.618rem; }
+.text-golden-xl { font-size: 2.618rem; }
+.text-golden-2xl { font-size: 4.236rem; }
+
+/* Renaissance Glow Effects */
+.glow-renaissance {
+  position: relative;
+}
+
+.glow-renaissance::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: radial-gradient(
+    circle at center,
+    rgba(218, 165, 32, 0.1) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.6s var(--ease-natural);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.glow-renaissance:hover::before {
+  opacity: 1;
+}
+
+/* Utility Classes for Field Workers */
+.touch-golden {
+  min-height: var(--space-8); /* 55px - Perfect for gloved hands */
+  min-width: var(--space-8);
+}
+
+.readable-field {
+  font-size: 1.125rem;
+  line-height: 1.618;
+  font-weight: 500;
+}
+
+/* Responsive Golden Grid */
+@media (min-width: 768px) {
+  .grid-golden {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(377px, 1fr)); /* 377 = 233 * 1.618 */
+    gap: var(--space-5);
+  }
+}
+
+/* Print Styles - Blueprint Mode */
+@media print {
+  * {
+    background: white !important;
+    color: var(--blueprint-blue) !important;
+  }
+  
+  .davinci-grid::before,
+  .blueprint-overlay::after {
+    opacity: 0.1 !important;
+  }
+}

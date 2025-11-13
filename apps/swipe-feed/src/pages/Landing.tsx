@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SEOHead, generateWebPageSchema } from '../components/seo/SEOHead';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Compass, Cog, Ruler } from 'lucide-react';
+import '../styles/davinci.css';
 
 const title = 'FieldForge — Enterprise-Grade Construction Management';
 const description =
   'Plan, coordinate, and deliver transmission and substation projects with AI-assisted scheduling, safety workflows, and real-time collaboration.';
 
 export const Landing: React.FC = () => {
+  const [scrollY, setScrollY] = useState(0);
+  
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
   const structuredData = generateWebPageSchema(
     title,
     description,
@@ -22,59 +31,90 @@ export const Landing: React.FC = () => {
         url="https://fieldforge.app/"
         structuredData={structuredData}
       />
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
-        <div className="absolute top-20 left-20 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center relative overflow-hidden davinci-grid">
+        {/* Sacred Geometry Layers */}
+        <div className="absolute inset-0">
+          {/* Technical Blueprint Grid */}
+          <div className="absolute inset-0 opacity-[0.02]" style={{
+            backgroundImage: `repeating-linear-gradient(0deg, rgba(218, 165, 32, 0.1) 0px, transparent 1px, transparent 61.8px, rgba(218, 165, 32, 0.1) 61.8px),
+                             repeating-linear-gradient(90deg, rgba(218, 165, 32, 0.1) 0px, transparent 1px, transparent 61.8px, rgba(218, 165, 32, 0.1) 61.8px)`
+          }} />
+          
+          {/* Vitruvian Circle Overlay */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-amber-500/5" 
+               style={{ transform: `translate(-50%, -50%) rotate(${scrollY * 0.05}deg)` }} />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[382px] h-[382px] rounded-full border border-amber-500/5" 
+               style={{ transform: `translate(-50%, -50%) rotate(-${scrollY * 0.08}deg)` }} />
+          
+          {/* Renaissance Glow Orbs */}
+          <div className="absolute top-20 left-20 w-[377px] h-[377px] bg-amber-500/10 rounded-full blur-3xl depth-layer-2" 
+               style={{ transform: `translateZ(${scrollY * 0.1}px)` }} />
+          <div className="absolute bottom-20 right-20 w-[377px] h-[377px] bg-blue-500/10 rounded-full blur-3xl depth-layer-2" 
+               style={{ transform: `translateZ(${scrollY * 0.15}px)` }} />
+        </div>
         
-        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <Link to="/showcase" className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium mb-8 hover:bg-amber-500/30 transition-colors">
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-4 depth-field">
+          {/* Technical Drawing Accent */}
+          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-10">
+            <Compass className="w-24 h-24 text-amber-400" style={{ transform: `rotate(${scrollY * 0.2}deg)` }} />
+          </div>
+          
+          <Link to="/showcase" className="inline-flex items-center gap-2 px-[21px] py-[13px] bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium mb-[34px] hover:bg-amber-500/30 transition-all duration-300 tech-border depth-layer-1 annotation" data-note="EXPLORE FEATURES">
             <Sparkles className="w-4 h-4" />
             See What Makes Us Different
             <ArrowRight className="w-4 h-4" />
           </Link>
           
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-golden-xl md:text-golden-2xl font-bold text-white mb-[21px] leading-tight depth-layer-2 relative">
+            {/* Technical Line Accent */}
+            <div className="absolute -left-[55px] top-1/2 transform -translate-y-1/2 hidden lg:block">
+              <Ruler className="w-[34px] h-[34px] text-amber-400/20" />
+            </div>
             Construction Management
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-[#B87333] to-amber-600 text-blueprint">
               Built for the Field
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-12">
+          <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto mb-[55px] readable-field depth-layer-1">
             Voice-controlled, offline-capable, and designed specifically for electrical contractors. 
-            Finally, software that works as hard as you do.
+            <br className="hidden md:block" />
+            <span className="text-[#DAA520]/60 font-medium">Finally, software that works as hard as you do.</span>
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-[21px] justify-center mb-[55px] depth-layer-1">
             <Link 
               to="/signup" 
-              className="group px-8 py-4 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-semibold transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+              className="group px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] btn-davinci touch-golden glow-renaissance relative overflow-hidden"
             >
-              Start Free Trial
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <span className="relative z-10">Start Free Trial</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" />
             </Link>
             <Link 
               to="/showcase" 
-              className="px-8 py-4 bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-xl font-semibold transition-all transform hover:scale-105"
+              className="px-[34px] py-[13px] bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-[8px] font-semibold transition-all transform hover:scale-105 tech-border touch-golden relative"
             >
-              Explore Features
+              <span className="relative z-10">Explore Features</span>
             </Link>
           </div>
           
-          <div className="flex flex-wrap gap-6 justify-center items-center text-sm text-slate-400">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              500+ Active Crews
+          <div className="flex flex-wrap gap-[34px] justify-center items-center text-sm text-slate-400 relative">
+            {/* Technical Gear Decoration */}
+            <div className="absolute -left-8 top-1/2 transform -translate-y-1/2 opacity-5">
+              <Cog className="w-16 h-16 text-amber-400" style={{ animation: 'gear-rotate 20s linear infinite' }} />
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              95% Field Adoption
+            
+            <div className="flex items-center gap-[8px] annotation" data-note="VERIFIED">
+              <div className="w-[8px] h-[8px] bg-green-400 rounded-full animate-pulse" />
+              <span className="text-golden-sm">500+ Active Crews</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              45 Min Saved Daily
+            <div className="flex items-center gap-[8px] annotation" data-note="MEASURED">
+              <div className="w-[8px] h-[8px] bg-green-400 rounded-full animate-pulse" />
+              <span className="text-golden-sm">95% Field Adoption</span>
+            </div>
+            <div className="flex items-center gap-[8px] annotation" data-note="CALCULATED">
+              <div className="w-[8px] h-[8px] bg-green-400 rounded-full animate-pulse" />
+              <span className="text-golden-sm">45 Min Saved Daily</span>
             </div>
           </div>
         </div>
