@@ -3,10 +3,11 @@ import {
   Activity, TrendingUp, TrendingDown, AlertTriangle, CheckCircle,
   Clock, Users, Truck, Zap, Shield, Package, Calendar, 
   BarChart3, ArrowUp, ArrowDown, Target, Gauge, Building2,
-  HardHat, Wrench, FileText, DollarSign, Timer, MapPin
+  HardHat, Wrench, FileText, DollarSign, Timer, MapPin, Compass, Ruler
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { Link } from 'react-router-dom';
+import '../../styles/davinci.css';
 
 interface MetricCard {
   title: string;
@@ -248,84 +249,92 @@ export const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="space-y-6 p-6">
-        <div className="skeleton h-20 rounded-2xl border border-slate-800 bg-slate-900/50" />
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="space-y-[34px] p-[34px]">
+        <div className="skeleton h-20 rounded-[21px] border border-amber-500/20 bg-slate-900/50" />
+        <div className="grid grid-cols-1 gap-[21px] md:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, idx) => (
-            <div key={idx} className="skeleton h-32 rounded-xl border border-slate-800 bg-slate-900/50" />
+            <div key={idx} className="skeleton h-32 rounded-[13px] border border-amber-500/20 bg-slate-900/50" />
           ))}
         </div>
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="skeleton h-64 rounded-xl border border-slate-800 bg-slate-900/50 lg:col-span-2" />
-          <div className="skeleton h-64 rounded-xl border border-slate-800 bg-slate-900/50" />
+        <div className="grid grid-cols-1 gap-[34px] lg:grid-cols-3">
+          <div className="skeleton h-64 rounded-[13px] border border-amber-500/20 bg-slate-900/50 lg:col-span-2" />
+          <div className="skeleton h-64 rounded-[13px] border border-amber-500/20 bg-slate-900/50" />
         </div>
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div className="skeleton h-56 rounded-xl border border-slate-800 bg-slate-900/50" />
-          <div className="skeleton h-56 rounded-xl border border-slate-800 bg-slate-900/50" />
+        <div className="grid grid-cols-1 gap-[34px] lg:grid-cols-2">
+          <div className="skeleton h-56 rounded-[13px] border border-amber-500/20 bg-slate-900/50" />
+          <div className="skeleton h-56 rounded-[13px] border border-amber-500/20 bg-slate-900/50" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-[34px] space-y-[34px]">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold on-surface">Construction dashboard</h1>
-          <p className="mt-1 on-surface-muted">Demo 138kV substation upgrade • {new Date().toLocaleDateString()}</p>
+      <div className="flex items-center justify-between relative">
+        {/* Technical Compass */}
+        <div className="absolute -right-8 -top-8 opacity-5">
+          <Compass className="w-[144px] h-[144px] text-amber-400" style={{ animation: 'gear-rotate 30s linear infinite' }} />
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="relative">
+          <div className="absolute -left-[55px] top-1/2 transform -translate-y-1/2 hidden lg:block opacity-10">
+            <Ruler className="w-[34px] h-[34px] text-amber-400" />
+          </div>
+          <h1 className="text-golden-xl font-bold text-white measurement-line">Construction Dashboard</h1>
+          <p className="mt-[8px] text-amber-400/60 technical-annotation" data-note="LIVE DATA">138kV substation upgrade • {new Date().toLocaleDateString()}</p>
+        </div>
+        <div className="flex items-center gap-[21px]">
           <Link
             to="/field"
-            className="btn btn-primary bg-amber-500 text-white hover:bg-amber-600"
+            className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] btn-davinci field-touch glow-renaissance"
           >
             <HardHat className="w-5 h-5" />
-            <span>Daily report</span>
+            <span>Daily Report</span>
           </Link>
           <Link
             to="/safety/briefing"
-            className="btn btn-secondary bg-green-500 text-white hover:bg-green-600"
+            className="px-[34px] py-[13px] bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] tech-border field-touch"
           >
             <Shield className="w-5 h-5" />
-            <span>Safety brief</span>
+            <span>Safety Brief</span>
           </Link>
         </div>
       </div>
 
       {/* Key Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {metrics.map((metric) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[21px]">
+        {metrics.map((metric, index) => (
           <div
             key={metric.title}
-            className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5 hover:bg-slate-800/70 transition-all"
+            className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] hover:border-amber-500/40 transition-all card-vitruvian tech-border depth-layer-1"
+            style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="on-surface-muted text-sm font-medium">{metric.title}</p>
-                <div className="flex items-baseline mt-2">
-                  <span className="text-3xl font-bold on-surface">{metric.value}</span>
+                <p className="text-sm font-medium text-amber-400/60 annotation" data-note={metric.title.toUpperCase().replace(' ', '-')}>{metric.title}</p>
+                <div className="flex items-baseline mt-[8px]">
+                  <span className="text-golden-base font-bold text-white">{metric.value}</span>
                   {metric.unit && (
-                    <span className="on-surface-muted text-sm ml-1">{metric.unit}</span>
+                    <span className="text-amber-400/60 text-sm ml-[5px]">{metric.unit}</span>
                   )}
                 </div>
-                <div className="flex items-center mt-3">
+                <div className="flex items-center mt-[13px]">
                   {metric.trend === 'up' ? (
-                    <ArrowUp className="w-4 h-4 text-green-500 mr-1" />
+                    <ArrowUp className="w-4 h-4 text-green-400 mr-[5px]" />
                   ) : metric.trend === 'down' ? (
-                    <ArrowDown className="w-4 h-4 text-red-500 mr-1" />
+                    <ArrowDown className="w-4 h-4 text-red-400 mr-[5px]" />
                   ) : (
-                    <div className="w-4 h-4 bg-slate-600 rounded-full mr-1" />
+                    <div className="w-4 h-4 bg-amber-500/20 rounded-full mr-[5px]" />
                   )}
                   <span className={`text-sm ${
-                    metric.trend === 'up' ? 'text-green-500' : 
-                    metric.trend === 'down' ? 'text-red-500' : 'text-slate-500'
+                    metric.trend === 'up' ? 'text-green-400' : 
+                    metric.trend === 'down' ? 'text-red-400' : 'text-amber-400/60'
                   }`}>
                     {Math.abs(metric.change)}% from yesterday
                   </span>
                 </div>
               </div>
-              <div className={`p-3 rounded-lg bg-slate-700/50 ${metric.color}`}>
+              <div className={`p-[13px] rounded-[8px] bg-slate-800/50 ${metric.color.replace('text-', 'text-amber-400 bg-').replace('500', '500/20')}`}>
                 <metric.icon className="w-6 h-6" />
               </div>
             </div>
@@ -333,49 +342,49 @@ export const Dashboard: React.FC = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-[34px]">
         {/* Project Timeline */}
-        <div className="lg:col-span-2 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-white flex items-center">
-              <Calendar className="mr-2 w-5 h-5 text-amber-500" />
-              Project timeline
+        <div className="lg:col-span-2 bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] card-engineering relative">
+          <div className="flex items-center justify-between mb-[34px]">
+            <h2 className="text-golden-base font-bold text-white flex items-center measurement-line">
+              <Calendar className="mr-[8px] w-5 h-5 text-amber-400" />
+              Project Timeline
             </h2>
-            <Link to="/schedule" className="text-sm font-medium text-amber-500 hover:text-amber-400">
+            <Link to="/schedule" className="text-sm font-medium text-amber-400 hover:text-amber-300 technical-annotation" data-note="SCHEDULE">
               View full schedule →
             </Link>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-[21px]">
             {/* Timeline Progress Bar */}
             <div className="relative">
-              <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full" style={{ width: '67%' }}></div>
+              <div className="h-[8px] bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full breathe" style={{ width: '67%' }}></div>
               </div>
-              <div className="flex justify-between mt-2">
-                <span className="text-xs on-surface-muted">Start: Jan 15, 2025</span>
-                <span className="text-xs font-bold text-amber-500">Current: 67% Complete</span>
-                <span className="text-xs on-surface-muted">End: Jul 15, 2025</span>
+              <div className="flex justify-between mt-[8px]">
+                <span className="text-xs text-amber-400/60">Start: Jan 15, 2025</span>
+                <span className="text-xs font-bold text-amber-400">Current: 67% Complete</span>
+                <span className="text-xs text-amber-400/60">End: Jul 15, 2025</span>
               </div>
             </div>
 
             {/* Upcoming Milestones */}
-            <div className="space-y-3 mt-6">
-              <h3 className="text-sm font-medium on-surface-muted uppercase tracking-wider">Upcoming Milestones</h3>
+            <div className="space-y-[13px] mt-[34px]">
+              <h3 className="text-sm font-medium text-amber-400 uppercase tracking-wider technical-annotation" data-note="MILESTONES">Upcoming Milestones</h3>
               {[
                 { name: 'Foundation Complete', date: 'Nov 15', status: 'on-track' },
                 { name: 'Equipment Delivery', date: 'Nov 20', status: 'at-risk' },
                 { name: 'Primary Testing', date: 'Dec 1', status: 'on-track' },
                 { name: 'Energization', date: 'Dec 15', status: 'on-track' }
               ].map((milestone) => (
-                <div key={milestone.name} className="flex items-center justify-between py-2 px-3 bg-slate-700/30 rounded-lg">
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-2 h-2 rounded-full ${
-                      milestone.status === 'on-track' ? 'bg-green-500' : 'bg-orange-500'
+                <div key={milestone.name} className="flex items-center justify-between py-[13px] px-[21px] bg-slate-800/30 rounded-[8px] hover:bg-slate-800/50 transition-all tech-border">
+                  <div className="flex items-center gap-[13px]">
+                    <div className={`w-[8px] h-[8px] rounded-full ${
+                      milestone.status === 'on-track' ? 'bg-green-400' : 'bg-orange-400'
                     }`}></div>
-                    <span className="on-surface font-medium">{milestone.name}</span>
+                    <span className="text-white font-medium field-readable">{milestone.name}</span>
                   </div>
-                  <span className="text-sm on-surface-muted">{milestone.date}</span>
+                  <span className="text-sm text-amber-400/60 annotation" data-note="DUE">{milestone.date}</span>
                 </div>
               ))}
             </div>
@@ -383,25 +392,29 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold on-surface flex items-center">
-              <Activity className="w-5 h-5 mr-2 text-amber-500" />
+        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] card-vitruvian relative">
+          {/* Technical Compass */}
+          <div className="absolute top-[21px] right-[21px] opacity-5">
+            <Compass className="w-[55px] h-[55px] text-amber-400" style={{ animation: 'gear-rotate 45s linear infinite reverse' }} />
+          </div>
+          <div className="flex items-center justify-between mb-[34px]">
+            <h2 className="text-golden-base font-bold text-white flex items-center measurement-line">
+              <Activity className="w-5 h-5 mr-[8px] text-amber-400" />
               Recent Activity
             </h2>
-            <button className="text-amber-500 hover:text-amber-400 text-sm font-medium">
+            <button className="text-amber-400 hover:text-amber-300 text-sm font-medium technical-annotation" data-note="LIVE">
               View All →
             </button>
           </div>
 
-          <div className="space-y-3">
-            {activities.map((activity) => {
+          <div className="space-y-[13px]">
+            {activities.map((activity, index) => {
               const Icon = getActivityIcon(activity.type);
-              const colorClass = getActivityColor(activity.type);
+              const colorClass = getActivityColor(activity.type).replace('bg-', 'bg-amber-500/20 text-amber-400');
               
               return (
-                <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-slate-700/30 transition-colors cursor-pointer">
-                  <div className={`p-2 rounded-lg ${colorClass}`}>
+                <div key={activity.id} className="flex items-start gap-[13px] p-[13px] rounded-[8px] hover:bg-slate-800/30 transition-all cursor-pointer tech-border depth-layer-1" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <div className={`p-[8px] rounded-[8px] ${colorClass}`}>
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -421,42 +434,51 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Quick Actions Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-[21px]">
         {[
-          { label: 'Start Daily Report', icon: FileText, color: 'bg-blue-500', path: '/field' },
-          { label: 'Equipment Check', icon: Wrench, color: 'bg-purple-500', path: '/equipment' },
-          { label: 'Submit RFI', icon: FileText, color: 'bg-cyan-500', path: '/documents' },
-          { label: 'View 3D Map', icon: MapPin, color: 'bg-emerald-500', path: '/map' }
-        ].map((action) => (
+          { label: 'Start Daily Report', icon: FileText, color: 'text-amber-400', path: '/field' },
+          { label: 'Equipment Check', icon: Wrench, color: 'text-amber-400', path: '/equipment' },
+          { label: 'Submit RFI', icon: FileText, color: 'text-amber-400', path: '/documents' },
+          { label: 'View 3D Map', icon: MapPin, color: 'text-amber-400', path: '/map' }
+        ].map((action, index) => (
           <Link
             key={action.label}
             to={action.path}
-            className="group relative overflow-hidden bg-slate-800/50 hover:bg-slate-800/70 border border-slate-700 rounded-xl p-4 transition-all"
+            className="group relative overflow-hidden bg-slate-900/80 hover:bg-slate-800/80 border border-amber-500/20 rounded-[13px] p-[21px] transition-all card-vitruvian tech-border hover:scale-[1.02] hover:border-amber-500/40 depth-layer-1"
+            style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <div className={`absolute inset-0 ${action.color} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
+            <div className="absolute inset-0 bg-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">
-              <action.icon className={`w-8 h-8 ${action.color.replace('bg-', 'text-')} mb-3`} />
-              <p className="text-white font-medium">{action.label}</p>
-              <p className="text-slate-400 text-xs mt-1">Quick access →</p>
+              <action.icon className={`w-8 h-8 ${action.color} mb-[13px]`} />
+              <p className="text-white font-medium field-readable">{action.label}</p>
+              <p className="text-amber-400/60 text-xs mt-[5px] annotation" data-note="QUICK">Quick access →</p>
             </div>
           </Link>
         ))}
       </div>
 
       {/* Footer Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-slate-700">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-[21px] pt-[34px] border-t border-amber-500/20">
         {[
           { label: 'Total Man Hours', value: '12,456', icon: Timer },
           { label: 'Structures Set', value: '45/62', icon: Building2 },
           { label: 'Cable Pulled', value: '18.5 km', icon: Zap },
           { label: 'Tests Complete', value: '89%', icon: CheckCircle }
-        ].map((stat) => (
-          <div key={stat.label} className="text-center">
-            <stat.icon className="w-8 h-8 text-slate-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-white">{stat.value}</p>
-            <p className="text-sm text-slate-400">{stat.label}</p>
+        ].map((stat, index) => (
+          <div key={stat.label} className="text-center vitruvian-rect" style={{ animationDelay: `${index * 0.15}s` }}>
+            <stat.icon className="w-8 h-8 text-amber-400/60 mx-auto mb-[8px]" />
+            <p className="text-golden-base font-bold text-white">{stat.value}</p>
+            <p className="text-sm text-amber-400/60 technical-annotation" data-note={stat.label.toUpperCase().replace(' ', '-')}>{stat.label}</p>
           </div>
         ))}
+      </div>
+
+      {/* Leonardo Quote */}
+      <div className="text-center opacity-30 mt-[89px]">
+        <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">
+          "Knowing is not enough; we must apply. Being willing is not enough; we must do."
+        </p>
+        <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
       </div>
     </div>
   );

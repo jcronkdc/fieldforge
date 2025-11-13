@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, AlertTriangle, Activity, FileText, Users, Calendar, TrendingUp, Clock } from 'lucide-react';
+import { Shield, AlertTriangle, Activity, FileText, Users, Calendar, TrendingUp, Clock, Compass, Zap } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { format, differenceInDays } from 'date-fns';
+import '../../styles/davinci.css';
 
 interface SafetyMetrics {
   daysWithoutIncident: number;
@@ -186,16 +187,23 @@ export const SafetyHub: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-[34px] max-w-7xl mx-auto space-y-[34px]">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Safety Hub</h1>
-          <p className="text-gray-400">Monitor safety performance and manage incidents</p>
+      <div className="flex items-center justify-between relative">
+        {/* Technical Compass */}
+        <div className="absolute -left-8 -top-8 opacity-5">
+          <Shield className="w-[144px] h-[144px] text-amber-400" style={{ animation: 'gear-rotate 60s linear infinite' }} />
+        </div>
+        <div className="relative">
+          <div className="absolute -left-[55px] top-1/2 transform -translate-y-1/2 hidden lg:block opacity-10">
+            <Zap className="w-[34px] h-[34px] text-amber-400" />
+          </div>
+          <h1 className="text-golden-xl font-bold text-white mb-[8px] measurement-line">Safety Hub</h1>
+          <p className="text-amber-400/60 technical-annotation" data-note="PROTECTION">Monitor safety performance and manage incidents</p>
         </div>
         <button
           onClick={() => setShowReportForm(true)}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium flex items-center gap-2 transition-colors"
+          className="px-[34px] py-[13px] bg-red-600 hover:bg-red-700 text-white rounded-[8px] font-semibold flex items-center gap-[8px] transition-all btn-davinci field-touch glow-renaissance"
         >
           <AlertTriangle className="w-4 h-4" />
           Report Incident
@@ -203,30 +211,30 @@ export const SafetyHub: React.FC = () => {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[21px]">
+        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian tech-border hover:border-amber-500/40 transition-all depth-layer-1">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-400">Days Without Incident</p>
-              <p className="text-3xl font-bold text-white mt-1">{metrics.daysWithoutIncident}</p>
-              <p className="text-xs text-green-500 mt-2">Target: 365 days</p>
+              <p className="text-sm text-amber-400/60 annotation" data-note="STREAK">Days Without Incident</p>
+              <p className="text-golden-base font-bold text-white mt-[8px]">{metrics.daysWithoutIncident}</p>
+              <p className="text-xs text-green-400 mt-[8px]">Target: 365 days</p>
             </div>
-            <Shield className="w-10 h-10 text-green-500" />
+            <Shield className="w-10 h-10 text-green-400" />
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5">
+        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian tech-border hover:border-amber-500/40 transition-all depth-layer-1">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-400">Safety Score</p>
-              <p className="text-3xl font-bold text-white mt-1">{metrics.safetyScore}%</p>
-              <div className="flex items-center mt-2">
-                {metrics.monthlyTrend === 'up' && <TrendingUp className="w-4 h-4 text-green-500 mr-1" />}
-                {metrics.monthlyTrend === 'down' && <TrendingUp className="w-4 h-4 text-red-500 mr-1 rotate-180" />}
+              <p className="text-sm text-amber-400/60 annotation" data-note="SCORE">Safety Score</p>
+              <p className="text-golden-base font-bold text-white mt-[8px]">{metrics.safetyScore}%</p>
+              <div className="flex items-center mt-[8px]">
+                {metrics.monthlyTrend === 'up' && <TrendingUp className="w-4 h-4 text-green-400 mr-[5px]" />}
+                {metrics.monthlyTrend === 'down' && <TrendingUp className="w-4 h-4 text-red-400 mr-[5px] rotate-180" />}
                 <span className={`text-xs ${
-                  metrics.monthlyTrend === 'up' ? 'text-green-500' : 
-                  metrics.monthlyTrend === 'down' ? 'text-red-500' : 
-                  'text-gray-500'
+                  metrics.monthlyTrend === 'up' ? 'text-green-400' : 
+                  metrics.monthlyTrend === 'down' ? 'text-red-400' : 
+                  'text-amber-400/60'
                 }`}>
                   {metrics.monthlyTrend === 'up' ? 'Improving' : 
                    metrics.monthlyTrend === 'down' ? 'Declining' : 
@@ -234,106 +242,111 @@ export const SafetyHub: React.FC = () => {
                 </span>
               </div>
             </div>
-            <Activity className="w-10 h-10 text-amber-500" />
+            <Activity className="w-10 h-10 text-amber-400" />
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5">
+        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian tech-border hover:border-amber-500/40 transition-all depth-layer-1">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-400">Open Investigations</p>
-              <p className="text-3xl font-bold text-white mt-1">{metrics.openInvestigations}</p>
-              <p className="text-xs text-yellow-500 mt-2">{metrics.nearMisses} near misses</p>
+              <p className="text-sm text-amber-400/60 annotation" data-note="ACTIVE">Open Investigations</p>
+              <p className="text-golden-base font-bold text-white mt-[8px]">{metrics.openInvestigations}</p>
+              <p className="text-xs text-amber-400 mt-[8px]">{metrics.nearMisses} near misses</p>
             </div>
-            <AlertTriangle className="w-10 h-10 text-yellow-500" />
+            <AlertTriangle className="w-10 h-10 text-amber-400" />
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5">
+        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian tech-border hover:border-amber-500/40 transition-all depth-layer-1">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-400">Active Permits</p>
-              <p className="text-3xl font-bold text-white mt-1">{metrics.activePermits}</p>
-              <p className="text-xs text-orange-500 mt-2">{metrics.trainingsExpiring} trainings expiring</p>
+              <p className="text-sm text-amber-400/60 annotation" data-note="PERMITS">Active Permits</p>
+              <p className="text-golden-base font-bold text-white mt-[8px]">{metrics.activePermits}</p>
+              <p className="text-xs text-orange-400 mt-[8px]">{metrics.trainingsExpiring} trainings expiring</p>
             </div>
-            <FileText className="w-10 h-10 text-blue-500" />
+            <FileText className="w-10 h-10 text-amber-400" />
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <button className="p-4 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl hover:bg-slate-700/50 transition-colors text-left">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-500/10 rounded-lg">
-              <FileText className="w-6 h-6 text-blue-500" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-[21px]">
+        <button className="p-[21px] bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] hover:bg-slate-800/80 hover:border-amber-500/40 transition-all text-left card-vitruvian tech-border hover:scale-[1.02] depth-layer-1">
+          <div className="flex items-center gap-[13px]">
+            <div className="p-[13px] bg-amber-500/20 rounded-[8px]">
+              <FileText className="w-6 h-6 text-amber-400" />
             </div>
             <div>
-              <h3 className="font-medium text-white">Request Permit</h3>
-              <p className="text-sm text-gray-400">Hot work, confined space, etc.</p>
+              <h3 className="font-medium text-white field-readable">Request Permit</h3>
+              <p className="text-sm text-amber-400/60 annotation" data-note="SAFETY">Hot work, confined space, etc.</p>
             </div>
           </div>
         </button>
 
-        <button className="p-4 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl hover:bg-slate-700/50 transition-colors text-left">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-green-500/10 rounded-lg">
-              <Users className="w-6 h-6 text-green-500" />
+        <button className="p-[21px] bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] hover:bg-slate-800/80 hover:border-amber-500/40 transition-all text-left card-vitruvian tech-border hover:scale-[1.02] depth-layer-1">
+          <div className="flex items-center gap-[13px]">
+            <div className="p-[13px] bg-green-400/20 rounded-[8px]">
+              <Users className="w-6 h-6 text-green-400" />
             </div>
             <div>
-              <h3 className="font-medium text-white">Safety Training</h3>
-              <p className="text-sm text-gray-400">View and complete trainings</p>
+              <h3 className="font-medium text-white field-readable">Safety Training</h3>
+              <p className="text-sm text-amber-400/60 annotation" data-note="LEARN">View and complete trainings</p>
             </div>
           </div>
         </button>
 
-        <button className="p-4 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl hover:bg-slate-700/50 transition-colors text-left">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-amber-500/10 rounded-lg">
-              <Calendar className="w-6 h-6 text-amber-500" />
+        <button className="p-[21px] bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] hover:bg-slate-800/80 hover:border-amber-500/40 transition-all text-left card-vitruvian tech-border hover:scale-[1.02] depth-layer-1">
+          <div className="flex items-center gap-[13px]">
+            <div className="p-[13px] bg-amber-500/20 rounded-[8px]">
+              <Calendar className="w-6 h-6 text-amber-400" />
             </div>
             <div>
-              <h3 className="font-medium text-white">Toolbox Talks</h3>
-              <p className="text-sm text-gray-400">Schedule daily briefings</p>
+              <h3 className="font-medium text-white field-readable">Toolbox Talks</h3>
+              <p className="text-sm text-amber-400/60 annotation" data-note="BRIEF">Schedule daily briefings</p>
             </div>
           </div>
         </button>
       </div>
 
       {/* Recent Incidents */}
-      <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
-        <h3 className="text-lg font-medium text-white mb-4">Recent Incidents</h3>
+      <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] card-engineering relative">
+        {/* Technical Compass */}
+        <div className="absolute top-[21px] right-[21px] opacity-5">
+          <Compass className="w-[55px] h-[55px] text-amber-400" style={{ animation: 'gear-rotate 50s linear infinite reverse' }} />
+        </div>
+        <h3 className="text-golden-base font-medium text-white mb-[21px] measurement-line">Recent Incidents</h3>
         
         {loading && recentIncidents.length === 0 ? (
-          <div className="text-center py-8 text-gray-400">Loading incidents...</div>
+          <div className="text-center py-[89px] text-amber-400/60">Loading incidents...</div>
         ) : recentIncidents.length === 0 ? (
-          <div className="text-center py-8">
-            <Shield className="w-12 h-12 text-green-500 mx-auto mb-3" />
-            <p className="text-gray-400">No recent incidents reported</p>
-            <p className="text-sm text-gray-500 mt-1">Keep up the great work!</p>
+          <div className="text-center py-[89px]">
+            <Shield className="w-[89px] h-[89px] text-green-400 mx-auto mb-[21px] opacity-30" />
+            <p className="text-amber-400/60">No recent incidents reported</p>
+            <p className="text-sm text-green-400 mt-[8px]">Keep up the great work!</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {recentIncidents.map(incident => (
+          <div className="space-y-[13px]">
+            {recentIncidents.map((incident, index) => (
               <div 
                 key={incident.id}
-                className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700/70 transition-colors cursor-pointer"
+                className="flex items-center justify-between p-[21px] bg-slate-800/30 rounded-[13px] hover:bg-slate-800/50 transition-all cursor-pointer tech-border depth-layer-1"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="flex items-center gap-4">
-                  <div className={`px-2 py-1 rounded text-xs font-medium ${getSeverityColor(incident.severity)}`}>
+                <div className="flex items-center gap-[21px]">
+                  <div className={`px-[8px] py-[5px] rounded-[5px] text-xs font-medium ${getSeverityColor(incident.severity).replace('bg-', 'bg-amber-500/20 text-')}`}>
                     {incident.severity.toUpperCase()}
                   </div>
                   <div>
-                    <p className="text-white font-medium">{incident.incident_type}</p>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-white font-medium field-readable">{incident.incident_type}</p>
+                    <p className="text-sm text-amber-400/60 mt-[5px]">
                       {incident.project?.name} • {format(new Date(incident.incident_date), 'MMM d, yyyy')}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className={`px-2 py-1 rounded text-xs font-medium ${
-                    incident.status === 'open' ? 'bg-yellow-500/10 text-yellow-500' :
-                    incident.status === 'investigating' ? 'bg-blue-500/10 text-blue-500' :
+                <div className="flex items-center gap-[13px]">
+                  <span className={`px-[8px] py-[5px] rounded-[5px] text-xs font-medium ${
+                    incident.status === 'open' ? 'bg-amber-500/20 text-amber-400' :
+                    incident.status === 'investigating' ? 'bg-blue-500/20 text-blue-400' :
                     'bg-green-500/10 text-green-500'
                   }`}>
                     {incident.status}
@@ -474,6 +487,14 @@ export const SafetyHub: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Leonardo Quote */}
+      <div className="text-center opacity-30 mt-[89px]">
+        <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">
+          "The human foot is a masterpiece of engineering and a work of art"
+        </p>
+        <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+      </div>
     </div>
   );
 };
