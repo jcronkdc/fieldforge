@@ -80,7 +80,8 @@ export { EnvironmentalCompliance } from './environmental/EnvironmentalCompliance
 // Communication
 // TeamMessaging is now a real component - see ./messaging/TeamMessaging.tsx
 export { TeamMessaging } from './messaging/TeamMessaging';
-export const EmergencyAlerts = () => <PlaceholderPage title="Emergency Alerts" icon={AlertTriangle} description="Emergency broadcast system" />;
+// EmergencyAlerts is now a real component - see ./emergency/EmergencyAlerts.tsx
+export { EmergencyAlerts } from './emergency/EmergencyAlerts';
 
 // 3D Visualization
 export const ProjectMap3D = () => <PlaceholderPage title="3D Project Map" icon={Map} description="Interactive 3D project visualization" />;

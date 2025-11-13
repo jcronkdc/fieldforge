@@ -29,6 +29,7 @@ import { createDrawingRouter } from "./construction/drawings/drawingRoutes.js";
 import { createEquipmentTestingRouter } from "./construction/equipment/equipmentTestingRoutes.js";
 import { createLeadRouter } from "./routes/leadRoutes.js";
 import { createEnvironmentalRouter } from "./construction/environmental/environmentalRoutes.js";
+import { createEmergencyRouter } from "./construction/emergency/emergencyRoutes.js";
 import { createSubmittalsRouter } from "./routes/submittalsRoutes.js";
 import { createOutagesRouter } from "./routes/outagesRoutes.js";
 
@@ -146,6 +147,9 @@ app.use("/api/receipts", createReceiptRouter());
 
 // Environmental Compliance - MONITORING & REGULATORY COMPLIANCE ✅
 app.use("/api/environmental", createEnvironmentalRouter());
+
+// Emergency Alert System - CRITICAL SAFETY BROADCASTS ✅
+app.use("/api/emergency", createEmergencyRouter());
 
 // Feedback endpoint (keep this - useful for any platform)
 app.use("/api/feedback", createFeedbackRouter());
