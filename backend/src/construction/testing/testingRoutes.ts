@@ -9,8 +9,8 @@ export function createTestingRouter(): Router {
   // Apply authentication to all routes
   router.use(authenticateRequest);
 
-  // Get equipment tests
-  router.get('/tests', async (req: Request, res: Response) => {
+  // Get equipment tests (main endpoint)
+  router.get('/', async (req: Request, res: Response) => {
     try {
       const companyId = req.user?.company_id;
       const { equipment_id, test_type, status, start_date, end_date } = req.query;

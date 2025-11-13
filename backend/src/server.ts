@@ -25,6 +25,8 @@ import { createInventoryRouter } from "./construction/inventory/inventoryRoutes.
 import { createReceiptRouter } from "./construction/receipts/receiptRoutes.js";
 import { createOperationsRouter } from "./construction/operations/operationsRoutes.js";
 import { createTestingRouter } from "./construction/testing/testingRoutes.js";
+import { createDrawingRouter } from "./construction/drawings/drawingRoutes.js";
+import { createEquipmentTestingRouter } from "./construction/equipment/equipmentTestingRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -96,6 +98,9 @@ app.use("/api/projects", createProjectRouter());
 // Equipment Management  
 app.use("/api/equipment", createEquipmentRouter());
 
+// Equipment Testing - DIAGNOSTICS & COMPLIANCE ✅
+app.use("/api/equipment/testing", createEquipmentTestingRouter());
+
 // Safety Management - COMPLETE E2E PATHWAY ✅
 app.use("/api/safety", createSafetyRouter());
 
@@ -110,6 +115,9 @@ app.use("/api/qaqc", createQAQCRouter());
 
 // Document Management - UPLOAD/DOWNLOAD/SHARE ✅
 app.use("/api/documents", createDocumentRouter());
+
+// Drawing Viewer - CAD/PDF WITH ANNOTATIONS ✅
+app.use("/api/documents/drawings", createDrawingRouter());
 
 // Project Scheduling - GANTT CHARTS & RESOURCE MGMT ✅
 app.use("/api/scheduling", createSchedulingRouter());
