@@ -6,7 +6,8 @@ import {
   LayoutDashboard, HardHat, Shield, Package, ClipboardCheck,
   FileText, Calendar, Cloud, MessageSquare, Map, Brain,
   Settings, LogOut, Menu, X, Bell, Zap, Users, AlertTriangle,
-  Activity, Wrench, Truck, Building2, Radio, ChevronDown, Sun, Moon
+  Activity, Wrench, Truck, Building2, Radio, ChevronDown, Sun, Moon,
+  DollarSign, Phone
 } from 'lucide-react';
 import { PushNotifications } from '../notifications/PushNotifications';
 import { NotificationCenter } from '../notifications/NotificationCenter';
@@ -266,6 +267,24 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
             </div>
           ))}
         </nav>
+
+        {/* Business Links */}
+        <div className="border-t border-amber-500/20 p-4">
+          <Link
+            to="/pricing"
+            className="flex items-center space-x-3 px-3 py-2 rounded-[8px] text-amber-400/80 hover:bg-amber-500/10 hover:text-amber-400 transition-all mb-1"
+          >
+            <DollarSign className="w-5 h-5 text-amber-500/60" />
+            <span className="font-medium field-readable text-base">Pricing</span>
+          </Link>
+          <Link
+            to="/contact"
+            className="flex items-center space-x-3 px-3 py-2 rounded-[8px] text-amber-400/80 hover:bg-amber-500/10 hover:text-amber-400 transition-all"
+          >
+            <Phone className="w-5 h-5 text-amber-500/60" />
+            <span className="font-medium field-readable text-base">Contact Sales</span>
+          </Link>
+        </div>
 
         {/* User Section */}
         <div className="absolute bottom-0 left-0 right-0 border-t border-amber-500/20 bg-slate-900/95 p-4">

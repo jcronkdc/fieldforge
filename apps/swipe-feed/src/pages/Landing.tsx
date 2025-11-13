@@ -102,6 +102,12 @@ export const Landing: React.FC = () => {
             >
               <span className="relative z-10">Explore Features</span>
             </Link>
+            <Link 
+              to="/contact" 
+              className="px-[34px] py-[13px] border-2 border-amber-500/30 hover:border-amber-400 text-amber-300 hover:bg-amber-500/5 rounded-[8px] font-semibold transition-all transform hover:scale-105 tech-border touch-golden relative"
+            >
+              <span className="relative z-10">Request Demo</span>
+            </Link>
           </div>
           
           <div className="flex flex-wrap gap-[34px] justify-center items-center text-sm text-slate-400 relative mb-[55px]">
