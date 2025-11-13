@@ -23,6 +23,7 @@ import { createSchedulingRouter } from "./construction/scheduling/schedulingRout
 import { createReportingRouter } from "./construction/reporting/reportingRoutes.js";
 import { createInventoryRouter } from "./construction/inventory/inventoryRoutes.js";
 import { createReceiptRouter } from "./construction/receipts/receiptRoutes.js";
+import { createOperationsRouter } from "./construction/operations/operationsRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -111,6 +112,9 @@ app.use("/api/documents", createDocumentRouter());
 
 // Project Scheduling - GANTT CHARTS & RESOURCE MGMT ✅
 app.use("/api/scheduling", createSchedulingRouter());
+
+// Daily Operations - FIELD REPORTS & PRODUCTIVITY ✅
+app.use("/api/operations", createOperationsRouter());
 
 // Reporting System - PDF GENERATION & DASHBOARDS ✅
 app.use("/api/reporting", createReportingRouter());

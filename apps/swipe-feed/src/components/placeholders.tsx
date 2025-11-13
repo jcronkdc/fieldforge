@@ -18,11 +18,14 @@ const PlaceholderPage: React.FC<{ title: string; icon: React.ElementType; descri
 );
 
 // Dashboard Components
-export const ProjectMetrics = () => <PlaceholderPage title="Project Metrics" icon={Activity} description="Detailed project performance analytics" />;
-export const SafetyMetrics = () => <PlaceholderPage title="Safety Metrics" icon={Shield} description="Safety performance and compliance tracking" />;
+// ProjectMetrics is now a real component - see ./analytics/ProjectMetrics.tsx
+export { ProjectMetrics } from './analytics/ProjectMetrics';
+// SafetyMetrics is now a real component - see ./analytics/SafetyMetrics.tsx
+export { SafetyMetrics } from './analytics/SafetyMetrics';
 
 // Field Operations
-export const DailyOperations = () => <PlaceholderPage title="Daily Operations" icon={HardHat} description="Manage daily field activities and reports" />;
+// DailyOperations is now a real component - see ./fieldops/DailyOperations.tsx
+export { DailyOperations } from './fieldops/DailyOperations';
 // CrewManagement is now a real component - see ./crew/CrewManagement.tsx
 export { CrewManagement } from './crew/CrewManagement';
 // TimeTracking is now a real component - see ./time/TimeTracking.tsx
@@ -43,11 +46,13 @@ export { PermitManagement } from './safety/PermitManagement';
 export { EquipmentHub } from './equipment/EquipmentHub';
 // MaterialInventory is now a real component - see ./inventory/MaterialInventory.tsx
 export { MaterialInventory } from './inventory/MaterialInventory';
-export const EquipmentMaintenance = () => <PlaceholderPage title="Equipment Maintenance" icon={Wrench} description="Schedule and track maintenance" />;
+// EquipmentMaintenance is now a real component - see ./equipment/EquipmentMaintenance.tsx
+export { EquipmentMaintenance } from './equipment/EquipmentMaintenance';
 
 // QAQC - Now a real component with inspection tracking
 export { QAQCHub } from './qaqc/QAQCHub';
-export const InspectionManager = () => <PlaceholderPage title="Inspection Manager" icon={ClipboardCheck} description="Schedule and document inspections" />;
+// InspectionManager is now a real component - see ./qaqc/InspectionManager.tsx
+export { InspectionManager } from './qaqc/InspectionManager';
 export const TestingDashboard = () => <PlaceholderPage title="Testing Dashboard" icon={ClipboardCheck} description="Equipment testing and results" />;
 
 // Documents - Now with real upload/download/share functionality
