@@ -15,7 +15,7 @@ import { LandingPageTest } from './pages/LandingPageTest';
 import { TestRouting } from './pages/TestRouting';
 import { TestRunner } from './pages/TestRunner';
 import { ShowcasePage } from './components/showcase/ShowcasePage';
-import { PricingPage } from './components/pricing/PricingPage';
+import { PricingPage } from './pages/PricingPage';
 import { ContactSales } from './components/contact/ContactSales';
 
 // Auth Components
@@ -60,11 +60,13 @@ import { InspectionManager } from './components/qaqc/InspectionManager';
 import { TestingDashboard } from './components/testing/TestingDashboard';
 import { DrawingViewer } from './components/documents/DrawingViewer';
 
+// Real Components
+import { SubmittalManager } from './components/submittals/SubmittalManager';
+import { OutageCoordination } from './components/outages/OutageCoordination';
+
 // Placeholder Components - TO BE REPLACED
 import {
   SafetyBriefing,
-  SubmittalManager,
-  OutageCoordination,
   EnvironmentalCompliance,
   TeamMessaging,
   EmergencyAlerts,
