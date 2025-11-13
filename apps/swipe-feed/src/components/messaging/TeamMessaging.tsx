@@ -61,9 +61,14 @@ export const TeamMessaging: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // New channel form
-  const [newChannel, setNewChannel] = useState({
+  const [newChannel, setNewChannel] = useState<{
+    name: string;
+    type: 'public' | 'private';
+    description: string;
+    is_emergency: boolean;
+  }>({
     name: '',
-    type: 'public' as const,
+    type: 'public',
     description: '',
     is_emergency: false
   });
@@ -390,14 +395,14 @@ export const TeamMessaging: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => toast.info('Voice calls coming soon!')}
+                  onClick={() => toast('Voice calls coming soon!')}
                   className="p-2 hover:bg-gray-100 rounded-lg"
                   title="Start Voice Call"
                 >
                   <Phone className="w-5 h-5 text-gray-600" />
                 </button>
                 <button
-                  onClick={() => toast.info('Video calls coming soon!')}
+                  onClick={() => toast('Video calls coming soon!')}
                   className="p-2 hover:bg-gray-100 rounded-lg"
                   title="Start Video Call"
                 >
@@ -477,7 +482,7 @@ export const TeamMessaging: React.FC = () => {
             <div className="flex gap-3">
               <button
                 type="button"
-                onClick={() => toast.info('File attachments coming soon!')}
+                onClick={() => toast('File attachments coming soon!')}
                 className="p-2 hover:bg-gray-100 rounded-lg"
               >
                 <Paperclip className="w-5 h-5 text-gray-600" />

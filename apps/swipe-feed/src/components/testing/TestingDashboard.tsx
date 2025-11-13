@@ -118,9 +118,9 @@ export const TestingDashboard: React.FC = () => {
   const generateMockMeasurements = (testType: string): Measurement[] => {
     const measurements: { [key: string]: Measurement[] } = {
       insulation: [
-        { parameter: 'Phase A-Ground', value: 1200, unit: 'MΩ', min_acceptable: 1000, max_acceptable: null, status: 'normal' },
-        { parameter: 'Phase B-Ground', value: 1150, unit: 'MΩ', min_acceptable: 1000, max_acceptable: null, status: 'normal' },
-        { parameter: 'Phase C-Ground', value: 950, unit: 'MΩ', min_acceptable: 1000, max_acceptable: null, status: 'warning' }
+        { parameter: 'Phase A-Ground', value: 1200, unit: 'MΩ', min_acceptable: 1000, status: 'normal' },
+        { parameter: 'Phase B-Ground', value: 1150, unit: 'MΩ', min_acceptable: 1000, status: 'normal' },
+        { parameter: 'Phase C-Ground', value: 950, unit: 'MΩ', min_acceptable: 1000, status: 'warning' }
       ],
       continuity: [
         { parameter: 'Circuit 1', value: 0.05, unit: 'Ω', min_acceptable: 0, max_acceptable: 0.1, status: 'normal' },

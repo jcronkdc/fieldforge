@@ -173,7 +173,7 @@ export const ThreeWeekLookahead: React.FC = () => {
       crew_type: activity.crew_type,
       location: activity.location,
       project_id: activity.project_id,
-      constraints: activity.constraints || []
+      constraints: [] as Constraint[]  // UI uses Constraint[], DB stores string[]
     });
     setShowForm(true);
   };
@@ -345,7 +345,7 @@ export const ThreeWeekLookahead: React.FC = () => {
               <AlertCircle className="w-5 h-5 text-red-500" />
             </div>
             <div className="text-2xl font-bold text-white">
-              {weekActivities.reduce((sum, a) => sum + (a.constraints?.filter(c => !c.resolved).length || 0), 0)}
+              {weekActivities.reduce((sum, a) => sum + (a.constraints?.length || 0), 0)}
             </div>
             <div className="text-sm text-slate-400">To resolve</div>
           </div>
@@ -403,10 +403,10 @@ export const ThreeWeekLookahead: React.FC = () => {
                             <span>{activity.crew_size} {activity.crew_type}</span>
                           </div>
                           
-                          {activity.constraints && activity.constraints.filter(c => !c.resolved).length > 0 && (
+                          {activity.constraints && activity.constraints.length > 0 && (
                             <div className="flex items-center gap-1 text-xs text-red-400 mt-1">
                               <AlertCircle className="w-3 h-3" />
-                              <span>{activity.constraints.filter(c => !c.resolved).length} constraints</span>
+                              <span>{activity.constraints.length} constraints</span>
                             </div>
                           )}
                         </div>

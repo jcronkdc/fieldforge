@@ -68,8 +68,7 @@ export const EquipmentHub: React.FC = () => {
       .from('equipment_inventory')
       .select(`
         *,
-        project:projects(name),
-        assigned_user:auth.users!assigned_to(raw_user_meta_data->full_name)
+        project:projects(name)
       `)
       .order('created_at', { ascending: false });
       
@@ -122,7 +121,7 @@ export const EquipmentHub: React.FC = () => {
         status: 'available',
         assigned_to: null,
         condition,
-        usage_hours: equipment.find(e => e.id === equipmentId)?.usage_hours + hours
+        usage_hours: (equipment.find(e => e.id === equipmentId)?.usage_hours || 0) + hours
       })
       .eq('id', equipmentId);
       

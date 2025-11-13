@@ -8,6 +8,7 @@ import { FuturisticToastContainer } from './components/common/FuturisticToast';
 import { FuturisticLoader } from './components/common/FuturisticLoader';
 import { KeyboardShortcutsModal, useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { logEnvironmentStatus } from './lib/env-validator';
+import type { Session } from '@supabase/supabase-js';
 import './styles/animations.css';
 import './styles/ai-animations.css';
 import './styles/futuristic.css';
@@ -138,8 +139,8 @@ function AppSafe() {
             </button>
             <button
               onClick={() => {
-                setError(null);
-                setLoading(false);
+                // Error state is managed by useRobustAuth
+                window.location.reload();
               }}
               className="w-full px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors"
             >
