@@ -1,8 +1,8 @@
 {
   "framework": null,
-  "buildCommand": "cd apps/swipe-feed && npm install && npm run build && cd ../../backend && npm install && npm run build",
+  "buildCommand": "cd apps/swipe-feed && npm install --production=false && npm run build && cd ../../backend && npm install --production=false && npm run build",
   "outputDirectory": "apps/swipe-feed/dist",
-  "installCommand": "cd backend && npm install && cd ../apps/swipe-feed && npm install",
+  "installCommand": "cd backend && npm install && cd ../apps/swipe-feed && npm install --production=false",
   "functions": {
     "api/[...path].ts": {
       "runtime": "@vercel/node@3.0.0",
