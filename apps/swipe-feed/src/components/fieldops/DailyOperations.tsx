@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, MapPin, CloudRain, Sun, Cloud, CheckCircle, AlertCircle, Activity, Camera, FileText, Truck, HardHat, Zap } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
 interface DailyReport {

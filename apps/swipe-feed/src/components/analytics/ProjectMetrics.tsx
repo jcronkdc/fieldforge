@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, TrendingUp, TrendingDown, BarChart3, PieChart, Clock, DollarSign, Users, Calendar, AlertCircle, CheckCircle, Zap } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
 interface ProjectData {

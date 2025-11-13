@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, FileText, Clock, CheckCircle, XCircle, AlertTriangle, Plus, Eye, Download } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
 interface Permit {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, AlertTriangle, TrendingUp, TrendingDown, Activity, Users, Clock, Calendar, Award, Target, Zap, BarChart3 } from 'lucide-react';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
 interface SafetyData {
