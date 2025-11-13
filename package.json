@@ -1,0 +1,20 @@
+{
+  "name": "fieldforge-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../apps/swipe-feed && npm install",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd apps/swipe-feed && npm run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd apps/swipe-feed && npm run dev\"",
+    "typecheck": "cd backend && npm run typecheck && cd ../apps/swipe-feed && npm run typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

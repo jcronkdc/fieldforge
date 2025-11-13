@@ -21,6 +21,7 @@ import { createQAQCRouter } from "./construction/qaqc/qaqcRoutes.js";
 import { createDocumentRouter } from "./construction/documents/documentRoutes.js";
 import { createSchedulingRouter } from "./construction/scheduling/schedulingRoutes.js";
 import { createReportingRouter } from "./construction/reporting/reportingRoutes.js";
+import { createInventoryRouter } from "./construction/inventory/inventoryRoutes.js";
 import { createReceiptRouter } from "./construction/receipts/receiptRoutes.js";
 
 /**
@@ -114,6 +115,9 @@ app.use("/api/scheduling", createSchedulingRouter());
 // Reporting System - PDF GENERATION & DASHBOARDS ✅
 app.use("/api/reporting", createReportingRouter());
 
+// Inventory Management - MATERIALS & STOCK TRACKING ✅
+app.use("/api/inventory", createInventoryRouter());
+
 // Receipt Management - EXPENSE TRACKING WITH APPROVAL ✅
 app.use("/api/receipts", createReceiptRouter());
 
@@ -126,9 +130,15 @@ app.use(errorHandler); // Handle all errors
 
 const port = Number(process.env.PORT ?? 4000);
 
-app.listen(port, () => {
-  console.log(`[fieldforge-api] Construction Platform API`);
-  console.log(`[fieldforge-api] listening on port ${port}`);
-  console.log(`[fieldforge-api] environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`[fieldforge-api] Ready for T&D/Substation field operations`);
-});
+// Only start the server if not running in Vercel environment
+if (!process.env.VERCEL && !process.env.NOW_BUILDER) {
+  app.listen(port, () => {
+    console.log(`[fieldforge-api] Construction Platform API`);
+    console.log(`[fieldforge-api] listening on port ${port}`);
+    console.log(`[fieldforge-api] environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`[fieldforge-api] Ready for T&D/Substation field operations`);
+  });
+}
+
+// Export the app for Vercel
+export default app;

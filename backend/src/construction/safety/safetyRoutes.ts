@@ -319,6 +319,183 @@ export function createSafetyRouter(): Router {
     }
   });
 
+  // ============================================================================
+  // WORK PERMIT MANAGEMENT ENDPOINTS
+  // ============================================================================
+
+  // GET work permits with filters
+  router.get('/permits', authenticateRequest, async (req: Request, res: Response) => {
+    try {
+      const companyId = req.user?.company_id || req.headers['x-company-id'];
+      const { status, project_id, type } = req.query;
+
+      let queryText = `
+        SELECT 
+          wp.*,
+          p.name as project_name,
+          cu.raw_user_meta_data->>'full_name' as creator_name,
+          au.raw_user_meta_data->>'full_name' as approver_name
+        FROM work_permits wp
+        LEFT JOIN projects p ON wp.project_id = p.id
+        LEFT JOIN auth.users cu ON wp.created_by = cu.id
+        LEFT JOIN auth.users au ON wp.approved_by = au.id
+        WHERE wp.company_id = $1
+      `;
+      
+      const params: any[] = [companyId];
+      let paramIndex = 2;
+
+      if (status && status !== 'all') {
+        queryText += ` AND wp.status = $${paramIndex}`;
+        params.push(status);
+        paramIndex++;
+      }
+
+      if (project_id) {
+        queryText += ` AND wp.project_id = $${paramIndex}`;
+        params.push(project_id);
+        paramIndex++;
+      }
+
+      if (type) {
+        queryText += ` AND wp.type = $${paramIndex}`;
+        params.push(type);
+        paramIndex++;
+      }
+
+      queryText += ` ORDER BY wp.created_at DESC`;
+
+      const result = await query(queryText, params);
+      res.json({ permits: result.rows });
+    } catch (error) {
+      console.error('[safety] Error fetching permits:', error);
+      res.status(500).json({ error: 'Failed to fetch work permits' });
+    }
+  });
+
+  // CREATE work permit
+  router.post('/permits', authenticateRequest, async (req: Request, res: Response) => {
+    try {
+      const userId = req.user?.id;
+      const companyId = req.user?.company_id || req.headers['x-company-id'];
+
+      const {
+        type,
+        project_id,
+        work_description,
+        hazards,
+        controls,
+        valid_start,
+        valid_until,
+        authorized_workers,
+        special_requirements
+      } = req.body;
+
+      // Validate required fields
+      if (!type || !work_description || !hazards || !controls || !valid_until) {
+        return res.status(400).json({ 
+          error: 'Missing required fields: type, work_description, hazards, controls, valid_until' 
+        });
+      }
+
+      const permitResult = await query(
+        `INSERT INTO work_permits
+         (type, project_id, work_description, hazards, controls,
+          valid_start, valid_until, created_by, authorized_workers, 
+          company_id, status, special_requirements)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'pending', $11)
+         RETURNING *`,
+        [type, project_id, work_description, hazards, controls,
+         valid_start || new Date(), valid_until, userId, 
+         authorized_workers || [], companyId, special_requirements]
+      );
+
+      await logAuditEvent({
+        action: 'work_permit_created',
+        user_id: userId!,
+        resource_type: 'work_permit',
+        resource_id: permitResult.rows[0].id,
+        ip_address: req.ip || '',
+        user_agent: req.headers['user-agent'] as string,
+        metadata: { type, project_id },
+        success: true
+      });
+
+      res.status(201).json(permitResult.rows[0]);
+    } catch (error) {
+      console.error('[safety] Error creating permit:', error);
+      res.status(500).json({ error: 'Failed to create work permit' });
+    }
+  });
+
+  // APPROVE work permit
+  router.put('/permits/:id/approve', authenticateRequest, async (req: Request, res: Response) => {
+    try {
+      const userId = req.user?.id;
+      const { id } = req.params;
+
+      const result = await query(
+        `UPDATE work_permits
+         SET status = 'active',
+             approved_by = $1,
+             approved_at = NOW(),
+             updated_at = NOW()
+         WHERE id = $2 AND status = 'pending'
+         RETURNING *`,
+        [userId, id]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ error: 'Permit not found or already approved' });
+      }
+
+      await logAuditEvent({
+        action: 'work_permit_approved',
+        user_id: userId!,
+        resource_type: 'work_permit',
+        resource_id: id,
+        ip_address: req.ip || '',
+        user_agent: req.headers['user-agent'] as string,
+        success: true
+      });
+
+      res.json(result.rows[0]);
+    } catch (error) {
+      console.error('[safety] Error approving permit:', error);
+      res.status(500).json({ error: 'Failed to approve work permit' });
+    }
+  });
+
+  // CANCEL work permit
+  router.put('/permits/:id/cancel', authenticateRequest, async (req: Request, res: Response) => {
+    try {
+      const userId = req.user?.id;
+      const { id } = req.params;
+      const { reason } = req.body;
+
+      const result = await query(
+        `UPDATE work_permits
+         SET status = 'cancelled',
+             cancellation_reason = $1,
+             cancelled_by = $2,
+             cancelled_at = NOW(),
+             updated_at = NOW()
+         WHERE id = $3 AND status IN ('pending', 'active')
+         RETURNING *`,
+        [reason || 'Cancelled by user', userId, id]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ error: 'Permit not found or already cancelled' });
+      }
+
+      res.json(result.rows[0]);
+    } catch (error) {
+      console.error('[safety] Error cancelling permit:', error);
+      res.status(500).json({ error: 'Failed to cancel work permit' });
+    }
+  });
+
   return router;
 }
 

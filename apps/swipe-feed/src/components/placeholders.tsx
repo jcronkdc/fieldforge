@@ -33,13 +33,16 @@ export { TimeTracking } from './time/TimeTracking';
 export { SafetyHub } from './safety/SafetyHub';
 // SafetyBriefing is now a real component - see ./safety/SafetyBriefing.tsx
 export { SafetyBriefing } from './safety/SafetyBriefing';
-export const IncidentReporting = () => <PlaceholderPage title="Incident Reporting" icon={AlertTriangle} description="Report and track safety incidents" />;
-export const PermitManagement = () => <PlaceholderPage title="Permit Management" icon={FileText} description="Manage work permits and clearances" />;
+// IncidentReporting is now a real component - see ./safety/IncidentReporting.tsx
+export { IncidentReporting } from './safety/IncidentReporting';
+// PermitManagement is now a real component - see ./safety/PermitManagement.tsx
+export { PermitManagement } from './safety/PermitManagement';
 
 // Equipment & Materials
 // EquipmentHub is now a real component - see ./equipment/EquipmentHub.tsx
 export { EquipmentHub } from './equipment/EquipmentHub';
-export const MaterialInventory = () => <PlaceholderPage title="Material Inventory" icon={Package} description="Track material stock and usage" />;
+// MaterialInventory is now a real component - see ./inventory/MaterialInventory.tsx
+export { MaterialInventory } from './inventory/MaterialInventory';
 export const EquipmentMaintenance = () => <PlaceholderPage title="Equipment Maintenance" icon={Wrench} description="Schedule and track maintenance" />;
 
 // QAQC - Now a real component with inspection tracking
@@ -53,8 +56,10 @@ export const DrawingViewer = () => <PlaceholderPage title="Drawing Viewer" icon=
 export const SubmittalManager = () => <PlaceholderPage title="Submittal Manager" icon={FileText} description="Manage project submittals" />;
 
 // Project Management
-export const ProjectSchedule = () => <PlaceholderPage title="Project Schedule" icon={Calendar} description="Master project schedule and milestones" />;
-export const ThreeWeekLookahead = () => <PlaceholderPage title="3-Week Lookahead" icon={Calendar} description="Short-term planning and coordination" />;
+// ProjectSchedule is now a real component - see ./projects/ProjectSchedule.tsx
+export { ProjectSchedule } from './projects/ProjectSchedule';
+// Scheduling - Real-time 3-week activity planning
+export { ThreeWeekLookahead } from './scheduling/ThreeWeekLookahead';
 export const OutageCoordination = () => <PlaceholderPage title="Outage Coordination" icon={Calendar} description="Plan and coordinate system outages" />;
 
 // Weather & Environmental

@@ -1,29 +1,23 @@
 {
-  "buildCommand": "cd apps/swipe-feed && npm run build",
+  "framework": null,
+  "buildCommand": "cd apps/swipe-feed && npm install && npm run build && cd ../../backend && npm install && npm run build",
   "outputDirectory": "apps/swipe-feed/dist",
-  "framework": "vite",
-  "installCommand": "npm install",
+  "installCommand": "cd backend && npm install && cd ../apps/swipe-feed && npm install",
   "functions": {
-    "backend/src/server.ts": {
+    "api/[...path].ts": {
       "runtime": "@vercel/node@3.0.0",
-      "maxDuration": 30
+      "maxDuration": 30,
+      "includeFiles": "backend/**"
     }
   },
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/backend/src/server.ts"
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
     },
     {
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "env": {
-    "VITE_SUPABASE_URL": "@supabase_url",
-    "VITE_SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "DATABASE_URL": "@database_url",
-    "JWT_SECRET": "@jwt_secret",
-    "NODE_ENV": "production"
-  }
+  ]
 }
