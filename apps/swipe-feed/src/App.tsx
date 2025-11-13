@@ -42,25 +42,25 @@ import { CrewManagement } from './components/crew/CrewManagement';
 import { QAQCHub } from './components/qaqc/QAQCHub';
 import { DocumentHub } from './components/documents/DocumentHub';
 import { ReceiptManager } from './components/receipts/ReceiptManager';
+import { ProjectMetrics } from './components/analytics/ProjectMetrics';
+import { SafetyMetrics } from './components/analytics/SafetyMetrics';
+import { DailyOperations } from './components/operations/DailyOperations';
+import { IncidentReporting } from './components/safety/IncidentReporting';
+import { PermitManagement } from './components/safety/PermitManagement';
+import { MaterialInventory } from './components/inventory/MaterialInventory';
+import { ProjectSchedule } from './components/projects/ProjectSchedule';
+import { ThreeWeekLookahead } from './components/scheduling/ThreeWeekLookahead';
+import { WeatherDashboard } from './components/weather/WeatherDashboard';
+import { EquipmentMaintenance } from './components/equipment/EquipmentMaintenance';
+import { InspectionManager } from './components/qaqc/InspectionManager';
 
 // Placeholder Components - TO BE REPLACED
 import {
-  ProjectMetrics,
-  SafetyMetrics,
-  DailyOperations,
   SafetyBriefing,
-  IncidentReporting,
-  PermitManagement,
-  MaterialInventory,
-  EquipmentMaintenance,
-  InspectionManager,
   TestingDashboard,
   DrawingViewer,
   SubmittalManager,
-  ProjectSchedule,
-  ThreeWeekLookahead,
   OutageCoordination,
-  WeatherDashboard,
   EnvironmentalCompliance,
   TeamMessaging,
   EmergencyAlerts,
