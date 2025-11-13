@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Upload, Check, AlertCircle, Clock, Search, Filter, Eye, Download, MessageSquare, Compass, Archive } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
+import { FileText, Upload, Clock, CheckCircle, XCircle, AlertCircle, Search, Filter, Compass, RefreshCw, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { format } from 'date-fns';
+import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
 import '../../styles/davinci.css';
 
@@ -11,65 +10,46 @@ interface Submittal {
   project_id: string;
   submittal_number: string;
   title: string;
-  description: string;
   spec_section: string;
-  status: 'draft' | 'submitted' | 'under_review' | 'approved' | 'rejected' | 'revised';
+  description: string;
+  status: 'draft' | 'submitted' | 'under_review' | 'approved' | 'rejected' | 'revise_resubmit';
   priority: 'low' | 'medium' | 'high' | 'critical';
   submitted_by: string;
   submitted_date: string;
   required_date: string;
   approved_date?: string;
   reviewer_comments?: string;
-  revision_count: number;
-  attachments: Array<{
-    id: string;
-    filename: string;
-    file_size: number;
-    uploaded_at: string;
-  }>;
+  revision_number: number;
+  attachments: string[];
   created_at: string;
   updated_at: string;
-  project?: {
-    name: string;
-    project_number: string;
-  };
 }
 
 export const SubmittalManager: React.FC = () => {
-  const { session } = useAuth();
+  const { user } = useAuth();
   const [submittals, setSubmittals] = useState<Submittal[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<string>('all');
+  const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedSubmittal, setSelectedSubmittal] = useState<Submittal | null>(null);
-
-  // Form state
+  const [showUploadForm, setShowUploadForm] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
     spec_section: '',
-    priority: 'medium' as 'low' | 'medium' | 'high' | 'critical',
-    required_date: '',
-    project_id: ''
+    description: '',
+    priority: 'medium' as const,
+    required_date: ''
   });
 
   useEffect(() => {
-    if (session?.user?.id) {
-      fetchSubmittals();
-      subscribeToChanges();
-    }
-  }, [session?.user?.id, filter]);
+    fetchSubmittals();
+  }, [filter]);
 
   const fetchSubmittals = async () => {
     try {
-      setLoading(true);
       let query = supabase
         .from('submittals')
-        .select(`
-          *,
-          project:projects(name, project_number)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (filter !== 'all') {
@@ -77,8 +57,8 @@ export const SubmittalManager: React.FC = () => {
       }
 
       const { data, error } = await query;
-
       if (error) throw error;
+      
       setSubmittals(data || []);
     } catch (error) {
       console.error('Error fetching submittals:', error);
@@ -88,67 +68,61 @@ export const SubmittalManager: React.FC = () => {
     }
   };
 
-  const subscribeToChanges = () => {
-    const subscription = supabase
-      .channel('submittals_changes')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'submittals'
-      }, () => {
-        fetchSubmittals();
-      })
-      .subscribe();
+  const handleSubmit = async () => {
+    if (!formData.title || !formData.spec_section) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  };
-
-  const handleCreateSubmittal = async (e: React.FormEvent) => {
-    e.preventDefault();
     try {
-      const submittalNumber = `SUB-${Date.now().toString().slice(-6)}`;
+      const submittalNumber = `SUB-${Date.now().toString(36).toUpperCase()}`;
       
-      const { error } = await supabase
-        .from('submittals')
-        .insert({
-          ...formData,
-          submittal_number: submittalNumber,
-          status: 'draft',
-          submitted_by: session?.user?.id,
-          submitted_date: new Date().toISOString(),
-          revision_count: 0
-        });
+      const { error } = await supabase.from('submittals').insert({
+        project_id: '00000000-0000-0000-0000-000000000000', // TODO: Get from context
+        submittal_number: submittalNumber,
+        title: formData.title,
+        spec_section: formData.spec_section,
+        description: formData.description,
+        status: 'draft',
+        priority: formData.priority,
+        submitted_by: user?.id,
+        submitted_date: new Date().toISOString(),
+        required_date: formData.required_date || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        revision_number: 1,
+        attachments: []
+      });
 
       if (error) throw error;
 
       toast.success('Submittal created successfully');
-      setShowCreateModal(false);
+      setShowUploadForm(false);
       setFormData({
         title: '',
-        description: '',
         spec_section: '',
+        description: '',
         priority: 'medium',
-        required_date: '',
-        project_id: ''
+        required_date: ''
       });
+      fetchSubmittals();
     } catch (error) {
       console.error('Error creating submittal:', error);
       toast.error('Failed to create submittal');
     }
   };
 
-  const updateSubmittalStatus = async (id: string, status: string, comments?: string) => {
+  const updateStatus = async (id: string, newStatus: Submittal['status'], comments?: string) => {
     try {
-      const updates: any = { status, updated_at: new Date().toISOString() };
-      
-      if (status === 'approved') {
-        updates.approved_date = new Date().toISOString();
-      }
-      
+      const updates: any = { 
+        status: newStatus,
+        updated_at: new Date().toISOString()
+      };
+
       if (comments) {
         updates.reviewer_comments = comments;
+      }
+
+      if (newStatus === 'approved') {
+        updates.approved_date = new Date().toISOString();
       }
 
       const { error } = await supabase
@@ -158,7 +132,8 @@ export const SubmittalManager: React.FC = () => {
 
       if (error) throw error;
 
-      toast.success(`Submittal ${status}`);
+      toast.success(`Submittal ${newStatus.replace('_', ' ')}`);
+      fetchSubmittals();
       setSelectedSubmittal(null);
     } catch (error) {
       console.error('Error updating submittal:', error);
@@ -166,429 +141,332 @@ export const SubmittalManager: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    const colors = {
-      draft: 'text-slate-400 bg-slate-900/50',
-      submitted: 'text-blue-400 bg-blue-900/50',
-      under_review: 'text-amber-400 bg-amber-900/50',
-      approved: 'text-green-400 bg-green-900/50',
-      rejected: 'text-red-400 bg-red-900/50',
-      revised: 'text-purple-400 bg-purple-900/50'
-    };
-    return colors[status as keyof typeof colors] || 'text-slate-400 bg-slate-900/50';
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'approved':
+        return <CheckCircle className="w-5 h-5 text-green-400" />;
+      case 'rejected':
+        return <XCircle className="w-5 h-5 text-red-400" />;
+      case 'under_review':
+        return <Clock className="w-5 h-5 text-amber-400" />;
+      case 'revise_resubmit':
+        return <RefreshCw className="w-5 h-5 text-orange-400" />;
+      default:
+        return <AlertCircle className="w-5 h-5 text-slate-400" />;
+    }
   };
 
   const getPriorityColor = (priority: string) => {
-    const colors = {
-      low: 'text-slate-400',
-      medium: 'text-amber-400',
-      high: 'text-orange-400',
-      critical: 'text-red-400'
-    };
-    return colors[priority as keyof typeof colors] || 'text-slate-400';
+    switch (priority) {
+      case 'critical':
+        return 'text-red-400 bg-red-400/20';
+      case 'high':
+        return 'text-orange-400 bg-orange-400/20';
+      case 'medium':
+        return 'text-amber-400 bg-amber-400/20';
+      default:
+        return 'text-green-400 bg-green-400/20';
+    }
   };
 
-  const filteredSubmittals = submittals.filter(submittal =>
-    submittal.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    submittal.submittal_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    submittal.spec_section.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredSubmittals = submittals.filter(sub =>
+    sub.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    sub.spec_section.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture flex items-center justify-center">
+        <div className="text-center">
+          <Compass className="w-[89px] h-[89px] text-amber-400 mx-auto mb-[21px] animate-spin" />
+          <p className="text-slate-400">Loading submittals...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-7xl mx-auto p-[34px] space-y-[34px]">
-      {/* Header */}
-      <div className="relative">
-        <div className="absolute -left-[55px] top-1/2 transform -translate-y-1/2 hidden lg:block opacity-10">
-          <Archive className="w-[34px] h-[34px] text-amber-400" />
-        </div>
-        <h1 className="text-golden-xl font-bold text-white mb-[8px] measurement-line">Submittal Manager</h1>
-        <p className="text-slate-400 technical-annotation" data-note="MEMORY">Track and manage all project submittals</p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-[21px]">
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-amber-400/60 annotation" data-note="TOTAL">Total Submittals</p>
-              <p className="text-golden-base font-bold text-white">{submittals.length}</p>
-            </div>
-            <FileText className="w-8 h-8 text-amber-400" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture">
+      <div className="p-[34px]">
+        {/* Header */}
+        <div className="mb-[55px] text-center relative">
+          <div className="absolute top-0 left-8 opacity-20">
+            <Compass className="w-[144px] h-[144px] text-amber-400" style={{ animation: 'gear-rotate 60s linear infinite' }} />
           </div>
+          <h1 className="text-golden-2xl font-bold text-white mb-[13px]">Submittal Manager</h1>
+          <p className="text-golden-base text-slate-300">Platform's Memory System</p>
+          <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation mt-[8px]">
+            "Learning never exhausts the mind" — Leonardo da Vinci
+          </p>
         </div>
 
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-amber-400/60 annotation" data-note="PENDING">Under Review</p>
-              <p className="text-golden-base font-bold text-amber-400">
-                {submittals.filter(s => s.status === 'under_review').length}
-              </p>
-            </div>
-            <Clock className="w-8 h-8 text-amber-400" />
-          </div>
-        </div>
-
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-green-400/60 annotation" data-note="SUCCESS">Approved</p>
-              <p className="text-golden-base font-bold text-green-400">
-                {submittals.filter(s => s.status === 'approved').length}
-              </p>
-            </div>
-            <Check className="w-8 h-8 text-green-400" />
-          </div>
-        </div>
-
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-red-400/60 annotation" data-note="ACTION">Rejected</p>
-              <p className="text-golden-base font-bold text-red-400">
-                {submittals.filter(s => s.status === 'rejected').length}
-              </p>
-            </div>
-            <AlertCircle className="w-8 h-8 text-red-400" />
-          </div>
-        </div>
-      </div>
-
-      {/* Controls */}
-      <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] card-engineering">
-        {/* Technical Compass */}
-        <div className="absolute top-[21px] right-[21px] opacity-5">
-          <Compass className="w-[55px] h-[55px] text-amber-400" style={{ animation: 'gear-rotate 30s linear infinite' }} />
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-[21px] items-end">
-          {/* Search */}
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="SEARCH">
-              Search Submittals
-            </label>
+        {/* Controls */}
+        <div className="flex flex-wrap gap-[21px] mb-[34px]">
+          <div className="flex-1 min-w-[233px]">
             <div className="relative">
-              <Search className="absolute left-[13px] top-1/2 transform -translate-y-1/2 w-5 h-5 text-amber-400/60" />
+              <Search className="absolute left-[13px] top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search by title, number, or spec section..."
-                className="w-full pl-[44px] pr-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white placeholder-slate-400 focus:border-amber-500 focus:outline-none input-davinci"
+                className="w-full input-davinci bg-slate-800/50 text-white pl-[55px] pr-[21px] py-[13px] rounded-[8px] tech-border"
+                placeholder="Search submittals..."
               />
             </div>
           </div>
 
-          {/* Filter */}
-          <div>
-            <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="FILTER">
-              Status Filter
-            </label>
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
-            >
-              <option value="all">All Status</option>
-              <option value="draft">Draft</option>
-              <option value="submitted">Submitted</option>
-              <option value="under_review">Under Review</option>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="revised">Revised</option>
-            </select>
+          <div className="flex gap-[13px]">
+            {['all', 'draft', 'submitted', 'under_review', 'approved', 'rejected'].map(status => (
+              <button
+                key={status}
+                onClick={() => setFilter(status)}
+                className={`px-[21px] py-[13px] rounded-[8px] font-semibold transition-all ${
+                  filter === status
+                    ? 'bg-amber-500 text-white'
+                    : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
+                }`}
+              >
+                {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
+              </button>
+            ))}
           </div>
 
-          {/* Create Button */}
           <button
-            onClick={() => setShowCreateModal(true)}
-            className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] btn-davinci field-touch glow-renaissance"
+            onClick={() => setShowUploadForm(true)}
+            className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-bold transition-all btn-davinci breathe flex items-center gap-[8px]"
           >
             <Upload className="w-5 h-5" />
             New Submittal
           </button>
         </div>
-      </div>
 
-      {/* Submittals List */}
-      <div className="space-y-[21px]">
-        {loading ? (
-          <div className="text-center py-[89px]">
-            <div className="inline-block w-[55px] h-[55px] border-[3px] border-amber-400/20 border-t-amber-400 rounded-full animate-spin" />
-          </div>
-        ) : filteredSubmittals.length === 0 ? (
-          <div className="text-center py-[89px] text-slate-400">
-            <Archive className="w-[89px] h-[89px] mx-auto mb-[21px] opacity-20" />
-            <p className="text-golden-base">No submittals found</p>
-          </div>
-        ) : (
-          filteredSubmittals.map((submittal) => (
+        {/* Submittal Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[21px]">
+          {filteredSubmittals.map((submittal) => (
             <div
               key={submittal.id}
-              className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] hover:border-amber-500/40 transition-all card-vitruvian"
+              onClick={() => setSelectedSubmittal(submittal)}
+              className="card-vitruvian corner-sketch p-[21px] rounded-[13px] cursor-pointer hover:scale-[1.02] transition-all depth-layer-1"
             >
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-[21px]">
-                <div className="flex-1">
-                  <div className="flex items-start gap-[13px] mb-[13px]">
-                    <FileText className="w-6 h-6 text-amber-400 mt-1" />
-                    <div>
-                      <h3 className="text-golden-base font-semibold text-white measurement-line">
-                        {submittal.title}
-                      </h3>
-                      <p className="text-amber-400/60 text-sm mt-[5px]">
-                        {submittal.submittal_number} • Section {submittal.spec_section}
-                      </p>
-                    </div>
-                    <span className={`px-[13px] py-[5px] rounded-full text-xs font-medium ${getStatusColor(submittal.status)}`}>
-                      {submittal.status.replace('_', ' ').toUpperCase()}
-                    </span>
-                  </div>
-                  
-                  <p className="text-slate-300 mb-[13px] field-readable ml-[37px]">
-                    {submittal.description}
-                  </p>
-
-                  <div className="flex flex-wrap items-center gap-[21px] text-sm text-slate-400 ml-[37px]">
-                    <span className="flex items-center gap-[8px]">
-                      <Clock className="w-4 h-4 text-amber-400/60" />
-                      Required: {format(new Date(submittal.required_date), 'MMM d, yyyy')}
-                    </span>
-                    <span className={`flex items-center gap-[8px] ${getPriorityColor(submittal.priority)}`}>
-                      <AlertCircle className="w-4 h-4" />
-                      {submittal.priority.toUpperCase()} Priority
-                    </span>
-                    <span className="flex items-center gap-[8px]">
-                      <MessageSquare className="w-4 h-4 text-amber-400/60" />
-                      {submittal.revision_count} Revisions
-                    </span>
-                  </div>
+              <div className="flex items-start justify-between mb-[13px]">
+                <div className="flex items-center gap-[8px]">
+                  {getStatusIcon(submittal.status)}
+                  <span className="text-sm text-slate-400 measurement-line">{submittal.submittal_number}</span>
                 </div>
+                <span className={`px-[8px] py-[3px] rounded text-xs font-semibold ${getPriorityColor(submittal.priority)}`}>
+                  {submittal.priority.toUpperCase()}
+                </span>
+              </div>
 
-                <div className="flex items-center gap-[13px]">
-                  <button
-                    onClick={() => setSelectedSubmittal(submittal)}
-                    className="p-[13px] bg-slate-800/50 hover:bg-slate-700/50 border border-amber-500/20 rounded-[8px] text-amber-400 transition-all tech-border"
-                  >
-                    <Eye className="w-5 h-5" />
-                  </button>
-                  <button className="p-[13px] bg-slate-800/50 hover:bg-slate-700/50 border border-amber-500/20 rounded-[8px] text-amber-400 transition-all tech-border">
-                    <Download className="w-5 h-5" />
-                  </button>
-                </div>
+              <h3 className="text-lg font-semibold text-white mb-[8px] field-readable">{submittal.title}</h3>
+              <p className="text-sm text-slate-400 mb-[13px]">Spec: {submittal.spec_section}</p>
+
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-slate-400">
+                  Rev {submittal.revision_number}
+                </span>
+                <span className="text-slate-400 annotation" data-note="DUE">
+                  {new Date(submittal.required_date).toLocaleDateString()}
+                </span>
               </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
 
-      {/* Create Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-[21px] bg-black/50 backdrop-blur-sm">
-          <div className="bg-slate-900/95 border border-amber-500/20 rounded-[21px] p-[34px] max-w-lg w-full card-engineering">
-            <h2 className="text-golden-base font-bold text-white mb-[21px] measurement-line">
-              Create New Submittal
-            </h2>
-            
-            <form onSubmit={handleCreateSubmittal} className="space-y-[21px]">
-              <div>
-                <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="TITLE">
-                  Submittal Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="DESC">
-                  Description
-                </label>
-                <textarea
-                  required
-                  rows={3}
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci resize-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-[21px]">
+        {/* Submittal Details Modal */}
+        {selectedSubmittal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-slate-900 rounded-[21px] p-[34px] max-w-2xl w-full max-h-[90vh] overflow-y-auto card-vitruvian">
+              <div className="flex justify-between items-start mb-[21px]">
                 <div>
-                  <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="SPEC">
-                    Spec Section
+                  <h2 className="text-golden-xl font-bold text-white mb-[8px]">{selectedSubmittal.title}</h2>
+                  <p className="text-slate-400">{selectedSubmittal.submittal_number} • Rev {selectedSubmittal.revision_number}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedSubmittal(null)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  <XCircle className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="space-y-[21px]">
+                <div>
+                  <label className="text-sm font-medium text-slate-300">Spec Section</label>
+                  <p className="text-white technical-annotation" data-note="SPEC">{selectedSubmittal.spec_section}</p>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-300">Description</label>
+                  <p className="text-white">{selectedSubmittal.description}</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-[21px]">
+                  <div>
+                    <label className="text-sm font-medium text-slate-300">Status</label>
+                    <div className="flex items-center gap-[8px] mt-[5px]">
+                      {getStatusIcon(selectedSubmittal.status)}
+                      <span className="text-white">{selectedSubmittal.status.replace('_', ' ')}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-slate-300">Priority</label>
+                    <span className={`inline-block px-[13px] py-[5px] rounded mt-[5px] font-semibold ${getPriorityColor(selectedSubmittal.priority)}`}>
+                      {selectedSubmittal.priority.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-[21px]">
+                  <div>
+                    <label className="text-sm font-medium text-slate-300">Submitted Date</label>
+                    <p className="text-white">{new Date(selectedSubmittal.submitted_date).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-slate-300">Required Date</label>
+                    <p className="text-white">{new Date(selectedSubmittal.required_date).toLocaleDateString()}</p>
+                  </div>
+                </div>
+
+                {selectedSubmittal.reviewer_comments && (
+                  <div>
+                    <label className="text-sm font-medium text-slate-300">Reviewer Comments</label>
+                    <p className="text-white bg-slate-800/50 p-[13px] rounded-[8px] mt-[5px]">
+                      {selectedSubmittal.reviewer_comments}
+                    </p>
+                  </div>
+                )}
+
+                {selectedSubmittal.status !== 'approved' && selectedSubmittal.status !== 'rejected' && (
+                  <div className="flex gap-[13px] mt-[34px]">
+                    <button
+                      onClick={() => updateStatus(selectedSubmittal.id, 'approved')}
+                      className="flex-1 px-[21px] py-[13px] bg-green-500 hover:bg-green-600 text-white rounded-[8px] font-semibold transition-all btn-davinci"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={() => updateStatus(selectedSubmittal.id, 'revise_resubmit', 'Please see comments for required revisions')}
+                      className="flex-1 px-[21px] py-[13px] bg-orange-500 hover:bg-orange-600 text-white rounded-[8px] font-semibold transition-all"
+                    >
+                      Revise & Resubmit
+                    </button>
+                    <button
+                      onClick={() => updateStatus(selectedSubmittal.id, 'rejected')}
+                      className="flex-1 px-[21px] py-[13px] bg-red-500 hover:bg-red-600 text-white rounded-[8px] font-semibold transition-all"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* New Submittal Form */}
+        {showUploadForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-slate-900 rounded-[21px] p-[34px] max-w-lg w-full card-vitruvian">
+              <h2 className="text-golden-xl font-bold text-white mb-[21px]">New Submittal</h2>
+              
+              <div className="space-y-[21px]">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                    Title *
                   </label>
                   <input
                     type="text"
-                    required
-                    placeholder="e.g., 26 05 00"
-                    value={formData.spec_section}
-                    onChange={(e) => setFormData({ ...formData, spec_section: e.target.value })}
-                    className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    placeholder="Electrical Panel Specifications"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="PRIORITY">
-                    Priority
+                  <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                    Spec Section *
                   </label>
-                  <select
-                    value={formData.priority}
-                    onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-                    className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
+                  <input
+                    type="text"
+                    value={formData.spec_section}
+                    onChange={(e) => setFormData({ ...formData, spec_section: e.target.value })}
+                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    placeholder="26 24 16"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                    Description
+                  </label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] min-h-[89px]"
+                    placeholder="Detailed description of submittal..."
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-[21px]">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                      Priority
+                    </label>
+                    <select
+                      value={formData.priority}
+                      onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
+                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    >
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                      <option value="critical">Critical</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                      Required Date
+                    </label>
+                    <input
+                      type="date"
+                      value={formData.required_date}
+                      onChange={(e) => setFormData({ ...formData, required_date: e.target.value })}
+                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-[13px] mt-[34px]">
+                  <button
+                    onClick={() => {
+                      setShowUploadForm(false);
+                      setFormData({
+                        title: '',
+                        spec_section: '',
+                        description: '',
+                        priority: 'medium',
+                        required_date: ''
+                      });
+                    }}
+                    className="flex-1 px-[21px] py-[13px] bg-slate-700 hover:bg-slate-600 text-white rounded-[8px] font-semibold transition-all"
                   >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                    <option value="critical">Critical</option>
-                  </select>
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSubmit}
+                    className="flex-1 px-[21px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all btn-davinci glow-renaissance"
+                  >
+                    Create Submittal
+                  </button>
                 </div>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="DUE">
-                  Required Date
-                </label>
-                <input
-                  type="date"
-                  required
-                  value={formData.required_date}
-                  onChange={(e) => setFormData({ ...formData, required_date: e.target.value })}
-                  className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
-                />
-              </div>
-
-              <div className="flex gap-[13px] pt-[13px]">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateModal(false)}
-                  className="flex-1 px-[34px] py-[13px] bg-slate-800/50 hover:bg-slate-700/50 border border-amber-500/20 text-white rounded-[8px] font-medium transition-all tech-border"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all btn-davinci"
-                >
-                  Create Submittal
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Detail Modal */}
-      {selectedSubmittal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-[21px] bg-black/50 backdrop-blur-sm">
-          <div className="bg-slate-900/95 border border-amber-500/20 rounded-[21px] p-[34px] max-w-2xl w-full max-h-[90vh] overflow-y-auto card-engineering">
-            <div className="flex justify-between items-start mb-[34px]">
-              <div>
-                <h2 className="text-golden-base font-bold text-white measurement-line">
-                  {selectedSubmittal.title}
-                </h2>
-                <p className="text-amber-400/60 mt-[8px]">
-                  {selectedSubmittal.submittal_number} • {selectedSubmittal.spec_section}
-                </p>
-              </div>
-              <button
-                onClick={() => setSelectedSubmittal(null)}
-                className="text-amber-400 hover:text-amber-300"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="space-y-[34px]">
-              <div>
-                <h3 className="text-amber-400 font-medium mb-[13px] technical-annotation" data-note="DETAILS">
-                  Submittal Details
-                </h3>
-                <p className="text-slate-300 field-readable">{selectedSubmittal.description}</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-[21px]">
-                <div>
-                  <p className="text-sm text-amber-400/60 mb-[5px]">Status</p>
-                  <span className={`px-[13px] py-[5px] rounded-full text-sm font-medium inline-block ${getStatusColor(selectedSubmittal.status)}`}>
-                    {selectedSubmittal.status.replace('_', ' ').toUpperCase()}
-                  </span>
-                </div>
-                <div>
-                  <p className="text-sm text-amber-400/60 mb-[5px]">Priority</p>
-                  <span className={`text-sm font-medium ${getPriorityColor(selectedSubmittal.priority)}`}>
-                    {selectedSubmittal.priority.toUpperCase()}
-                  </span>
-                </div>
-                <div>
-                  <p className="text-sm text-amber-400/60 mb-[5px]">Required Date</p>
-                  <p className="text-white">{format(new Date(selectedSubmittal.required_date), 'MMMM d, yyyy')}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-amber-400/60 mb-[5px]">Revisions</p>
-                  <p className="text-white">{selectedSubmittal.revision_count}</p>
-                </div>
-              </div>
-
-              {selectedSubmittal.reviewer_comments && (
-                <div>
-                  <h3 className="text-amber-400 font-medium mb-[13px] technical-annotation" data-note="REVIEW">
-                    Reviewer Comments
-                  </h3>
-                  <p className="text-slate-300 field-readable bg-slate-800/30 p-[21px] rounded-[13px]">
-                    {selectedSubmittal.reviewer_comments}
-                  </p>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              {selectedSubmittal.status !== 'approved' && (
-                <div className="flex gap-[13px] pt-[21px] border-t border-amber-500/20">
-                  {selectedSubmittal.status === 'submitted' && (
-                    <>
-                      <button
-                        onClick={() => updateSubmittalStatus(selectedSubmittal.id, 'under_review')}
-                        className="flex-1 px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all btn-davinci"
-                      >
-                        Start Review
-                      </button>
-                    </>
-                  )}
-                  {selectedSubmittal.status === 'under_review' && (
-                    <>
-                      <button
-                        onClick={() => updateSubmittalStatus(selectedSubmittal.id, 'approved')}
-                        className="flex-1 px-[34px] py-[13px] bg-green-600 hover:bg-green-700 text-white rounded-[8px] font-semibold transition-all btn-davinci"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => updateSubmittalStatus(selectedSubmittal.id, 'rejected', 'Requires revision')}
-                        className="flex-1 px-[34px] py-[13px] bg-red-600 hover:bg-red-700 text-white rounded-[8px] font-semibold transition-all btn-davinci"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Leonardo Quote */}
-      <div className="text-center opacity-30 mt-[89px]">
-        <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">
-          "Learning never exhausts the mind"
-        </p>
-        <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+        )}
       </div>
     </div>
   );
 };
-
-export default SubmittalManager;

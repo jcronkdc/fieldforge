@@ -28,6 +28,9 @@ import { createTestingRouter } from "./construction/testing/testingRoutes.js";
 import { createDrawingRouter } from "./construction/drawings/drawingRoutes.js";
 import { createEquipmentTestingRouter } from "./construction/equipment/equipmentTestingRoutes.js";
 import { createLeadRouter } from "./routes/leadRoutes.js";
+import { createEnvironmentalRouter } from "./construction/environmental/environmentalRoutes.js";
+import { createSubmittalsRouter } from "./routes/submittalsRoutes.js";
+import { createOutagesRouter } from "./routes/outagesRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -141,8 +144,17 @@ app.use("/api/inventory", createInventoryRouter());
 // Receipt Management - EXPENSE TRACKING WITH APPROVAL ✅
 app.use("/api/receipts", createReceiptRouter());
 
+// Environmental Compliance - MONITORING & REGULATORY COMPLIANCE ✅
+app.use("/api/environmental", createEnvironmentalRouter());
+
 // Feedback endpoint (keep this - useful for any platform)
 app.use("/api/feedback", createFeedbackRouter());
+
+// Submittals Management - PLATFORM'S MEMORY ✅
+app.use("/api/submittals", createSubmittalsRouter());
+
+// Outage Coordination - PLATFORM'S PLANNING BRAIN ✅
+app.use("/api/outages", createOutagesRouter());
 
 // Error handling middleware (must be last)
 app.use(notFoundHandler); // Handle 404s

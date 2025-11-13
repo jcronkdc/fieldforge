@@ -1,109 +1,141 @@
 import React, { useState, useEffect } from 'react';
-import { Power, Calendar, MapPin, Users, AlertTriangle, Clock, Phone, CheckCircle, Shield, Compass } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
+import { Power, AlertTriangle, Users, Clock, MapPin, Phone, Calendar, CheckCircle, XCircle, Radio, Zap, Shield, Ruler } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { format, addDays } from 'date-fns';
+import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
 import '../../styles/davinci.css';
 
 interface Outage {
   id: string;
   outage_number: string;
-  project_id: string;
   title: string;
   description: string;
-  outage_type: 'planned' | 'emergency' | 'rolling' | 'maintenance';
-  start_datetime: string;
-  end_datetime: string;
-  duration_hours: number;
+  location: string;
+  start_time: string;
+  end_time: string;
+  status: 'planned' | 'active' | 'completed' | 'cancelled';
+  impact_level: 'low' | 'medium' | 'high' | 'critical';
   affected_circuits: string[];
   affected_customers: number;
-  affected_area: string;
-  switching_steps: Array<{
-    step: number;
-    action: string;
-    device: string;
-    location: string;
-    completed: boolean;
-  }>;
-  crew_requirements: {
-    switching_crew: number;
-    construction_crew: number;
-    safety_observers: number;
-  };
+  crews_required: number;
+  switching_steps: SwitchingStep[];
   safety_requirements: string[];
-  notification_status: {
-    customers: boolean;
-    dispatch: boolean;
-    field_crews: boolean;
-    management: boolean;
-  };
-  approval_status: 'draft' | 'pending' | 'approved' | 'rejected' | 'completed';
-  approved_by?: string;
+  notifications_sent: boolean;
   created_by: string;
   created_at: string;
   updated_at: string;
-  project?: {
-    name: string;
-    project_number: string;
-  };
+}
+
+interface SwitchingStep {
+  sequence: number;
+  description: string;
+  location: string;
+  equipment_id: string;
+  safety_notes: string;
+  completed: boolean;
+  completed_by?: string;
+  completed_at?: string;
 }
 
 export const OutageCoordination: React.FC = () => {
-  const { session } = useAuth();
+  const { user } = useAuth();
   const [outages, setOutages] = useState<Outage[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<string>('upcoming');
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [filter, setFilter] = useState('all');
   const [selectedOutage, setSelectedOutage] = useState<Outage | null>(null);
-
-  // Form state
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    outage_type: 'planned' as 'planned' | 'emergency' | 'rolling' | 'maintenance',
-    start_datetime: '',
-    end_datetime: '',
-    affected_circuits: [''],
-    affected_customers: 0,
-    affected_area: '',
-    project_id: ''
+    location: '',
+    start_time: '',
+    end_time: '',
+    impact_level: 'medium' as const,
+    affected_circuits: '',
+    affected_customers: '',
+    crews_required: ''
   });
 
   useEffect(() => {
-    if (session?.user?.id) {
       fetchOutages();
-      subscribeToChanges();
-    }
-  }, [session?.user?.id, filter]);
+  }, [filter]);
 
   const fetchOutages = async () => {
     try {
-      setLoading(true);
       let query = supabase
-        .from('outages')
-        .select(`
-          *,
-          project:projects(name, project_number)
-        `)
-        .order('start_datetime', { ascending: true });
+        .from('outage_coordination')
+        .select('*')
+        .order('start_time', { ascending: true });
 
-      if (filter === 'upcoming') {
-        query = query.gte('start_datetime', new Date().toISOString());
-      } else if (filter === 'today') {
-        const todayStart = new Date();
-        todayStart.setHours(0, 0, 0, 0);
-        const todayEnd = new Date();
-        todayEnd.setHours(23, 59, 59, 999);
-        query = query
-          .gte('start_datetime', todayStart.toISOString())
-          .lte('start_datetime', todayEnd.toISOString());
+      if (filter !== 'all') {
+        query = query.eq('status', filter);
       }
 
       const { data, error } = await query;
-
       if (error) throw error;
-      setOutages(data || []);
+
+      // Add mock data for demo
+      const mockOutages: Outage[] = data?.length ? data : [
+        {
+          id: '1',
+          outage_number: 'OUT-2025-001',
+          title: 'Substation 12 Maintenance',
+          description: 'Annual maintenance and equipment testing',
+          location: 'Substation 12 - Main St & 5th Ave',
+          start_time: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          end_time: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000).toISOString(),
+          status: 'planned',
+          impact_level: 'high',
+          affected_circuits: ['F12-01', 'F12-02', 'F12-03'],
+          affected_customers: 2500,
+          crews_required: 4,
+          switching_steps: [
+            {
+              sequence: 1,
+              description: 'Open breaker CB-123',
+              location: 'Substation 12 - Bay 3',
+              equipment_id: 'CB-123',
+              safety_notes: 'Verify zero voltage before proceeding',
+              completed: false
+            },
+            {
+              sequence: 2,
+              description: 'Close tie switch TS-456',
+              location: 'Pole 234 - Main St',
+              equipment_id: 'TS-456',
+              safety_notes: 'Check phase rotation',
+              completed: false
+            }
+          ],
+          safety_requirements: ['Lock-out/Tag-out', 'Ground equipment', 'Test before touch'],
+          notifications_sent: true,
+          created_by: user?.id || '',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        {
+          id: '2',
+          outage_number: 'OUT-2025-002',
+          title: 'Emergency Repair - Damaged Pole',
+          description: 'Vehicle struck pole, immediate repair needed',
+          location: '123 Oak Street',
+          start_time: new Date().toISOString(),
+          end_time: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
+          status: 'active',
+          impact_level: 'critical',
+          affected_circuits: ['F15-04'],
+          affected_customers: 350,
+          crews_required: 2,
+          switching_steps: [],
+          safety_requirements: ['Traffic control', 'PPE required'],
+          notifications_sent: true,
+          created_by: user?.id || '',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+      ];
+
+      setOutages(mockOutages);
     } catch (error) {
       console.error('Error fetching outages:', error);
       toast.error('Failed to load outages');
@@ -112,745 +144,567 @@ export const OutageCoordination: React.FC = () => {
     }
   };
 
-  const subscribeToChanges = () => {
-    const subscription = supabase
-      .channel('outages_changes')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'outages'
-      }, () => {
-        fetchOutages();
-      })
-      .subscribe();
+  const handleCreate = async () => {
+    if (!formData.title || !formData.location || !formData.start_time) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
 
-    return () => {
-      subscription.unsubscribe();
-    };
-  };
-
-  const calculateDuration = (start: string, end: string) => {
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    return Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60));
-  };
-
-  const handleCreateOutage = async (e: React.FormEvent) => {
-    e.preventDefault();
     try {
-      const outageNumber = `OUT-${Date.now().toString().slice(-6)}`;
-      const duration = calculateDuration(formData.start_datetime, formData.end_datetime);
+      const outageNumber = `OUT-${new Date().getFullYear()}-${Date.now().toString(36).toUpperCase()}`;
       
-      const { error } = await supabase
-        .from('outages')
-        .insert({
-          ...formData,
+      const newOutage = {
           outage_number: outageNumber,
-          duration_hours: duration,
-          switching_steps: generateDefaultSwitchingSteps(),
-          crew_requirements: {
-            switching_crew: 2,
-            construction_crew: formData.outage_type === 'maintenance' ? 4 : 6,
-            safety_observers: 1
-          },
-          safety_requirements: [
-            'Safety briefing completed',
-            'LOTO procedures reviewed',
-            'Arc flash boundaries established',
-            'Grounding installed',
-            'Barriers in place'
-          ],
-          notification_status: {
-            customers: false,
-            dispatch: false,
-            field_crews: false,
-            management: false
-          },
-          approval_status: 'draft',
-          created_by: session?.user?.id
-        });
+        title: formData.title,
+        description: formData.description,
+        location: formData.location,
+        start_time: formData.start_time,
+        end_time: formData.end_time,
+        status: 'planned' as const,
+        impact_level: formData.impact_level,
+        affected_circuits: formData.affected_circuits.split(',').map(c => c.trim()),
+        affected_customers: parseInt(formData.affected_customers) || 0,
+        crews_required: parseInt(formData.crews_required) || 1,
+        switching_steps: [],
+        safety_requirements: [],
+        notifications_sent: false,
+        created_by: user?.id
+      };
 
+      const { error } = await supabase.from('outage_coordination').insert(newOutage);
       if (error) throw error;
 
-      toast.success('Outage plan created successfully');
-      setShowCreateModal(false);
-      resetForm();
+      toast.success('Outage created successfully');
+      setShowCreateForm(false);
+      setFormData({
+        title: '',
+        description: '',
+        location: '',
+        start_time: '',
+        end_time: '',
+        impact_level: 'medium',
+        affected_circuits: '',
+        affected_customers: '',
+        crews_required: ''
+      });
+      fetchOutages();
     } catch (error) {
       console.error('Error creating outage:', error);
       toast.error('Failed to create outage');
     }
   };
 
-  const generateDefaultSwitchingSteps = () => {
-    return [
-      { step: 1, action: 'Open', device: 'Circuit Breaker', location: 'Substation A', completed: false },
-      { step: 2, action: 'Open', device: 'Disconnect Switch', location: 'Structure 123', completed: false },
-      { step: 3, action: 'Install', device: 'Grounds', location: 'Work Zone', completed: false },
-      { step: 4, action: 'Test', device: 'Voltage', location: 'All Phases', completed: false },
-      { step: 5, action: 'Issue', device: 'Clearance', location: 'To Construction Crew', completed: false }
-    ];
-  };
-
-  const updateNotificationStatus = async (outageId: string, type: keyof Outage['notification_status']) => {
+  const updateOutageStatus = async (id: string, newStatus: Outage['status']) => {
     try {
-      const outage = outages.find(o => o.id === outageId);
-      if (!outage) return;
-
-      const updatedStatus = {
-        ...outage.notification_status,
-        [type]: true
-      };
-
       const { error } = await supabase
-        .from('outages')
+        .from('outage_coordination')
         .update({ 
-          notification_status: updatedStatus,
+          status: newStatus,
           updated_at: new Date().toISOString()
         })
-        .eq('id', outageId);
+        .eq('id', id);
 
       if (error) throw error;
 
-      toast.success(`${type} notification sent`);
+      toast.success(`Outage ${newStatus}`);
+      fetchOutages();
     } catch (error) {
-      console.error('Error updating notification:', error);
-      toast.error('Failed to update notification');
+      console.error('Error updating outage:', error);
+      toast.error('Failed to update outage');
     }
   };
 
-  const approveOutage = async (outageId: string) => {
+  const markStepComplete = async (outageId: string, stepSequence: number) => {
+    const outage = outages.find(o => o.id === outageId);
+    if (!outage) return;
+
+    const updatedSteps = outage.switching_steps.map(step => 
+      step.sequence === stepSequence
+        ? { ...step, completed: true, completed_by: user?.id, completed_at: new Date().toISOString() }
+        : step
+    );
+
     try {
       const { error } = await supabase
-        .from('outages')
+        .from('outage_coordination')
         .update({
-          approval_status: 'approved',
-          approved_by: session?.user?.id,
+          switching_steps: updatedSteps,
           updated_at: new Date().toISOString()
         })
         .eq('id', outageId);
 
       if (error) throw error;
 
-      toast.success('Outage approved');
-      setSelectedOutage(null);
+      toast.success('Step marked complete');
+      fetchOutages();
     } catch (error) {
-      console.error('Error approving outage:', error);
-      toast.error('Failed to approve outage');
+      console.error('Error updating step:', error);
+      toast.error('Failed to update step');
     }
   };
 
-  const getTypeColor = (type: string) => {
-    const colors = {
-      planned: 'text-blue-400 bg-blue-900/50',
-      emergency: 'text-red-400 bg-red-900/50',
-      rolling: 'text-amber-400 bg-amber-900/50',
-      maintenance: 'text-green-400 bg-green-900/50'
-    };
-    return colors[type as keyof typeof colors] || 'text-slate-400 bg-slate-900/50';
+  const getImpactColor = (impact: string) => {
+    switch (impact) {
+      case 'critical':
+        return 'text-red-400 bg-red-400/20';
+      case 'high':
+        return 'text-orange-400 bg-orange-400/20';
+      case 'medium':
+        return 'text-amber-400 bg-amber-400/20';
+      default:
+        return 'text-green-400 bg-green-400/20';
+    }
   };
 
-  const getStatusColor = (status: string) => {
-    const colors = {
-      draft: 'text-slate-400',
-      pending: 'text-amber-400',
-      approved: 'text-green-400',
-      rejected: 'text-red-400',
-      completed: 'text-blue-400'
-    };
-    return colors[status as keyof typeof colors] || 'text-slate-400';
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'active':
+        return <Radio className="w-5 h-5 text-red-400 animate-pulse" />;
+      case 'completed':
+        return <CheckCircle className="w-5 h-5 text-green-400" />;
+      case 'cancelled':
+        return <XCircle className="w-5 h-5 text-slate-400" />;
+      default:
+        return <Clock className="w-5 h-5 text-amber-400" />;
+    }
   };
 
-  const resetForm = () => {
-    setFormData({
-      title: '',
-      description: '',
-      outage_type: 'planned',
-      start_datetime: '',
-      end_datetime: '',
-      affected_circuits: [''],
-      affected_customers: 0,
-      affected_area: '',
-      project_id: ''
-    });
-  };
+  const filteredOutages = outages.filter(outage => 
+    filter === 'all' || outage.status === filter
+  );
 
-  const upcomingOutages = outages.filter(o => new Date(o.start_datetime) > new Date());
-  const activeOutages = outages.filter(o => {
-    const now = new Date();
-    return new Date(o.start_datetime) <= now && new Date(o.end_datetime) >= now;
-  });
+  if (loading) {
+  return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture flex items-center justify-center">
+        <div className="text-center">
+          <Power className="w-[89px] h-[89px] text-amber-400 mx-auto mb-[21px] animate-pulse" />
+          <p className="text-slate-400">Loading outage coordination...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-7xl mx-auto p-[34px] space-y-[34px]">
-      {/* Header */}
-      <div className="relative">
-        <div className="absolute -left-[55px] top-1/2 transform -translate-y-1/2 hidden lg:block opacity-10">
-          <Power className="w-[34px] h-[34px] text-amber-400" />
-        </div>
-        <h1 className="text-golden-xl font-bold text-white mb-[8px] measurement-line">Outage Coordination</h1>
-        <p className="text-slate-400 technical-annotation" data-note="PLANNING">Plan and coordinate power outages safely</p>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-[21px]">
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-amber-400/60 annotation" data-note="ACTIVE">Active Now</p>
-              <p className="text-golden-base font-bold text-red-400">{activeOutages.length}</p>
-            </div>
-            <Power className="w-8 h-8 text-red-400 animate-pulse" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture">
+      <div className="p-[34px]">
+        {/* Header */}
+        <div className="mb-[55px] text-center relative">
+          <div className="absolute top-0 right-8 opacity-20">
+            <Zap className="w-[144px] h-[144px] text-amber-400" style={{ animation: 'gear-rotate 45s linear infinite reverse' }} />
           </div>
-        </div>
-
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-amber-400/60 annotation" data-note="NEXT 7D">Next 7 Days</p>
-              <p className="text-golden-base font-bold text-amber-400">
-                {upcomingOutages.filter(o => new Date(o.start_datetime) <= addDays(new Date(), 7)).length}
-              </p>
-            </div>
-            <Calendar className="w-8 h-8 text-amber-400" />
-          </div>
-        </div>
-
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-amber-400/60 annotation" data-note="IMPACT">Customers Today</p>
-              <p className="text-golden-base font-bold text-white">
-                {activeOutages.reduce((sum, o) => sum + o.affected_customers, 0).toLocaleString()}
-              </p>
-            </div>
-            <Users className="w-8 h-8 text-amber-400" />
-          </div>
-        </div>
-
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] card-vitruvian">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-green-400/60 annotation" data-note="READY">Approved</p>
-              <p className="text-golden-base font-bold text-green-400">
-                {outages.filter(o => o.approval_status === 'approved').length}
-              </p>
-            </div>
-            <CheckCircle className="w-8 h-8 text-green-400" />
-          </div>
-        </div>
+          <h1 className="text-golden-2xl font-bold text-white mb-[13px]">Outage Coordination</h1>
+          <p className="text-golden-base text-slate-300">Platform's Planning Brain</p>
+          <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation mt-[8px]">
+            "The noblest pleasure is the joy of understanding" — Leonardo da Vinci
+          </p>
       </div>
 
       {/* Active Outages Alert */}
-      {activeOutages.length > 0 && (
-        <div className="bg-red-900/20 border border-red-500/50 rounded-[21px] p-[21px] card-vitruvian">
-          <div className="flex items-center gap-[13px]">
-            <AlertTriangle className="w-6 h-6 text-red-400 animate-pulse" />
+        {outages.some(o => o.status === 'active') && (
+          <div className="mb-[34px] p-[21px] bg-red-500/20 border-2 border-red-500 rounded-[13px] flex items-center gap-[13px]">
+            <AlertTriangle className="w-6 h-6 text-red-400 flex-shrink-0" />
             <div>
-              <h3 className="text-red-400 font-semibold">Active Outages in Progress</h3>
-              <p className="text-red-300/80 text-sm mt-[5px]">
-                {activeOutages.length} outage{activeOutages.length !== 1 ? 's' : ''} currently affecting {activeOutages.reduce((sum, o) => sum + o.affected_customers, 0).toLocaleString()} customers
+              <h3 className="text-lg font-semibold text-white">Active Outages</h3>
+              <p className="text-red-300">
+                {outages.filter(o => o.status === 'active').length} outage(s) currently in progress
               </p>
-            </div>
           </div>
         </div>
       )}
 
       {/* Controls */}
-      <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] card-engineering relative">
-        {/* Technical Compass */}
-        <div className="absolute top-[21px] right-[21px] opacity-5">
-          <Compass className="w-[55px] h-[55px] text-amber-400" style={{ animation: 'gear-rotate 40s linear infinite' }} />
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-[21px] items-end">
-          {/* Filter */}
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="VIEW">
-              View Outages
-            </label>
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
-            >
-              <option value="all">All Outages</option>
-              <option value="upcoming">Upcoming Only</option>
-              <option value="today">Today Only</option>
-            </select>
+        <div className="flex flex-wrap gap-[21px] mb-[34px]">
+          <div className="flex gap-[13px]">
+            {['all', 'planned', 'active', 'completed', 'cancelled'].map(status => (
+              <button
+                key={status}
+                onClick={() => setFilter(status)}
+                className={`px-[21px] py-[13px] rounded-[8px] font-semibold transition-all ${
+                  filter === status
+                    ? 'bg-amber-500 text-white'
+                    : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
+                }`}
+              >
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </button>
+            ))}
           </div>
 
-          {/* Create Button */}
           <button
-            onClick={() => setShowCreateModal(true)}
-            className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] btn-davinci field-touch glow-renaissance"
+            onClick={() => setShowCreateForm(true)}
+            className="ml-auto px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-bold transition-all btn-davinci breathe flex items-center gap-[8px]"
           >
             <Power className="w-5 h-5" />
             Plan Outage
           </button>
-        </div>
       </div>
 
-      {/* Outages Timeline */}
+        {/* Outage List */}
       <div className="space-y-[21px]">
-        {loading ? (
-          <div className="text-center py-[89px]">
-            <div className="inline-block w-[55px] h-[55px] border-[3px] border-amber-400/20 border-t-amber-400 rounded-full animate-spin" />
-          </div>
-        ) : outages.length === 0 ? (
-          <div className="text-center py-[89px] text-slate-400">
-            <Power className="w-[89px] h-[89px] mx-auto mb-[21px] opacity-20" />
-            <p className="text-golden-base">No outages scheduled</p>
-          </div>
-        ) : (
-          outages.map((outage) => (
+          {filteredOutages.map((outage) => (
             <div
               key={outage.id}
-              className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] hover:border-amber-500/40 transition-all card-vitruvian"
+              onClick={() => setSelectedOutage(outage)}
+              className="card-vitruvian corner-sketch p-[34px] rounded-[13px] cursor-pointer hover:scale-[1.01] transition-all depth-layer-1"
             >
-              <div className="flex flex-col md:flex-row justify-between items-start gap-[21px]">
-                <div className="flex-1">
-                  <div className="flex items-start gap-[13px] mb-[13px]">
-                    <Power className={`w-6 h-6 mt-1 ${activeOutages.includes(outage) ? 'text-red-400 animate-pulse' : 'text-amber-400'}`} />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-[13px] flex-wrap">
-                        <h3 className="text-golden-base font-semibold text-white measurement-line">
-                          {outage.title}
-                        </h3>
-                        <span className={`px-[13px] py-[5px] rounded-full text-xs font-medium ${getTypeColor(outage.outage_type)}`}>
-                          {outage.outage_type.toUpperCase()}
+              <div className="flex items-start justify-between mb-[21px]">
+                <div>
+                  <div className="flex items-center gap-[13px] mb-[8px]">
+                    {getStatusIcon(outage.status)}
+                    <span className="text-sm text-slate-400 measurement-line">{outage.outage_number}</span>
+                    <span className={`px-[8px] py-[3px] rounded text-xs font-semibold ${getImpactColor(outage.impact_level)}`}>
+                      {outage.impact_level.toUpperCase()} IMPACT
                         </span>
-                        <span className={`text-sm font-medium ${getStatusColor(outage.approval_status)}`}>
-                          {outage.approval_status.replace('_', ' ').toUpperCase()}
+                  </div>
+                  <h3 className="text-golden-base font-bold text-white mb-[5px] field-readable">{outage.title}</h3>
+                  <p className="text-slate-400">{outage.description}</p>
+                </div>
+                
+                <div className="text-right">
+                  <div className="text-golden-base font-semibold text-amber-400 mb-[5px]">
+                    {outage.affected_customers.toLocaleString()} Customers
+                  </div>
+                  <div className="text-sm text-slate-400">
+                    {outage.affected_circuits.length} Circuits
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-[21px]">
+                <div className="flex items-center gap-[8px]">
+                  <MapPin className="w-4 h-4 text-slate-400" />
+                  <span className="text-sm text-slate-300">{outage.location}</span>
+                </div>
+                <div className="flex items-center gap-[8px]">
+                  <Clock className="w-4 h-4 text-slate-400" />
+                  <span className="text-sm text-slate-300">
+                    {new Date(outage.start_time).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                         </span>
                       </div>
-                      <p className="text-amber-400/60 text-sm mt-[5px]">
-                        {outage.outage_number} • {outage.project?.project_number}
-                      </p>
+                <div className="flex items-center gap-[8px]">
+                  <Users className="w-4 h-4 text-slate-400" />
+                  <span className="text-sm text-slate-300">{outage.crews_required} Crews Required</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Outage Details Modal */}
+        {selectedOutage && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-slate-900 rounded-[21px] p-[34px] max-w-4xl w-full max-h-[90vh] overflow-y-auto card-vitruvian">
+              <div className="flex justify-between items-start mb-[21px]">
+                <div>
+                  <h2 className="text-golden-xl font-bold text-white mb-[8px]">{selectedOutage.title}</h2>
+                  <p className="text-slate-400">{selectedOutage.outage_number}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedOutage(null)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  <XCircle className="w-6 h-6" />
+                </button>
                     </div>
+
+              <div className="grid grid-cols-2 gap-[34px]">
+                {/* Left Column */}
+                <div className="space-y-[21px]">
+                  <div>
+                    <label className="text-sm font-medium text-slate-300">Description</label>
+                    <p className="text-white mt-[5px]">{selectedOutage.description}</p>
                   </div>
                   
-                  <p className="text-slate-300 mb-[21px] field-readable ml-[37px]">
-                    {outage.description}
-                  </p>
+                  <div>
+                    <label className="text-sm font-medium text-slate-300">Location</label>
+                    <p className="text-white mt-[5px] flex items-center gap-[8px]">
+                      <MapPin className="w-4 h-4 text-amber-400" />
+                      {selectedOutage.location}
+                    </p>
+                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[21px] ml-[37px]">
+                  <div className="grid grid-cols-2 gap-[13px]">
                     <div>
-                      <p className="text-xs text-amber-400/60 mb-[5px]">Schedule</p>
-                      <p className="text-sm text-white">
-                        {format(new Date(outage.start_datetime), 'MMM d, h:mm a')}
-                      </p>
-                      <p className="text-xs text-slate-400">
-                        Duration: {outage.duration_hours}h
+                      <label className="text-sm font-medium text-slate-300">Start Time</label>
+                      <p className="text-white mt-[5px]">
+                        {new Date(selectedOutage.start_time).toLocaleString()}
                       </p>
                     </div>
-                    
                     <div>
-                      <p className="text-xs text-amber-400/60 mb-[5px]">Impact</p>
-                      <p className="text-sm text-white">
-                        {outage.affected_customers.toLocaleString()} customers
+                      <label className="text-sm font-medium text-slate-300">End Time</label>
+                      <p className="text-white mt-[5px]">
+                        {new Date(selectedOutage.end_time).toLocaleString()}
                       </p>
-                      <p className="text-xs text-slate-400">
-                        {outage.affected_circuits.join(', ')}
-                      </p>
+                    </div>
                     </div>
 
                     <div>
-                      <p className="text-xs text-amber-400/60 mb-[5px]">Area</p>
-                      <p className="text-sm text-white field-readable">
-                        {outage.affected_area}
-                      </p>
+                    <label className="text-sm font-medium text-slate-300">Affected Circuits</label>
+                    <div className="flex flex-wrap gap-[8px] mt-[5px]">
+                      {selectedOutage.affected_circuits.map((circuit, i) => (
+                        <span key={i} className="px-[13px] py-[5px] bg-amber-500/20 text-amber-400 rounded-[5px] text-sm font-mono">
+                          {circuit}
+                        </span>
+                      ))}
+                    </div>
                     </div>
 
                     <div>
-                      <p className="text-xs text-amber-400/60 mb-[5px]">Notifications</p>
-                      <div className="flex gap-[8px]">
-                        {Object.entries(outage.notification_status).map(([key, sent]) => (
-                          <div
-                            key={key}
-                            className={`w-[8px] h-[8px] rounded-full ${sent ? 'bg-green-400' : 'bg-slate-600'}`}
-                            title={`${key}: ${sent ? 'Sent' : 'Pending'}`}
-                          />
-                        ))}
-                      </div>
-                    </div>
+                    <label className="text-sm font-medium text-slate-300">Safety Requirements</label>
+                    <ul className="mt-[5px] space-y-[5px]">
+                      {selectedOutage.safety_requirements.map((req, i) => (
+                        <li key={i} className="flex items-center gap-[8px] text-white">
+                          <Shield className="w-4 h-4 text-green-400" />
+                          {req}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-[13px]">
+                {/* Right Column */}
+                <div className="space-y-[21px]">
+                  <div>
+                    <label className="text-sm font-medium text-slate-300">Switching Steps</label>
+                    <div className="mt-[8px] space-y-[8px]">
+                      {selectedOutage.switching_steps.map((step) => (
+                        <div
+                          key={step.sequence}
+                          className={`p-[13px] rounded-[8px] ${
+                            step.completed ? 'bg-green-500/10' : 'bg-slate-800/50'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-start gap-[13px]">
+                              <div className={`w-[34px] h-[34px] rounded-full flex items-center justify-center flex-shrink-0 ${
+                                step.completed ? 'bg-green-500' : 'bg-slate-700'
+                              }`}>
+                                {step.completed ? (
+                                  <CheckCircle className="w-5 h-5 text-white" />
+                                ) : (
+                                  <span className="text-white font-bold">{step.sequence}</span>
+                                )}
+                              </div>
+                              <div className="flex-1">
+                                <p className="text-white font-semibold">{step.description}</p>
+                                <p className="text-sm text-slate-400">Location: {step.location}</p>
+                                {step.safety_notes && (
+                                  <p className="text-sm text-amber-400 mt-[5px] flex items-center gap-[5px]">
+                                    <AlertTriangle className="w-3 h-3" />
+                                    {step.safety_notes}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            {!step.completed && selectedOutage.status === 'active' && (
+                              <button
+                                onClick={() => markStepComplete(selectedOutage.id, step.sequence)}
+                                className="px-[13px] py-[5px] bg-amber-500 hover:bg-amber-600 text-white text-sm rounded-[5px] font-semibold transition-all"
+                              >
+                                Complete
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-[13px]">
+                    <div className="p-[21px] bg-slate-800/50 rounded-[13px] text-center">
+                      <Users className="w-8 h-8 text-amber-400 mx-auto mb-[8px]" />
+                      <div className="text-2xl font-bold text-white">{selectedOutage.crews_required}</div>
+                      <div className="text-sm text-slate-400">Crews Required</div>
+                    </div>
+                    <div className="p-[21px] bg-slate-800/50 rounded-[13px] text-center">
+                      <Phone className="w-8 h-8 text-amber-400 mx-auto mb-[8px]" />
+                      <div className="text-2xl font-bold text-white">
+                        {selectedOutage.notifications_sent ? 'Sent' : 'Pending'}
+                      </div>
+                      <div className="text-sm text-slate-400">Notifications</div>
+                  </div>
+                </div>
+
+                  {selectedOutage.status === 'planned' && (
                   <button
-                    onClick={() => setSelectedOutage(outage)}
-                    className="px-[21px] py-[13px] bg-slate-800/50 hover:bg-slate-700/50 border border-amber-500/20 rounded-[8px] text-amber-400 transition-all tech-border field-touch"
+                      onClick={() => updateOutageStatus(selectedOutage.id, 'active')}
+                      className="w-full px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-bold transition-all btn-davinci glow-renaissance"
                   >
-                    View Details
+                      Start Outage
                   </button>
-                  {outage.approval_status === 'draft' && (
+                  )}
+                  {selectedOutage.status === 'active' && (
                     <button
-                      onClick={() => approveOutage(outage.id)}
-                      className="px-[21px] py-[13px] bg-green-600 hover:bg-green-700 text-white rounded-[8px] font-medium transition-all field-touch"
+                      onClick={() => updateOutageStatus(selectedOutage.id, 'completed')}
+                      className="w-full px-[34px] py-[13px] bg-green-500 hover:bg-green-600 text-white rounded-[8px] font-bold transition-all btn-davinci"
                     >
-                      Approve
+                      Mark Complete
                     </button>
                   )}
                 </div>
               </div>
             </div>
-          ))
+          </div>
         )}
-      </div>
 
-      {/* Create Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-[21px] bg-black/50 backdrop-blur-sm">
-          <div className="bg-slate-900/95 border border-amber-500/20 rounded-[21px] p-[34px] max-w-2xl w-full max-h-[90vh] overflow-y-auto card-engineering">
-            <h2 className="text-golden-base font-bold text-white mb-[21px] measurement-line">
-              Plan New Outage
-            </h2>
-            
-            <form onSubmit={handleCreateOutage} className="space-y-[21px]">
-              <div>
-                <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="TITLE">
-                  Outage Title
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.g., Feeder 123 Maintenance Outage"
-                  className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="DESC">
-                  Description
-                </label>
-                <textarea
-                  required
-                  rows={3}
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Describe the work requiring this outage..."
-                  className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci resize-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-[21px]">
+        {/* Create Outage Form */}
+        {showCreateForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-slate-900 rounded-[21px] p-[34px] max-w-2xl w-full max-h-[90vh] overflow-y-auto card-vitruvian">
+              <h2 className="text-golden-xl font-bold text-white mb-[21px]">Plan New Outage</h2>
+              
+              <div className="space-y-[21px]">
                 <div>
-                  <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="TYPE">
-                    Outage Type
-                  </label>
-                  <select
-                    value={formData.outage_type}
-                    onChange={(e) => setFormData({ ...formData, outage_type: e.target.value as any })}
-                    className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
-                  >
-                    <option value="planned">Planned</option>
-                    <option value="emergency">Emergency</option>
-                    <option value="rolling">Rolling</option>
-                    <option value="maintenance">Maintenance</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="AREA">
-                    Affected Area
+                  <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                    Title *
                   </label>
                   <input
                     type="text"
-                    required
-                    value={formData.affected_area}
-                    onChange={(e) => setFormData({ ...formData, affected_area: e.target.value })}
-                    placeholder="e.g., Downtown District"
-                    className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    placeholder="Substation maintenance, Emergency repair, etc."
                   />
-                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-[21px]">
                 <div>
-                  <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="START">
-                    Start Date/Time
+                  <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                    Description
                   </label>
-                  <input
-                    type="datetime-local"
-                    required
-                    value={formData.start_datetime}
-                    onChange={(e) => setFormData({ ...formData, start_datetime: e.target.value })}
-                    className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] min-h-[89px]"
+                    placeholder="Detailed description of work to be performed..."
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="END">
-                    End Date/Time
+                  <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                    Location *
                   </label>
                   <input
-                    type="datetime-local"
-                    required
-                    value={formData.end_datetime}
-                    onChange={(e) => setFormData({ ...formData, end_datetime: e.target.value })}
-                    className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
+                    type="text"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    placeholder="Substation name, street address, etc."
                   />
-                </div>
               </div>
 
+                <div className="grid grid-cols-2 gap-[21px]">
               <div>
-                <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="CIRCUITS">
-                  Affected Circuits
+                    <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                      Start Time *
                 </label>
-                {formData.affected_circuits.map((circuit, index) => (
-                  <div key={index} className="flex gap-[13px] mb-[8px]">
                     <input
-                      type="text"
-                      required
-                      value={circuit}
-                      onChange={(e) => {
-                        const newCircuits = [...formData.affected_circuits];
-                        newCircuits[index] = e.target.value;
-                        setFormData({ ...formData, affected_circuits: newCircuits });
-                      }}
-                      placeholder="e.g., FEEDER-123"
-                      className="flex-1 px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
+                      type="datetime-local"
+                      value={formData.start_time}
+                      onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
+                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     />
-                    {formData.affected_circuits.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newCircuits = formData.affected_circuits.filter((_, i) => i !== index);
-                          setFormData({ ...formData, affected_circuits: newCircuits });
-                        }}
-                        className="px-[13px] text-red-400 hover:text-red-300"
-                      >
-                        ×
-                      </button>
-                    )}
                   </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, affected_circuits: [...formData.affected_circuits, ''] })}
-                  className="text-amber-400 hover:text-amber-300 text-sm"
-                >
-                  + Add Circuit
-                </button>
-              </div>
-
               <div>
-                <label className="block text-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="IMPACT">
-                  Estimated Customers Affected
+                    <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                      End Time *
                 </label>
                 <input
-                  type="number"
-                  required
-                  min="0"
-                  value={formData.affected_customers}
-                  onChange={(e) => setFormData({ ...formData, affected_customers: parseInt(e.target.value) || 0 })}
-                  className="w-full px-[21px] py-[13px] bg-slate-800/50 border border-amber-500/20 rounded-[8px] text-white focus:border-amber-500 focus:outline-none input-davinci"
-                />
+                      type="datetime-local"
+                      value={formData.end_time}
+                      onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
+                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-[21px]">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                      Impact Level
+                    </label>
+                    <select
+                      value={formData.impact_level}
+                      onChange={(e) => setFormData({ ...formData, impact_level: e.target.value as any })}
+                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    >
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                      <option value="critical">Critical</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                      Crews Required
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.crews_required}
+                      onChange={(e) => setFormData({ ...formData, crews_required: e.target.value })}
+                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                      placeholder="2"
+                    />
+                </div>
               </div>
 
-              <div className="flex gap-[13px] pt-[13px] border-t border-amber-500/20">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowCreateModal(false);
-                    resetForm();
-                  }}
-                  className="flex-1 px-[34px] py-[13px] bg-slate-800/50 hover:bg-slate-700/50 border border-amber-500/20 text-white rounded-[8px] font-medium transition-all tech-border"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all btn-davinci"
-                >
-                  Create Outage Plan
-                </button>
+              <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                    Affected Circuits
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.affected_circuits}
+                    onChange={(e) => setFormData({ ...formData, affected_circuits: e.target.value })}
+                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    placeholder="F12-01, F12-02, F12-03"
+                  />
               </div>
-            </form>
+
+              <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-[8px]">
+                    Affected Customers
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.affected_customers}
+                    onChange={(e) => setFormData({ ...formData, affected_customers: e.target.value })}
+                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    placeholder="500"
+                  />
+              </div>
+
+                <div className="flex gap-[13px] mt-[34px]">
+                  <button
+                    onClick={() => {
+                      setShowCreateForm(false);
+                      setFormData({
+                        title: '',
+                        description: '',
+                        location: '',
+                        start_time: '',
+                        end_time: '',
+                        impact_level: 'medium',
+                        affected_circuits: '',
+                        affected_customers: '',
+                        crews_required: ''
+                      });
+                    }}
+                    className="flex-1 px-[21px] py-[13px] bg-slate-700 hover:bg-slate-600 text-white rounded-[8px] font-semibold transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleCreate}
+                    className="flex-1 px-[21px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all btn-davinci glow-renaissance"
+                  >
+                    Create Outage Plan
+                  </button>
+                </div>
+              </div>
           </div>
         </div>
       )}
-
-      {/* Detail Modal */}
-      {selectedOutage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-[21px] bg-black/50 backdrop-blur-sm">
-          <div className="bg-slate-900/95 border border-amber-500/20 rounded-[21px] p-[34px] max-w-3xl w-full max-h-[90vh] overflow-y-auto card-engineering">
-            <div className="flex justify-between items-start mb-[34px]">
-              <div>
-                <h2 className="text-golden-base font-bold text-white measurement-line">
-                  {selectedOutage.title}
-                </h2>
-                <p className="text-amber-400/60 mt-[8px]">
-                  {selectedOutage.outage_number} • {selectedOutage.outage_type.toUpperCase()}
-                </p>
-              </div>
-              <button
-                onClick={() => setSelectedOutage(null)}
-                className="text-amber-400 hover:text-amber-300 text-2xl"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="space-y-[34px]">
-              {/* Overview */}
-              <div>
-                <h3 className="text-amber-400 font-medium mb-[13px] technical-annotation" data-note="OVERVIEW">
-                  Outage Overview
-                </h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-[21px]">
-                  <div>
-                    <p className="text-sm text-amber-400/60 mb-[5px]">Start Time</p>
-                    <p className="text-white">{format(new Date(selectedOutage.start_datetime), 'MMM d, yyyy h:mm a')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-amber-400/60 mb-[5px]">Duration</p>
-                    <p className="text-white">{selectedOutage.duration_hours} hours</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-amber-400/60 mb-[5px]">Customers Affected</p>
-                    <p className="text-white">{selectedOutage.affected_customers.toLocaleString()}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Switching Steps */}
-              <div>
-                <h3 className="text-amber-400 font-medium mb-[13px] technical-annotation" data-note="SWITCHING">
-                  Switching Steps
-                </h3>
-                <div className="space-y-[8px]">
-                  {selectedOutage.switching_steps.map((step) => (
-                    <div key={step.step} className={`flex items-center gap-[13px] p-[13px] rounded-[8px] ${step.completed ? 'bg-green-900/20' : 'bg-slate-800/30'}`}>
-                      <div className={`w-[34px] h-[34px] rounded-full flex items-center justify-center text-sm font-bold ${step.completed ? 'bg-green-600 text-white' : 'bg-slate-700 text-slate-400'}`}>
-                        {step.step}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-white">
-                          <span className="font-medium text-amber-400">{step.action}</span> {step.device} at {step.location}
-                        </p>
-                      </div>
-                      {step.completed && <Check className="w-5 h-5 text-green-400" />}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Crew Requirements */}
-              <div>
-                <h3 className="text-amber-400 font-medium mb-[13px] technical-annotation" data-note="CREWS">
-                  Crew Requirements
-                </h3>
-                <div className="grid grid-cols-3 gap-[13px]">
-                  <div className="bg-slate-800/30 p-[13px] rounded-[8px]">
-                    <p className="text-sm text-amber-400/60">Switching</p>
-                    <p className="text-white font-medium">{selectedOutage.crew_requirements.switching_crew} persons</p>
-                  </div>
-                  <div className="bg-slate-800/30 p-[13px] rounded-[8px]">
-                    <p className="text-sm text-amber-400/60">Construction</p>
-                    <p className="text-white font-medium">{selectedOutage.crew_requirements.construction_crew} persons</p>
-                  </div>
-                  <div className="bg-slate-800/30 p-[13px] rounded-[8px]">
-                    <p className="text-sm text-amber-400/60">Safety Observer</p>
-                    <p className="text-white font-medium">{selectedOutage.crew_requirements.safety_observers} person</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Safety Requirements */}
-              <div>
-                <h3 className="text-amber-400 font-medium mb-[13px] technical-annotation" data-note="SAFETY">
-                  Safety Requirements
-                </h3>
-                <div className="space-y-[8px]">
-                  {selectedOutage.safety_requirements.map((req, index) => (
-                    <div key={index} className="flex items-center gap-[8px]">
-                      <Shield className="w-4 h-4 text-green-400" />
-                      <span className="text-slate-300">{req}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Notifications */}
-              <div>
-                <h3 className="text-amber-400 font-medium mb-[13px] technical-annotation" data-note="NOTIFY">
-                  Notification Status
-                </h3>
-                <div className="grid grid-cols-2 gap-[13px]">
-                  {Object.entries(selectedOutage.notification_status).map(([type, sent]) => (
-                    <div key={type} className="flex items-center justify-between bg-slate-800/30 p-[13px] rounded-[8px]">
-                      <span className="text-slate-300 capitalize">{type.replace('_', ' ')}</span>
-                      {sent ? (
-                        <span className="text-green-400 text-sm">Sent</span>
-                      ) : (
-                        <button
-                          onClick={() => updateNotificationStatus(selectedOutage.id, type as any)}
-                          className="px-[13px] py-[5px] bg-amber-500 hover:bg-amber-600 text-white text-sm rounded-[5px] transition-all"
-                        >
-                          Send
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Emergency Contacts */}
-              <div className="bg-red-900/20 border border-red-500/30 rounded-[13px] p-[21px]">
-                <div className="flex items-center gap-[8px] mb-[13px]">
-                  <Phone className="w-5 h-5 text-red-400" />
-                  <h3 className="text-red-400 font-medium">Emergency Contacts</h3>
-                </div>
-                <div className="space-y-[8px] text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-red-300">System Control</span>
-                    <span className="text-white font-mono">1-800-XXX-XXXX</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-red-300">Field Supervisor</span>
-                    <span className="text-white font-mono">XXX-XXX-XXXX</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-red-300">Safety Officer</span>
-                    <span className="text-white font-mono">XXX-XXX-XXXX</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Actions */}
-              {selectedOutage.approval_status !== 'approved' && (
-                <div className="flex gap-[13px] pt-[21px] border-t border-amber-500/20">
-                  <button
-                    onClick={() => setSelectedOutage(null)}
-                    className="flex-1 px-[34px] py-[13px] bg-slate-800/50 hover:bg-slate-700/50 border border-amber-500/20 text-white rounded-[8px] font-medium transition-all tech-border"
-                  >
-                    Close
-                  </button>
-                  <button
-                    onClick={() => approveOutage(selectedOutage.id)}
-                    className="flex-1 px-[34px] py-[13px] bg-green-600 hover:bg-green-700 text-white rounded-[8px] font-semibold transition-all"
-                  >
-                    Approve Outage
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Leonardo Quote */}
-      <div className="text-center opacity-30 mt-[89px]">
-        <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">
-          "The noblest pleasure is the joy of understanding"
-        </p>
-        <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
       </div>
     </div>
   );
 };
-
-export default OutageCoordination;

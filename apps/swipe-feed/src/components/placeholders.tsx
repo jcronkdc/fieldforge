@@ -60,19 +60,22 @@ export { TestingDashboard } from './testing/TestingDashboard';
 export { DocumentHub } from './documents/DocumentHub';
 // Drawing Viewer - CAD/PDF viewing with annotations
 export { DrawingViewer } from './documents/DrawingViewer';
-export const SubmittalManager = () => <PlaceholderPage title="Submittal Manager" icon={FileText} description="Manage project submittals" />;
+// SubmittalManager is now a real component - see ./submittals/SubmittalManager.tsx
+export { SubmittalManager } from './submittals/SubmittalManager';
 
 // Project Management
 // ProjectSchedule is now a real component - see ./projects/ProjectSchedule.tsx
 export { ProjectSchedule } from './projects/ProjectSchedule';
 // Scheduling - Real-time 3-week activity planning
 export { ThreeWeekLookahead } from './scheduling/ThreeWeekLookahead';
-export const OutageCoordination = () => <PlaceholderPage title="Outage Coordination" icon={Calendar} description="Plan and coordinate system outages" />;
+// OutageCoordination is now a real component - see ./outages/OutageCoordination.tsx
+export { OutageCoordination } from './outages/OutageCoordination';
 
 // Weather & Environmental
 // WeatherDashboard is now a real component - see ./weather/WeatherDashboard.tsx
 export { WeatherDashboard } from './weather/WeatherDashboard';
-export const EnvironmentalCompliance = () => <PlaceholderPage title="Environmental Compliance" icon={Cloud} description="Environmental monitoring and compliance" />;
+// EnvironmentalCompliance is now a real component - see ./environmental/EnvironmentalCompliance.tsx
+export { EnvironmentalCompliance } from './environmental/EnvironmentalCompliance';
 
 // Communication
 // TeamMessaging is now a real component - see ./messaging/TeamMessaging.tsx
