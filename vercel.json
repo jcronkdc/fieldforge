@@ -5,7 +5,7 @@
   "installCommand": "cd backend && npm install && cd ../apps/swipe-feed && npm install --production=false",
   "functions": {
     "api/[...path].ts": {
-      "runtime": "@vercel/node@3.0.0",
+      "runtime": "@vercel/node@2",
       "maxDuration": 30,
       "includeFiles": "backend/**"
     }
