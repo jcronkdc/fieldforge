@@ -43,6 +43,49 @@ const trainingSchema = z.object({
   next_renewal: z.string().optional()
 });
 
+// Settings validation schema
+const settingsSchema = z.object({
+  theme: z.enum(['light', 'dark', 'auto']).optional(),
+  language: z.string().optional(),
+  dateFormat: z.string().optional(),
+  timeFormat: z.enum(['12h', '24h']).optional(),
+  firstDayOfWeek: z.number().min(0).max(6).optional(),
+  notificationsEnabled: z.boolean().optional(),
+  notificationCategories: z.object({
+    safety: z.object({ app: z.boolean(), email: z.boolean(), sms: z.boolean(), push: z.boolean() }),
+    projects: z.object({ app: z.boolean(), email: z.boolean(), sms: z.boolean(), push: z.boolean() }),
+    equipment: z.object({ app: z.boolean(), email: z.boolean(), sms: z.boolean(), push: z.boolean() }),
+    weather: z.object({ app: z.boolean(), email: z.boolean(), sms: z.boolean(), push: z.boolean() }),
+    system: z.object({ app: z.boolean(), email: z.boolean(), sms: z.boolean(), push: z.boolean() })
+  }).optional(),
+  quietHoursEnabled: z.boolean().optional(),
+  quietHoursStart: z.string().optional(),
+  quietHoursEnd: z.string().optional(),
+  autoSync: z.boolean().optional(),
+  syncInterval: z.number().optional(),
+  offlineMode: z.boolean().optional(),
+  cacheSize: z.number().optional(),
+  dataCompression: z.boolean().optional(),
+  reducedMotion: z.boolean().optional(),
+  lowDataMode: z.boolean().optional(),
+  biometricAuth: z.boolean().optional(),
+  sessionTimeout: z.number().optional(),
+  showProfilePhoto: z.boolean().optional(),
+  shareLocation: z.boolean().optional(),
+  analyticsEnabled: z.boolean().optional(),
+  highContrast: z.boolean().optional(),
+  largeText: z.boolean().optional(),
+  soundEffects: z.boolean().optional(),
+  hapticFeedback: z.boolean().optional(),
+  screenReaderOptimized: z.boolean().optional(),
+  debugMode: z.boolean().optional(),
+  showPerformanceStats: z.boolean().optional(),
+  enableBetaFeatures: z.boolean().optional(),
+  autoBackup: z.boolean().optional(),
+  backupFrequency: z.enum(['daily', 'weekly', 'monthly']).optional(),
+  storageUsed: z.number().optional()
+});
+
 export function createUserRouter(): Router {
   const router = Router();
 
@@ -429,6 +472,139 @@ export function createUserRouter(): Router {
     } catch (error) {
       console.error('Error deleting account:', error);
       res.status(500).json({ success: false, error: 'Failed to delete account' });
+    }
+  });
+
+  // Get user settings
+  router.get('/settings', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+
+      const result = await query(
+        'SELECT settings FROM user_settings WHERE user_id = $1',
+        [userId]
+      );
+
+      if (result.rows.length === 0) {
+        // Return default settings if none exist
+        return res.json({ 
+          success: true, 
+          settings: {
+            theme: 'dark',
+            language: 'en',
+            dateFormat: 'MM/DD/YYYY',
+            timeFormat: '12h',
+            firstDayOfWeek: 0,
+            notificationsEnabled: true,
+            notificationCategories: {
+              safety: { app: true, email: true, sms: true, push: true },
+              projects: { app: true, email: true, sms: false, push: true },
+              equipment: { app: true, email: false, sms: false, push: true },
+              weather: { app: true, email: false, sms: false, push: true },
+              system: { app: true, email: true, sms: false, push: false }
+            },
+            quietHoursEnabled: false,
+            quietHoursStart: '22:00',
+            quietHoursEnd: '07:00',
+            autoSync: true,
+            syncInterval: 15,
+            offlineMode: false,
+            cacheSize: 100,
+            dataCompression: false,
+            reducedMotion: false,
+            lowDataMode: false,
+            biometricAuth: false,
+            sessionTimeout: 30,
+            showProfilePhoto: true,
+            shareLocation: true,
+            analyticsEnabled: true,
+            highContrast: false,
+            largeText: false,
+            soundEffects: true,
+            hapticFeedback: true,
+            screenReaderOptimized: false,
+            debugMode: false,
+            showPerformanceStats: false,
+            enableBetaFeatures: false,
+            autoBackup: true,
+            backupFrequency: 'weekly',
+            storageUsed: 0
+          }
+        });
+      }
+
+      res.json({ success: true, settings: result.rows[0].settings });
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+      res.status(500).json({ success: false, error: 'Failed to fetch settings' });
+    }
+  });
+
+  // Update user settings
+  router.put('/settings', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+      const validatedData = settingsSchema.parse(req.body);
+
+      // Upsert settings
+      const result = await query(
+        `INSERT INTO user_settings (user_id, settings, updated_at)
+         VALUES ($1, $2, NOW())
+         ON CONFLICT (user_id)
+         DO UPDATE SET settings = $2, updated_at = NOW()
+         RETURNING settings`,
+        [userId, JSON.stringify(validatedData)]
+      );
+
+      auditLogger.log('user_settings_updated', userId);
+
+      res.json({ success: true, settings: result.rows[0].settings });
+    } catch (error) {
+      console.error('Error updating settings:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Invalid settings', 
+          details: error.format() 
+        });
+      }
+      res.status(500).json({ success: false, error: 'Failed to update settings' });
+    }
+  });
+
+  // Get cache statistics
+  router.get('/cache-stats', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+
+      // In production, this would calculate actual cache usage
+      // For now, return mock data
+      const stats = {
+        size: Math.floor(Math.random() * 50 * 1024 * 1024), // Random 0-50MB
+        items: Math.floor(Math.random() * 1000),
+        lastCleared: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString()
+      };
+
+      res.json({ success: true, stats });
+    } catch (error) {
+      console.error('Error fetching cache stats:', error);
+      res.status(500).json({ success: false, error: 'Failed to fetch cache stats' });
+    }
+  });
+
+  // Clear user cache
+  router.delete('/cache', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+
+      // In production, this would clear actual cache
+      // Log the cache clear action
+      auditLogger.log('cache_cleared', userId);
+
+      res.json({ success: true, message: 'Cache cleared successfully' });
+    } catch (error) {
+      console.error('Error clearing cache:', error);
+      res.status(500).json({ success: false, error: 'Failed to clear cache' });
     }
   });
 

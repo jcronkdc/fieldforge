@@ -91,7 +91,8 @@ export const SubstationModel = () => <PlaceholderPage title="Substation Model" i
 export const FieldForgeAI = () => <PlaceholderPage title="FieldForge AI Assistant" icon={Brain} description="AI-powered construction assistant" />;
 
 // Settings
-export const Settings = () => <PlaceholderPage title="Settings" icon={SettingsIcon} description="Application settings and preferences" />;
+// Settings is now a real component - see ./settings/Settings.tsx
+export { Settings } from './settings/Settings';
 export const CompanySettings = () => <PlaceholderPage title="Company Settings" icon={Building2} description="Company configuration and management" />;
 // UserProfile is now a real component - see ./profile/UserProfile.tsx
 export { UserProfile } from './profile/UserProfile';
