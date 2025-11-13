@@ -13,6 +13,7 @@ import { Landing } from './pages/Landing';
 import { LandingPageTest } from './pages/LandingPageTest';
 import { TestRouting } from './pages/TestRouting';
 import { TestRunner } from './pages/TestRunner';
+import { ShowcasePage } from './components/showcase/ShowcasePage';
 
 // Auth Components
 import { LoginPage } from './components/auth/LoginPage';
@@ -166,6 +167,9 @@ function App() {
             path="/"
             element={session ? <Navigate to="/dashboard" replace /> : <Landing />}
           />
+          
+          {/* Showcase Page - Public */}
+          <Route path="/showcase" element={<ShowcasePage />} />
           
           {/* Auth Routes */}
           <Route path="/login" element={
