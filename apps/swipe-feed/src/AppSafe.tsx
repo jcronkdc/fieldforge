@@ -56,8 +56,12 @@ import { RenaissanceTest } from './pages/RenaissanceTest';
 // Onboarding
 import { WelcomePage } from './pages/WelcomePage';
 
-// Placeholder components
-import { ReceiptManager, DailyOperations, TimeTracking, WeatherDashboard, TeamMessaging } from './components/placeholders';
+// All components are now fully implemented
+import { ReceiptManager } from './components/receipts/ReceiptManager';
+import { DailyOperations } from './components/fieldops/DailyOperations';
+import { TimeTracking } from './components/time/TimeTracking';
+import { WeatherDashboard } from './components/weather/WeatherDashboard';
+import { TeamMessaging } from './components/messaging/TeamMessaging';
 
 // Field operations
 import { FieldOperationsIndex } from './pages/FieldOperationsIndex';
