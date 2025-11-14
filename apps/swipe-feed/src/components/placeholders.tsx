@@ -84,7 +84,8 @@ export { TeamMessaging } from './messaging/TeamMessaging';
 export { EmergencyAlerts } from './emergency/EmergencyAlerts';
 
 // 3D Visualization
-export const ProjectMap3D = () => <PlaceholderPage title="3D Project Map" icon={Map} description="Interactive 3D project visualization" />;
+// ProjectMap3D is now a real component - see ./maps/ProjectMap3D.tsx
+export { ProjectMap3D } from './maps/ProjectMap3D';
 export const SubstationModel = () => <PlaceholderPage title="Substation Model" icon={Building2} description="3D substation equipment layout" />;
 
 // AI Assistant
