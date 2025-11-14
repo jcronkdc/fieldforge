@@ -31,6 +31,18 @@ const operationsRoutes_js_1 = require("./construction/operations/operationsRoute
 const testingRoutes_js_1 = require("./construction/testing/testingRoutes.js");
 const drawingRoutes_js_1 = require("./construction/drawings/drawingRoutes.js");
 const equipmentTestingRoutes_js_1 = require("./construction/equipment/equipmentTestingRoutes.js");
+const leadRoutes_js_1 = require("./routes/leadRoutes.js");
+const environmentalRoutes_js_1 = require("./construction/environmental/environmentalRoutes.js");
+const emergencyRoutes_js_1 = require("./construction/emergency/emergencyRoutes.js");
+const userRoutes_js_1 = require("./routes/userRoutes.js");
+const submittalsRoutes_js_1 = require("./routes/submittalsRoutes.js");
+const outagesRoutes_js_1 = require("./routes/outagesRoutes.js");
+const companyRoutes_js_1 = require("./routes/companyRoutes.js");
+const mapRoutes_js_1 = require("./routes/mapRoutes.js");
+const substationRoutes_js_1 = require("./routes/substationRoutes.js");
+const aiRoutes_js_1 = require("./routes/aiRoutes.js");
+const stripeRoutes_js_1 = require("./routes/stripeRoutes.js");
+const stripeWebhookRoutes_js_1 = require("./routes/stripeWebhookRoutes.js");
 /**
  * © 2025 FieldForge. All Rights Reserved.
  * PROPRIETARY AND CONFIDENTIAL - DO NOT DISTRIBUTE
@@ -72,7 +84,20 @@ app.get("/health", (_req, res) => {
         timestamp: new Date().toISOString()
     });
 });
-// Apply authentication middleware to ALL API routes (except health check)
+// Public lead capture endpoint (no auth required)
+app.use("/api/leads", (0, leadRoutes_js_1.createLeadRouter)());
+// Health check endpoint (no auth required)
+app.get('/api/health', (_req, res) => {
+    res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        service: 'fieldforge-api',
+        version: '1.0.0'
+    });
+});
+// Stripe webhook endpoint (no auth required, needs raw body)
+app.use("/api/webhook", express_1.default.raw({ type: 'application/json' }), (0, stripeWebhookRoutes_js_1.createStripeWebhookRouter)());
+// Apply authentication middleware to ALL API routes (except health check, leads, and webhooks)
 app.use('/api', auth_js_1.authenticateRequest);
 // Apply granular rate limiting for sensitive/compute-intensive endpoints
 app.use("/api/projects/reports", rateLimit_js_1.sensitiveOperationLimiter);
@@ -81,6 +106,10 @@ app.use("/api/documents/bulk", rateLimit_js_1.sensitiveOperationLimiter);
 // ============================================================================
 // CONSTRUCTION PLATFORM API ROUTES
 // ============================================================================
+// User Profile Management - COMPLETE WITH CERTIFICATIONS & SETTINGS ✅
+app.use("/api/users", (0, userRoutes_js_1.createUserRouter)());
+// Company Management - ORGANIZATION SETTINGS & MULTI-TENANT ✅
+app.use("/api/company", (0, companyRoutes_js_1.createCompanyRouter)());
 // Field Operations (Time tracking, daily reports, weather)
 app.use("/api/field-ops", (0, fieldOpsRoutes_js_1.createFieldOpsRouter)());
 // Project Management
@@ -113,8 +142,25 @@ app.use("/api/reporting", (0, reportingRoutes_js_1.createReportingRouter)());
 app.use("/api/inventory", (0, inventoryRoutes_js_1.createInventoryRouter)());
 // Receipt Management - EXPENSE TRACKING WITH APPROVAL ✅
 app.use("/api/receipts", (0, receiptRoutes_js_1.createReceiptRouter)());
+// Environmental Compliance - MONITORING & REGULATORY COMPLIANCE ✅
+app.use("/api/environmental", (0, environmentalRoutes_js_1.createEnvironmentalRouter)());
+// Emergency Alert System - CRITICAL SAFETY BROADCASTS ✅
+app.use("/api/emergency", (0, emergencyRoutes_js_1.createEmergencyRouter)());
 // Feedback endpoint (keep this - useful for any platform)
 app.use("/api/feedback", (0, feedbackRoutes_js_1.createFeedbackRouter)());
+// Submittals Management - PLATFORM'S MEMORY ✅
+app.use("/api/submittals", (0, submittalsRoutes_js_1.createSubmittalsRouter)());
+// Outage Coordination - PLATFORM'S PLANNING BRAIN ✅
+app.use("/api/outages", (0, outagesRoutes_js_1.createOutagesRouter)());
+// 3D Map System - REAL-TIME SITE VISUALIZATION ✅
+app.use("/api/map", (0, mapRoutes_js_1.createMapRouter)());
+// Substation Model - 3D ELECTRICAL INFRASTRUCTURE ✅
+app.use("/api/substations", (0, substationRoutes_js_1.createSubstationRouter)());
+// FieldForge AI - INTELLIGENT CONSTRUCTION ASSISTANT ✅
+app.use("/api/ai", (0, aiRoutes_js_1.createAIRouter)());
+// Payment Processing - STRIPE INTEGRATION ✅  
+app.use("/api/payments", (0, stripeRoutes_js_1.createStripeRouter)());
+// Settings are now part of user routes (/api/users/settings)
 // Error handling middleware (must be last)
 app.use(errorHandler_js_1.notFoundHandler); // Handle 404s
 app.use(errorHandler_js_1.errorHandler); // Handle all errors

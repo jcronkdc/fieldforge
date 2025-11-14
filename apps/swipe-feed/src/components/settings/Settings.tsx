@@ -295,14 +295,14 @@ export const Settings: React.FC = () => {
         },
         {
           key: 'exportData',
-          label: 'Export Settings',
-          description: 'Download your settings',
+          label: 'Export Data',
+          description: 'Download all your data',
           type: 'action',
           action: () => exportSettings()
         },
         {
           key: 'importData',
-          label: 'Import Settings',
+          label: 'Import Data',
           description: 'Restore from backup',
           type: 'action',
           action: () => setShowImportDialog(true)
@@ -329,135 +329,89 @@ export const Settings: React.FC = () => {
         {
           key: 'showPerformanceStats',
           label: 'Performance Stats',
-          description: 'Display FPS and metrics',
+          description: 'Display FPS and memory usage',
           type: 'toggle'
         },
         {
           key: 'enableBetaFeatures',
           label: 'Beta Features',
-          description: 'Try experimental features',
+          description: 'Access experimental features',
           type: 'toggle'
         }
       ]
     }
   ];
 
+  // Default settings
+  const defaultSettings: SettingsData = {
+    theme: 'auto',
+    language: 'en',
+    dateFormat: 'MM/DD/YYYY',
+    timeFormat: '12h',
+    firstDayOfWeek: 0,
+    notificationsEnabled: true,
+    notificationCategories: {
+      safety: { app: true, email: true, sms: true, push: true },
+      projects: { app: true, email: true, sms: false, push: true },
+      equipment: { app: true, email: false, sms: false, push: true },
+      weather: { app: true, email: false, sms: true, push: true },
+      system: { app: true, email: true, sms: false, push: false }
+    },
+    quietHoursEnabled: false,
+    quietHoursStart: '22:00',
+    quietHoursEnd: '07:00',
+    autoSync: true,
+    syncInterval: 15,
+    offlineMode: true,
+    cacheSize: 100,
+    dataCompression: true,
+    reducedMotion: false,
+    lowDataMode: false,
+    biometricAuth: false,
+    sessionTimeout: 30,
+    showProfilePhoto: true,
+    shareLocation: false,
+    analyticsEnabled: true,
+    highContrast: false,
+    largeText: false,
+    soundEffects: true,
+    hapticFeedback: true,
+    screenReaderOptimized: false,
+    debugMode: false,
+    showPerformanceStats: false,
+    enableBetaFeatures: false,
+    autoBackup: true,
+    backupFrequency: 'daily',
+    storageUsed: 0
+  };
+
   useEffect(() => {
-      fetchSettings();
-    fetchCacheStats();
+    loadSettings();
+    calculateCacheSize();
   }, []);
 
-  const fetchSettings = async () => {
-    setLoading(true);
+  const loadSettings = async () => {
     try {
-      const response = await fetch('/api/users/settings', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setSettings(data.settings);
+      const storedSettings = localStorage.getItem('userSettings');
+      if (storedSettings) {
+        setSettings(JSON.parse(storedSettings));
       } else {
-        // Load default settings if none exist
-        const defaultSettings: SettingsData = {
-          theme: 'dark',
-          language: 'en',
-          dateFormat: 'MM/DD/YYYY',
-          timeFormat: '12h',
-          firstDayOfWeek: 0,
-          notificationsEnabled: true,
-          notificationCategories: {
-            safety: { app: true, email: true, sms: true, push: true },
-            projects: { app: true, email: true, sms: false, push: true },
-            equipment: { app: true, email: false, sms: false, push: true },
-            weather: { app: true, email: false, sms: false, push: true },
-            system: { app: true, email: true, sms: false, push: false }
-          },
-          quietHoursEnabled: false,
-          quietHoursStart: '22:00',
-          quietHoursEnd: '07:00',
-          autoSync: true,
-          syncInterval: 15,
-          offlineMode: false,
-          cacheSize: 100,
-          dataCompression: false,
-          reducedMotion: false,
-          lowDataMode: false,
-          biometricAuth: false,
-          sessionTimeout: 30,
-          showProfilePhoto: true,
-          shareLocation: true,
-          analyticsEnabled: true,
-          highContrast: false,
-          largeText: false,
-          soundEffects: true,
-          hapticFeedback: true,
-          screenReaderOptimized: false,
-          debugMode: false,
-          showPerformanceStats: false,
-          enableBetaFeatures: false,
-          autoBackup: true,
-          backupFrequency: 'weekly',
-          storageUsed: 0
-        };
         setSettings(defaultSettings);
       }
     } catch (error) {
-      console.error('Error fetching settings:', error);
-      toast.error('Failed to load settings');
+      console.error('Error loading settings:', error);
+      setSettings(defaultSettings);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchCacheStats = async () => {
-    try {
-      const response = await fetch('/api/users/cache-stats', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setCacheStats(data.stats);
-      }
-    } catch (error) {
-      console.error('Error fetching cache stats:', error);
-    }
-  };
-
-  const saveSettings = async (updates: Partial<SettingsData>) => {
-    if (!settings) return;
-    
+  const saveSettings = async (newSettings: SettingsData) => {
     setSaving(true);
     try {
-      const newSettings = { ...settings, ...updates } as SettingsData;
-      
-      const response = await fetch('/api/users/settings', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify(newSettings)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save settings');
-      }
-
+      localStorage.setItem('userSettings', JSON.stringify(newSettings));
       setSettings(newSettings);
-      
-      // Apply theme change immediately
-      if (updates.theme) {
-        applyTheme(updates.theme);
-      }
-      
-      // Show save confirmation
-      toast.success('Settings saved');
+      toast.success('Settings saved successfully');
     } catch (error) {
       console.error('Error saving settings:', error);
       toast.error('Failed to save settings');
@@ -466,92 +420,69 @@ export const Settings: React.FC = () => {
     }
   };
 
-  const applyTheme = (theme: 'light' | 'dark' | 'auto') => {
-    const root = document.documentElement;
-    root.classList.remove('light', 'dark');
-    
-    if (theme === 'auto') {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      root.classList.add(prefersDark ? 'dark' : 'light');
-    } else {
-      root.classList.add(theme);
-    }
-    
-    localStorage.setItem('fieldforge_theme', theme);
-  };
-
-  const handleSettingChange = (key: string, value: any) => {
+  const updateSetting = (key: string, value: any) => {
     if (!settings) return;
     
-    const updates: any = {};
+    const newSettings = { ...settings };
     
-    // Handle nested properties
     if (key.includes('.')) {
-      const parts = key.split('.');
-      let current = updates;
-      for (let i = 0; i < parts.length - 1; i++) {
-        if (!(parts[i] in current)) {
-          current[parts[i]] = {};
-        }
-        current = current[parts[i]];
+      const [parent, child, subChild] = key.split('.');
+      if (subChild) {
+        (newSettings as any)[parent][child][subChild] = value;
+      } else {
+        (newSettings as any)[parent][child] = value;
       }
-      current[parts[parts.length - 1]] = value;
     } else {
-      updates[key] = value;
+      (newSettings as any)[key] = value;
     }
     
-    saveSettings(updates);
+    saveSettings(newSettings);
+  };
+
+  const calculateCacheSize = async () => {
+    try {
+      if ('storage' in navigator && 'estimate' in navigator.storage) {
+        const estimate = await navigator.storage.estimate();
+        setCacheStats({
+          size: estimate.usage || 0,
+          items: 0
+        });
+      }
+    } catch (error) {
+      console.error('Error calculating cache size:', error);
+    }
   };
 
   const clearCache = async () => {
     try {
-      const response = await fetch('/api/users/cache', {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to clear cache');
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(name => caches.delete(name)));
+        localStorage.removeItem('offlineData');
+        calculateCacheSize();
+        toast.success('Cache cleared successfully');
       }
-
-      // Clear local storage cache
-      const keysToKeep = ['fieldforge_theme', 'token'];
-      Object.keys(localStorage).forEach(key => {
-        if (!keysToKeep.includes(key)) {
-          localStorage.removeItem(key);
-        }
-      });
-
-      toast.success('Cache cleared successfully');
-      setCacheStats({ size: 0, items: 0 });
     } catch (error) {
       console.error('Error clearing cache:', error);
       toast.error('Failed to clear cache');
     }
   };
 
-  const exportSettings = async () => {
+  const exportSettings = () => {
     try {
-      const exportData = {
-        settings,
-        version: '1.0',
-        exportedAt: new Date().toISOString(),
-        user: user?.email
+      const data = {
+        settings: settings,
+        exportDate: new Date().toISOString(),
+        version: '1.0.0'
       };
-
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-        type: 'application/json'
-      });
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `fieldforge-settings-${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(a);
+      a.download = `fieldforge-settings-${new Date().toISOString()}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      document.body.removeChild(a);
       
       toast.success('Settings exported successfully');
     } catch (error) {
@@ -563,81 +494,90 @@ export const Settings: React.FC = () => {
   const importSettings = async (file: File) => {
     try {
       const text = await file.text();
-      const importData = JSON.parse(text);
+      const data = JSON.parse(text);
       
-      if (!importData.settings || importData.version !== '1.0') {
+      if (!data.settings || !data.version) {
         throw new Error('Invalid settings file');
       }
       
-      await saveSettings(importData.settings);
+      await saveSettings(data.settings);
       setShowImportDialog(false);
       toast.success('Settings imported successfully');
     } catch (error) {
       console.error('Error importing settings:', error);
-      toast.error('Failed to import settings');
+      toast.error('Failed to import settings. Please check the file format.');
     }
   };
 
   const renderSettingControl = (item: SettingItem) => {
     if (!settings) return null;
-    
-    const value = item.key.includes('.') 
-      ? item.key.split('.').reduce((obj, key) => obj?.[key], settings as any)
-      : settings[item.key as keyof SettingsData];
+    const value = (settings as any)[item.key];
 
     switch (item.type) {
       case 'toggle':
         return (
           <button
-            onClick={() => handleSettingChange(item.key, !value)}
-            className={`relative w-[55px] h-[29px] rounded-full transition-all ${
-              value ? 'bg-amber-500' : 'bg-slate-700'
+            onClick={() => updateSetting(item.key, !value)}
+            className={`relative w-[55px] h-[26px] rounded-full transition-all ${
+              value ? 'bg-amber-500' : 'bg-slate-600'
             }`}
           >
-            <div className={`absolute top-[3px] w-[23px] h-[23px] bg-white rounded-full transition-all ${
-              value ? 'left-[29px]' : 'left-[3px]'
-            }`} />
+            <span
+              className={`absolute top-[2px] left-[2px] w-[22px] h-[22px] bg-white rounded-full transition-transform ${
+                value ? 'translate-x-[29px]' : ''
+              }`}
+            />
           </button>
         );
-        
+      
       case 'select':
         return (
           <select
-            value={value as string}
-            onChange={(e) => handleSettingChange(item.key, e.target.value)}
-            className="px-[13px] py-[8px] bg-slate-700 text-white rounded-[8px] text-sm"
+            value={value}
+            onChange={(e) => updateSetting(item.key, e.target.value)}
+            className="px-[13px] py-[8px] bg-slate-700 text-white rounded-[8px] min-w-[144px]"
           >
             {item.options?.map(opt => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
         );
-        
+      
       case 'number':
         return (
           <div className="flex items-center gap-[8px]">
             <input
               type="number"
-              value={value as number}
-              onChange={(e) => handleSettingChange(item.key, parseInt(e.target.value))}
+              value={value}
               min={item.min}
               max={item.max}
-              className="w-[89px] px-[13px] py-[8px] bg-slate-700 text-white rounded-[8px] text-sm text-center"
+              onChange={(e) => updateSetting(item.key, parseInt(e.target.value))}
+              className="w-[89px] px-[13px] py-[8px] bg-slate-700 text-white rounded-[8px] text-center"
             />
-            {item.unit && <span className="text-sm text-slate-400">{item.unit}</span>}
+            {item.unit && <span className="text-slate-400 text-sm">{item.unit}</span>}
           </div>
         );
-        
+      
+      case 'time':
+        return (
+          <input
+            type="time"
+            value={value}
+            onChange={(e) => updateSetting(item.key, e.target.value)}
+            className="px-[13px] py-[8px] bg-slate-700 text-white rounded-[8px]"
+          />
+        );
+      
       case 'action':
         return (
           <button
             onClick={item.action}
-            className="px-[21px] py-[8px] bg-slate-700 hover:bg-slate-600 text-white rounded-[8px] text-sm font-medium transition-all"
+            className="px-[21px] py-[8px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all"
           >
             {item.label}
           </button>
         );
-        
+      
       default:
         return null;
     }
@@ -663,228 +603,130 @@ export const Settings: React.FC = () => {
           <p className="text-slate-600 mt-2">Configure your FieldForge experience</p>
         </div>
 
-      <div className="grid lg:grid-cols-4 gap-6">
-        {/* Sidebar Navigation */}
-        <div className="lg:col-span-1">
-          <nav className="space-y-2">
-            {sections.map(section => {
-              const Icon = section.icon;
-              return (
-                <button
-                  key={section.id}
-                  onClick={() => setActiveSection(section.id)}
-                  className={`w-full flex items-center gap-[13px] px-[21px] py-[13px] rounded-[13px] transition-all ${
-                    activeSection === section.id
-                      ? 'bg-amber-500/20 text-amber-400'
-                      : 'text-slate-400 hover:bg-slate-800'
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="font-medium">{section.title}</span>
-                  <ChevronRight className={`w-4 h-4 ml-auto transition-transform ${
-                    activeSection === section.id ? 'rotate-90' : ''
-                  }`} />
-                </button>
-              );
-            })}
-          </nav>
+        <div className="grid lg:grid-cols-4 gap-6">
+          {/* Sidebar Navigation */}
+          <div className="lg:col-span-1">
+            <nav className="space-y-2">
+              {sections.map(section => {
+                const Icon = section.icon;
+                return (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSection(section.id)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                      activeSection === section.id
+                        ? 'bg-slate-100 text-slate-900'
+                        : 'text-slate-600 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span className="font-medium">{section.title}</span>
+                    <ChevronRight className={`w-4 h-4 ml-auto transition-transform ${
+                      activeSection === section.id ? 'rotate-90' : ''
+                    }`} />
+                  </button>
+                );
+              })}
+            </nav>
 
-          {/* Storage Info */}
-          <div className="mt-6 p-4 bg-slate-100 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-slate-700">Storage Used</span>
-              <span className="text-sm text-slate-600">
-                {(settings?.storageUsed || 0) / 1024 / 1024} MB
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-700">Cache Size</span>
-              <span className="text-sm text-slate-600">
-                {cacheStats.size / 1024 / 1024} MB
-              </span>
+            {/* Storage Info */}
+            <div className="mt-6 p-4 bg-slate-100 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-slate-700">Storage Used</span>
+                <span className="text-sm text-slate-600">
+                  {Math.round(cacheStats.size / 1024 / 1024)} MB
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Settings Content */}
-        <div className="lg:col-span-3">
-          <AnimatePresence mode="wait">
-            {sections
-              .filter(section => section.id === activeSection)
-              .map(section => (
-                <motion.div
-                  key={section.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-[21px]"
-                >
-                  <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
-                    <h2 className="text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3">
-                      <section.icon className="w-6 h-6 text-slate-700" />
-                      {section.title}
-                    </h2>
-                    
-                    <div className="space-y-[21px]">
-                      {section.items.map(item => (
-                        <div
-                          key={item.key}
-                          className="flex items-center justify-between py-[13px] border-b border-slate-700/50 last:border-0"
-                        >
-                          <div className="flex-1 pr-[21px]">
-                            <h3 className="text-white font-medium">{item.label}</h3>
-                            {item.description && (
-                              <p className="text-sm text-slate-400 mt-[3px]">{item.description}</p>
-                            )}
-                          </div>
-                          <div className="flex-shrink-0">
-                            {renderSettingControl(item)}
-          </div>
-                        </div>
-                      ))}
-        </div>
-      </div>
-
-                  {/* Special sections for detailed settings */}
-                  {activeSection === 'notifications' && settings?.notificationsEnabled && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]"
-                    >
-                      <h3 className="text-lg font-semibold text-white mb-[21px]">
-                        Notification Categories
-                      </h3>
-                      <div className="space-y-[21px]">
-                        {Object.entries(settings.notificationCategories).map(([category, channels]) => (
-                          <div key={category} className="space-y-[13px]">
-                            <h4 className="text-white font-medium capitalize">{category}</h4>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-[13px]">
-                              {Object.entries(channels).map(([channel, enabled]) => (
-                                <label
-                                  key={channel}
-                                  className="flex items-center gap-[8px] cursor-pointer"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    checked={enabled}
-                                    onChange={(e) => {
-                                      const newCategories = { ...settings.notificationCategories };
-                                      newCategories[category as keyof typeof settings.notificationCategories][
-                                        channel as keyof typeof channels
-                                      ] = e.target.checked;
-                                      handleSettingChange('notificationCategories', newCategories);
-                                    }}
-                                    className="w-4 h-4 text-amber-500"
-                                  />
-                                  <span className="text-sm text-slate-300 capitalize">{channel}</span>
-            </label>
-          ))}
-          </div>
-        </div>
-                        ))}
-      </div>
-
-                      {settings.quietHoursEnabled && (
-                        <div className="mt-[34px] pt-[21px] border-t border-slate-700">
-                          <h4 className="text-white font-medium mb-[13px]">Quiet Hours</h4>
-                          <div className="grid grid-cols-2 gap-[21px]">
-                            <div>
-                              <label className="block text-sm text-slate-400 mb-[8px]">Start</label>
-                              <input
-                                type="time"
-                                value={settings.quietHoursStart}
-                                onChange={(e) => handleSettingChange('quietHoursStart', e.target.value)}
-                                className="w-full px-[13px] py-[8px] bg-slate-700 text-white rounded-[8px]"
-                              />
-                            </div>
-          <div>
-                              <label className="block text-sm text-slate-400 mb-[8px]">End</label>
-                              <input
-                                type="time"
-                                value={settings.quietHoursEnd}
-                                onChange={(e) => handleSettingChange('quietHoursEnd', e.target.value)}
-                                className="w-full px-[13px] py-[8px] bg-slate-700 text-white rounded-[8px]"
-                              />
-          </div>
-        </div>
-      </div>
-                      )}
-                    </motion.div>
-                  )}
-
-                  {activeSection === 'billing' && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                    >
+          {/* Settings Content */}
+          <div className="lg:col-span-3">
+            <AnimatePresence mode="wait">
+              {sections
+                .filter(section => section.id === activeSection)
+                .map(section => (
+                  <motion.div
+                    key={section.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                  >
+                    {activeSection === 'billing' ? (
                       <BillingSettings />
-                    </motion.div>
-                  )}
-
-                  {activeSection === 'developer' && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-amber-500/10 border border-amber-500/30 rounded-[13px] p-[21px]"
-                    >
-                      <div className="flex items-start gap-[13px]">
-                        <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-[3px]" />
-                        <div className="text-sm text-amber-400">
-                          <p className="font-medium mb-[5px]">Warning: Developer Options</p>
-                          <p className="text-amber-400/80">
-                            These settings can affect app stability and performance. 
-                            Only enable if you know what you're doing.
-                          </p>
-            </div>
+                    ) : (
+                      <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                        <h2 className="text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3">
+                          <section.icon className="w-6 h-6 text-slate-700" />
+                          {section.title}
+                        </h2>
+                        
+                        <div className="space-y-4">
+                          {section.items.map(item => (
+                            <div
+                              key={item.key}
+                              className="flex items-center justify-between py-3 border-b border-slate-100 last:border-0"
+                            >
+                              <div className="flex-1 pr-4">
+                                <h3 className="text-slate-900 font-medium">{item.label}</h3>
+                                {item.description && (
+                                  <p className="text-sm text-slate-500 mt-1">{item.description}</p>
+                                )}
+                              </div>
+                              <div className="flex-shrink-0">
+                                {renderSettingControl(item)}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+            </AnimatePresence>
           </div>
-                    </motion.div>
-                  )}
-                </motion.div>
-              ))}
-          </AnimatePresence>
         </div>
       </div>
 
       {/* Import Settings Dialog */}
       <AnimatePresence>
         {showImportDialog && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-slate-900 border border-slate-700 rounded-[21px] p-[34px] max-w-md w-full"
+              className="bg-white rounded-xl p-6 max-w-md w-full shadow-lg"
             >
-              <h3 className="text-xl font-bold text-white mb-[21px]">Import Settings</h3>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Import Settings</h3>
               
-              <div className="mb-[34px]">
+              <div className="mb-6">
                 <label className="block w-full">
-                  <div className="px-[34px] py-[55px] bg-slate-800 border-2 border-dashed border-slate-600 rounded-[13px] text-center cursor-pointer hover:bg-slate-700 transition-all">
-                    <Upload className="w-12 h-12 text-slate-400 mx-auto mb-[13px]" />
-                    <p className="text-slate-300 font-medium">Click to select file</p>
-                    <p className="text-sm text-slate-500 mt-[5px]">JSON files only</p>
+                  <div className="px-6 py-12 bg-slate-50 border-2 border-dashed border-slate-300 rounded-lg text-center cursor-pointer hover:bg-slate-100 transition-all">
+                    <Upload className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                    <p className="text-slate-600 font-medium">Click to select file</p>
+                    <p className="text-sm text-slate-500 mt-1">JSON files only</p>
                   </div>
-            <input
-              type="file"
-              accept=".json"
+                  <input
+                    type="file"
+                    accept=".json"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) importSettings(file);
                     }}
-              className="hidden"
-            />
-          </label>
+                    className="hidden"
+                  />
+                </label>
               </div>
 
-          <button
+              <button
                 onClick={() => setShowImportDialog(false)}
-                className="w-full px-[21px] py-[13px] bg-slate-700 hover:bg-slate-600 text-white rounded-[8px] font-semibold transition-all"
-          >
+                className="w-full px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-all"
+              >
                 Cancel
-          </button>
+              </button>
             </motion.div>
-        </div>
+          </div>
         )}
       </AnimatePresence>
 
@@ -895,10 +737,10 @@ export const Settings: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-[34px] right-[34px] bg-slate-800 border border-slate-700 rounded-[13px] p-[21px] flex items-center gap-[13px] shadow-lg"
+            className="fixed bottom-6 right-6 bg-slate-800 text-white rounded-lg p-4 flex items-center gap-3 shadow-lg"
           >
-            <RefreshCw className="w-5 h-5 text-amber-400 animate-spin" />
-            <span className="text-white font-medium">Saving settings...</span>
+            <RefreshCw className="w-5 h-5 animate-spin" />
+            <span className="font-medium">Saving settings...</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -906,3 +748,4 @@ export const Settings: React.FC = () => {
   );
 };
 
+export default Settings;

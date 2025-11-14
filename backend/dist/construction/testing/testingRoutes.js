@@ -9,8 +9,85 @@ function createTestingRouter() {
     const router = (0, express_1.Router)();
     // Apply authentication to all routes
     router.use(auth_js_1.authenticateRequest);
+    // Helper function for test results with filtering
+    const getTestResults = async (req, res) => {
+        try {
+            const companyId = req.user?.company_id;
+            const { range, type } = req.query;
+            if (!companyId) {
+                return res.status(401).json({ error: 'Unauthorized' });
+            }
+            // Calculate date range
+            let dateFilter = '';
+            const now = new Date();
+            if (range === 'week') {
+                const weekAgo = new Date(now.setDate(now.getDate() - 7));
+                dateFilter = `AND et.test_date >= '${weekAgo.toISOString().split('T')[0]}'`;
+            }
+            else if (range === 'month') {
+                const monthAgo = new Date(now.setMonth(now.getMonth() - 1));
+                dateFilter = `AND et.test_date >= '${monthAgo.toISOString().split('T')[0]}'`;
+            }
+            else if (range === 'quarter') {
+                const quarterAgo = new Date(now.setMonth(now.getMonth() - 3));
+                dateFilter = `AND et.test_date >= '${quarterAgo.toISOString().split('T')[0]}'`;
+            }
+            else if (range === 'year') {
+                const yearAgo = new Date(now.setFullYear(now.getFullYear() - 1));
+                dateFilter = `AND et.test_date >= '${yearAgo.toISOString().split('T')[0]}'`;
+            }
+            let typeFilter = '';
+            if (type && type !== 'all') {
+                typeFilter = `AND et.test_type = '${type}'`;
+            }
+            const queryText = `
+        SELECT 
+          et.id,
+          et.equipment_id,
+          e.name as equipment_name,
+          e.equipment_code,
+          et.test_type,
+          et.test_name,
+          et.test_date::date as test_date,
+          u.raw_user_meta_data->>'full_name' as performed_by,
+          et.status,
+          et.measurements,
+          et.parameters,
+          et.notes,
+          et.next_test_due::date as next_test_due,
+          et.report_url,
+          et.created_at,
+          ${companyId} as company_id
+        FROM equipment_tests et
+        JOIN equipment e ON et.equipment_id = e.id
+        LEFT JOIN auth.users u ON et.performed_by = u.id
+        WHERE e.company_id = $1
+        ${dateFilter}
+        ${typeFilter}
+        ORDER BY et.test_date DESC
+      `;
+            const result = await (0, database_js_1.query)(queryText, [companyId]);
+            // Transform data to match frontend expectations
+            const transformedResults = result.rows.map(row => ({
+                ...row,
+                measurements: row.measurements || [],
+                parameters: row.parameters || []
+            }));
+            res.json(transformedResults);
+        }
+        catch (error) {
+            console.error('[testing] Error fetching test results:', error);
+            res.status(500).json({ error: 'Failed to fetch test results' });
+        }
+    };
     // Get equipment tests (main endpoint)
     router.get('/', async (req, res) => {
+        // Handle test results query with range and type filters
+        const { range, type } = req.query;
+        if (range || type) {
+            return getTestResults(req, res);
+        }
+        // Otherwise, return test list
         try {
             const companyId = req.user?.company_id;
             const { equipment_id, test_type, status, start_date, end_date } = req.query;
@@ -64,6 +141,46 @@ function createTestingRouter() {
         catch (error) {
             console.error('[testing] Error fetching tests:', error);
             res.status(500).json({ success: false, error: 'Failed to fetch tests' });
+        }
+    });
+    // Get test schedule
+    router.get('/schedule', async (req, res) => {
+        try {
+            const companyId = req.user?.company_id;
+            if (!companyId) {
+                return res.status(401).json({ error: 'Unauthorized' });
+            }
+            const queryText = `
+        SELECT 
+          ts.id,
+          ts.equipment_id,
+          e.name as equipment_name,
+          e.equipment_code,
+          ts.test_type,
+          ts.test_name,
+          ts.scheduled_date::date as scheduled_date,
+          ts.frequency,
+          ts.compliance_standard,
+          ts.created_at,
+          CASE 
+            WHEN ts.scheduled_date < CURRENT_DATE THEN 'overdue'
+            WHEN ts.scheduled_date = CURRENT_DATE THEN 'due_today'
+            WHEN ts.scheduled_date <= CURRENT_DATE + INTERVAL '7 days' THEN 'upcoming'
+            ELSE 'scheduled'
+          END as status,
+          ${companyId} as company_id
+        FROM test_schedules ts
+        JOIN equipment e ON ts.equipment_id = e.id
+        WHERE e.company_id = $1
+        AND ts.scheduled_date >= CURRENT_DATE - INTERVAL '30 days'
+        ORDER BY ts.scheduled_date ASC
+      `;
+            const result = await (0, database_js_1.query)(queryText, [companyId]);
+            res.json(result.rows);
+        }
+        catch (error) {
+            console.error('[testing] Error fetching test schedule:', error);
+            res.status(500).json({ error: 'Failed to fetch test schedule' });
         }
     });
     // Get test templates

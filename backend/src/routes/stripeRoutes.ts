@@ -7,7 +7,7 @@ export function createStripeRouter() {
   
   // Initialize Stripe with your secret key
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-    apiVersion: '2024-11-20.acacia'
+    apiVersion: '2025-10-29.clover'
   });
 
   // FieldForge pricing tiers
@@ -185,8 +185,8 @@ export function createStripeRouter() {
         status: subscription.status,
         plan: plan,
         trial: subscription.status === 'trialing',
-        currentPeriodEnd: subscription.current_period_end,
-        cancelAtPeriodEnd: subscription.cancel_at_period_end
+        currentPeriodEnd: (subscription as any).current_period_end,
+        cancelAtPeriodEnd: (subscription as any).cancel_at_period_end
       });
     } catch (error) {
       console.error('Error fetching subscription status:', error);

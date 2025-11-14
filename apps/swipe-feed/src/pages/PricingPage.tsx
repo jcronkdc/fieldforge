@@ -3,8 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Check, Sparkles, TrendingUp, Shield, Users, Zap, DollarSign, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { loadStripe } from '@stripe/stripe-js';
-import { useAuth } from '../lib/auth';
-import { config } from '../config';
+import { useAuth } from '../hooks/useAuth';
 
 // Initialize Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder');
@@ -101,7 +100,7 @@ export const PricingPage: React.FC = () => {
 
     try {
       // Call backend to create Stripe Checkout session
-      const response = await fetch(`${config.apiUrl}/api/payments/create-checkout-session`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/payments/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

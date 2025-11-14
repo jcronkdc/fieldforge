@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CreditCard, Calendar, AlertCircle, CheckCircle, Loader2, ExternalLink } from 'lucide-react';
-import { config } from '../../config';
-import { useAuth } from '../../lib/auth';
+import { useAuth } from '../../hooks/useAuth';
 
 interface SubscriptionInfo {
   status: string;
@@ -24,7 +23,7 @@ export const BillingSettings: React.FC = () => {
 
   const fetchSubscriptionStatus = async () => {
     try {
-      const response = await fetch(`${config.apiUrl}/api/payments/subscription-status?customerId=${user?.stripeCustomerId || ''}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/payments/subscription-status?customerId=${user?.stripeCustomerId || ''}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -48,7 +47,7 @@ export const BillingSettings: React.FC = () => {
     setPortalLoading(true);
     
     try {
-      const response = await fetch(`${config.apiUrl}/api/payments/create-portal-session`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/payments/create-portal-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
