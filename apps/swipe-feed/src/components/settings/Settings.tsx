@@ -652,24 +652,21 @@ export const Settings: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture">
-      <div className="p-[34px] max-w-6xl mx-auto">
+    <div className="min-h-screen bg-white">
+      <div className="p-6 max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-[55px] text-center relative">
-          <div className="absolute top-0 right-8 opacity-20">
-            <SettingsIcon className="w-[144px] h-[144px] text-amber-400" style={{ animation: 'gear-rotate 45s linear infinite' }} />
-          </div>
-          <h1 className="text-golden-2xl font-bold text-white mb-[13px]">Settings</h1>
-          <p className="text-golden-base text-slate-300">Configure your FieldForge experience</p>
-          <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation mt-[8px]">
-            "Simplicity is the ultimate sophistication" — Leonardo da Vinci
-          </p>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+            <SettingsIcon className="w-8 h-8 text-slate-700" />
+            Settings
+          </h1>
+          <p className="text-slate-600 mt-2">Configure your FieldForge experience</p>
         </div>
 
-      <div className="grid lg:grid-cols-4 gap-[34px]">
+      <div className="grid lg:grid-cols-4 gap-6">
         {/* Sidebar Navigation */}
         <div className="lg:col-span-1">
-          <nav className="space-y-[8px]">
+          <nav className="space-y-2">
             {sections.map(section => {
               const Icon = section.icon;
               return (
@@ -693,16 +690,16 @@ export const Settings: React.FC = () => {
           </nav>
 
           {/* Storage Info */}
-          <div className="mt-[34px] p-[21px] bg-slate-800/50 backdrop-blur-sm border border-amber-500/20 rounded-[13px] vitruvian-rect depth-layer-1">
-            <div className="flex items-center justify-between mb-[13px]">
-              <span className="text-golden-sm font-medium text-amber-200">Storage Used</span>
-              <span className="text-golden-sm text-amber-400/60">
+          <div className="mt-6 p-4 bg-slate-100 rounded-lg">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-slate-700">Storage Used</span>
+              <span className="text-sm text-slate-600">
                 {(settings?.storageUsed || 0) / 1024 / 1024} MB
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-golden-sm font-medium text-amber-200">Cache Size</span>
-              <span className="text-golden-sm text-amber-400/60">
+              <span className="text-sm font-medium text-slate-700">Cache Size</span>
+              <span className="text-sm text-slate-600">
                 {cacheStats.size / 1024 / 1024} MB
               </span>
             </div>
@@ -722,9 +719,9 @@ export const Settings: React.FC = () => {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-[21px]"
                 >
-                  <div className="bg-slate-800/50 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[34px] vitruvian-rect corner-sketch depth-layer-2">
-                    <h2 className="text-golden-xl font-semibold text-white mb-[34px] flex items-center gap-[13px]">
-                      <section.icon className="w-6 h-6 text-amber-400" />
+                  <div className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <h2 className="text-xl font-semibold text-slate-900 mb-6 flex items-center gap-3">
+                      <section.icon className="w-6 h-6 text-slate-700" />
                       {section.title}
                     </h2>
                     

@@ -34,10 +34,10 @@ export const PaymentSuccess: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture flex items-center justify-center">
-        <div className="text-center vitruvian-rect">
-          <Loader2 className="w-[55px] h-[55px] text-amber-400 mx-auto mb-[13px]" style={{ animation: 'gear-rotate 2s linear infinite' }} />
-          <p className="text-golden-base text-amber-300">Verifying your payment...</p>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-3" />
+          <p className="text-slate-600">Verifying your payment...</p>
         </div>
       </div>
     );
@@ -45,19 +45,19 @@ export const PaymentSuccess: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture flex items-center justify-center px-[21px]">
-        <div className="max-w-md w-full text-center vitruvian-rect">
-          <div className="bg-red-500/10 rounded-full w-[89px] h-[89px] mx-auto mb-[21px] flex items-center justify-center border-2 border-red-500/30 depth-layer-1">
-            <span className="text-golden-2xl">⚠️</span>
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="bg-red-50 rounded-full w-20 h-20 mx-auto mb-6 flex items-center justify-center">
+            <span className="text-3xl">⚠️</span>
           </div>
-          <h1 className="text-golden-xl font-bold text-white mb-[13px]">Payment Verification Failed</h1>
-          <p className="text-golden-base text-amber-300/80 mb-[34px]">{error}</p>
+          <h1 className="text-2xl font-bold text-slate-900 mb-3">Payment Verification Failed</h1>
+          <p className="text-slate-600 mb-6">{error}</p>
           <Link
             to="/pricing"
-            className="inline-flex items-center gap-[8px] px-[21px] py-[13px] bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-900 font-semibold rounded-[8px] transition-all transform hover:scale-105 shadow-amber-500/20 corner-sketch"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors"
           >
             Back to Pricing
-            <ArrowRight className="w-[21px] h-[21px]" />
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
@@ -65,36 +65,36 @@ export const PaymentSuccess: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture">
-      <div className="max-w-4xl mx-auto px-[34px] py-[89px]">
+    <div className="min-h-screen bg-slate-50">
+      <div className="max-w-4xl mx-auto px-6 py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
           {/* Success Icon */}
-          <div className="relative mb-[34px]">
-            <div className="w-[144px] h-[144px] mx-auto bg-gradient-to-br from-amber-500/20 to-green-500/20 rounded-full flex items-center justify-center vitruvian-circle depth-layer-2">
-              <CheckCircle className="w-[89px] h-[89px] text-amber-400" />
+          <div className="relative mb-8">
+            <div className="w-32 h-32 mx-auto bg-green-100 rounded-full flex items-center justify-center">
+              <CheckCircle className="w-16 h-16 text-green-600" />
             </div>
             <motion.div
-              className="absolute inset-0 w-[144px] h-[144px] mx-auto bg-amber-400/10 rounded-full"
-              animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.2, 0.5] }}
-              transition={{ duration: 3.14159, repeat: Infinity }}
+              className="absolute inset-0 w-32 h-32 mx-auto bg-green-200 rounded-full"
+              animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity }}
             />
           </div>
 
-          <h1 className="text-golden-2xl md:text-[55px] font-bold text-white mb-[13px]">
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
             Welcome to FieldForge!
           </h1>
           
-          <p className="text-golden-lg text-amber-300/90 mb-[55px] max-w-2xl mx-auto">
+          <p className="text-xl text-slate-600 mb-12 max-w-2xl mx-auto">
             Your payment was successful and your subscription is now active. 
             You have full access to all features in your plan.
           </p>
 
           {/* What's Next Section */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-[13px] p-[34px] mb-[55px] border border-amber-500/20 vitruvian-rect corner-sketch depth-layer-1">
+          <div className="bg-white rounded-lg p-8 mb-12 border border-slate-200 shadow-sm">
             <h2 className="text-2xl font-bold text-white mb-6">What's Next?</h2>
             
             <div className="grid md:grid-cols-3 gap-6 text-left">

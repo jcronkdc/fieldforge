@@ -28,43 +28,39 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const describedBy = [helperId, errorId].filter(Boolean).join(' ') || undefined;
 
     return (
-      <div className="flex flex-col gap-[8px]">
+      <div className="flex flex-col gap-2">
         <label
           htmlFor={inputId}
-          className="text-golden-sm font-medium text-amber-200 technical-annotation"
+          className="text-sm font-medium text-slate-700"
         >
           {label}
         </label>
-        <div className="relative">
-          <input
-            ref={ref}
-            id={inputId}
-            type={type}
-            aria-invalid={Boolean(error) || undefined}
-            aria-describedby={describedBy}
-            className={clsx(
-              'w-full rounded-[8px] border-2 border-amber-500/20 bg-slate-900/50 px-[13px] py-[8px] text-amber-100 shadow-inner',
-              'backdrop-blur-sm transition-all duration-300 ease-[var(--ease-standard)]',
-              'focus-visible:border-amber-400 focus-visible:bg-slate-800/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/30',
-              error
-                ? 'border-red-500/50 text-red-100 focus-visible:border-red-400 focus-visible:ring-red-400/30'
-                : 'hover:border-amber-500/40 hover:bg-slate-800/60',
-              'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
-              'placeholder:text-amber-400/40 vitruvian-rect',
-              className
-            )}
-            {...props}
-          />
-          {/* Corner sketch decoration */}
-          <div className="corner-sketch opacity-20" />
-        </div>
+        <input
+          ref={ref}
+          id={inputId}
+          type={type}
+          aria-invalid={Boolean(error) || undefined}
+          aria-describedby={describedBy}
+          className={clsx(
+            'w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm',
+            'transition-colors duration-200',
+            'focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-0',
+            error
+              ? 'border-red-500 text-red-900 focus:border-red-500 focus:ring-red-500'
+              : 'hover:border-slate-400',
+            'disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-50',
+            'placeholder:text-slate-400',
+            className
+          )}
+          {...props}
+        />
         {helperText && !error ? (
-          <p id={helperId} className="text-golden-xs text-amber-400/60 italic">
+          <p id={helperId} className="text-xs text-slate-500">
             {helperText}
           </p>
         ) : null}
         {error ? (
-          <p id={errorId} role="alert" className="text-golden-xs text-red-400 font-medium">
+          <p id={errorId} role="alert" className="text-xs text-red-600">
             {error}
           </p>
         ) : null}

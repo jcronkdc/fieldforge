@@ -395,7 +395,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
         </header>
 
         {/* Page Content */}
-        <main id="main" className="flex-1 overflow-y-auto bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture">
+        <main id="main" className="flex-1 overflow-y-auto bg-slate-50">
           <PushNotifications />
           <div className="max-w-[1920px] mx-auto">
             <Outlet />

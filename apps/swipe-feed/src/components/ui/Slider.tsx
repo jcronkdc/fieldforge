@@ -21,41 +21,29 @@ export const Slider: React.FC<SliderProps> = ({
   className = '',
   disabled = false
 }) => {
-  const percentage = ((value - min) / (max - min)) * 100;
-  
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="block text-golden-sm font-medium text-amber-200 mb-[8px] technical-annotation">
+        <label className="block text-sm font-medium text-slate-700 mb-2">
           {label}
         </label>
       )}
-      <div className="flex items-center gap-[13px]">
-        <div className="flex-1 relative">
-          <input
-            type="range"
-            min={min}
-            max={max}
-            step={step}
-            value={value}
-            onChange={(e) => onChange(Number(e.target.value))}
-            disabled={disabled}
-            className="w-full h-[8px] bg-slate-800/50 rounded-[5px] appearance-none cursor-pointer outline-none
-                     [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[21px] [&::-webkit-slider-thumb]:h-[21px]
-                     [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-br
-                     [&::-webkit-slider-thumb]:from-amber-400 [&::-webkit-slider-thumb]:to-amber-500
-                     [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:shadow-amber-500/30
-                     [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-amber-300/50
-                     [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:hover:scale-110
-                     disabled:opacity-50 disabled:cursor-not-allowed vitruvian-rect"
-          />
-          {/* Progress fill */}
-          <div 
-            className="absolute top-[50%] left-0 h-[8px] bg-gradient-to-r from-amber-500 to-amber-400 rounded-l-[5px] pointer-events-none -translate-y-1/2 shadow-inner"
-            style={{ width: `${percentage}%` }}
-          />
-        </div>
-        <span className="text-golden-sm font-semibold text-amber-300 min-w-[34px] text-right measurement-line">
+      <div className="flex items-center gap-3">
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          disabled={disabled}
+          className="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer
+                   [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5
+                   [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-600
+                   [&::-webkit-slider-thumb]:hover:bg-blue-700 [&::-webkit-slider-thumb]:transition-colors
+                   disabled:opacity-50 disabled:cursor-not-allowed"
+        />
+        <span className="text-sm font-medium text-slate-700 min-w-[3ch] text-right">
           {value}
         </span>
       </div>
