@@ -252,7 +252,7 @@ export const AcquisitionInquiry: React.FC = () => {
                     className="w-full input-davinci px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white field-readable"
                   >
                     <option value="">Select timeline</option>
-                    <option value="immediate">Immediate (< 1 month)</option>
+                    <option value="immediate">Immediate (&lt; 1 month)</option>
                     <option value="quarter">This Quarter</option>
                     <option value="half-year">Next 6 Months</option>
                     <option value="year">Within a Year</option>
@@ -270,11 +270,11 @@ export const AcquisitionInquiry: React.FC = () => {
                     className="w-full input-davinci px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white field-readable"
                   >
                     <option value="">Select budget</option>
-                    <option value="<100k">Under $100K</option>
+                    <option value="under-100k">Under $100K</option>
                     <option value="100-500k">$100K - $500K</option>
                     <option value="500k-1m">$500K - $1M</option>
                     <option value="1m-5m">$1M - $5M</option>
-                    <option value=">5m">Over $5M</option>
+                    <option value="over-5m">Over $5M</option>
                     <option value="tbd">To Be Determined</option>
                   </select>
                 </div>
