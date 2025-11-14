@@ -35,6 +35,7 @@ import { createSubmittalsRouter } from "./routes/submittalsRoutes.js";
 import { createOutagesRouter } from "./routes/outagesRoutes.js";
 import { createCompanyRouter } from "./routes/companyRoutes.js";
 import { createMapRouter } from "./routes/mapRoutes.js";
+import { createSubstationRouter } from "./routes/substationRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -171,6 +172,9 @@ app.use("/api/outages", createOutagesRouter());
 
 // 3D Map System - REAL-TIME SITE VISUALIZATION ✅
 app.use("/api/map", createMapRouter());
+
+// Substation Model - 3D ELECTRICAL INFRASTRUCTURE ✅
+app.use("/api/substations", createSubstationRouter());
 
 // Settings are now part of user routes (/api/users/settings)
 

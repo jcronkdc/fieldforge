@@ -86,7 +86,8 @@ export { EmergencyAlerts } from './emergency/EmergencyAlerts';
 // 3D Visualization
 // ProjectMap3D is now a real component - see ./maps/ProjectMap3D.tsx
 export { ProjectMap3D } from './maps/ProjectMap3D';
-export const SubstationModel = () => <PlaceholderPage title="Substation Model" icon={Building2} description="3D substation equipment layout" />;
+// SubstationModel is now a real component - see ./electrical/SubstationModel.tsx
+export { SubstationModel } from './electrical/SubstationModel';
 
 // AI Assistant
 export const FieldForgeAI = () => <PlaceholderPage title="FieldForge AI Assistant" icon={Brain} description="AI-powered construction assistant" />;
