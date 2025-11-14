@@ -85,6 +85,9 @@ import { SyncStatus } from './components/common/SyncStatus';
 // Monitoring
 import { PerformanceMonitor } from './components/monitoring/PerformanceMonitor';
 
+// Admin
+import { SystemHealthDashboard } from './components/admin/SystemHealthDashboard';
+
 function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -262,6 +265,9 @@ function App() {
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/settings/company" element={<CompanySettings />} />
               <Route path="/settings/profile" element={<UserProfile />} />
+              
+              {/* Admin */}
+              <Route path="/admin/system-health" element={<SystemHealthDashboard />} />
               
               {/* Catch all - redirect to dashboard */}
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
