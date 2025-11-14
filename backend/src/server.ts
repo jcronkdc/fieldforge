@@ -90,6 +90,16 @@ app.get("/health", (_req: Request, res: Response) => {
 // Public lead capture endpoint (no auth required)
 app.use("/api/leads", createLeadRouter());
 
+// Health check endpoint (no auth required)
+app.get('/api/health', (_req: Request, res: Response) => {
+  res.json({ 
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    service: 'fieldforge-api',
+    version: '1.0.0'
+  });
+});
+
 // Apply authentication middleware to ALL API routes (except health check and leads)
 app.use('/api', authenticateRequest);
 

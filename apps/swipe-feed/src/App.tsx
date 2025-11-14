@@ -87,6 +87,7 @@ import { PerformanceMonitor } from './components/monitoring/PerformanceMonitor';
 
 // Admin
 import { SystemHealthDashboard } from './components/admin/SystemHealthDashboard';
+import { SmokeTest } from './pages/SmokeTest';
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -268,6 +269,7 @@ function App() {
               
               {/* Admin */}
               <Route path="/admin/system-health" element={<SystemHealthDashboard />} />
+              <Route path="/admin/smoke-test" element={<SmokeTest />} />
               
               {/* Catch all - redirect to dashboard */}
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
