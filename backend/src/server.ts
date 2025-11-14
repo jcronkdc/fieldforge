@@ -36,6 +36,7 @@ import { createOutagesRouter } from "./routes/outagesRoutes.js";
 import { createCompanyRouter } from "./routes/companyRoutes.js";
 import { createMapRouter } from "./routes/mapRoutes.js";
 import { createSubstationRouter } from "./routes/substationRoutes.js";
+import { createAIRouter } from "./routes/aiRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -175,6 +176,9 @@ app.use("/api/map", createMapRouter());
 
 // Substation Model - 3D ELECTRICAL INFRASTRUCTURE ✅
 app.use("/api/substations", createSubstationRouter());
+
+// FieldForge AI - INTELLIGENT CONSTRUCTION ASSISTANT ✅
+app.use("/api/ai", createAIRouter());
 
 // Settings are now part of user routes (/api/users/settings)
 

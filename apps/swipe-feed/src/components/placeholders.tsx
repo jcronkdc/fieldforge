@@ -89,8 +89,8 @@ export { ProjectMap3D } from './maps/ProjectMap3D';
 // SubstationModel is now a real component - see ./electrical/SubstationModel.tsx
 export { SubstationModel } from './electrical/SubstationModel';
 
-// AI Assistant
-export const FieldForgeAI = () => <PlaceholderPage title="FieldForge AI Assistant" icon={Brain} description="AI-powered construction assistant" />;
+// AI Assistant - Now a real component with full AI capabilities
+export { FieldForgeAI } from './ai/FieldForgeAI';
 
 // Settings
 // Settings is now a real component - see ./settings/Settings.tsx
