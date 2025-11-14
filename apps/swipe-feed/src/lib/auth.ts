@@ -41,13 +41,21 @@ export async function signUp(
 
 // Sign in existing user
 export async function signIn(email: string, password: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
+  // Check if using demo auth
+  if (typeof supabase.auth.signInWithPassword === 'function') {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
 
-  if (error) throw error;
-  return data;
+    if (error) throw error;
+    return data;
+  } else {
+    // Demo mode
+    const { data, error } = await supabase.auth.signIn(email, password);
+    if (error) throw error;
+    return data;
+  }
 }
 
 // Sign in with demo account
@@ -63,9 +71,15 @@ export async function signOut() {
 
 // Get current user
 export async function getCurrentUser() {
-  const { data: { user }, error } = await supabase.auth.getUser();
-  if (error) throw error;
-  return user;
+  // Check if getUser exists (Supabase v2)
+  if (typeof supabase.auth.getUser === 'function') {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) throw error;
+    return user;
+  } else {
+    // Demo mode or older API
+    return await supabase.auth.getCurrentUser();
+  }
 }
 
 // Get user profile
