@@ -130,16 +130,46 @@ export const Landing: React.FC = () => {
             </div>
           </div>
           
-          {/* Add pricing link */}
-          <div className="mt-[55px] text-center">
+          {/* Add pricing and acquisition links */}
+          <div className="mt-[55px] text-center space-y-[13px]">
             <Link
               to="/pricing"
-              className="text-amber-400 hover:text-amber-300 font-semibold text-golden-base transition-colors annotation" data-note="TRANSPARENT"
+              className="text-amber-400 hover:text-amber-300 font-semibold text-golden-base transition-colors annotation block" data-note="TRANSPARENT"
             >
               View Transparent Pricing →
             </Link>
+            <Link
+              to="/acquisition-inquiry"
+              className="text-amber-400/80 hover:text-amber-300 font-medium text-golden-sm transition-colors annotation block" data-note="PARTNER"
+            >
+              Interested in Acquiring or Custom Development? →
+            </Link>
           </div>
           
+          {/* Demo Credentials - Always visible for testing */}
+          <div className="mt-[55px] p-[21px] bg-amber-400/10 border border-amber-400/20 rounded-[13px] tech-border">
+            <h3 className="text-golden-sm font-semibold text-amber-400 mb-[13px] technical-annotation" data-note="DEMO">
+              Demo Credentials
+            </h3>
+            <div className="grid md:grid-cols-3 gap-[13px] text-golden-sm text-amber-400/80">
+              <div>
+                <span className="font-medium">Field Worker:</span>
+                <div className="text-white">demo@fieldforge.com</div>
+                <div className="text-xs text-amber-400/60">password: demo123</div>
+              </div>
+              <div>
+                <span className="font-medium">Manager:</span>
+                <div className="text-white">manager@fieldforge.com</div>
+                <div className="text-xs text-amber-400/60">password: demo123</div>
+              </div>
+              <div>
+                <span className="font-medium">Admin:</span>
+                <div className="text-white">admin@fieldforge.com</div>
+                <div className="text-xs text-amber-400/60">password: demo123</div>
+              </div>
+            </div>
+          </div>
+
           {/* Leonardo's Wisdom */}
           <div className="text-center opacity-30 mt-[89px]">
             <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">

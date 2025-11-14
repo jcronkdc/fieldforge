@@ -25,6 +25,12 @@ import { FuturisticAdminSetup } from './components/auth/FuturisticAdminSetup';
 import { NewElectricalLanding } from './pages/NewElectricalLanding';
 import { Landing } from './pages/Landing';
 
+// Marketing Pages
+import { PricingPage } from './pages/PricingPage';
+import { ContactSales } from './components/contact/ContactSales';
+import { ShowcasePage } from './components/showcase/ShowcasePage';
+import { AcquisitionInquiry } from './pages/AcquisitionInquiry';
+
 // Social & AI Components
 import { SocialFeed } from './components/feed/SocialFeed';
 import { AIAssistant } from './components/ai/AIAssistant';
@@ -192,7 +198,7 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
             
             <Routes>
               {/* Public Routes */}
-              <Route path="/" element={<NewElectricalLanding />} />
+              <Route path="/" element={<Landing />} />
               <Route path="/app" element={
                 session ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
               } />
@@ -202,6 +208,12 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
               } />
               <Route path="/landing" element={<Landing />} />
               <Route path="/simple" element={<Landing />} />
+              <Route path="/old-landing" element={<NewElectricalLanding />} />
+              
+              {/* Marketing Pages - Always Public */}
+              <Route path="/pricing" element={<PricingPage />} />
+              <Route path="/contact" element={<ContactSales />} />
+              <Route path="/showcase" element={<ShowcasePage />} />
               
               <Route path="/signup" element={
                 session ? <Navigate to="/dashboard" replace /> : <FuturisticSignUp />
@@ -221,6 +233,9 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
               
               {/* Renaissance Theme Test - Always accessible */}
               <Route path="/renaissance-test" element={<RenaissanceTest />} />
+              
+              {/* Acquisition & Custom Development - Always accessible */}
+              <Route path="/acquisition-inquiry" element={<AcquisitionInquiry />} />
               
               {/* Protected Routes */}
               {session ? (
