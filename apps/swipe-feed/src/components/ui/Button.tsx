@@ -29,19 +29,19 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-[var(--color-accent)] text-[#0b0f14] hover:brightness-[1.05] focus-visible:brightness-[1.05]',
+    'bg-gradient-to-br from-amber-500 to-amber-600 text-[#0b0f14] hover:from-amber-400 hover:to-amber-500 focus-visible:from-amber-400 focus-visible:to-amber-500 shadow-amber-500/20 corner-sketch',
   secondary:
-    'bg-slate-800 text-white hover:bg-slate-700 focus-visible:bg-slate-700',
+    'bg-slate-800/90 text-white hover:bg-slate-700/90 focus-visible:bg-slate-700/90 border border-amber-500/20 vitruvian-rect',
   ghost:
-    'bg-transparent text-slate-200 hover:bg-slate-800/60 focus-visible:bg-slate-800/60',
+    'bg-transparent text-amber-200 hover:bg-amber-500/10 focus-visible:bg-amber-500/10 hover:text-amber-100',
   danger:
-    'bg-red-600 text-white hover:bg-red-500 focus-visible:bg-red-500',
+    'bg-gradient-to-br from-red-600 to-red-700 text-white hover:from-red-500 hover:to-red-600 focus-visible:from-red-500 focus-visible:to-red-600 shadow-red-500/20',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-6 py-3 text-lg',
+  sm: 'px-[8px] py-[5px] text-golden-sm',
+  md: 'px-[13px] py-[8px] text-golden-base',
+  lg: 'px-[21px] py-[13px] text-golden-lg',
 };
 
 /**
@@ -73,10 +73,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     }
 
     const baseStyles = clsx(
-      'inline-flex items-center justify-center gap-2 font-semibold rounded-lg',
-      'transition-[background-color,color,transform,box-shadow] duration-[var(--dur-med)] ease-[var(--ease-standard)]',
-      'focus-visible:outline-[var(--focus-outline)] focus-visible:outline-offset-[var(--ring-offset)] focus-visible:ring-0',
-      'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none'
+      'inline-flex items-center justify-center gap-[8px] font-semibold rounded-[8px]',
+      'transition-all duration-300 ease-[var(--ease-standard)]',
+      'focus-visible:outline-[var(--focus-outline)] focus-visible:outline-offset-[var(--ring-offset)] focus-visible:ring-2 focus-visible:ring-amber-400/50',
+      'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
+      'shadow-md hover:shadow-lg active:scale-[0.98]',
+      'relative overflow-hidden depth-layer-1'
     );
 
     const content = (
