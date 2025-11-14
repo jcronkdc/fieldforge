@@ -3,7 +3,6 @@ import { Clock, Play, Pause, Calendar, MapPin, Cloud, Users, DollarSign, Compass
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { format, differenceInMinutes, startOfWeek, endOfWeek } from 'date-fns';
-import '../../styles/davinci.css';
 
 interface TimeEntry {
   id: string;

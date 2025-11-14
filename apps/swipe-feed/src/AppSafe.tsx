@@ -198,7 +198,7 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
             
             <Routes>
               {/* Public Routes */}
-              <Route path="/" element={<Landing />} />
+              <Route path="/" element={<NewElectricalLanding />} />
               <Route path="/app" element={
                 session ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
               } />
@@ -208,7 +208,7 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
               } />
               <Route path="/landing" element={<Landing />} />
               <Route path="/simple" element={<Landing />} />
-              <Route path="/old-landing" element={<NewElectricalLanding />} />
+              <Route path="/renaissance-landing" element={<Landing />} />
               
               {/* Marketing Pages - Always Public */}
               <Route path="/pricing" element={<PricingPage />} />

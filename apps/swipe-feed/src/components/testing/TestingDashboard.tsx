@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Zap, Activity, AlertTriangle, CheckCircle, Clock, Calendar, TrendingUp, BarChart3, Shield, FileText, Download, Filter, Compass, Ruler } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
-import '../../styles/davinci.css';
 
 interface TestResult {
   id: number;

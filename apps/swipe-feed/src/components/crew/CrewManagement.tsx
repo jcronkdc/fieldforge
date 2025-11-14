@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Users, HardHat, Plus, UserPlus, TrendingUp, Shield, Phone, Award, ChevronRight, Search, Filter, Star, Clock, AlertCircle, CheckCircle, Loader2, MapPin, Compass, Ruler } from 'lucide-react';
 import { format } from 'date-fns';
-import '../../styles/davinci.css';
 
 interface Crew {
   id: string;

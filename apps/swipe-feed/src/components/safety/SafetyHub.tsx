@@ -3,7 +3,6 @@ import { Shield, AlertTriangle, Activity, FileText, Users, Calendar, TrendingUp,
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { format, differenceInDays } from 'date-fns';
-import '../../styles/davinci.css';
 
 interface SafetyMetrics {
   daysWithoutIncident: number;

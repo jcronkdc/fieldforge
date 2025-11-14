@@ -185,15 +185,21 @@ export const NewElectricalLanding: React.FC = () => {
           </div>
           
           <div className="flex items-center gap-4">
+            <a href="/pricing" className="px-4 py-2 text-slate-300 hover:text-white transition-colors font-medium hidden md:block">
+              Pricing
+            </a>
+            <a href="/showcase" className="px-4 py-2 text-slate-300 hover:text-white transition-colors font-medium hidden md:block">
+              Features
+            </a>
             <button 
               onClick={handleLoginClick}
-              className="px-6 py-2 text-white hover:text-blue-300 transition-colors font-medium"
+              className="px-6 py-2.5 text-white hover:text-blue-300 transition-colors font-medium border border-slate-700 rounded-lg hover:border-slate-600"
             >
               Sign In
             </button>
             <button 
               onClick={handleSignupClick}
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-[1.02]"
             >
               Get Started
             </button>
@@ -221,22 +227,22 @@ export const NewElectricalLanding: React.FC = () => {
                 </div>
               </h1>
               
-              <p className="mx-auto mb-10 max-w-3xl text-xl text-slate-300 leading-relaxed">
-                We're building the first platform designed specifically for electrical construction teams.
-                Join our early access program and help shape the future of T&D project management.
+              <p className="mx-auto mb-10 max-w-3xl text-xl text-slate-200 font-light leading-relaxed">
+                Enterprise-grade construction management platform built specifically for electrical contractors.
+                Streamline your transmission, distribution, and substation projects with real-time intelligence.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
                 <button 
                   onClick={handleSignupClick}
-                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-xl shadow-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+                  className="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-xl shadow-2xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-[1.02] hover:shadow-blue-500/25 flex items-center justify-center gap-3 border border-blue-400/20"
                 >
                   Join Early Access
                   <ArrowRight className="h-5 w-5" />
                 </button>
                 <button 
                   onClick={handleLoginClick}
-                  className="px-8 py-4 bg-slate-800/50 backdrop-blur-sm border border-slate-600 text-white text-lg font-semibold rounded-xl hover:bg-slate-700/50 transition-all flex items-center justify-center gap-2"
+                  className="px-10 py-4 bg-slate-800/80 backdrop-blur-md border-2 border-slate-600 text-white text-lg font-semibold rounded-xl hover:bg-slate-700/80 hover:border-slate-500 transition-all flex items-center justify-center gap-3 shadow-lg"
                 >
                   Learn More
                 </button>
@@ -476,6 +482,45 @@ export const NewElectricalLanding: React.FC = () => {
           <p className="mt-8 text-sm text-blue-200">
             No credit card required • Early access • Help shape the future
           </p>
+        </div>
+      </section>
+
+      {/* Demo Access Section */}
+      <section className="bg-slate-900/50 py-16 border-t border-slate-800">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="bg-slate-800/30 backdrop-blur-sm rounded-2xl p-8 border border-slate-700">
+            <h3 className="text-2xl font-bold text-white mb-6 text-center">
+              Test Drive the Platform
+            </h3>
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-slate-900/50 rounded-xl p-6 border border-blue-500/20">
+                <div className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-2">Field Worker</div>
+                <div className="text-white font-mono mb-1">demo@fieldforge.com</div>
+                <div className="text-xs text-slate-400 font-mono">password: demo123</div>
+              </div>
+              <div className="bg-slate-900/50 rounded-xl p-6 border border-purple-500/20">
+                <div className="text-sm font-semibold text-purple-400 uppercase tracking-wider mb-2">Manager</div>
+                <div className="text-white font-mono mb-1">manager@fieldforge.com</div>
+                <div className="text-xs text-slate-400 font-mono">password: demo123</div>
+              </div>
+              <div className="bg-slate-900/50 rounded-xl p-6 border border-green-500/20">
+                <div className="text-sm font-semibold text-green-400 uppercase tracking-wider mb-2">Administrator</div>
+                <div className="text-white font-mono mb-1">admin@fieldforge.com</div>
+                <div className="text-xs text-slate-400 font-mono">password: demo123</div>
+              </div>
+            </div>
+            <div className="text-center space-y-3">
+              <a href="/pricing" className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold transition-colors">
+                View Transparent Pricing
+                <ArrowRight className="h-4 w-4" />
+              </a>
+              <div className="text-slate-400">•</div>
+              <a href="/acquisition-inquiry" className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-semibold transition-colors">
+                Enterprise Solutions & Acquisition
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 

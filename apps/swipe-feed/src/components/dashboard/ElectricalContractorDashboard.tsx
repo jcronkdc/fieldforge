@@ -20,7 +20,6 @@ import {
   Compass,
   Ruler
 } from 'lucide-react';
-import '../../styles/davinci.css';
 
 // Based on National Conductor's actual capabilities from their website
 const quickActions = [

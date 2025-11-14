@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { SEOHead, generateWebPageSchema } from '../components/seo/SEOHead';
 import { ArrowRight, Sparkles, Compass, Cog, Ruler } from 'lucide-react';
-import '../styles/davinci.css';
 
 const title = 'FieldForge — Enterprise-Grade Construction Management';
 const description =

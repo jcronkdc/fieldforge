@@ -1,6 +1,5 @@
 import React from 'react';
 import { Compass, Ruler, Cog, Package, Users, Shield } from 'lucide-react';
-import '../styles/davinci.css';
 
 export const RenaissanceTest: React.FC = () => {
   return (

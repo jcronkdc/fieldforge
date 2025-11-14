@@ -3,7 +3,6 @@ import { FileText, Upload, Clock, CheckCircle, XCircle, AlertCircle, Search, Fil
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
-import '../../styles/davinci.css';
 
 interface Submittal {
   id: string;

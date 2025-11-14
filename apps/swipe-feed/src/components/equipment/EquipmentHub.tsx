@@ -3,7 +3,6 @@ import { Package, Truck, Wrench, Calendar, QrCode, Search, Filter, Plus, AlertTr
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { format, differenceInDays } from 'date-fns';
-import '../../styles/davinci.css';
 
 interface Equipment {
   id: string;

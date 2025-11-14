@@ -7,7 +7,6 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
-import '../../styles/davinci.css';
 
 interface CompanyData {
   id: string;

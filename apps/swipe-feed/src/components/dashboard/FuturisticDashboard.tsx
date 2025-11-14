@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { ElectricalContractorDashboard } from './ElectricalContractorDashboard';
 import { Link } from 'react-router-dom';
-import '../../styles/davinci.css';
 
 const telemetryCards = [
   {

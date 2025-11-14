@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Building, Code, DollarSign, Users, Zap, Shield, CheckCircle, ArrowRight, Compass, Ruler } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/davinci.css';
 
 export const AcquisitionInquiry: React.FC = () => {
   const navigate = useNavigate();
