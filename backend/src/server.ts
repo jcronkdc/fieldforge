@@ -33,7 +33,6 @@ import { createEmergencyRouter } from "./construction/emergency/emergencyRoutes.
 import { createUserRouter } from "./routes/userRoutes.js";
 import { createSubmittalsRouter } from "./routes/submittalsRoutes.js";
 import { createOutagesRouter } from "./routes/outagesRoutes.js";
-import { createSettingsRouter } from "./routes/settingsRoutes.js";
 import { createCompanyRouter } from "./routes/companyRoutes.js";
 
 /**
@@ -103,6 +102,9 @@ app.use("/api/documents/bulk", sensitiveOperationLimiter);
 // User Profile Management - COMPLETE WITH CERTIFICATIONS & SETTINGS ✅
 app.use("/api/users", createUserRouter());
 
+// Company Management - ORGANIZATION SETTINGS & MULTI-TENANT ✅
+app.use("/api/company", createCompanyRouter());
+
 // Field Operations (Time tracking, daily reports, weather)
 app.use("/api/field-ops", createFieldOpsRouter());
 
@@ -166,11 +168,7 @@ app.use("/api/submittals", createSubmittalsRouter());
 // Outage Coordination - PLATFORM'S PLANNING BRAIN ✅
 app.use("/api/outages", createOutagesRouter());
 
-// User Settings Management - PREFERENCES & CUSTOMIZATION ✅
-app.use("/api/user", createSettingsRouter());
-
-// Company Settings Management - ADMIN ONLY ✅
-app.use("/api/company", createCompanyRouter());
+// Settings are now part of user routes (/api/users/settings)
 
 // Error handling middleware (must be last)
 app.use(notFoundHandler); // Handle 404s

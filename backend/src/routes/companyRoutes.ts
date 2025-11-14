@@ -1,284 +1,709 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { supabase } from '../db.js';
+import crypto from 'crypto';
+import { query } from '../database.js';
+import { auditLogger } from '../middleware/auditLogger.js';
 
-// Company settings schema
-const companySettingsSchema = z.object({
-  company_name: z.string().optional(),
-  legal_entity_name: z.string().optional(),
-  industry: z.string().optional(),
-  address: z.string().optional(),
-  contact_email: z.string().email().optional(),
-  phone_number: z.string().optional(),
-  logo_url: z.string().url().optional(),
+// Company data validation schema
+const companyDataSchema = z.object({
+  name: z.string(),
+  legalName: z.string(),
+  taxId: z.string().optional(),
+  registrationNumber: z.string().optional(),
+  industry: z.string(),
+  founded: z.string(),
+  website: z.string().optional(),
+  description: z.string().optional(),
+  email: z.string().email(),
+  phone: z.string().optional(),
+  address: z.object({
+    street: z.string().optional(),
+    city: z.string().optional(),
+    state: z.string().optional(),
+    zipCode: z.string().optional(),
+    country: z.string()
+  }),
   branding: z.object({
-    primary_color: z.string().optional(),
-    secondary_color: z.string().optional(),
-    logo_position: z.enum(['left', 'center', 'right']).optional(),
-    custom_css: z.string().optional()
-  }).optional(),
-  integrations: z.object({
-    slack: z.object({
-      enabled: z.boolean(),
-      webhook_url: z.string().optional()
-    }).optional(),
-    microsoft_teams: z.object({
-      enabled: z.boolean(),
-      webhook_url: z.string().optional()
-    }).optional(),
-    google_workspace: z.object({
-      enabled: z.boolean(),
-      api_key: z.string().optional()
-    }).optional()
-  }).optional(),
-  billing: z.object({
-    plan: z.enum(['starter', 'professional', 'enterprise']).optional(),
-    billing_email: z.string().email().optional(),
-    tax_id: z.string().optional(),
-    payment_method: z.enum(['card', 'invoice', 'ach']).optional()
-  }).optional(),
-  data_retention: z.object({
-    logs: z.enum(['30days', '90days', '1year', 'forever']).optional(),
-    documents: z.enum(['1year', '3years', '7years', 'forever']).optional(),
-    analytics: z.enum(['90days', '1year', '3years', 'forever']).optional()
-  }).optional()
+    primaryColor: z.string(),
+    secondaryColor: z.string(),
+    logoUrl: z.string().optional(),
+    faviconUrl: z.string().optional(),
+    emailHeader: z.string().optional()
+  }),
+  settings: z.object({
+    timezone: z.string(),
+    currency: z.string(),
+    dateFormat: z.string(),
+    fiscalYearStart: z.string(),
+    defaultProjectDuration: z.number(),
+    autoNumberProjects: z.boolean(),
+    projectPrefix: z.string(),
+    requireApprovals: z.boolean(),
+    approvalThreshold: z.number()
+  }),
+  subscription: z.object({
+    plan: z.enum(['starter', 'professional', 'enterprise']),
+    status: z.enum(['active', 'trialing', 'canceled', 'past_due']),
+    currentPeriodEnd: z.string(),
+    seats: z.number(),
+    usedSeats: z.number()
+  }),
+  features: z.object({
+    advancedAnalytics: z.boolean(),
+    apiAccess: z.boolean(),
+    customWorkflows: z.boolean(),
+    unlimitedProjects: z.boolean(),
+    prioritySupport: z.boolean(),
+    whiteLabel: z.boolean(),
+    ssoEnabled: z.boolean()
+  })
 });
 
-// Middleware to check if user is admin
-async function isAdmin(req: Request, res: Response, next: Function) {
-  const userId = (req as any).user?.id;
-  if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
+// Role validation schema
+const roleSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  permissions: z.array(z.string())
+});
 
-  // Check user profile for admin status
-  const { data: profile, error } = await supabase
-    .from('user_profiles')
-    .select('role, is_admin')
-    .eq('user_id', userId)
-    .single();
+// Workflow template validation schema
+const workflowTemplateSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  category: z.string(),
+  steps: z.array(z.object({
+    name: z.string(),
+    assignee: z.string(),
+    duration: z.number(),
+    dependencies: z.array(z.string())
+  })),
+  isDefault: z.boolean()
+});
 
-  if (error || (!profile?.is_admin && profile?.role !== 'admin')) {
-    return res.status(403).json({ error: 'Admin access required' });
-  }
-
-  next();
-}
+// API key validation schema
+const apiKeySchema = z.object({
+  name: z.string(),
+  permissions: z.array(z.string())
+});
 
 export function createCompanyRouter(): Router {
   const router = Router();
 
-  // Get company settings (admin only)
-  router.get('/settings', isAdmin, async (req: Request, res: Response) => {
+  // Get company data
+  router.get('/', async (req: Request, res: Response) => {
     try {
       const userId = (req as any).user?.id;
-
-      // Get user's company ID from profile
-      const { data: profile, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('company_id')
-        .eq('user_id', userId)
-        .single();
-
-      if (profileError || !profile?.company_id) {
-        return res.status(404).json({ error: 'Company not found' });
+      
+      // Get user's company ID
+      const userResult = await query(
+        'SELECT company_id FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
       }
-
-      // Get company settings
-      const { data: settings, error } = await supabase
-        .from('company_settings')
-        .select('*')
-        .eq('company_id', profile.company_id)
-        .single();
-
-      if (error && error.code === 'PGRST116') {
-        // No settings found, create defaults
-        const defaultSettings = {
-          company_id: profile.company_id,
-          company_name: 'FieldForge Construction',
-          industry: 'Construction',
-          branding: {
-            primary_color: '#DAA520',
-            secondary_color: '#1e293b',
-            logo_position: 'left'
-          },
-          integrations: {
-            slack: { enabled: false },
-            microsoft_teams: { enabled: false },
-            google_workspace: { enabled: false }
-          },
-          billing: {
-            plan: 'starter'
-          },
-          data_retention: {
-            logs: '90days',
-            documents: '3years',
-            analytics: '1year'
-          },
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        };
-
-        const { data: newSettings, error: createError } = await supabase
-          .from('company_settings')
-          .insert(defaultSettings)
-          .select()
-          .single();
-
-        if (createError) {
-          console.error('Error creating default company settings:', createError);
-          return res.status(500).json({ error: 'Failed to create settings' });
-        }
-
-        return res.json({ success: true, settings: newSettings });
+      
+      const companyId = userResult.rows[0].company_id;
+      
+      // Fetch company data
+      const companyResult = await query(
+        'SELECT * FROM company_settings WHERE id = $1',
+        [companyId]
+      );
+      
+      if (companyResult.rows.length === 0) {
+        return res.status(404).json({ success: false, error: 'Company not found' });
       }
-
-      if (error) {
-        console.error('Error fetching company settings:', error);
-        return res.status(500).json({ error: 'Failed to fetch settings' });
-      }
-
-      res.json({ success: true, settings });
+      
+      res.json({ success: true, company: companyResult.rows[0].data });
     } catch (error) {
-      console.error('Error in GET /company/settings:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error('Error fetching company data:', error);
+      res.status(500).json({ success: false, error: 'Failed to fetch company data' });
     }
   });
 
-  // Update company settings (admin only)
-  router.put('/settings', isAdmin, async (req: Request, res: Response) => {
+  // Update company data
+  router.put('/', async (req: Request, res: Response) => {
     try {
       const userId = (req as any).user?.id;
-
-      // Get user's company ID
-      const { data: profile, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('company_id')
-        .eq('user_id', userId)
-        .single();
-
-      if (profileError || !profile?.company_id) {
-        return res.status(404).json({ error: 'Company not found' });
+      const validatedData = companyDataSchema.parse(req.body);
+      
+      // Get user's company ID and verify permissions
+      const userResult = await query(
+        'SELECT company_id, role FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
       }
-
-      // Validate request body
-      const validatedData = companySettingsSchema.parse(req.body);
-
-      const { data: updatedSettings, error } = await supabase
-        .from('company_settings')
-        .update({
-          ...validatedData,
-          updated_at: new Date().toISOString()
-        })
-        .eq('company_id', profile.company_id)
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error updating company settings:', error);
-        return res.status(500).json({ error: 'Failed to update settings' });
+      
+      const { company_id: companyId, role } = userResult.rows[0];
+      
+      // Check if user has permission to update company settings
+      if (!['admin', 'owner'].includes(role)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Insufficient permissions' 
+        });
       }
-
-      res.json({ success: true, settings: updatedSettings });
+      
+      // Update company data
+      await query(
+        `INSERT INTO company_settings (id, data, updated_at, updated_by)
+         VALUES ($1, $2, NOW(), $3)
+         ON CONFLICT (id)
+         DO UPDATE SET data = $2, updated_at = NOW(), updated_by = $3`,
+        [companyId, JSON.stringify(validatedData), userId]
+      );
+      
+      auditLogger.log('company_settings_updated', userId, {
+        company_id: companyId,
+        changes: Object.keys(req.body)
+      });
+      
+      res.json({ success: true, company: validatedData });
     } catch (error) {
+      console.error('Error updating company data:', error);
       if (error instanceof z.ZodError) {
-        return res.status(400).json({ error: 'Invalid settings data', details: error.errors });
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Invalid company data', 
+          details: error.format() 
+        });
       }
-      console.error('Error in PUT /company/settings:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ success: false, error: 'Failed to update company data' });
     }
   });
 
-  // Upload company logo (admin only)
-  router.post('/settings/logo', isAdmin, async (req: Request, res: Response) => {
+  // Get company roles
+  router.get('/roles', async (req: Request, res: Response) => {
     try {
       const userId = (req as any).user?.id;
-      const { logo_url } = req.body;
-
-      if (!logo_url) {
-        return res.status(400).json({ error: 'Logo URL required' });
-      }
-
+      
       // Get user's company ID
-      const { data: profile, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('company_id')
-        .eq('user_id', userId)
-        .single();
-
-      if (profileError || !profile?.company_id) {
-        return res.status(404).json({ error: 'Company not found' });
+      const userResult = await query(
+        'SELECT company_id FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
       }
-
-      // Update logo URL
-      const { data: updatedSettings, error } = await supabase
-        .from('company_settings')
-        .update({
-          logo_url,
-          updated_at: new Date().toISOString()
-        })
-        .eq('company_id', profile.company_id)
-        .select()
-        .single();
-
-      if (error) {
-        return res.status(500).json({ error: 'Failed to update logo' });
-      }
-
-      res.json({ success: true, settings: updatedSettings });
+      
+      const companyId = userResult.rows[0].company_id;
+      
+      // Fetch roles
+      const rolesResult = await query(
+        `SELECT r.*, COUNT(u.id) as member_count
+         FROM company_roles r
+         LEFT JOIN users u ON u.company_id = r.company_id AND u.role = r.name
+         WHERE r.company_id = $1
+         GROUP BY r.id
+         ORDER BY r.created_at`,
+        [companyId]
+      );
+      
+      const roles = rolesResult.rows.map((row: any) => ({
+        id: row.id,
+        name: row.name,
+        description: row.description,
+        permissions: row.permissions,
+        isSystem: row.is_system,
+        memberCount: parseInt(row.member_count)
+      }));
+      
+      res.json({ success: true, roles });
     } catch (error) {
-      console.error('Error in POST /company/settings/logo:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error('Error fetching roles:', error);
+      res.status(500).json({ success: false, error: 'Failed to fetch roles' });
     }
   });
 
-  // Export company settings (admin only)
-  router.post('/settings/export', isAdmin, async (req: Request, res: Response) => {
+  // Create new role
+  router.post('/roles', async (req: Request, res: Response) => {
     try {
       const userId = (req as any).user?.id;
-
-      // Get user's company ID
-      const { data: profile, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('company_id')
-        .eq('user_id', userId)
-        .single();
-
-      if (profileError || !profile?.company_id) {
-        return res.status(404).json({ error: 'Company not found' });
+      const validatedData = roleSchema.parse(req.body);
+      
+      // Get user's company ID and verify permissions
+      const userResult = await query(
+        'SELECT company_id, role FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
       }
-
-      const { data: settings, error } = await supabase
-        .from('company_settings')
-        .select('*')
-        .eq('company_id', profile.company_id)
-        .single();
-
-      if (error) {
-        return res.status(500).json({ error: 'Failed to fetch settings' });
+      
+      const { company_id: companyId, role } = userResult.rows[0];
+      
+      if (!['admin', 'owner'].includes(role)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Insufficient permissions' 
+        });
       }
-
-      // Remove sensitive data
-      const exportData = {
-        ...settings,
-        company_id: undefined,
-        id: undefined,
-        created_at: undefined,
-        updated_at: undefined,
-        integrations: {
-          ...settings.integrations,
-          slack: { ...settings.integrations?.slack, webhook_url: undefined },
-          microsoft_teams: { ...settings.integrations?.microsoft_teams, webhook_url: undefined },
-          google_workspace: { ...settings.integrations?.google_workspace, api_key: undefined }
+      
+      // Create role
+      const result = await query(
+        `INSERT INTO company_roles (company_id, name, description, permissions, created_by)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [companyId, validatedData.name, validatedData.description, validatedData.permissions, userId]
+      );
+      
+      auditLogger.log('role_created', userId, {
+        company_id: companyId,
+        role_name: validatedData.name
+      });
+      
+      res.json({ 
+        success: true, 
+        role: {
+          id: result.rows[0].id,
+          name: result.rows[0].name,
+          description: result.rows[0].description,
+          permissions: result.rows[0].permissions,
+          isSystem: false,
+          memberCount: 0
         }
-      };
-
-      res.json({ success: true, export: exportData });
+      });
     } catch (error) {
-      console.error('Error in POST /company/settings/export:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.error('Error creating role:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Invalid role data', 
+          details: error.format() 
+        });
+      }
+      res.status(500).json({ success: false, error: 'Failed to create role' });
+    }
+  });
+
+  // Update role
+  router.put('/roles/:roleId', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+      const { roleId } = req.params;
+      const validatedData = roleSchema.parse(req.body);
+      
+      // Get user's company ID and verify permissions
+      const userResult = await query(
+        'SELECT company_id, role FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
+      }
+      
+      const { company_id: companyId, role } = userResult.rows[0];
+      
+      if (!['admin', 'owner'].includes(role)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Insufficient permissions' 
+        });
+      }
+      
+      // Check if role is system role
+      const roleCheck = await query(
+        'SELECT is_system FROM company_roles WHERE id = $1 AND company_id = $2',
+        [roleId, companyId]
+      );
+      
+      if (!roleCheck.rows.length) {
+        return res.status(404).json({ success: false, error: 'Role not found' });
+      }
+      
+      if (roleCheck.rows[0].is_system) {
+        // For system roles, only update permissions
+        await query(
+          'UPDATE company_roles SET permissions = $1, updated_at = NOW() WHERE id = $2',
+          [validatedData.permissions, roleId]
+        );
+      } else {
+        // For custom roles, update everything
+        await query(
+          'UPDATE company_roles SET name = $1, description = $2, permissions = $3, updated_at = NOW() WHERE id = $4',
+          [validatedData.name, validatedData.description, validatedData.permissions, roleId]
+        );
+      }
+      
+      auditLogger.log('role_updated', userId, {
+        company_id: companyId,
+        role_id: roleId
+      });
+      
+      res.json({ success: true, role: validatedData });
+    } catch (error) {
+      console.error('Error updating role:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Invalid role data', 
+          details: error.format() 
+        });
+      }
+      res.status(500).json({ success: false, error: 'Failed to update role' });
+    }
+  });
+
+  // Delete role
+  router.delete('/roles/:roleId', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+      const { roleId } = req.params;
+      
+      // Get user's company ID and verify permissions
+      const userResult = await query(
+        'SELECT company_id, role FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
+      }
+      
+      const { company_id: companyId, role } = userResult.rows[0];
+      
+      if (!['admin', 'owner'].includes(role)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Insufficient permissions' 
+        });
+      }
+      
+      // Check if role is system role or has members
+      const roleCheck = await query(
+        `SELECT r.is_system, COUNT(u.id) as member_count
+         FROM company_roles r
+         LEFT JOIN users u ON u.company_id = r.company_id AND u.role = r.name
+         WHERE r.id = $1 AND r.company_id = $2
+         GROUP BY r.id, r.is_system`,
+        [roleId, companyId]
+      );
+      
+      if (!roleCheck.rows.length) {
+        return res.status(404).json({ success: false, error: 'Role not found' });
+      }
+      
+      if (roleCheck.rows[0].is_system) {
+        return res.status(400).json({ success: false, error: 'Cannot delete system role' });
+      }
+      
+      if (parseInt(roleCheck.rows[0].member_count) > 0) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Cannot delete role with active members' 
+        });
+      }
+      
+      // Delete role
+      await query(
+        'DELETE FROM company_roles WHERE id = $1 AND company_id = $2',
+        [roleId, companyId]
+      );
+      
+      auditLogger.log('role_deleted', userId, {
+        company_id: companyId,
+        role_id: roleId
+      });
+      
+      res.json({ success: true, message: 'Role deleted' });
+    } catch (error) {
+      console.error('Error deleting role:', error);
+      res.status(500).json({ success: false, error: 'Failed to delete role' });
+    }
+  });
+
+  // Get workflow templates
+  router.get('/workflows', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+      
+      // Get user's company ID
+      const userResult = await query(
+        'SELECT company_id FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
+      }
+      
+      const companyId = userResult.rows[0].company_id;
+      
+      // Fetch workflows
+      const workflowsResult = await query(
+        'SELECT * FROM workflow_templates WHERE company_id = $1 ORDER BY created_at',
+        [companyId]
+      );
+      
+      const workflows = workflowsResult.rows.map((row: any) => ({
+        id: row.id,
+        name: row.name,
+        description: row.description,
+        category: row.category,
+        steps: row.steps,
+        isDefault: row.is_default
+      }));
+      
+      res.json({ success: true, workflows });
+    } catch (error) {
+      console.error('Error fetching workflows:', error);
+      res.status(500).json({ success: false, error: 'Failed to fetch workflows' });
+    }
+  });
+
+  // Create workflow template
+  router.post('/workflows', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+      const validatedData = workflowTemplateSchema.parse(req.body);
+      
+      // Get user's company ID and verify permissions
+      const userResult = await query(
+        'SELECT company_id, role FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
+      }
+      
+      const { company_id: companyId, role } = userResult.rows[0];
+      
+      if (!['admin', 'owner', 'manager'].includes(role)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Insufficient permissions' 
+        });
+      }
+      
+      // Create workflow
+      const result = await query(
+        `INSERT INTO workflow_templates 
+         (company_id, name, description, category, steps, is_default, created_by)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         RETURNING *`,
+        [
+          companyId, 
+          validatedData.name, 
+          validatedData.description,
+          validatedData.category,
+          JSON.stringify(validatedData.steps),
+          validatedData.isDefault,
+          userId
+        ]
+      );
+      
+      auditLogger.log('workflow_created', userId, {
+        company_id: companyId,
+        workflow_name: validatedData.name
+      });
+      
+      res.json({ 
+        success: true, 
+        workflow: {
+          id: result.rows[0].id,
+          ...validatedData
+        }
+      });
+    } catch (error) {
+      console.error('Error creating workflow:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Invalid workflow data', 
+          details: error.format() 
+        });
+      }
+      res.status(500).json({ success: false, error: 'Failed to create workflow' });
+    }
+  });
+
+  // Get API keys
+  router.get('/api-keys', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+      
+      // Get user's company ID and verify permissions
+      const userResult = await query(
+        'SELECT company_id, role FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
+      }
+      
+      const { company_id: companyId, role } = userResult.rows[0];
+      
+      if (!['admin', 'owner'].includes(role)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Insufficient permissions' 
+        });
+      }
+      
+      // Fetch API keys
+      const keysResult = await query(
+        'SELECT * FROM api_keys WHERE company_id = $1 ORDER BY created_at DESC',
+        [companyId]
+      );
+      
+      const keys = keysResult.rows.map((row: any) => ({
+        id: row.id,
+        name: row.name,
+        key: row.key_preview, // Only show preview
+        created: row.created_at,
+        lastUsed: row.last_used,
+        permissions: row.permissions,
+        isActive: row.is_active
+      }));
+      
+      res.json({ success: true, keys });
+    } catch (error) {
+      console.error('Error fetching API keys:', error);
+      res.status(500).json({ success: false, error: 'Failed to fetch API keys' });
+    }
+  });
+
+  // Create API key
+  router.post('/api-keys', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+      const validatedData = apiKeySchema.parse(req.body);
+      
+      // Get user's company ID and verify permissions
+      const userResult = await query(
+        'SELECT company_id, role FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
+      }
+      
+      const { company_id: companyId, role } = userResult.rows[0];
+      
+      if (!['admin', 'owner'].includes(role)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Insufficient permissions' 
+        });
+      }
+      
+      // Generate API key
+      const apiKey = `ff_${companyId}_${generateRandomKey()}`;
+      const keyPreview = `${apiKey.substring(0, 20)}...${apiKey.substring(apiKey.length - 10)}`;
+      
+      // Store API key
+      const result = await query(
+        `INSERT INTO api_keys 
+         (company_id, name, key_hash, key_preview, permissions, created_by)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         RETURNING id`,
+        [
+          companyId,
+          validatedData.name,
+          hashApiKey(apiKey), // Hash the key for storage
+          keyPreview,
+          validatedData.permissions,
+          userId
+        ]
+      );
+      
+      auditLogger.log('api_key_created', userId, {
+        company_id: companyId,
+        key_id: result.rows[0].id,
+        key_name: validatedData.name
+      });
+      
+      res.json({ 
+        success: true, 
+        key: {
+          id: result.rows[0].id,
+          name: validatedData.name,
+          key: apiKey, // Return full key only on creation
+          created: new Date().toISOString(),
+          permissions: validatedData.permissions,
+          isActive: true
+        }
+      });
+    } catch (error) {
+      console.error('Error creating API key:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Invalid API key data', 
+          details: error.format() 
+        });
+      }
+      res.status(500).json({ success: false, error: 'Failed to create API key' });
+    }
+  });
+
+  // Revoke API key
+  router.delete('/api-keys/:keyId', async (req: Request, res: Response) => {
+    try {
+      const userId = (req as any).user?.id;
+      const { keyId } = req.params;
+      
+      // Get user's company ID and verify permissions
+      const userResult = await query(
+        'SELECT company_id, role FROM users WHERE id = $1',
+        [userId]
+      );
+      
+      if (!userResult.rows[0]?.company_id) {
+        return res.status(404).json({ success: false, error: 'No company found' });
+      }
+      
+      const { company_id: companyId, role } = userResult.rows[0];
+      
+      if (!['admin', 'owner'].includes(role)) {
+        return res.status(403).json({ 
+          success: false, 
+          error: 'Insufficient permissions' 
+        });
+      }
+      
+      // Revoke key
+      await query(
+        'UPDATE api_keys SET is_active = false, revoked_at = NOW(), revoked_by = $3 WHERE id = $1 AND company_id = $2',
+        [keyId, companyId, userId]
+      );
+      
+      auditLogger.log('api_key_revoked', userId, {
+        company_id: companyId,
+        key_id: keyId
+      });
+      
+      res.json({ success: true, message: 'API key revoked' });
+    } catch (error) {
+      console.error('Error revoking API key:', error);
+      res.status(500).json({ success: false, error: 'Failed to revoke API key' });
     }
   });
 
   return router;
+}
+
+// Helper functions
+function generateRandomKey(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let key = '';
+  for (let i = 0; i < 32; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return key;
+}
+
+function hashApiKey(key: string): string {
+  return crypto.createHash('sha256').update(key).digest('hex');
 }

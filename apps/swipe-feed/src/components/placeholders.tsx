@@ -93,7 +93,8 @@ export const FieldForgeAI = () => <PlaceholderPage title="FieldForge AI Assistan
 // Settings
 // Settings is now a real component - see ./settings/Settings.tsx
 export { Settings } from './settings/Settings';
-export const CompanySettings = () => <PlaceholderPage title="Company Settings" icon={Building2} description="Company configuration and management" />;
+// CompanySettings is now a real component - see ./company/CompanySettings.tsx
+export { CompanySettings } from './company/CompanySettings';
 // UserProfile is now a real component - see ./profile/UserProfile.tsx
 export { UserProfile } from './profile/UserProfile';
 

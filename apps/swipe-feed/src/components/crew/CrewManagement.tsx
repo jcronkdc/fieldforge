@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Users, HardHat, Plus, UserPlus, TrendingUp, Shield, Phone, Award, ChevronRight, Search, Filter, Star, Clock, AlertCircle, CheckCircle, Loader2, MapPin } from 'lucide-react';
+import { Users, HardHat, Plus, UserPlus, TrendingUp, Shield, Phone, Award, ChevronRight, Search, Filter, Star, Clock, AlertCircle, CheckCircle, Loader2, MapPin, Compass, Ruler } from 'lucide-react';
 import { format } from 'date-fns';
+import '../../styles/davinci.css';
 
 interface Crew {
   id: string;
@@ -252,69 +253,83 @@ export const CrewManagement: React.FC = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+    <div className="davinci-grid p-[34px] max-w-7xl mx-auto space-y-[34px]">
+      {/* Renaissance Decorations */}
+      <div className="compass-rose" />
+      
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[21px]">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Crew Management</h1>
-          <p className="text-gray-600 mt-1">Manage construction crews and assignments</p>
+          <h1 className="text-golden-2xl font-bold text-white measurement-line flex items-center gap-[13px]">
+            <Users className="w-8 h-8 text-amber-400" />
+            Crew Management
+          </h1>
+          <p className="text-golden-base text-amber-400/60 mt-[8px] technical-annotation" data-note="WORKFORCE">Manage construction crews and assignments</p>
         </div>
         <button
           onClick={() => setShowCreateForm(true)}
-          className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center gap-2 min-h-[44px]"
+          className="btn-davinci px-[21px] py-[13px] flex items-center gap-[8px] field-touch"
         >
-          <Plus className="w-4 h-4" />
-          New Crew
+          <Plus className="w-5 h-5" />
+          <span className="field-readable">New Crew</span>
         </button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+      {/* Stats Cards - Golden Ratio Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[21px] paper-texture">
+        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Total Crews</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{crews.length}</p>
+              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="COUNT">Total Crews</p>
+              <p className="text-golden-xl font-bold text-white mt-[8px]">{crews.length}</p>
             </div>
-            <Users className="w-8 h-8 text-amber-500" />
+            <div className="vitruvian-square">
+              <Users className="w-[34px] h-[34px] text-amber-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.1s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Active Workers</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="ACTIVE">Active Workers</p>
+              <p className="text-golden-xl font-bold text-green-400 mt-[8px]">
                 {crews.reduce((sum, crew) => sum + crew.active_members, 0)}
               </p>
             </div>
-            <HardHat className="w-8 h-8 text-green-500" />
+            <div className="vitruvian-square">
+              <HardHat className="w-[34px] h-[34px] text-green-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.2s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Available Crews</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="READY">Available Crews</p>
+              <p className="text-golden-xl font-bold text-blue-400 mt-[8px]">
                 {crews.filter(c => !c.current_project_name).length}
               </p>
             </div>
-            <CheckCircle className="w-8 h-8 text-blue-500" />
+            <div className="vitruvian-square">
+              <CheckCircle className="w-[34px] h-[34px] text-blue-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.3s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600">Avg Crew Size</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">
+              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="AVERAGE">Avg Crew Size</p>
+              <p className="text-golden-xl font-bold text-purple-400 mt-[8px]">
                 {crews.length > 0 
                   ? Math.round(crews.reduce((sum, crew) => sum + crew.active_members, 0) / crews.length)
                   : 0}
               </p>
             </div>
-            <TrendingUp className="w-8 h-8 text-purple-500" />
+            <div className="vitruvian-square">
+              <TrendingUp className="w-[34px] h-[34px] text-purple-400" />
+            </div>
           </div>
         </div>
       </div>

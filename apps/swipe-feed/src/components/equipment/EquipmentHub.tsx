@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Package, Truck, Wrench, Calendar, QrCode, Search, Filter, Plus, AlertTriangle } from 'lucide-react';
+import { Package, Truck, Wrench, Calendar, QrCode, Search, Filter, Plus, AlertTriangle, Compass, Ruler } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { format, differenceInDays } from 'date-fns';
+import '../../styles/davinci.css';
 
 interface Equipment {
   id: string;
@@ -142,21 +143,21 @@ export const EquipmentHub: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'available': return 'text-green-500 bg-green-500/10';
-      case 'in use': return 'text-blue-500 bg-blue-500/10';
-      case 'maintenance': return 'text-orange-500 bg-orange-500/10';
-      case 'retired': return 'text-gray-500 bg-gray-500/10';
-      default: return 'text-gray-500 bg-gray-500/10';
+      case 'available': return 'text-green-400 bg-green-400/10';
+      case 'in use': return 'text-amber-400 bg-amber-400/10';
+      case 'maintenance': return 'text-orange-400 bg-orange-400/10';
+      case 'retired': return 'text-amber-400/40 bg-amber-400/5';
+      default: return 'text-amber-400/60 bg-amber-400/5';
     }
   };
 
   const getConditionColor = (condition: string) => {
     switch (condition) {
-      case 'new': return 'text-green-600';
-      case 'good': return 'text-green-500';
-      case 'fair': return 'text-yellow-500';
-      case 'poor': return 'text-red-500';
-      default: return 'text-gray-500';
+      case 'new': return 'text-green-400';
+      case 'good': return 'text-green-400/80';
+      case 'fair': return 'text-amber-400';
+      case 'poor': return 'text-red-400';
+      default: return 'text-amber-400/60';
     }
   };
 
@@ -172,123 +173,137 @@ export const EquipmentHub: React.FC = () => {
   });
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-4 sm:space-y-6">
+    <div className="davinci-grid p-[34px] max-w-7xl mx-auto space-y-[34px]">
+      {/* Renaissance Decorations */}
+      <div className="compass-rose" />
+      
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[21px]">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white">Equipment Hub</h1>
-          <p className="text-sm sm:text-base text-gray-400 mt-1">Track and manage equipment inventory</p>
+          <h1 className="text-golden-2xl font-bold text-white measurement-line flex items-center gap-[13px]">
+            <Package className="w-8 h-8 text-amber-400" />
+            Equipment Hub
+          </h1>
+          <p className="text-golden-base text-amber-400/60 mt-[8px] technical-annotation" data-note="INVENTORY">Track and manage equipment inventory</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setShowScanner(true)}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium flex items-center gap-2 transition-colors min-h-[44px]"
+            className="btn-blueprint px-[21px] py-[13px] flex items-center gap-[8px] field-touch"
           >
-            <QrCode className="w-4 h-4" />
-            <span className="hidden sm:inline">Scan QR</span>
+            <QrCode className="w-5 h-5" />
+            <span className="hidden sm:inline field-readable">Scan QR</span>
           </button>
           <button
             onClick={() => setShowAddForm(true)}
-            className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium flex items-center gap-2 transition-colors min-h-[44px]"
+            className="btn-davinci px-[21px] py-[13px] flex items-center gap-[8px] field-touch"
           >
-            <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">Add Equipment</span>
+            <Plus className="w-5 h-5" />
+            <span className="hidden sm:inline field-readable">Add Equipment</span>
           </button>
         </div>
       </div>
 
-      {/* Stats Cards - Mobile Responsive Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 sm:p-5">
+      {/* Stats Cards - Golden Ratio Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[21px] paper-texture">
+        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs sm:text-sm text-gray-400">Total Equipment</p>
-              <p className="text-xl sm:text-2xl font-bold text-white mt-1">{equipment.length}</p>
+              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="INVENTORY">Total Equipment</p>
+              <p className="text-golden-xl font-bold text-white mt-[8px]">{equipment.length}</p>
             </div>
-            <Package className="w-6 h-6 sm:w-8 sm:h-8 text-amber-500" />
+            <div className="vitruvian-square">
+              <Package className="w-[34px] h-[34px] text-amber-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 sm:p-5">
+        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.1s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs sm:text-sm text-gray-400">Available</p>
-              <p className="text-xl sm:text-2xl font-bold text-white mt-1">
+              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="STATUS">Available</p>
+              <p className="text-golden-xl font-bold text-green-400 mt-[8px]">
                 {equipment.filter(e => e.status === 'available').length}
               </p>
             </div>
-            <Truck className="w-6 h-6 sm:w-8 sm:h-8 text-green-500" />
+            <div className="vitruvian-square">
+              <Truck className="w-[34px] h-[34px] text-green-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 sm:p-5">
+        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.2s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs sm:text-sm text-gray-400">In Maintenance</p>
-              <p className="text-xl sm:text-2xl font-bold text-white mt-1">
+              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="REPAIR">In Maintenance</p>
+              <p className="text-golden-xl font-bold text-orange-400 mt-[8px]">
                 {equipment.filter(e => e.status === 'maintenance').length}
               </p>
             </div>
-            <Wrench className="w-6 h-6 sm:w-8 sm:h-8 text-orange-500" />
+            <div className="vitruvian-square">
+              <Wrench className="w-[34px] h-[34px] text-orange-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-4 sm:p-5">
+        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.3s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs sm:text-sm text-gray-400">Due Service</p>
-              <p className="text-xl sm:text-2xl font-bold text-white mt-1">
+              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="URGENT">Due Service</p>
+              <p className="text-golden-xl font-bold text-red-400 mt-[8px]">
                 {equipment.filter(e => {
                   if (!e.next_maintenance_date) return false;
                   return differenceInDays(new Date(e.next_maintenance_date), new Date()) <= 7;
                 }).length}
               </p>
             </div>
-            <Calendar className="w-6 h-6 sm:w-8 sm:h-8 text-red-500" />
+            <div className="vitruvian-square">
+              <Calendar className="w-[34px] h-[34px] text-red-400" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Search and Filter - Mobile Optimized */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      {/* Search and Filter - Renaissance Style */}
+      <div className="flex flex-col sm:flex-row gap-[21px]">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-[13px] top-[13px] w-5 h-5 text-amber-400/60" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by type, serial, or asset tag..."
-            className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none text-base min-h-[44px]"
+            className="w-full pl-[55px] pr-[21px] py-[13px] input-davinci bg-slate-800/50 text-white rounded-[8px] field-readable field-touch"
           />
         </div>
         
         <div className="flex gap-2">
           <button
             onClick={() => setFilterStatus('all')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] ${
+            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all field-touch ${
               filterStatus === 'all' 
-                ? 'bg-amber-600 text-white' 
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'btn-davinci' 
+                : 'tech-border bg-slate-800/50 text-amber-400/60 hover:bg-slate-700/50 hover:text-amber-400'
             }`}
           >
             All
           </button>
           <button
             onClick={() => setFilterStatus('available')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] ${
+            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all field-touch ${
               filterStatus === 'available' 
-                ? 'bg-amber-600 text-white' 
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'btn-davinci' 
+                : 'tech-border bg-slate-800/50 text-amber-400/60 hover:bg-slate-700/50 hover:text-amber-400'
             }`}
           >
             Available
           </button>
           <button
             onClick={() => setFilterStatus('in use')}
-            className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] ${
+            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all field-touch ${
               filterStatus === 'in use' 
-                ? 'bg-amber-600 text-white' 
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                ? 'btn-davinci' 
+                : 'tech-border bg-slate-800/50 text-amber-400/60 hover:bg-slate-700/50 hover:text-amber-400'
             }`}
           >
             In Use
@@ -296,16 +311,19 @@ export const EquipmentHub: React.FC = () => {
         </div>
       </div>
 
-      {/* Equipment Grid - Mobile Responsive */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Equipment Grid - Golden Ratio Layout */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[21px]">
         {loading && filteredEquipment.length === 0 ? (
-          <div className="col-span-full text-center py-12 text-gray-400">
-            Loading equipment...
+          <div className="col-span-full text-center py-[55px] text-amber-400/60">
+            <div className="spinner-davinci mb-[21px]" />
+            <p className="technical-annotation">Loading equipment inventory...</p>
           </div>
         ) : filteredEquipment.length === 0 ? (
-          <div className="col-span-full text-center py-12">
-            <Package className="w-12 h-12 text-gray-500 mx-auto mb-3" />
-            <p className="text-gray-400">No equipment found</p>
+          <div className="col-span-full text-center py-[55px]">
+            <div className="vitruvian-square mx-auto mb-[13px]">
+              <Package className="w-[55px] h-[55px] text-amber-400/40" />
+            </div>
+            <p className="text-amber-400/60 technical-annotation">No equipment found</p>
           </div>
         ) : (
           filteredEquipment.map(item => {
@@ -314,14 +332,15 @@ export const EquipmentHub: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5 hover:bg-slate-700/50 transition-colors cursor-pointer"
+                className="card-engineering p-[21px] rounded-[13px] cursor-pointer transform hover:scale-[1.02] transition-all depth-layer-1 breathe"
                 onClick={() => setSelectedEquipment(item)}
+                style={{ animationDelay: `${filteredEquipment.indexOf(item) * 0.05}s` }}
               >
-                <div className="flex justify-between items-start mb-3">
+                <div className="flex justify-between items-start mb-[13px]">
                   <div>
-                    <h3 className="text-lg font-medium text-white">{item.equipment_type}</h3>
+                    <h3 className="text-golden-base font-medium text-white measurement-line">{item.equipment_type}</h3>
                     {item.model && (
-                      <p className="text-sm text-gray-400">{item.manufacturer} {item.model}</p>
+                      <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="MODEL">{item.manufacturer} {item.model}</p>
                     )}
                   </div>
                   <div className="flex flex-col items-end gap-1">
@@ -415,15 +434,17 @@ export const EquipmentHub: React.FC = () => {
         )}
       </div>
 
-      {/* QR Scanner Modal - Mobile Friendly */}
+      {/* QR Scanner Modal - Renaissance Style */}
       {showScanner && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-xl p-6 max-w-md w-full">
-            <h2 className="text-xl font-bold text-white mb-4">Scan Equipment QR Code</h2>
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-[21px]">
+          <div className="card-vitruvian p-[34px] rounded-[21px] max-w-md w-full depth-layer-2 corner-sketch">
+            <h2 className="text-golden-lg font-bold text-white mb-[21px] measurement-line">Scan Equipment QR Code</h2>
             
-            <div className="border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
-              <QrCode className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-400 mb-4">
+            <div className="tech-border border-dashed rounded-[13px] p-[34px] text-center">
+              <div className="vitruvian-square mx-auto mb-[21px]">
+                <QrCode className="w-[55px] h-[55px] text-amber-400" />
+              </div>
+              <p className="text-amber-400/60 mb-[21px] technical-annotation" data-note="SCAN">
                 Use your camera to scan the QR code on the equipment
               </p>
               
@@ -438,7 +459,7 @@ export const EquipmentHub: React.FC = () => {
               
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium min-h-[44px]"
+                className="btn-davinci px-[34px] py-[13px] field-touch field-readable"
               >
                 Open Camera
               </button>
@@ -447,7 +468,7 @@ export const EquipmentHub: React.FC = () => {
             <div className="mt-4 flex gap-3">
               <button
                 onClick={() => setShowScanner(false)}
-                className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors min-h-[44px]"
+                className="flex-1 px-[21px] py-[13px] btn-blueprint field-touch field-readable"
               >
                 Cancel
               </button>
@@ -456,11 +477,11 @@ export const EquipmentHub: React.FC = () => {
         </div>
       )}
 
-      {/* Equipment Details Modal - Mobile Optimized */}
+      {/* Equipment Details Modal - Renaissance Style */}
       {selectedEquipment && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold text-white mb-4">Equipment Details</h2>
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-[21px]">
+          <div className="card-vitruvian p-[34px] rounded-[21px] max-w-2xl w-full max-h-[90vh] overflow-y-auto depth-layer-2 corner-sketch">
+            <h2 className="text-golden-lg font-bold text-white mb-[21px] measurement-line">Equipment Details</h2>
             
             <div className="space-y-4">
               <div>
@@ -519,7 +540,7 @@ export const EquipmentHub: React.FC = () => {
             <div className="mt-6 flex gap-3">
               <button
                 onClick={() => setSelectedEquipment(null)}
-                className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors min-h-[44px]"
+                className="flex-1 px-[21px] py-[13px] btn-blueprint field-touch field-readable"
               >
                 Close
               </button>
@@ -527,6 +548,14 @@ export const EquipmentHub: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Leonardo Quote */}
+      <div className="text-center opacity-30 mt-[89px]">
+        <p className="text-golden-sm text-amber-400/60 font-light italic">
+          "Mechanics is the paradise of the mathematical sciences."
+        </p>
+        <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+      </div>
     </div>
   );
 };
