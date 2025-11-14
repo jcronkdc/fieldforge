@@ -774,6 +774,24 @@ div[class*="bg-slate"] {
               linear-gradient(to bottom right, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
 }
 
+/* LANDING PAGE SPECIFIC OVERRIDES - MAXIMUM FORCE */
+.davinci-grid {
+  position: relative !important;
+  background-image: 
+    radial-gradient(ellipse at center, rgba(218, 165, 32, 0.05) 0%, transparent 70%),
+    linear-gradient(to bottom right, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
+}
+
+.davinci-grid::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image: 
+    repeating-linear-gradient(0deg, rgba(218, 165, 32, 0.05) 0px, transparent 1px, transparent 34px, rgba(218, 165, 32, 0.05) 34px),
+    repeating-linear-gradient(90deg, rgba(218, 165, 32, 0.05) 0px, transparent 1px, transparent 34px, rgba(218, 165, 32, 0.05) 34px) !important;
+  pointer-events: none !important;
+}
+
 /* Force amber colors on all primary elements */
 h1, h2, h3, h4, h5, h6,
 .text-white,
@@ -902,4 +920,75 @@ header {
   background: rgba(15, 23, 42, 0.95) !important;
   backdrop-filter: blur(16px) !important;
   border-color: rgba(218, 165, 32, 0.2) !important;
+}
+
+/* =================================================================== */
+/* LANDING PAGE ULTRA-AGGRESSIVE OVERRIDES - NUCLEAR OPTION           */
+/* =================================================================== */
+
+/* Force Renaissance background with highest specificity */
+body .min-h-screen.bg-gradient-to-br,
+body div.min-h-screen[class*="from-slate"],
+body .davinci-grid {
+  background: none !important;
+  background-color: #0f172a !important;
+  background-image: 
+    radial-gradient(ellipse at 30% 30%, rgba(218, 165, 32, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 70%, rgba(184, 115, 51, 0.06) 0%, transparent 60%),
+    linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%) !important;
+}
+
+/* Force visible golden grid */
+.davinci-grid {
+  position: relative !important;
+}
+
+.davinci-grid::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-image: 
+    repeating-linear-gradient(0deg, rgba(218, 165, 32, 0.1) 0px, transparent 1px, transparent 55px, rgba(218, 165, 32, 0.1) 55px),
+    repeating-linear-gradient(90deg, rgba(218, 165, 32, 0.1) 0px, transparent 1px, transparent 55px, rgba(218, 165, 32, 0.1) 55px) !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+/* Force Renaissance text colors */
+h1 span.measurement-line,
+h1 span.text-blueprint {
+  color: #DAA520 !important;
+  text-shadow: 0 0 30px rgba(218, 165, 32, 0.5) !important;
+}
+
+/* Force button styles */
+a.btn-davinci,
+.btn-davinci {
+  background: linear-gradient(135deg, #DAA520 0%, #B87333 100%) !important;
+  color: #FFFFFF !important;
+  border: 2px solid rgba(218, 165, 32, 0.4) !important;
+  box-shadow: 
+    0 4px 20px rgba(218, 165, 32, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Force Renaissance decorations visible */
+.compass-rose,
+.spiral-path {
+  opacity: 0.3 !important;
+  filter: drop-shadow(0 0 10px rgba(218, 165, 32, 0.5)) !important;
+}
+
+/* Paper texture for depth */
+.paper-texture {
+  position: relative !important;
+}
+
+.paper-texture::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: 
+    repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(218, 165, 32, 0.02) 1deg, transparent 2deg, transparent 3deg) !important;
+  pointer-events: none !important;
 }
