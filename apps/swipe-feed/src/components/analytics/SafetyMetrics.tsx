@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Shield, AlertTriangle, TrendingUp, TrendingDown, Activity, Users, Clock, Calendar, Award, Target, Zap, BarChart3, FileText, CheckCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { getRealSafetyMetrics } from '../../utils/real-data-helpers';
 
 interface SafetyData {
   totalIncidents: number;
@@ -124,15 +125,45 @@ export const SafetyMetrics: React.FC = () => {
         emergencyDrills: analytics.emergencyDrills || 4
       });
 
-      // Generate trend data
+      // Get real trend data
       const trends: TrendData[] = [];
       const periods = timeRange === 'week' ? 7 : timeRange === 'month' ? 4 : timeRange === 'quarter' ? 3 : 12;
-      for (let i = 0; i < periods; i++) {
+      
+      // Calculate date ranges for each period
+      const now = new Date();
+      for (let i = periods - 1; i >= 0; i--) {
+        const periodStart = new Date(now);
+        const periodEnd = new Date(now);
+        
+        if (timeRange === 'week') {
+          periodStart.setDate(now.getDate() - (i + 1));
+          periodEnd.setDate(now.getDate() - i);
+        } else if (timeRange === 'month') {
+          periodStart.setDate(now.getDate() - ((i + 1) * 7));
+          periodEnd.setDate(now.getDate() - (i * 7));
+        } else if (timeRange === 'quarter') {
+          periodStart.setMonth(now.getMonth() - (i + 1));
+          periodEnd.setMonth(now.getMonth() - i);
+        } else {
+          periodStart.setMonth(now.getMonth() - (i + 1));
+          periodEnd.setMonth(now.getMonth() - i);
+        }
+        
+        // Get real metrics for this period
+        const periodMetrics = await getRealSafetyMetrics(undefined, {
+          start: periodStart,
+          end: periodEnd
+        });
+        
         trends.push({
-          period: `Period ${i + 1}`,
-          incidents: Math.floor(Math.random() * 5),
-          nearMisses: Math.floor(Math.random() * 8),
-          observations: Math.floor(Math.random() * 20) + 10
+          period: timeRange === 'week' ? 
+            periodStart.toLocaleDateString('en-US', { weekday: 'short' }) :
+            timeRange === 'month' ? 
+            `Week ${periods - i}` :
+            periodStart.toLocaleDateString('en-US', { month: 'short' }),
+          incidents: periodMetrics.incidents,
+          nearMisses: periodMetrics.nearMisses,
+          observations: periodMetrics.observations
         });
       }
       setTrendData(trends);

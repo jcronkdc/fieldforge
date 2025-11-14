@@ -5,6 +5,7 @@ import { Session } from '@supabase/supabase-js';
 import { AuthProvider } from './components/auth/AuthProvider';
 import { VoiceCommandInterface } from './components/voice/VoiceCommandInterface';
 import { Toaster } from 'react-hot-toast';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import './styles/animations.css';
 import './styles/ai-animations.css';
 
@@ -81,6 +82,9 @@ import { SettingsPage } from './pages/Settings';
 import { OfflineIndicator } from './components/common/OfflineIndicator';
 import { SyncStatus } from './components/common/SyncStatus';
 
+// Monitoring
+import { PerformanceMonitor } from './components/monitoring/PerformanceMonitor';
+
 function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -138,6 +142,7 @@ function App() {
   }
 
   return (
+    <ErrorBoundary>
     <AuthProvider>
       <Router>
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -277,9 +282,13 @@ function App() {
         
         {/* AI Assistant - Available on all protected routes */}
         {session && <AIAssistant />}
+        
+        {/* Performance Monitor - Available to admins */}
+        {session && <PerformanceMonitor />}
       </div>
     </Router>
     </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
