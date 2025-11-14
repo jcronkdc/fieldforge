@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, Activity, AlertTriangle, CheckCircle, Clock, Calendar, TrendingUp, BarChart3, Shield, FileText, Download, Filter } from 'lucide-react';
+import { Zap, Activity, AlertTriangle, CheckCircle, Clock, Calendar, TrendingUp, BarChart3, Shield, FileText, Download, Filter, Compass, Ruler } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import '../../styles/davinci.css';
 
 interface TestResult {
   id: number;
@@ -230,29 +231,35 @@ export const TestingDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="p-6 flex items-center justify-center min-h-screen">
+      <div className="p-[34px] flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
-          <p className="text-slate-400">Loading test diagnostics...</p>
+          <div className="spinner-davinci mb-[21px]"></div>
+          <p className="text-amber-400/60 technical-annotation">Loading test diagnostics...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
+    <div className="davinci-grid p-[34px]">
+      {/* Renaissance Decorations */}
+      <div className="compass-rose" />
+      
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-[34px] gap-[21px]">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">⚡ Testing Dashboard</h1>
-            <p className="text-slate-400">Equipment testing and diagnostics center</p>
+            <h1 className="text-golden-2xl font-bold text-white mb-[8px] measurement-line flex items-center gap-[13px]">
+              <Zap className="w-8 h-8 text-amber-400" />
+              Testing Dashboard
+            </h1>
+            <p className="text-golden-base text-amber-400/60 technical-annotation" data-note="DIAGNOSTICS">Equipment testing and diagnostics center</p>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-[13px]">
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2 text-white"
+              className="input-davinci bg-slate-800/50 rounded-[8px] px-[21px] py-[13px] text-white field-readable"
             >
               <option value="all">All Tests</option>
               {TEST_TYPES.map(type => (
@@ -263,7 +270,7 @@ export const TestingDashboard: React.FC = () => {
             <select
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value as typeof dateRange)}
-              className="bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2 text-white"
+              className="input-davinci bg-slate-800/50 rounded-[8px] px-[21px] py-[13px] text-white field-readable"
             >
               <option value="week">This Week</option>
               <option value="month">This Month</option>
@@ -273,79 +280,79 @@ export const TestingDashboard: React.FC = () => {
 
             <button
               onClick={() => setShowTestForm(true)}
-              className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition"
+              className="btn-davinci px-[21px] py-[13px] flex items-center gap-[8px] field-touch"
             >
               <Zap className="w-5 h-5" />
-              New Test
+              <span className="field-readable">New Test</span>
             </button>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-400">Total Tests</span>
-              <Activity className="w-5 h-5 text-cyan-500" />
+        {/* Stats Cards - Golden Ratio Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-[21px] mb-[34px] paper-texture">
+          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe">
+            <div className="flex items-center justify-between mb-[8px]">
+              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="COUNT">Total Tests</span>
+              <Activity className="w-[21px] h-[21px] text-cyan-400" />
             </div>
-            <div className="text-3xl font-bold text-white">{stats.total}</div>
-            <div className="text-sm text-slate-400 mt-1">This period</div>
+            <div className="text-golden-xl font-bold text-white">{stats.total}</div>
+            <div className="text-golden-sm text-amber-400/40 mt-[8px]">This period</div>
           </div>
 
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-400">Pass Rate</span>
-              <TrendingUp className="w-5 h-5 text-green-500" />
+          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.1s' }}>
+            <div className="flex items-center justify-between mb-[8px]">
+              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="SUCCESS">Pass Rate</span>
+              <TrendingUp className="w-[21px] h-[21px] text-green-400" />
             </div>
-            <div className="text-3xl font-bold text-green-400">{stats.passRate}%</div>
-            <div className="text-sm text-green-400 mt-1">
+            <div className="text-golden-xl font-bold text-green-400">{stats.passRate}%</div>
+            <div className="text-golden-sm text-green-400/60 mt-[8px]">
               {stats.passed} passed
             </div>
           </div>
 
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-400">Failed</span>
-              <AlertTriangle className="w-5 h-5 text-red-500" />
+          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.2s' }}>
+            <div className="flex items-center justify-between mb-[8px]">
+              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="FAILED">Failed</span>
+              <AlertTriangle className="w-[21px] h-[21px] text-red-400" />
             </div>
-            <div className="text-3xl font-bold text-red-400">{stats.failed}</div>
-            <div className="text-sm text-red-400 mt-1">Need attention</div>
+            <div className="text-golden-xl font-bold text-red-400">{stats.failed}</div>
+            <div className="text-golden-sm text-red-400/60 mt-[8px]">Need attention</div>
           </div>
 
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-400">Warnings</span>
-              <AlertTriangle className="w-5 h-5 text-yellow-500" />
+          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.3s' }}>
+            <div className="flex items-center justify-between mb-[8px]">
+              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="WARNING">Warnings</span>
+              <AlertTriangle className="w-[21px] h-[21px] text-amber-400" />
             </div>
-            <div className="text-3xl font-bold text-yellow-400">{stats.warnings}</div>
-            <div className="text-sm text-yellow-400 mt-1">Monitor closely</div>
+            <div className="text-golden-xl font-bold text-amber-400">{stats.warnings}</div>
+            <div className="text-golden-sm text-amber-400/60 mt-[8px]">Monitor closely</div>
           </div>
 
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-400">Scheduled</span>
-              <Calendar className="w-5 h-5 text-purple-500" />
+          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.4s' }}>
+            <div className="flex items-center justify-between mb-[8px]">
+              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="PLANNED">Scheduled</span>
+              <Calendar className="w-[21px] h-[21px] text-purple-400" />
             </div>
-            <div className="text-3xl font-bold text-white">{upcomingTests.length}</div>
-            <div className="text-sm text-slate-400 mt-1">Upcoming tests</div>
+            <div className="text-golden-xl font-bold text-white">{upcomingTests.length}</div>
+            <div className="text-golden-sm text-amber-400/40 mt-[8px]">Upcoming tests</div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-[21px]">
           {/* Test Results */}
-          <div className="lg:col-span-2 bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl">
-            <div className="p-6 border-b border-slate-700">
+          <div className="lg:col-span-2 dashboard-card rounded-[21px] tech-border depth-layer-1 corner-sketch">
+            <div className="p-[21px] border-b border-amber-500/20">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-white">Test Results</h2>
-                <div className="flex gap-2">
+                <h2 className="text-golden-lg font-bold text-white measurement-line">Test Results</h2>
+                <div className="flex gap-[8px]">
                   {(['all', 'pass', 'fail', 'warning'] as const).map((filterType) => (
                     <button
                       key={filterType}
                       onClick={() => setFilter(filterType)}
-                      className={`px-3 py-1 rounded-lg text-sm transition ${
+                      className={`px-[13px] py-[8px] rounded-[8px] text-golden-sm transition field-touch ${
                         filter === filterType
-                          ? 'bg-cyan-600 text-white'
-                          : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                          ? 'btn-davinci'
+                          : 'bg-slate-800/50 tech-border text-amber-400/60 hover:bg-slate-700/50'
                       }`}
                     >
                       {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
@@ -355,11 +362,13 @@ export const TestingDashboard: React.FC = () => {
               </div>
             </div>
 
-            <div className="divide-y divide-slate-700 max-h-[600px] overflow-y-auto">
+            <div className="divide-y divide-amber-500/10 max-h-[600px] overflow-y-auto">
               {filteredResults.length === 0 ? (
-                <div className="p-12 text-center text-slate-400">
-                  <Zap className="w-16 h-16 mx-auto mb-4 text-slate-600" />
-                  <p>No test results found</p>
+                <div className="p-[55px] text-center">
+                  <div className="vitruvian-square mx-auto mb-[21px]">
+                    <Zap className="w-[55px] h-[55px] text-amber-400/40" />
+                  </div>
+                  <p className="text-amber-400/60 technical-annotation">No test results found</p>
                 </div>
               ) : (
                 filteredResults.map((result) => {
@@ -729,6 +738,14 @@ export const TestingDashboard: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Leonardo Quote */}
+        <div className="text-center opacity-30 mt-[89px]">
+          <p className="text-golden-sm text-amber-400/60 font-light italic">
+            "Testing leads to failure, and failure leads to understanding."
+          </p>
+          <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+        </div>
       </div>
     </div>
   );
