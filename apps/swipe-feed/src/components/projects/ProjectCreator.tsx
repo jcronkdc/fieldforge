@@ -112,7 +112,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
           {/* Basic Information */}
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <FileText className="w-5 h-5 mr-2 text-amber-500" />
+              <FileText className="w-5 h-5 mr-2 text-blue-500" />
               Basic information
             </h2>
             
@@ -127,7 +127,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                   required
                   value={formData.project_number}
                   onChange={(e) => setFormData({ ...formData, project_number: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="PRJ-2024-001"
                   aria-invalid={Boolean(error)}
                   aria-describedby={error ? 'project-error' : undefined}
@@ -144,7 +144,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="138kV Substation Upgrade"
                   aria-invalid={Boolean(error)}
                   aria-describedby={error ? 'project-error' : undefined}
@@ -160,7 +160,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="Project scope and objectives"
                 />
               </div>
@@ -170,7 +170,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
           {/* Technical Details */}
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <Zap className="w-5 h-5 mr-2 text-amber-500" />
+              <Zap className="w-5 h-5 mr-2 text-blue-500" />
               Technical specifications
             </h2>
             
@@ -183,7 +183,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                   id="project-type"
                   value={formData.project_type}
                   onChange={(e) => setFormData({ ...formData, project_type: e.target.value as any })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 >
                   <option value="transmission">Transmission</option>
                   <option value="distribution">Distribution</option>
@@ -200,7 +200,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                   id="voltage-class"
                   value={formData.voltage_class}
                   onChange={(e) => setFormData({ ...formData, voltage_class: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 >
                   <option value="">Select voltage</option>
                   {voltageOptions.map((voltage) => (
@@ -214,7 +214,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
           {/* Schedule & Contract */}
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <Calendar className="w-5 h-5 mr-2 text-amber-500" />
+              <Calendar className="w-5 h-5 mr-2 text-blue-500" />
               Schedule and contract
             </h2>
             
@@ -228,7 +228,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                   type="date"
                   value={formData.start_date}
                   onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 />
               </div>
               
@@ -241,7 +241,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                   type="date"
                   value={formData.end_date}
                   onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 />
               </div>
               
@@ -253,7 +253,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                   id="contract-type"
                   value={formData.contract_type}
                   onChange={(e) => setFormData({ ...formData, contract_type: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 >
                   {contractTypes.map((type) => (
                     <option key={type.value} value={type.value}>{type.label}</option>
@@ -266,7 +266,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
           {/* Location */}
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <MapPin className="w-5 h-5 mr-2 text-amber-500" />
+              <MapPin className="w-5 h-5 mr-2 text-blue-500" />
               Location
             </h2>
             
@@ -283,7 +283,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                     ...formData, 
                     location: { ...formData.location, address: e.target.value }
                   })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="1234 Main St"
                 />
               </div>
@@ -300,7 +300,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                     ...formData, 
                     location: { ...formData.location, city: e.target.value }
                   })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="City"
                 />
               </div>
@@ -318,7 +318,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                       ...formData, 
                       location: { ...formData.location, state: e.target.value }
                     })}
-                    className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                    className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                     placeholder="State"
                   />
                 </div>
@@ -335,7 +335,7 @@ export const ProjectCreator: React.FC<ProjectCreatorProps> = ({ onBack, onProjec
                       ...formData, 
                       location: { ...formData.location, zip: e.target.value }
                     })}
-                    className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                    className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                     placeholder="12345"
                   />
                 </div>

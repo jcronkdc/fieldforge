@@ -48,7 +48,7 @@ export const LoginPage: React.FC = () => {
     { icon: Shield, label: 'Safety Compliance', color: 'text-green-500' },
     { icon: Activity, label: 'Real-time Tracking', color: 'text-blue-500' },
     { icon: Map, label: '3D Visualization', color: 'text-purple-500' },
-    { icon: FileText, label: 'Digital Documents', color: 'text-amber-500' }
+    { icon: FileText, label: 'Digital Documents', color: 'text-blue-500' }
   ];
 
   return (
@@ -146,7 +146,7 @@ export const LoginPage: React.FC = () => {
                 <input
                   type="checkbox"
                   id="remember-me"
-                  className="w-4 h-4 bg-slate-800 border-slate-700 rounded text-amber-500 focus:ring-amber-500"
+                  className="w-4 h-4 bg-slate-800 border-slate-700 rounded text-blue-500 focus:ring-amber-500"
                 />
                 <span className="ml-2 text-sm text-slate-400">Remember me</span>
               </label>
@@ -202,7 +202,7 @@ export const LoginPage: React.FC = () => {
         <div className="absolute inset-0 bg-grid-white/5"></div>
         
         {/* Floating Elements */}
-        <div className="absolute top-10 right-10 w-32 h-32 bg-amber-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-10 right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-10 left-10 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl"></div>
         
         <div className="relative z-10 flex flex-col justify-center p-12">
@@ -226,15 +226,15 @@ export const LoginPage: React.FC = () => {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-8">
             <div>
-              <p className="text-3xl font-bold text-amber-500">500+</p>
+              <p className="text-3xl font-bold text-blue-500">500+</p>
               <p className="text-sm text-slate-300">Active Projects</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-amber-500">10k+</p>
+              <p className="text-3xl font-bold text-blue-500">10k+</p>
               <p className="text-sm text-slate-300">Field Workers</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-amber-500">99.9%</p>
+              <p className="text-3xl font-bold text-blue-500">99.9%</p>
               <p className="text-sm text-slate-300">Uptime</p>
             </div>
           </div>

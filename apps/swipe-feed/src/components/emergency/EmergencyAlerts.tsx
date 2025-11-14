@@ -282,7 +282,7 @@ export const EmergencyAlerts: React.FC = () => {
       case 'info':
         return 'bg-blue-600';
       case 'warning':
-        return 'bg-amber-600';
+        return 'bg-blue-600';
       case 'danger':
         return 'bg-red-600';
       case 'evacuation':
@@ -310,7 +310,7 @@ export const EmergencyAlerts: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-amber-500">Loading emergency alerts...</div>
+        <div className="text-blue-500">Loading emergency alerts...</div>
       </div>
     );
   }
@@ -472,7 +472,7 @@ export const EmergencyAlerts: React.FC = () => {
               </div>
               <button
                 onClick={() => setSelectedAlert(alert)}
-                className="text-amber-400 hover:text-amber-300 text-sm"
+                className="text-blue-400 hover:text-blue-300 text-sm"
               >
                 View
               </button>
@@ -603,7 +603,7 @@ export const EmergencyAlerts: React.FC = () => {
                         onClick={() => setBroadcastForm({ ...broadcastForm, priority })}
                         className={`px-[13px] py-[8px] rounded-[8px] font-medium capitalize transition-all ${
                           broadcastForm.priority === priority
-                            ? 'bg-amber-500 text-white'
+                            ? 'bg-blue-500 text-white'
                             : 'bg-slate-800 text-slate-400 hover:text-white'
                         }`}
                       >
@@ -636,7 +636,7 @@ export const EmergencyAlerts: React.FC = () => {
                               });
                             }
                           }}
-                          className="w-4 h-4 text-amber-500"
+                          className="w-4 h-4 text-blue-500"
                         />
                         <span className="text-sm text-slate-300 capitalize">{channel}</span>
                       </label>
@@ -649,7 +649,7 @@ export const EmergencyAlerts: React.FC = () => {
                     type="checkbox"
                     checked={broadcastForm.requires_acknowledgment}
                     onChange={(e) => setBroadcastForm({ ...broadcastForm, requires_acknowledgment: e.target.checked })}
-                    className="w-4 h-4 text-amber-500"
+                    className="w-4 h-4 text-blue-500"
                   />
                   <label className="text-sm text-slate-300">Require acknowledgment from all recipients</label>
                 </div>
@@ -734,7 +734,7 @@ export const EmergencyAlerts: React.FC = () => {
                       </button>
                       <button
                         onClick={() => acknowledgeAlert(selectedAlert.id, 'evacuating')}
-                        className="px-[13px] py-[8px] bg-amber-600 hover:bg-amber-700 text-white rounded-[8px] font-medium transition-all"
+                        className="px-[13px] py-[8px] bg-blue-600 hover:bg-blue-700 text-white rounded-[8px] font-medium transition-all"
                       >
                         Evacuating
                       </button>

@@ -467,7 +467,7 @@ export const ProjectMap3D: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-900">
-        <div className="text-amber-500">Loading 3D map...</div>
+        <div className="text-blue-500">Loading 3D map...</div>
       </div>
     );
   }
@@ -493,7 +493,7 @@ export const ProjectMap3D: React.FC = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-[21px]">
             <h1 className="text-2xl font-bold text-white flex items-center gap-[13px]">
-              <Map className="w-7 h-7 text-amber-400" />
+              <Map className="w-7 h-7 text-blue-400" />
               Project Site Map
             </h1>
             
@@ -514,7 +514,7 @@ export const ProjectMap3D: React.FC = () => {
               <button
                 onClick={() => setViewMode('3d')}
                 className={`p-[8px] rounded-[5px] transition-all ${
-                  viewMode === '3d' ? 'bg-amber-500 text-slate-900' : 'hover:bg-slate-700 text-white'
+                  viewMode === '3d' ? 'bg-blue-500 text-slate-900' : 'hover:bg-slate-700 text-white'
                 }`}
               >
                 <Eye className="w-5 h-5" />
@@ -523,7 +523,7 @@ export const ProjectMap3D: React.FC = () => {
               <button
                 onClick={() => setViewMode('top')}
                 className={`p-[8px] rounded-[5px] transition-all ${
-                  viewMode === 'top' ? 'bg-amber-500 text-slate-900' : 'hover:bg-slate-700 text-white'
+                  viewMode === 'top' ? 'bg-blue-500 text-slate-900' : 'hover:bg-slate-700 text-white'
                 }`}
               >
                 <Maximize className="w-5 h-5" />
@@ -567,7 +567,7 @@ export const ProjectMap3D: React.FC = () => {
             className="absolute left-[21px] top-[89px] bg-slate-800/90 backdrop-blur-sm rounded-[13px] p-[21px] w-[233px]"
           >
             <h3 className="text-white font-medium mb-[13px] flex items-center gap-[8px]">
-              <Layers className="w-5 h-5 text-amber-400" />
+              <Layers className="w-5 h-5 text-blue-400" />
               Map Layers
             </h3>
             
@@ -580,7 +580,7 @@ export const ProjectMap3D: React.FC = () => {
                     onClick={() => toggleLayer(layer.id)}
                     className={`w-full flex items-center gap-[8px] px-[13px] py-[8px] rounded-[8px] transition-all ${
                       layer.visible
-                        ? 'bg-amber-500/20 text-amber-400'
+                        ? 'bg-blue-500/20 text-blue-400'
                         : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700'
                     }`}
                   >
@@ -625,8 +625,8 @@ export const ProjectMap3D: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-amber-400">Idle</span>
-                    <span className="text-amber-400">
+                    <span className="text-blue-400">Idle</span>
+                    <span className="text-blue-400">
                       {equipment.filter(e => e.status === 'idle').length}
                     </span>
                   </div>
@@ -653,8 +653,8 @@ export const ProjectMap3D: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-amber-400">On Break</span>
-                    <span className="text-amber-400">
+                    <span className="text-blue-400">On Break</span>
+                    <span className="text-blue-400">
                       {crew.filter(c => c.status === 'break').length}
                     </span>
                   </div>
@@ -677,8 +677,8 @@ export const ProjectMap3D: React.FC = () => {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-amber-400">Caution</span>
-                    <span className="text-amber-400">
+                    <span className="text-blue-400">Caution</span>
+                    <span className="text-blue-400">
                       {zones.filter(z => z.type === 'caution' && z.active).length}
                     </span>
                   </div>

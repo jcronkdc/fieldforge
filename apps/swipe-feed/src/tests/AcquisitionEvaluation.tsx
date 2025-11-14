@@ -40,7 +40,7 @@ export const AcquisitionEvaluation: React.FC = () => {
       focusAreas: ['Infrastructure', 'Field Operations', 'Safety', 'Scale'],
       minRequirements: { marketSize: 50, efficiency: 40, safety: 90, scale: 80 },
       icon: Zap,
-      color: 'text-amber-500'
+      color: 'text-blue-500'
     },
     amazon: {
       name: 'Amazon',
@@ -444,10 +444,10 @@ export const AcquisitionEvaluation: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-amber-900/30 to-orange-900/30 border border-amber-500/30 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-amber-900/30 to-orange-900/30 border border-gray-700 rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-amber-400">Valuation</h3>
-              <DollarSign className="w-6 h-6 text-amber-400" />
+              <h3 className="text-lg font-semibold text-blue-400">Valuation</h3>
+              <DollarSign className="w-6 h-6 text-blue-400" />
             </div>
             <div className="text-4xl font-bold text-white mb-2">${valuation}B</div>
             <div className="text-sm text-gray-400">

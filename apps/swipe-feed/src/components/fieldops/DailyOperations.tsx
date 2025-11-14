@@ -265,7 +265,7 @@ export const DailyOperations: React.FC = () => {
             
             <button
               onClick={() => setShowReportForm(true)}
-              className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition"
             >
               <FileText className="w-5 h-5" />
               Create Report
@@ -396,7 +396,7 @@ export const DailyOperations: React.FC = () => {
             
             {loading ? (
               <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-700 mx-auto"></div>
               </div>
             ) : dailyReports.length === 0 ? (
               <div className="text-center py-12 text-slate-400">
@@ -404,7 +404,7 @@ export const DailyOperations: React.FC = () => {
                 <p>No reports for this date</p>
                 <button
                   onClick={() => setShowReportForm(true)}
-                  className="mt-4 text-amber-500 hover:text-amber-400 text-sm"
+                  className="mt-4 text-blue-500 hover:text-blue-400 text-sm"
                 >
                   Create first report
                 </button>
@@ -588,7 +588,7 @@ export const DailyOperations: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => addArrayField('activities_completed')}
-                    className="text-amber-500 hover:text-amber-400 text-sm"
+                    className="text-blue-500 hover:text-blue-400 text-sm"
                   >
                     + Add activity
                   </button>
@@ -618,7 +618,7 @@ export const DailyOperations: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
                   >
                     {editingReport ? 'Update' : 'Create'} Report
                   </button>

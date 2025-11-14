@@ -78,7 +78,7 @@ const FixedLandingPage = () => {
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-0 -left-4 w-96 h-96 bg-amber-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+          <div className="absolute top-0 -left-4 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
           <div className="absolute top-0 -right-4 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
           <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
         </div>
@@ -87,7 +87,7 @@ const FixedLandingPage = () => {
           {/* Navigation */}
           <nav className="flex justify-between items-center mb-16">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">FF</span>
               </div>
               <span className="text-2xl font-bold text-white">FieldForge</span>
@@ -95,13 +95,13 @@ const FixedLandingPage = () => {
             <div className="flex space-x-4">
               <button
                 onClick={() => navigate('/login')}
-                className="px-6 py-2 text-white hover:text-amber-400 transition-colors"
+                className="px-6 py-2 text-white hover:text-blue-400 transition-colors"
               >
                 Sign In
               </button>
               <button
                 onClick={() => navigate('/signup')}
-                className="px-6 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-semibold transition-all transform hover:scale-105"
+                className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-all transform hover:scale-105"
               >
                 Get Started
               </button>
@@ -167,11 +167,11 @@ const FixedLandingPage = () => {
         
         <div className="grid md:grid-cols-3 gap-8">
           {/* Voice Control */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
-            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-gray-700 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
               <span className="text-3xl">🎙️</span>
             </div>
-            <h3 className="text-xl font-bold text-amber-400 mb-3">Voice Control</h3>
+            <h3 className="text-xl font-bold text-blue-400 mb-3">Voice Control</h3>
             <p className="text-slate-400">
               Hands-free operation for field workers. Create reports, scan receipts,
               and manage tasks with simple voice commands.
@@ -179,11 +179,11 @@ const FixedLandingPage = () => {
           </div>
           
           {/* Gesture Controls */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
-            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-gray-700 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
               <span className="text-3xl">👆</span>
             </div>
-            <h3 className="text-xl font-bold text-amber-400 mb-3">Smart Gestures</h3>
+            <h3 className="text-xl font-bold text-blue-400 mb-3">Smart Gestures</h3>
             <p className="text-slate-400">
               Swipe to approve, reject, and manage. Intuitive touch controls
               designed for tablets and mobile devices.
@@ -191,11 +191,11 @@ const FixedLandingPage = () => {
           </div>
           
           {/* AI Assistant */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
-            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-gray-700 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
               <span className="text-3xl">🤖</span>
             </div>
-            <h3 className="text-xl font-bold text-amber-400 mb-3">AI Assistant</h3>
+            <h3 className="text-xl font-bold text-blue-400 mb-3">AI Assistant</h3>
             <p className="text-slate-400">
               Get instant answers, generate reports, and receive intelligent
               suggestions powered by advanced AI.
@@ -203,11 +203,11 @@ const FixedLandingPage = () => {
           </div>
 
           {/* Real-Time Analytics */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
-            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-gray-700 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
               <span className="text-3xl">📊</span>
             </div>
-            <h3 className="text-xl font-bold text-amber-400 mb-3">Live Analytics</h3>
+            <h3 className="text-xl font-bold text-blue-400 mb-3">Live Analytics</h3>
             <p className="text-slate-400">
               Monitor project performance in real-time with interactive dashboards
               and predictive insights.
@@ -215,11 +215,11 @@ const FixedLandingPage = () => {
           </div>
 
           {/* OCR Scanning */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
-            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-gray-700 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
               <span className="text-3xl">📸</span>
             </div>
-            <h3 className="text-xl font-bold text-amber-400 mb-3">Smart OCR</h3>
+            <h3 className="text-xl font-bold text-blue-400 mb-3">Smart OCR</h3>
             <p className="text-slate-400">
               Scan receipts and documents with automatic data extraction and
               intelligent categorization.
@@ -227,11 +227,11 @@ const FixedLandingPage = () => {
           </div>
 
           {/* 3D Visualization */}
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-amber-500/20 hover:border-amber-500/50 transition-all transform hover:scale-105">
-            <div className="w-16 h-16 bg-amber-500/20 rounded-lg flex items-center justify-center mb-4">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 hover:border-gray-700 transition-all transform hover:scale-105">
+            <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
               <span className="text-3xl">🌐</span>
             </div>
-            <h3 className="text-xl font-bold text-amber-400 mb-3">3D Visualization</h3>
+            <h3 className="text-xl font-bold text-blue-400 mb-3">3D Visualization</h3>
             <p className="text-slate-400">
               Holographic UI elements and immersive 3D project visualization
               for better understanding.
@@ -245,7 +245,7 @@ const FixedLandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">FF</span>
               </div>
               <span className="text-xl font-bold text-white">FieldForge</span>
@@ -321,7 +321,7 @@ function AppFixed() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-gray-700 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h1 className="text-2xl font-bold text-white">FieldForge</h1>
           <p className="text-slate-400 mt-2">Loading FieldForge</p>
         </div>

@@ -138,7 +138,7 @@ function Transformer({ equipment, selected, onSelect }: {
             <div className="font-bold">{equipment.name}</div>
             <div className="text-slate-400">{equipment.voltage}kV {equipment.type}</div>
             <div className="flex items-center gap-[5px]">
-              <Thermometer className="w-3 h-3 text-amber-400" />
+              <Thermometer className="w-3 h-3 text-blue-400" />
               <span>{equipment.temperature}°C</span>
             </div>
             <div className={`text-${equipment.status === 'energized' ? 'green' : 'gray'}-400`}>
@@ -549,7 +549,7 @@ export const SubstationModel: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-900">
-        <div className="text-amber-500">Loading substation model...</div>
+        <div className="text-blue-500">Loading substation model...</div>
       </div>
     );
   }
@@ -577,7 +577,7 @@ export const SubstationModel: React.FC = () => {
       <div className="absolute top-0 left-0 right-0 p-[21px] bg-gradient-to-b from-slate-900 via-slate-900/90 to-transparent pointer-events-none">
         <div className="flex items-center justify-between pointer-events-auto">
           <h1 className="text-2xl font-bold text-white flex items-center gap-[13px]">
-            <Zap className="w-7 h-7 text-amber-400" />
+            <Zap className="w-7 h-7 text-blue-400" />
             Substation 3D Model
           </h1>
           
@@ -612,7 +612,7 @@ export const SubstationModel: React.FC = () => {
                 onClick={() => setViewMode(mode.id)}
                 className={`p-[8px] rounded-[8px] transition-all ${
                   viewMode === mode.id
-                    ? 'bg-amber-500 text-slate-900'
+                    ? 'bg-blue-500 text-slate-900'
                     : 'text-slate-400 hover:bg-slate-700 hover:text-white'
                 }`}
                 title={mode.name}
@@ -643,7 +643,7 @@ export const SubstationModel: React.FC = () => {
             onClick={() => setShowHeatMap(!showHeatMap)}
             className={`px-[13px] py-[8px] rounded-[8px] text-sm font-medium transition-all flex items-center gap-[8px] ${
               showHeatMap
-                ? 'bg-amber-500/20 text-amber-400'
+                ? 'bg-blue-500/20 text-blue-400'
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
             }`}
           >
@@ -675,7 +675,7 @@ export const SubstationModel: React.FC = () => {
             className="absolute right-[21px] top-[89px] bg-slate-800/90 backdrop-blur-sm rounded-[13px] p-[21px] w-[300px]"
           >
             <h3 className="text-lg font-semibold text-white mb-[13px] flex items-center gap-[8px]">
-              {selected.type === 'transformer' && <Activity className="w-5 h-5 text-amber-400" />}
+              {selected.type === 'transformer' && <Activity className="w-5 h-5 text-blue-400" />}
               {selected.type === 'breaker' && <Zap className="w-5 h-5 text-blue-400" />}
               {selected.name}
             </h3>
@@ -688,7 +688,7 @@ export const SubstationModel: React.FC = () => {
                   selected.status === 'energized' ? 'text-green-400' :
                   selected.status === 'de-energized' ? 'text-gray-400' :
                   selected.status === 'grounded' ? 'text-blue-400' :
-                  'text-amber-400'
+                  'text-blue-400'
                 }`}>
                   {selected.status}
                 </span>
@@ -705,7 +705,7 @@ export const SubstationModel: React.FC = () => {
                 <span className="text-sm text-slate-400">Temperature</span>
                 <span className={`text-sm font-medium ${
                   selected.temperature > 80 ? 'text-red-400' :
-                  selected.temperature > 60 ? 'text-amber-400' :
+                  selected.temperature > 60 ? 'text-blue-400' :
                   'text-green-400'
                 }`}>
                   {selected.temperature}°C

@@ -55,7 +55,7 @@ export class ErrorBoundary extends Component<Props, State> {
             
             {import.meta.env.DEV && (
               <details className="mt-4">
-                <summary className="cursor-pointer text-amber-500 hover:text-amber-400">
+                <summary className="cursor-pointer text-blue-500 hover:text-blue-400">
                   Show error details (development only)
                 </summary>
                 <pre className="mt-2 p-4 bg-slate-900 rounded text-xs text-slate-400 overflow-auto">
@@ -67,7 +67,7 @@ export class ErrorBoundary extends Component<Props, State> {
             
             <button
               onClick={() => window.location.reload()}
-              className="mt-6 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors"
+              className="mt-6 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors"
             >
               Reload Page
             </button>

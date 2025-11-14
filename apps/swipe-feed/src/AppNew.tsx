@@ -13,14 +13,14 @@ const WorkingLandingPage = () => {
     <div className="min-h-screen bg-slate-900 text-white">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
-          <h1 className="text-7xl font-black text-amber-500 mb-4">
+          <h1 className="text-7xl font-black text-blue-500 mb-4">
             FIELDFORGE
           </h1>
           <p className="text-2xl text-slate-300 mb-8">
             Construction Management Platform
           </p>
           <div className="space-x-4">
-            <Link to="/login" className="inline-block px-8 py-3 bg-amber-500 hover:bg-amber-600 rounded-lg font-semibold">
+            <Link to="/login" className="inline-block px-8 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold">
               Sign In
             </Link>
             <Link to="/signup" className="inline-block px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold">
@@ -108,7 +108,7 @@ export function AppNew() {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-amber-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-gray-700 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-white">Loading FieldForge</p>
         </div>
       </div>

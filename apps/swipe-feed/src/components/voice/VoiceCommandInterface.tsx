@@ -260,7 +260,7 @@ export const VoiceCommandInterface: React.FC = () => {
           {/* Status indicator */}
           {isListening && (
             <div className="absolute inset-0 animate-ping">
-              <div className="w-full h-full rounded-full bg-amber-500 opacity-75"></div>
+              <div className="w-full h-full rounded-full bg-blue-500 opacity-75"></div>
             </div>
           )}
           
@@ -274,7 +274,7 @@ export const VoiceCommandInterface: React.FC = () => {
                 ? 'bg-slate-600 cursor-not-allowed'
                 : isListening 
                 ? 'bg-red-600 hover:bg-red-700' 
-                : 'bg-amber-500 hover:bg-amber-600'
+                : 'bg-blue-500 hover:bg-blue-600'
               }
               flex items-center justify-center
             `}
@@ -294,8 +294,8 @@ export const VoiceCommandInterface: React.FC = () => {
           {(transcript || interimTranscript) && (
             <div className="absolute bottom-20 right-0 w-72 p-4 bg-slate-800 rounded-lg shadow-xl border border-slate-700">
               <div className="flex items-center gap-2 mb-2">
-                <Volume2 className="w-4 h-4 text-amber-500" />
-                <span className="text-xs font-semibold text-amber-500">Voice Input</span>
+                <Volume2 className="w-4 h-4 text-blue-500" />
+                <span className="text-xs font-semibold text-blue-500">Voice Input</span>
               </div>
               <p className="text-sm text-white">
                 {transcript}
@@ -321,7 +321,7 @@ export const VoiceCommandInterface: React.FC = () => {
                 ) : status === 'success' ? (
                   <CheckCircle className="w-4 h-4 text-green-400" />
                 ) : (
-                  <Volume2 className="w-4 h-4 text-amber-500" />
+                  <Volume2 className="w-4 h-4 text-blue-500" />
                 )}
                 <p className="text-sm text-white">{feedback}</p>
               </div>
@@ -337,7 +337,7 @@ export const VoiceCommandInterface: React.FC = () => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                  <Mic className="w-6 h-6 text-amber-500" />
+                  <Mic className="w-6 h-6 text-blue-500" />
                   Voice Commands
                 </h2>
                 <button
@@ -357,7 +357,7 @@ export const VoiceCommandInterface: React.FC = () => {
                   }, {} as Record<string, VoiceCommand[]>)
                 ).map(([category, cmds]) => (
                   <div key={category}>
-                    <h3 className="text-sm font-semibold text-amber-500 mb-2">{category}</h3>
+                    <h3 className="text-sm font-semibold text-blue-500 mb-2">{category}</h3>
                     <div className="space-y-2">
                       {cmds.map((cmd) => (
                         <div key={cmd.command} className="p-3 bg-slate-800/50 rounded-lg">
@@ -384,8 +384,8 @@ export const VoiceCommandInterface: React.FC = () => {
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-amber-900/20 border border-amber-700 rounded-lg">
-                <p className="text-sm text-amber-400">
+              <div className="mt-6 p-4 bg-blue-900/20 border border-gray-700 rounded-lg">
+                <p className="text-sm text-blue-400">
                   💡 Tip: Keep commands simple and clear. The system will recognize variations of each command.
                 </p>
               </div>

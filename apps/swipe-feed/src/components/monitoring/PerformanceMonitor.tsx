@@ -155,7 +155,7 @@ export const PerformanceMonitor: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'good': return 'text-green-400';
-      case 'warning': return 'text-amber-400';
+      case 'warning': return 'text-blue-400';
       case 'critical': return 'text-red-400';
       default: return 'text-gray-400';
     }
@@ -164,7 +164,7 @@ export const PerformanceMonitor: React.FC = () => {
   const getStatusBg = (status: string) => {
     switch (status) {
       case 'good': return 'bg-green-400/20';
-      case 'warning': return 'bg-amber-400/20';
+      case 'warning': return 'bg-blue-400/20';
       case 'critical': return 'bg-red-400/20';
       default: return 'bg-gray-400/20';
     }
@@ -184,7 +184,7 @@ export const PerformanceMonitor: React.FC = () => {
         onClick={() => setIsOpen(true)}
         className="fixed bottom-[108px] right-[34px] w-[55px] h-[55px] bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-full shadow-lg flex items-center justify-center group transition-all z-40"
       >
-        <Zap className="w-6 h-6 text-amber-400 group-hover:scale-110 transition-transform" />
+        <Zap className="w-6 h-6 text-blue-400 group-hover:scale-110 transition-transform" />
       </button>
     );
   }
@@ -259,7 +259,7 @@ export const PerformanceMonitor: React.FC = () => {
                   <span className={`w-2 h-2 rounded-full ${
                     metric.status >= 200 && metric.status < 300 ? 'bg-green-400' :
                     metric.status >= 300 && metric.status < 400 ? 'bg-blue-400' :
-                    metric.status >= 400 && metric.status < 500 ? 'bg-amber-400' :
+                    metric.status >= 400 && metric.status < 500 ? 'bg-blue-400' :
                     'bg-red-400'
                   }`} />
                   <span className="text-slate-400 font-mono">{metric.method}</span>
@@ -269,7 +269,7 @@ export const PerformanceMonitor: React.FC = () => {
                 </div>
                 <span className={`font-mono ${
                   metric.responseTime < 200 ? 'text-green-400' :
-                  metric.responseTime < 500 ? 'text-amber-400' :
+                  metric.responseTime < 500 ? 'text-blue-400' :
                   'text-red-400'
                 }`}>
                   {metric.responseTime}ms

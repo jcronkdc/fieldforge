@@ -44,7 +44,7 @@ export const FuturisticLoader: React.FC<FuturisticLoaderProps> = ({
             <div className="w-56">
               <div className="h-1 rounded-full bg-slate-800">
                 <div
-                  className="h-full rounded-full bg-amber-400 transition-all"
+                  className="h-full rounded-full bg-blue-400 transition-all"
                   style={{ width: `${Math.min(Math.max(progress, 0), 100)}%` }}
                 />
               </div>

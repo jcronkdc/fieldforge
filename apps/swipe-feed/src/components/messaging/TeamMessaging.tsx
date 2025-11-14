@@ -287,7 +287,7 @@ export const TeamMessaging: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -330,7 +330,7 @@ export const TeamMessaging: React.FC = () => {
                   key={channel.id}
                   onClick={() => setSelectedChannel(channel)}
                   className={`w-full text-left px-3 py-2 rounded-lg mb-1 transition-colors ${
-                    selectedChannel?.id === channel.id ? 'bg-amber-600' : 'hover:bg-slate-800'
+                    selectedChannel?.id === channel.id ? 'bg-blue-600' : 'hover:bg-slate-800'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -339,7 +339,7 @@ export const TeamMessaging: React.FC = () => {
                       <span className="text-sm truncate">{channel.name}</span>
                     </div>
                     {channel.unread_count > 0 && (
-                      <span className="bg-amber-500 text-black text-xs px-2 py-0.5 rounded-full">
+                      <span className="bg-blue-500 text-black text-xs px-2 py-0.5 rounded-full">
                         {channel.unread_count}
                       </span>
                     )}
@@ -445,7 +445,7 @@ export const TeamMessaging: React.FC = () => {
                     <div className="text-gray-700">
                       {message.content}
                       {message.mentions && message.mentions.length > 0 && (
-                        <span className="text-amber-600 ml-1">
+                        <span className="text-blue-600 ml-1">
                           {message.mentions.map(m => `@${m}`).join(' ')}
                         </span>
                       )}
@@ -498,7 +498,7 @@ export const TeamMessaging: React.FC = () => {
               <button
                 type="submit"
                 disabled={!messageInput.trim() || sending}
-                className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 <Send className="w-4 h-4" />
                 Send
@@ -651,7 +651,7 @@ export const TeamMessaging: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                   Create Channel
                 </button>

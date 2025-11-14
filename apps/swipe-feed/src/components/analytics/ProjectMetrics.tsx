@@ -155,7 +155,7 @@ export const ProjectMetrics: React.FC = () => {
         change: 3,
         trend: 'up',
         icon: Zap,
-        color: 'text-amber-500'
+        color: 'text-blue-500'
       },
       {
         title: 'Equipment Use',
@@ -183,7 +183,7 @@ export const ProjectMetrics: React.FC = () => {
     return (
       <div className="p-6 flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-700 mx-auto mb-4"></div>
           <p className="text-slate-400">Analyzing project data...</p>
         </div>
       </div>
@@ -393,7 +393,7 @@ export const ProjectMetrics: React.FC = () => {
                     fill="none"
                     strokeDasharray={`${2 * Math.PI * 80}`}
                     strokeDashoffset={`${2 * Math.PI * 80 * (1 - selectedProjectData.tasks_completed / selectedProjectData.tasks_total)}`}
-                    className="text-amber-500 transition-all duration-500"
+                    className="text-blue-500 transition-all duration-500"
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">

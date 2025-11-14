@@ -248,7 +248,7 @@ export const MaterialInventory: React.FC = () => {
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
           >
             <Plus className="w-5 h-5" />
             Add Material
@@ -489,7 +489,7 @@ export const MaterialInventory: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
                   >
                     {selectedMaterial ? 'Update' : 'Add'} Material
                   </button>
@@ -576,7 +576,7 @@ export const MaterialInventory: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
                   >
                     Record Transaction
                   </button>
@@ -660,7 +660,7 @@ export const MaterialInventory: React.FC = () => {
                         <div className="flex items-center justify-center gap-2">
                           <button
                             onClick={() => startTransaction(material)}
-                            className="text-amber-400 hover:text-amber-300 transition"
+                            className="text-blue-400 hover:text-blue-300 transition"
                             title="Record transaction"
                           >
                             <TrendingUp className="w-4 h-4" />

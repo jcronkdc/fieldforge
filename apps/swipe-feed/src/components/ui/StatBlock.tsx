@@ -21,7 +21,7 @@ export const StatBlock: React.FC<StatBlockProps> = ({
   
   const variantStyles = {
     default: 'bg-slate-800/50 border-slate-700 text-slate-300',
-    primary: 'bg-amber-900/20 border-amber-700 text-amber-400',
+    primary: 'bg-blue-900/20 border-gray-700 text-blue-400',
     success: 'bg-green-900/20 border-green-700 text-green-400',
     warning: 'bg-yellow-900/20 border-yellow-700 text-yellow-400',
     danger: 'bg-red-900/20 border-red-700 text-red-400'

@@ -243,7 +243,7 @@ export const TimeTracking: React.FC = () => {
               <p className="text-sm text-gray-400">Today</p>
               <p className="text-2xl font-bold text-white">{todayHours.toFixed(1)}h</p>
             </div>
-            <Calendar className="w-8 h-8 text-amber-500" />
+            <Calendar className="w-8 h-8 text-blue-500" />
           </div>
         </div>
 
@@ -281,7 +281,7 @@ export const TimeTracking: React.FC = () => {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-mono font-bold text-amber-500">{getCurrentDuration()}</p>
+                <p className="text-3xl font-mono font-bold text-blue-500">{getCurrentDuration()}</p>
                 <button
                   onClick={stopTimer}
                   disabled={loading}
@@ -316,7 +316,7 @@ export const TimeTracking: React.FC = () => {
               <select
                 value={selectedProject}
                 onChange={(e) => setSelectedProject(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-gray-700 focus:outline-none"
                 disabled={projects.length === 0}
               >
                 <option value="">Select a project</option>
@@ -335,7 +335,7 @@ export const TimeTracking: React.FC = () => {
                 value={currentTask}
                 onChange={(e) => setCurrentTask(e.target.value)}
                 placeholder="e.g., Installing conduit in Building A"
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none"
+                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none"
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && !loading && selectedProject && currentTask.trim()) {
                     startTimer();
@@ -347,7 +347,7 @@ export const TimeTracking: React.FC = () => {
             <button
               onClick={startTimer}
               disabled={loading || !selectedProject || !currentTask.trim()}
-              className="w-full px-6 py-3 bg-amber-600 hover:bg-amber-700 disabled:bg-gray-600 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
+              className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
             >
               <Play className="w-5 h-5" />
               Start Timer
@@ -389,7 +389,7 @@ export const TimeTracking: React.FC = () => {
                     <div className="text-right">
                       <p className="text-lg font-medium text-white">{formatDuration(duration)}</p>
                       {!entry.end_time && (
-                        <p className="text-xs text-amber-500 animate-pulse">Active</p>
+                        <p className="text-xs text-blue-500 animate-pulse">Active</p>
                       )}
                     </div>
                   </div>

@@ -369,7 +369,7 @@ export const EnvironmentalCompliance: React.FC = () => {
       case 'warning':
       case 'expiring_soon':
       case 'investigating':
-        return 'text-amber-400 bg-amber-400/20';
+        return 'text-blue-400 bg-blue-400/20';
       case 'violation':
       case 'non_compliant':
       case 'expired':
@@ -383,7 +383,7 @@ export const EnvironmentalCompliance: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-amber-500">Loading environmental data...</div>
+        <div className="text-blue-500">Loading environmental data...</div>
       </div>
     );
   }
@@ -401,7 +401,7 @@ export const EnvironmentalCompliance: React.FC = () => {
         </div>
         <button
           onClick={() => setShowReadingForm(true)}
-          className="px-[21px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] touch-golden"
+          className="px-[21px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] touch-golden"
         >
           <Plus className="w-4 h-4" />
           Record Reading
@@ -459,7 +459,7 @@ export const EnvironmentalCompliance: React.FC = () => {
             className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[21px]"
           >
             <div className="flex items-center justify-between mb-[8px]">
-              <AlertCircle className="w-5 h-5 text-amber-400" />
+              <AlertCircle className="w-5 h-5 text-blue-400" />
               <span className="text-xs text-slate-400">Action Needed</span>
             </div>
             <div className="text-2xl font-bold text-white">{metrics.expiring_permits}</div>
@@ -473,7 +473,7 @@ export const EnvironmentalCompliance: React.FC = () => {
             className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[21px]"
           >
             <div className="flex items-center justify-between mb-[8px]">
-              <AlertTriangle className="w-5 h-5 text-amber-400" />
+              <AlertTriangle className="w-5 h-5 text-blue-400" />
               <span className="text-xs text-slate-400">Open</span>
             </div>
             <div className="text-2xl font-bold text-white">{metrics.open_incidents}</div>
@@ -502,7 +502,7 @@ export const EnvironmentalCompliance: React.FC = () => {
           onClick={() => setActiveTab('monitoring')}
           className={`px-[21px] py-[13px] font-medium transition-all border-b-2 ${
             activeTab === 'monitoring'
-              ? 'text-amber-400 border-amber-400'
+              ? 'text-blue-400 border-gray-700
               : 'text-slate-400 border-transparent hover:text-white'
           }`}
         >
@@ -512,7 +512,7 @@ export const EnvironmentalCompliance: React.FC = () => {
           onClick={() => setActiveTab('incidents')}
           className={`px-[21px] py-[13px] font-medium transition-all border-b-2 ${
             activeTab === 'incidents'
-              ? 'text-amber-400 border-amber-400'
+              ? 'text-blue-400 border-gray-700
               : 'text-slate-400 border-transparent hover:text-white'
           }`}
         >
@@ -522,7 +522,7 @@ export const EnvironmentalCompliance: React.FC = () => {
           onClick={() => setActiveTab('permits')}
           className={`px-[21px] py-[13px] font-medium transition-all border-b-2 ${
             activeTab === 'permits'
-              ? 'text-amber-400 border-amber-400'
+              ? 'text-blue-400 border-gray-700
               : 'text-slate-400 border-transparent hover:text-white'
           }`}
         >
@@ -532,7 +532,7 @@ export const EnvironmentalCompliance: React.FC = () => {
           onClick={() => setActiveTab('reports')}
           className={`px-[21px] py-[13px] font-medium transition-all border-b-2 ${
             activeTab === 'reports'
-              ? 'text-amber-400 border-amber-400'
+              ? 'text-blue-400 border-gray-700
               : 'text-slate-400 border-transparent hover:text-white'
           }`}
         >
@@ -636,7 +636,7 @@ export const EnvironmentalCompliance: React.FC = () => {
                       </div>
                       {incident.corrective_actions && (
                         <div className="mt-[13px] p-[13px] bg-slate-900/50 rounded-[8px]">
-                          <div className="text-sm text-amber-400 font-medium mb-[5px]">Corrective Actions:</div>
+                          <div className="text-sm text-blue-400 font-medium mb-[5px]">Corrective Actions:</div>
                           <div className="text-sm text-slate-300">{incident.corrective_actions}</div>
                         </div>
                       )}
@@ -688,7 +688,7 @@ export const EnvironmentalCompliance: React.FC = () => {
                   </div>
 
                   <div>
-                    <div className="text-sm text-amber-400 font-medium mb-[8px]">Conditions:</div>
+                    <div className="text-sm text-blue-400 font-medium mb-[8px]">Conditions:</div>
                     <ul className="space-y-[5px]">
                       {permit.conditions.map((condition, index) => (
                         <li key={index} className="text-sm text-slate-300 flex items-start gap-[8px]">
@@ -708,11 +708,11 @@ export const EnvironmentalCompliance: React.FC = () => {
         {activeTab === 'reports' && (
           <div className="space-y-[21px]">
             <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px] text-center">
-              <FileText className="w-16 h-16 text-amber-500 mx-auto mb-[21px]" />
+              <FileText className="w-16 h-16 text-blue-500 mx-auto mb-[21px]" />
               <h3 className="text-xl font-semibold text-white mb-[8px]">Environmental Reports</h3>
               <p className="text-slate-400 mb-[21px]">Generate compliance reports for regulatory submissions</p>
               <div className="flex gap-[13px] justify-center">
-                <button className="px-[21px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px]">
+                <button className="px-[21px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px]">
                   <Download className="w-4 h-4" />
                   Monthly Report
                 </button>
@@ -822,7 +822,7 @@ export const EnvironmentalCompliance: React.FC = () => {
             <div className="flex gap-[13px] mt-[34px]">
               <button
                 onClick={submitReading}
-                className="flex-1 px-[21px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all"
+                className="flex-1 px-[21px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all"
               >
                 Submit Reading
               </button>

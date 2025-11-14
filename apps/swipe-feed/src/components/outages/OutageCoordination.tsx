@@ -249,7 +249,7 @@ export const OutageCoordination: React.FC = () => {
       case 'high':
         return 'text-orange-400 bg-orange-400/20';
       case 'medium':
-        return 'text-amber-400 bg-amber-400/20';
+        return 'text-blue-400 bg-blue-400/20';
       default:
         return 'text-green-400 bg-green-400/20';
     }
@@ -264,7 +264,7 @@ export const OutageCoordination: React.FC = () => {
       case 'cancelled':
         return <XCircle className="w-5 h-5 text-slate-400" />;
       default:
-        return <Clock className="w-5 h-5 text-amber-400" />;
+        return <Clock className="w-5 h-5 text-blue-400" />;
     }
   };
 
@@ -274,9 +274,9 @@ export const OutageCoordination: React.FC = () => {
 
   if (loading) {
   return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950   flex items-center justify-center">
         <div className="text-center">
-          <Power className="w-[89px] h-[89px] text-amber-400 mx-auto mb-[21px] animate-pulse" />
+          <Power className="w-[89px] h-[89px] text-blue-400 mx-auto mb-[21px] animate-pulse" />
           <p className="text-slate-400">Loading outage coordination...</p>
         </div>
       </div>
@@ -284,16 +284,16 @@ export const OutageCoordination: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950  ">
       <div className="p-[34px]">
         {/* Header */}
         <div className="mb-[55px] text-center relative">
           <div className="absolute top-0 right-8 opacity-20">
-            <Zap className="w-[144px] h-[144px] text-amber-400" style={{ animation: 'gear-rotate 45s linear infinite reverse' }} />
+            <Zap className="w-[144px] h-[144px] text-blue-400" style={{ animation: ' 45s linear infinite reverse' }} />
           </div>
-          <h1 className="text-golden-2xl font-bold text-white mb-[13px]">Outage Coordination</h1>
-          <p className="text-golden-base text-slate-300">Platform's Planning Brain</p>
-          <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation mt-[8px]">
+          <h1 className="text-2xl font-bold text-white mb-[13px]">Outage Coordination</h1>
+          <p className="text-base text-slate-300">Platform's Planning Brain</p>
+          <p className="text-sm text-blue-400/60 font-light italic  mt-[8px]">
             "The noblest pleasure is the joy of understanding" — Leonardo da Vinci
           </p>
       </div>
@@ -320,7 +320,7 @@ export const OutageCoordination: React.FC = () => {
                 onClick={() => setFilter(status)}
                 className={`px-[21px] py-[13px] rounded-[8px] font-semibold transition-all ${
                   filter === status
-                    ? 'bg-amber-500 text-white'
+                    ? 'bg-blue-500 text-white'
                     : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
                 }`}
               >
@@ -331,7 +331,7 @@ export const OutageCoordination: React.FC = () => {
 
           <button
             onClick={() => setShowCreateForm(true)}
-            className="ml-auto px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-bold transition-all btn-davinci breathe flex items-center gap-[8px]"
+            className="ml-auto px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-bold transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all  flex items-center gap-[8px]"
           >
             <Power className="w-5 h-5" />
             Plan Outage
@@ -344,23 +344,23 @@ export const OutageCoordination: React.FC = () => {
             <div
               key={outage.id}
               onClick={() => setSelectedOutage(outage)}
-              className="card-vitruvian corner-sketch p-[34px] rounded-[13px] cursor-pointer hover:scale-[1.01] transition-all depth-layer-1"
+              className="card-vitruvian  p-[34px] rounded-[13px] cursor-pointer hover:scale-[1.01] transition-all "
             >
               <div className="flex items-start justify-between mb-[21px]">
                 <div>
                   <div className="flex items-center gap-[13px] mb-[8px]">
                     {getStatusIcon(outage.status)}
-                    <span className="text-sm text-slate-400 measurement-line">{outage.outage_number}</span>
+                    <span className="text-sm text-slate-400 ">{outage.outage_number}</span>
                     <span className={`px-[8px] py-[3px] rounded text-xs font-semibold ${getImpactColor(outage.impact_level)}`}>
                       {outage.impact_level.toUpperCase()} IMPACT
                         </span>
                   </div>
-                  <h3 className="text-golden-base font-bold text-white mb-[5px] field-readable">{outage.title}</h3>
+                  <h3 className="text-base font-bold text-white mb-[5px] ">{outage.title}</h3>
                   <p className="text-slate-400">{outage.description}</p>
                 </div>
                 
                 <div className="text-right">
-                  <div className="text-golden-base font-semibold text-amber-400 mb-[5px]">
+                  <div className="text-base font-semibold text-blue-400 mb-[5px]">
                     {outage.affected_customers.toLocaleString()} Customers
                   </div>
                   <div className="text-sm text-slate-400">
@@ -395,7 +395,7 @@ export const OutageCoordination: React.FC = () => {
             <div className="bg-slate-900 rounded-[21px] p-[34px] max-w-4xl w-full max-h-[90vh] overflow-y-auto card-vitruvian">
               <div className="flex justify-between items-start mb-[21px]">
                 <div>
-                  <h2 className="text-golden-xl font-bold text-white mb-[8px]">{selectedOutage.title}</h2>
+                  <h2 className="text-xl font-bold text-white mb-[8px]">{selectedOutage.title}</h2>
                   <p className="text-slate-400">{selectedOutage.outage_number}</p>
                 </div>
                 <button
@@ -417,7 +417,7 @@ export const OutageCoordination: React.FC = () => {
                   <div>
                     <label className="text-sm font-medium text-slate-300">Location</label>
                     <p className="text-white mt-[5px] flex items-center gap-[8px]">
-                      <MapPin className="w-4 h-4 text-amber-400" />
+                      <MapPin className="w-4 h-4 text-blue-400" />
                       {selectedOutage.location}
                     </p>
                   </div>
@@ -441,7 +441,7 @@ export const OutageCoordination: React.FC = () => {
                     <label className="text-sm font-medium text-slate-300">Affected Circuits</label>
                     <div className="flex flex-wrap gap-[8px] mt-[5px]">
                       {selectedOutage.affected_circuits.map((circuit, i) => (
-                        <span key={i} className="px-[13px] py-[5px] bg-amber-500/20 text-amber-400 rounded-[5px] text-sm font-mono">
+                        <span key={i} className="px-[13px] py-[5px] bg-blue-500/20 text-blue-400 rounded-[5px] text-sm font-mono">
                           {circuit}
                         </span>
                       ))}
@@ -488,7 +488,7 @@ export const OutageCoordination: React.FC = () => {
                                 <p className="text-white font-semibold">{step.description}</p>
                                 <p className="text-sm text-slate-400">Location: {step.location}</p>
                                 {step.safety_notes && (
-                                  <p className="text-sm text-amber-400 mt-[5px] flex items-center gap-[5px]">
+                                  <p className="text-sm text-blue-400 mt-[5px] flex items-center gap-[5px]">
                                     <AlertTriangle className="w-3 h-3" />
                                     {step.safety_notes}
                                   </p>
@@ -498,7 +498,7 @@ export const OutageCoordination: React.FC = () => {
                             {!step.completed && selectedOutage.status === 'active' && (
                               <button
                                 onClick={() => markStepComplete(selectedOutage.id, step.sequence)}
-                                className="px-[13px] py-[5px] bg-amber-500 hover:bg-amber-600 text-white text-sm rounded-[5px] font-semibold transition-all"
+                                className="px-[13px] py-[5px] bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-[5px] font-semibold transition-all"
                               >
                                 Complete
                               </button>
@@ -511,12 +511,12 @@ export const OutageCoordination: React.FC = () => {
 
                   <div className="grid grid-cols-2 gap-[13px]">
                     <div className="p-[21px] bg-slate-800/50 rounded-[13px] text-center">
-                      <Users className="w-8 h-8 text-amber-400 mx-auto mb-[8px]" />
+                      <Users className="w-8 h-8 text-blue-400 mx-auto mb-[8px]" />
                       <div className="text-2xl font-bold text-white">{selectedOutage.crews_required}</div>
                       <div className="text-sm text-slate-400">Crews Required</div>
                     </div>
                     <div className="p-[21px] bg-slate-800/50 rounded-[13px] text-center">
-                      <Phone className="w-8 h-8 text-amber-400 mx-auto mb-[8px]" />
+                      <Phone className="w-8 h-8 text-blue-400 mx-auto mb-[8px]" />
                       <div className="text-2xl font-bold text-white">
                         {selectedOutage.notifications_sent ? 'Sent' : 'Pending'}
                       </div>
@@ -527,7 +527,7 @@ export const OutageCoordination: React.FC = () => {
                   {selectedOutage.status === 'planned' && (
                   <button
                       onClick={() => updateOutageStatus(selectedOutage.id, 'active')}
-                      className="w-full px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-bold transition-all btn-davinci glow-renaissance"
+                      className="w-full px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-bold transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all "
                   >
                       Start Outage
                   </button>
@@ -535,7 +535,7 @@ export const OutageCoordination: React.FC = () => {
                   {selectedOutage.status === 'active' && (
                     <button
                       onClick={() => updateOutageStatus(selectedOutage.id, 'completed')}
-                      className="w-full px-[34px] py-[13px] bg-green-500 hover:bg-green-600 text-white rounded-[8px] font-bold transition-all btn-davinci"
+                      className="w-full px-[34px] py-[13px] bg-green-500 hover:bg-green-600 text-white rounded-[8px] font-bold transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all"
                     >
                       Mark Complete
                     </button>
@@ -550,7 +550,7 @@ export const OutageCoordination: React.FC = () => {
         {showCreateForm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
             <div className="bg-slate-900 rounded-[21px] p-[34px] max-w-2xl w-full max-h-[90vh] overflow-y-auto card-vitruvian">
-              <h2 className="text-golden-xl font-bold text-white mb-[21px]">Plan New Outage</h2>
+              <h2 className="text-xl font-bold text-white mb-[21px]">Plan New Outage</h2>
               
               <div className="space-y-[21px]">
                 <div>
@@ -561,7 +561,7 @@ export const OutageCoordination: React.FC = () => {
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="Substation maintenance, Emergency repair, etc."
                   />
               </div>
@@ -573,7 +573,7 @@ export const OutageCoordination: React.FC = () => {
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] min-h-[89px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] min-h-[89px]"
                     placeholder="Detailed description of work to be performed..."
                   />
                 </div>
@@ -586,7 +586,7 @@ export const OutageCoordination: React.FC = () => {
                     type="text"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="Substation name, street address, etc."
                   />
               </div>
@@ -600,7 +600,7 @@ export const OutageCoordination: React.FC = () => {
                       type="datetime-local"
                       value={formData.start_time}
                       onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
-                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                      className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     />
                   </div>
               <div>
@@ -611,7 +611,7 @@ export const OutageCoordination: React.FC = () => {
                       type="datetime-local"
                       value={formData.end_time}
                       onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
-                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                      className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     />
                   </div>
                 </div>
@@ -624,7 +624,7 @@ export const OutageCoordination: React.FC = () => {
                     <select
                       value={formData.impact_level}
                       onChange={(e) => setFormData({ ...formData, impact_level: e.target.value as any })}
-                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                      className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -640,7 +640,7 @@ export const OutageCoordination: React.FC = () => {
                       type="number"
                       value={formData.crews_required}
                       onChange={(e) => setFormData({ ...formData, crews_required: e.target.value })}
-                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                      className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                       placeholder="2"
                     />
                 </div>
@@ -654,7 +654,7 @@ export const OutageCoordination: React.FC = () => {
                     type="text"
                     value={formData.affected_circuits}
                     onChange={(e) => setFormData({ ...formData, affected_circuits: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="F12-01, F12-02, F12-03"
                   />
               </div>
@@ -667,7 +667,7 @@ export const OutageCoordination: React.FC = () => {
                     type="number"
                     value={formData.affected_customers}
                     onChange={(e) => setFormData({ ...formData, affected_customers: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="500"
                   />
               </div>
@@ -694,7 +694,7 @@ export const OutageCoordination: React.FC = () => {
                   </button>
                   <button
                     onClick={handleCreate}
-                    className="flex-1 px-[21px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all btn-davinci glow-renaissance"
+                    className="flex-1 px-[21px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all "
                   >
                     Create Outage Plan
                   </button>

@@ -158,7 +158,7 @@ export const WelcomePage: React.FC = () => {
             {/* Features Grid */}
             <div className="grid grid-cols-3 gap-4 mb-8">
               <div className="p-4 bg-slate-900/60 backdrop-blur-sm rounded-lg border border-cyan-500/20">
-                <Zap className="w-8 h-8 text-amber-500 mx-auto mb-2" />
+                <Zap className="w-8 h-8 text-blue-500 mx-auto mb-2" />
                 <h4 className="text-white font-semibold">AI Assistant</h4>
                 <p className="text-gray-400 text-xs mt-1">Voice-powered help</p>
               </div>

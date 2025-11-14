@@ -258,7 +258,7 @@ export const EquipmentMaintenance: React.FC = () => {
           
           <button
             onClick={() => setShowMaintenanceForm(true)}
-            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
           >
             <Plus className="w-5 h-5" />
             Schedule Maintenance
@@ -395,7 +395,7 @@ export const EquipmentMaintenance: React.FC = () => {
                           setFormData({ ...formData, equipment_id: eq.id });
                           setShowMaintenanceForm(true);
                         }}
-                        className="text-amber-400 hover:text-amber-300 text-sm flex items-center gap-1"
+                        className="text-blue-400 hover:text-blue-300 text-sm flex items-center gap-1"
                       >
                         <Wrench className="w-4 h-4" />
                         Schedule Service
@@ -425,7 +425,7 @@ export const EquipmentMaintenance: React.FC = () => {
             <div className="space-y-3 max-h-[500px] overflow-y-auto">
               {loading ? (
                 <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-700 mx-auto"></div>
                 </div>
               ) : filteredRecords.length === 0 ? (
                 <div className="text-center py-12 text-slate-400">
@@ -660,7 +660,7 @@ export const EquipmentMaintenance: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setFormData({...formData, parts_used: [...formData.parts_used, '']})}
-                    className="text-amber-500 hover:text-amber-400 text-sm"
+                    className="text-blue-500 hover:text-blue-400 text-sm"
                   >
                     + Add part
                   </button>
@@ -730,7 +730,7 @@ export const EquipmentMaintenance: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
                   >
                     {editingRecord ? 'Update' : 'Schedule'} Maintenance
                   </button>

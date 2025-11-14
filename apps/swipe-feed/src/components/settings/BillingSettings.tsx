@@ -82,7 +82,7 @@ export const BillingSettings: React.FC = () => {
       case 'professional':
         return { name: 'Professional', price: '$149/month', color: 'text-purple-400' };
       case 'enterprise':
-        return { name: 'Enterprise', price: '$499/month', color: 'text-amber-400' };
+        return { name: 'Enterprise', price: '$499/month', color: 'text-blue-400' };
       default:
         return { name: 'Free', price: '$0/month', color: 'text-gray-400' };
     }

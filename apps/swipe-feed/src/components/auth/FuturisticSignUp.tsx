@@ -678,8 +678,8 @@ export const FuturisticSignUp: React.FC = () => {
                   Account created.
                 </p>
                 
-                <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg mb-6">
-                  <p className="text-amber-400 text-sm">
+                <div className="p-4 bg-blue-500/10 border border-gray-700 rounded-lg mb-6">
+                  <p className="text-blue-400 text-sm">
                     📧 <strong>Check your email.</strong> We've sent a confirmation link to:
                   </p>
                   <p className="text-white font-mono mt-1">{formData.email}</p>

@@ -17,7 +17,7 @@ interface Drawing {
   uploaded_by: string;
   upload_date: string;
   file_size: number;
-  annotations?: Annotation[];
+  s?: Annotation[];
   tags: string[];
 }
 
@@ -74,7 +74,7 @@ export const DrawingViewer: React.FC = () => {
     currentTool: 'select'
   });
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [annotations, setAnnotations] = useState<Annotation[]>([]);
+  const [s, setAnnotations] = useState<Annotation[]>([]);
   const [newAnnotation, setNewAnnotation] = useState<Partial<Annotation> | null>(null);
   const [uploadForm, setUploadForm] = useState({
     file: null as File | null,
@@ -89,8 +89,8 @@ export const DrawingViewer: React.FC = () => {
   }, [filter, searchTerm]);
 
   useEffect(() => {
-    if (selectedDrawing?.annotations) {
-      setAnnotations(selectedDrawing.annotations);
+    if (selectedDrawing?.s) {
+      setAnnotations(selectedDrawing.s);
     }
   }, [selectedDrawing]);
 
@@ -220,25 +220,25 @@ export const DrawingViewer: React.FC = () => {
     setNewAnnotation(newAnn);
   };
 
-  const saveAnnotation = async (annotation: Annotation) => {
+  const saveAnnotation = async (: Annotation) => {
     try {
-      const response = await fetch(`/api/documents/drawings/${selectedDrawing?.id}/annotations`, {
+      const response = await fetch(`/api/documents/drawings/${selectedDrawing?.id}/s`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session?.access_token}`
         },
-        body: JSON.stringify(annotation)
+        body: JSON.stringify()
       });
 
-      if (!response.ok) throw new Error('Failed to save annotation');
+      if (!response.ok) throw new Error('Failed to save ');
 
-      setAnnotations([...annotations, annotation]);
+      setAnnotations([...s, ]);
       setNewAnnotation(null);
       toast.success('Annotation added');
     } catch (error) {
-      console.error('Error saving annotation:', error);
-      toast.error('Failed to save annotation');
+      console.error('Error saving :', error);
+      toast.error('Failed to save ');
     }
   };
 
@@ -286,7 +286,7 @@ export const DrawingViewer: React.FC = () => {
               onClick={() => setViewerState(prev => ({ ...prev, showGrid: !prev.showGrid }))}
               className={`p-2 rounded transition ${
                 viewerState.showGrid 
-                  ? 'text-amber-400 bg-slate-700' 
+                  ? 'text-blue-400 bg-slate-700' 
                   : 'text-slate-400 hover:text-white hover:bg-slate-700'
               }`}
               title="Toggle Grid"
@@ -307,7 +307,7 @@ export const DrawingViewer: React.FC = () => {
               onClick={() => setViewerState(prev => ({ ...prev, currentTool: 'select' }))}
               className={`p-2 rounded transition ${
                 viewerState.currentTool === 'select' 
-                  ? 'text-amber-400 bg-slate-700' 
+                  ? 'text-blue-400 bg-slate-700' 
                   : 'text-slate-400 hover:text-white hover:bg-slate-700'
               }`}
               title="Select"
@@ -318,7 +318,7 @@ export const DrawingViewer: React.FC = () => {
               onClick={() => setViewerState(prev => ({ ...prev, currentTool: 'comment' }))}
               className={`p-2 rounded transition ${
                 viewerState.currentTool === 'comment' 
-                  ? 'text-amber-400 bg-slate-700' 
+                  ? 'text-blue-400 bg-slate-700' 
                   : 'text-slate-400 hover:text-white hover:bg-slate-700'
               }`}
               title="Add Comment"
@@ -329,7 +329,7 @@ export const DrawingViewer: React.FC = () => {
               onClick={() => setViewerState(prev => ({ ...prev, currentTool: 'measure' }))}
               className={`p-2 rounded transition ${
                 viewerState.currentTool === 'measure' 
-                  ? 'text-amber-400 bg-slate-700' 
+                  ? 'text-blue-400 bg-slate-700' 
                   : 'text-slate-400 hover:text-white hover:bg-slate-700'
               }`}
               title="Measure"
@@ -340,7 +340,7 @@ export const DrawingViewer: React.FC = () => {
               onClick={() => setViewerState(prev => ({ ...prev, currentTool: 'markup' }))}
               className={`p-2 rounded transition ${
                 viewerState.currentTool === 'markup' 
-                  ? 'text-amber-400 bg-slate-700' 
+                  ? 'text-blue-400 bg-slate-700' 
                   : 'text-slate-400 hover:text-white hover:bg-slate-700'
               }`}
               title="Markup"
@@ -394,18 +394,18 @@ export const DrawingViewer: React.FC = () => {
             )}
 
             {/* Annotations */}
-            {viewerState.showAnnotations && annotations.map(annotation => (
+            {viewerState.showAnnotations && s.map( => (
               <div
-                key={annotation.id}
+                key={.id}
                 className="absolute"
                 style={{ 
-                  left: `${annotation.x}px`, 
-                  top: `${annotation.y}px`,
+                  left: `${.x}px`, 
+                  top: `${.y}px`,
                   transform: 'translate(-50%, -50%)'
                 }}
               >
-                {annotation.type === 'comment' && (
-                  <div className="bg-amber-500 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer hover:scale-110 transition">
+                {.type === 'comment' && (
+                  <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer hover:scale-110 transition">
                     <MessageSquare className="w-4 h-4" />
                   </div>
                 )}
@@ -465,7 +465,7 @@ export const DrawingViewer: React.FC = () => {
     return (
       <div className="p-6 flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-700 mx-auto mb-4"></div>
           <p className="text-slate-400">Loading drawings...</p>
         </div>
       </div>
@@ -503,7 +503,7 @@ export const DrawingViewer: React.FC = () => {
           </select>
 
           {/* Upload Button */}
-          <label className="w-full bg-amber-600 hover:bg-amber-700 text-white py-2 rounded-lg flex items-center justify-center gap-2 cursor-pointer transition">
+          <label className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg flex items-center justify-center gap-2 cursor-pointer transition">
             <Upload className="w-5 h-5" />
             Upload Drawing
             <input
@@ -529,7 +529,7 @@ export const DrawingViewer: React.FC = () => {
                   key={drawing.id}
                   className={`p-3 rounded-lg cursor-pointer transition ${
                     selectedDrawing?.id === drawing.id
-                      ? 'bg-amber-600/20 border border-amber-600/50'
+                      ? 'bg-blue-600/20 border border-gray-700
                       : 'bg-slate-700/50 hover:bg-slate-700 border border-transparent'
                   }`}
                   onClick={() => setSelectedDrawing(drawing)}
@@ -654,7 +654,7 @@ export const DrawingViewer: React.FC = () => {
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition disabled:opacity-50"
                 >
                   {uploading ? 'Uploading...' : 'Upload'}
                 </button>

@@ -176,7 +176,7 @@ export const SafetyBriefing: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -242,7 +242,7 @@ export const SafetyBriefing: React.FC = () => {
 
         <div className="bg-white rounded-lg shadow p-4">
           <div className="flex items-center justify-between mb-2">
-            <CheckCircle className="w-6 h-6 text-amber-500" />
+            <CheckCircle className="w-6 h-6 text-blue-500" />
             <span className="text-xs text-gray-500">Compliance</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">100%</p>

@@ -62,9 +62,9 @@ export const TestRouting: React.FC = () => {
           </div>
 
           <div className="mt-8 p-4 bg-gray-800 rounded-lg">
-            <h3 className="text-lg font-semibold text-amber-400 mb-2">Current URL:</h3>
+            <h3 className="text-lg font-semibold text-blue-400 mb-2">Current URL:</h3>
             <p className="text-white font-mono">{window.location.href}</p>
-            <h3 className="text-lg font-semibold text-amber-400 mt-4 mb-2">Pathname:</h3>
+            <h3 className="text-lg font-semibold text-blue-400 mt-4 mb-2">Pathname:</h3>
             <p className="text-white font-mono">{window.location.pathname}</p>
           </div>
         </div>

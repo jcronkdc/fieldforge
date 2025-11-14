@@ -307,7 +307,7 @@ export const UserProfile: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-amber-500">Loading profile...</div>
+        <div className="text-blue-500">Loading profile...</div>
       </div>
     );
   }
@@ -319,7 +319,7 @@ export const UserProfile: React.FC = () => {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-[21px]">
           <div className="flex items-center gap-[21px]">
             <div className="relative">
-              <div className="w-[89px] h-[89px] rounded-full bg-amber-600 flex items-center justify-center text-white text-3xl font-bold overflow-hidden">
+              <div className="w-[89px] h-[89px] rounded-full bg-blue-600 flex items-center justify-center text-white text-3xl font-bold overflow-hidden">
                 {profile?.avatar_url ? (
                   <img
                     src={profile.avatar_url}
@@ -331,7 +331,7 @@ export const UserProfile: React.FC = () => {
                 )}
               </div>
               {editMode && (
-                <label className="absolute bottom-0 right-0 p-[8px] bg-amber-500 rounded-full cursor-pointer hover:bg-amber-600 transition-all">
+                <label className="absolute bottom-0 right-0 p-[8px] bg-blue-500 rounded-full cursor-pointer hover:bg-blue-600 transition-all">
                   <Camera className="w-4 h-4 text-white" />
                   <input
                     type="file"
@@ -378,7 +378,7 @@ export const UserProfile: React.FC = () => {
               <>
                 <button
                   onClick={updateProfile}
-                  className="px-[21px] py-[8px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px]"
+                  className="px-[21px] py-[8px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px]"
                 >
                   <Save className="w-4 h-4" />
                   Save Changes
@@ -396,7 +396,7 @@ export const UserProfile: React.FC = () => {
             ) : (
               <button
                 onClick={() => setEditMode(true)}
-                className="px-[21px] py-[8px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px]"
+                className="px-[21px] py-[8px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px]"
               >
                 <Edit2 className="w-4 h-4" />
                 Edit Profile
@@ -414,7 +414,7 @@ export const UserProfile: React.FC = () => {
             onClick={() => setActiveTab(tab)}
             className={`px-[21px] py-[13px] font-medium capitalize transition-all border-b-2 ${
               activeTab === tab
-                ? 'text-amber-400 border-amber-400'
+                ? 'text-blue-400 border-gray-700
                 : 'text-slate-400 border-transparent hover:text-white'
             }`}
           >
@@ -555,7 +555,7 @@ export const UserProfile: React.FC = () => {
               <h2 className="text-lg font-semibold text-white">Certifications & Training</h2>
               <button
                 onClick={() => setShowCertForm(true)}
-                className="px-[21px] py-[8px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px]"
+                className="px-[21px] py-[8px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px]"
               >
                 <Award className="w-4 h-4" />
                 Add Certification
@@ -572,12 +572,12 @@ export const UserProfile: React.FC = () => {
                     <div className="flex items-start gap-[13px]">
                       <div className={`p-[8px] rounded-full ${
                         cert.status === 'active' ? 'bg-green-500/20' :
-                        cert.status === 'expiring_soon' ? 'bg-amber-500/20' :
+                        cert.status === 'expiring_soon' ? 'bg-blue-500/20' :
                         'bg-red-500/20'
                       }`}>
                         <Shield className={`w-5 h-5 ${
                           cert.status === 'active' ? 'text-green-400' :
-                          cert.status === 'expiring_soon' ? 'text-amber-400' :
+                          cert.status === 'expiring_soon' ? 'text-blue-400' :
                           'text-red-400'
                         }`} />
                       </div>
@@ -596,7 +596,7 @@ export const UserProfile: React.FC = () => {
                       {cert.expiry_date && (
                         <p className={`text-sm ${
                           cert.status === 'expired' ? 'text-red-400' :
-                          cert.status === 'expiring_soon' ? 'text-amber-400' :
+                          cert.status === 'expiring_soon' ? 'text-blue-400' :
                           'text-green-400'
                         }`}>
                           {cert.status === 'expired' ? 'Expired' : 'Expires'}: {new Date(cert.expiry_date).toLocaleDateString()}
@@ -736,7 +736,7 @@ export const UserProfile: React.FC = () => {
                         disabled={!editMode}
                         className={`px-[13px] py-[8px] rounded-[8px] capitalize font-medium transition-all flex items-center justify-center gap-[8px] ${
                           formData.theme === theme
-                            ? 'bg-amber-500 text-white'
+                            ? 'bg-blue-500 text-white'
                             : 'bg-slate-700 text-slate-400 hover:text-white'
                         } ${!editMode && 'opacity-50 cursor-not-allowed'}`}
                       >
@@ -802,7 +802,7 @@ export const UserProfile: React.FC = () => {
                     checked={formData.notifications_enabled}
                     onChange={(e) => setFormData({ ...formData, notifications_enabled: e.target.checked })}
                     disabled={!editMode}
-                    className="w-5 h-5 text-amber-500"
+                    className="w-5 h-5 text-blue-500"
                   />
                   <div>
                     <span className="text-white">Enable Notifications</span>
@@ -816,7 +816,7 @@ export const UserProfile: React.FC = () => {
                     checked={formData.email_notifications}
                     onChange={(e) => setFormData({ ...formData, email_notifications: e.target.checked })}
                     disabled={!editMode || !formData.notifications_enabled}
-                    className="w-5 h-5 text-amber-500"
+                    className="w-5 h-5 text-blue-500"
                   />
                   <div>
                     <span className="text-white">Email Notifications</span>
@@ -830,7 +830,7 @@ export const UserProfile: React.FC = () => {
                     checked={formData.sms_notifications}
                     onChange={(e) => setFormData({ ...formData, sms_notifications: e.target.checked })}
                     disabled={!editMode || !formData.notifications_enabled}
-                    className="w-5 h-5 text-amber-500"
+                    className="w-5 h-5 text-blue-500"
                   />
                   <div>
                     <span className="text-white">SMS Notifications</span>
@@ -935,7 +935,7 @@ export const UserProfile: React.FC = () => {
               <div className="flex gap-[13px] mt-[34px]">
                 <button
                   onClick={addCertification}
-                  className="flex-1 px-[21px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all"
+                  className="flex-1 px-[21px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all"
                 >
                   Add Certification
                 </button>

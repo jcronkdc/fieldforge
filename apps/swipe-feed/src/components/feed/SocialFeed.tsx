@@ -184,7 +184,7 @@ export const SocialFeed: React.FC = () => {
       case 'milestone': return <CheckCircle className="w-5 h-5 text-blue-400" />;
       case 'photo': return <Camera className="w-5 h-5 text-purple-400" />;
       case 'video': return <Video className="w-5 h-5 text-pink-400" />;
-      default: return <Zap className="w-5 h-5 text-amber-400" />;
+      default: return <Zap className="w-5 h-5 text-blue-400" />;
     }
   };
 
@@ -245,7 +245,7 @@ export const SocialFeed: React.FC = () => {
                   <select
                     value={selectedProject || ''}
                     onChange={(e) => setSelectedProject(e.target.value)}
-                    className="px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-sm text-white focus:border-amber-500 focus:outline-none"
+                    className="px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-sm text-white focus:border-gray-700 focus:outline-none"
                     disabled={projects.length === 0}
                   >
                     <option value="" disabled>
@@ -259,10 +259,10 @@ export const SocialFeed: React.FC = () => {
                   </select>
                   
                   <div className="flex items-center space-x-2">
-                    <button className="btn btn-ghost px-2 py-2 text-gray-300 hover:text-amber-400" type="button">
+                    <button className="btn btn-ghost px-2 py-2 text-gray-300 hover:text-blue-400" type="button">
                       <Image className="w-5 h-5" />
                     </button>
-                    <button className="btn btn-ghost px-2 py-2 text-gray-300 hover:text-amber-400" type="button">
+                    <button className="btn btn-ghost px-2 py-2 text-gray-300 hover:text-blue-400" type="button">
                       <MapPin className="w-5 h-5" />
                     </button>
                     <button
@@ -347,7 +347,7 @@ export const SocialFeed: React.FC = () => {
                       {post.tags.map((tag, index) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-gray-800 text-amber-400 rounded-full text-xs"
+                          className="px-2 py-1 bg-gray-800 text-blue-400 rounded-full text-xs"
                         >
                           #{tag}
                         </span>
@@ -390,7 +390,7 @@ export const SocialFeed: React.FC = () => {
                       onClick={() => setShowComments(showComments === post.id ? null : post.id)}
                       className="flex items-center space-x-1 px-3 py-1.5 rounded-lg hover:bg-gray-800 transition-colors group"
                     >
-                      <MessageCircle className="w-5 h-5 text-gray-400 group-hover:text-amber-400" />
+                      <MessageCircle className="w-5 h-5 text-gray-400 group-hover:text-blue-400" />
                       <span className="text-sm text-gray-400">
                         {post.comments_count || 0}
                       </span>
@@ -402,7 +402,7 @@ export const SocialFeed: React.FC = () => {
                   </div>
                   
                   <button className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors">
-                    <Bookmark className="w-5 h-5 text-gray-400 hover:text-amber-400" />
+                    <Bookmark className="w-5 h-5 text-gray-400 hover:text-blue-400" />
                   </button>
                 </div>
 
@@ -418,7 +418,7 @@ export const SocialFeed: React.FC = () => {
                           className="w-full px-3 py-2 bg-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                         />
                       </div>
-                      <button className="p-2 text-amber-400 hover:text-amber-300 transition-colors">
+                      <button className="p-2 text-blue-400 hover:text-blue-300 transition-colors">
                         <Send className="w-5 h-5" />
                       </button>
                     </div>

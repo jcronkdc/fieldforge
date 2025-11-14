@@ -92,7 +92,7 @@ const ErrorFallback = () => (
       <p className="text-slate-400 mb-8">Please refresh the page or contact support if the issue persists.</p>
       <button 
         onClick={() => window.location.reload()}
-        className="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors"
+        className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors"
       >
         Refresh Page
       </button>
@@ -150,7 +150,7 @@ function AppSafe() {
           <div className="space-y-3">
             <button
               onClick={() => window.location.reload()}
-              className="w-full px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg transition-colors"
+              className="w-full px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors"
             >
               Retry Connection
             </button>

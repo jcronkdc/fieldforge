@@ -203,7 +203,7 @@ export const WeatherDashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -225,7 +225,7 @@ export const WeatherDashboard: React.FC = () => {
               type="checkbox"
               checked={autoRefresh}
               onChange={(e) => setAutoRefresh(e.target.checked)}
-              className="rounded text-amber-600"
+              className="rounded text-blue-600"
             />
             <span className="text-sm text-gray-700">Auto-refresh</span>
           </label>

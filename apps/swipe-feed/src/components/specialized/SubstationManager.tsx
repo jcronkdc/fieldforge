@@ -35,7 +35,7 @@ export const SubstationManager: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-10 lg:px-8">
         <header className="space-y-3 border-b border-slate-800 pb-8">
-          <p className="text-sm font-medium text-amber-300">Substation &amp; switchyard delivery</p>
+          <p className="text-sm font-medium text-blue-300">Substation &amp; switchyard delivery</p>
           <h1 className="text-3xl font-semibold text-white">Keep every build package and outage plan aligned</h1>
           <p className="max-w-4xl text-base text-slate-300">
             FieldForge gives your team a central place to prepare work, document installation, and hand over
@@ -55,7 +55,7 @@ export const SubstationManager: React.FC = () => {
                 to="/projects"
                 className="flex items-center gap-3 rounded-md border border-slate-700 bg-slate-950/70 p-4 text-sm text-slate-200 hover:bg-slate-900"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-amber-100/80">
+                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-100/80">
                   <Building2 className="h-5 w-5 text-slate-900" />
                 </span>
                 <span>
@@ -67,7 +67,7 @@ export const SubstationManager: React.FC = () => {
                 to="/documents"
                 className="flex items-center gap-3 rounded-md border border-slate-700 bg-slate-950/70 p-4 text-sm text-slate-200 hover:bg-slate-900"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-amber-100/80">
+                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-100/80">
                   <Upload className="h-5 w-5 text-slate-900" />
                 </span>
                 <span>
@@ -84,7 +84,7 @@ export const SubstationManager: React.FC = () => {
               This panel will show project status, outage timing, and commissioning readiness at a glance.
             </p>
             <div className="mt-4 rounded-md border border-dashed border-slate-700 bg-slate-950/70 p-4 text-sm text-slate-400">
-              <FilePlus className="mb-2 h-5 w-5 text-amber-300" aria-hidden="true" />
+              <FilePlus className="mb-2 h-5 w-5 text-blue-300" aria-hidden="true" />
               Import spreadsheets or integrate with your existing system of record to populate structure lists,
               equipment registers, and inspection forms.
             </div>
@@ -100,7 +100,7 @@ export const SubstationManager: React.FC = () => {
             {nextSteps.map(({ title, description, icon: Icon }) => (
               <div key={title} className="rounded-md border border-slate-800 bg-slate-950/70 p-4">
                 <div className="flex items-center gap-3 text-white">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-md bg-amber-100/80">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-100/80">
                     <Icon className="h-5 w-5 text-slate-900" aria-hidden="true" />
                   </span>
                   <h3 className="text-sm font-semibold">{title}</h3>

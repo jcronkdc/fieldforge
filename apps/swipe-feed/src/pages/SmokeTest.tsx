@@ -161,7 +161,7 @@ export const SmokeTest: React.FC = () => {
       case 'fail':
         return <XCircle className="w-5 h-5 text-red-400" />;
       case 'running':
-        return <Loader className="w-5 h-5 text-amber-400 animate-spin" />;
+        return <Loader className="w-5 h-5 text-blue-400 animate-spin" />;
       default:
         return <AlertCircle className="w-5 h-5 text-gray-400" />;
     }
@@ -174,7 +174,7 @@ export const SmokeTest: React.FC = () => {
       case 'fail':
         return 'bg-red-400/20 border-red-400/50';
       case 'running':
-        return 'bg-amber-400/20 border-amber-400/50';
+        return 'bg-blue-400/20 border-gray-700
       default:
         return 'bg-gray-400/20 border-gray-400/50';
     }
@@ -184,7 +184,7 @@ export const SmokeTest: React.FC = () => {
     return (
       <div className="p-[34px]">
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[21px] p-[55px] text-center">
-          <Shield className="w-[89px] h-[89px] text-amber-500 mx-auto mb-[21px]" />
+          <Shield className="w-[89px] h-[89px] text-blue-500 mx-auto mb-[21px]" />
           <h1 className="text-3xl font-bold text-white mb-[13px]">Access Restricted</h1>
           <p className="text-slate-400">Smoke tests are available for admin and test users only.</p>
         </div>
@@ -220,7 +220,7 @@ export const SmokeTest: React.FC = () => {
           <button
             onClick={runTests}
             disabled={isRunning}
-            className="flex items-center gap-[13px] px-[34px] py-[21px] bg-amber-500 hover:bg-amber-600 disabled:bg-slate-700 text-white rounded-[13px] font-medium transition-all"
+            className="flex items-center gap-[13px] px-[34px] py-[21px] bg-blue-500 hover:bg-blue-600 disabled:bg-slate-700 text-white rounded-[13px] font-medium transition-all"
           >
             {isRunning ? (
               <>
@@ -254,8 +254,8 @@ export const SmokeTest: React.FC = () => {
               <p className="text-3xl font-bold text-white">{testResults.summary.total}</p>
             </div>
             
-            <div className="bg-amber-400/20 border border-amber-400/50 rounded-[13px] p-[21px]">
-              <p className="text-amber-400 text-sm mb-[8px]">Success Rate</p>
+            <div className="bg-blue-400/20 border border-gray-700 rounded-[13px] p-[21px]">
+              <p className="text-blue-400 text-sm mb-[8px]">Success Rate</p>
               <p className="text-3xl font-bold text-white">
                 {testResults.summary.successRate.toFixed(1)}%
               </p>

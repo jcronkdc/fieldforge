@@ -166,7 +166,7 @@ export const SystemHealthDashboard: React.FC = () => {
         return <CheckCircle className="w-5 h-5 text-green-400" />;
       case 'warning':
       case 'degraded':
-        return <AlertTriangle className="w-5 h-5 text-amber-400" />;
+        return <AlertTriangle className="w-5 h-5 text-blue-400" />;
       case 'critical':
       case 'down':
         return <XCircle className="w-5 h-5 text-red-400" />;
@@ -182,7 +182,7 @@ export const SystemHealthDashboard: React.FC = () => {
         return 'bg-green-400/20 border-green-400/50 text-green-400';
       case 'warning':
       case 'degraded':
-        return 'bg-amber-400/20 border-amber-400/50 text-amber-400';
+        return 'bg-blue-400/20 border-gray-700 text-blue-400';
       case 'critical':
       case 'down':
         return 'bg-red-400/20 border-red-400/50 text-red-400';
@@ -204,7 +204,7 @@ export const SystemHealthDashboard: React.FC = () => {
     return (
       <div className="p-[34px]">
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[21px] p-[55px] text-center">
-          <Shield className="w-[89px] h-[89px] text-amber-500 mx-auto mb-[21px]" />
+          <Shield className="w-[89px] h-[89px] text-blue-500 mx-auto mb-[21px]" />
           <h1 className="text-3xl font-bold text-white mb-[13px]">Access Restricted</h1>
           <p className="text-slate-400">System Health Dashboard is available for administrators only.</p>
         </div>
@@ -240,7 +240,7 @@ export const SystemHealthDashboard: React.FC = () => {
             <button
               onClick={checkSystemHealth}
               disabled={isRefreshing}
-              className="flex items-center gap-[8px] px-[21px] py-[13px] bg-amber-500 hover:bg-amber-600 disabled:bg-slate-700 text-white rounded-[13px] font-medium transition-all"
+              className="flex items-center gap-[8px] px-[21px] py-[13px] bg-blue-500 hover:bg-blue-600 disabled:bg-slate-700 text-white rounded-[13px] font-medium transition-all"
             >
               <RefreshCw className={`w-5 h-5 ${isRefreshing ? 'animate-spin' : ''}`} />
               Refresh Now
@@ -339,7 +339,7 @@ export const SystemHealthDashboard: React.FC = () => {
                     <div className="text-right">
                       <p className={`font-mono ${
                         component.responseTime < 100 ? 'text-green-400' :
-                        component.responseTime < 300 ? 'text-amber-400' :
+                        component.responseTime < 300 ? 'text-blue-400' :
                         'text-red-400'
                       }`}>
                         {component.responseTime}ms
@@ -376,7 +376,7 @@ export const SystemHealthDashboard: React.FC = () => {
         
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[21px]">
           <div className="flex items-center gap-[8px] mb-[13px]">
-            <Cpu className="w-5 h-5 text-amber-400" />
+            <Cpu className="w-5 h-5 text-blue-400" />
             <h3 className="font-medium text-white">CPU Usage</h3>
           </div>
           <p className="text-3xl font-bold text-white">34%</p>

@@ -173,7 +173,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                 <p className="text-sm text-gray-400">Total Team</p>
                 <p className="text-2xl font-bold text-white">{teamMembers.length}</p>
               </div>
-              <Users className="w-8 h-8 text-amber-400" />
+              <Users className="w-8 h-8 text-blue-400" />
             </div>
           </div>
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-xl p-4 border border-gray-700/50">
@@ -285,7 +285,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                         <select
                           value={member.role}
                           onChange={(e) => handleUpdateRole(member, e.target.value)}
-                          className="rounded-lg border border-gray-600 bg-gray-700 px-3 py-1 text-sm text-white focus:border-amber-500 focus:outline-none"
+                          className="rounded-lg border border-gray-600 bg-gray-700 px-3 py-1 text-sm text-white focus:border-gray-700 focus:outline-none"
                           disabled={!member.user_id}
                         >
                           {roles.filter(r => r.value !== 'owner').map((role) => (
@@ -335,7 +335,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                   type="email"
                   value={inviteData.email}
                   onChange={(e) => setInviteData({ ...inviteData, email: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="worker@company.com"
                 />
               </div>
@@ -347,7 +347,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                 <select
                   value={inviteData.role}
                   onChange={(e) => setInviteData({ ...inviteData, role: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 >
                   {roles.filter(r => r.value !== 'owner').map((role) => (
                     <option key={role.value} value={role.value}>
@@ -365,7 +365,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                   value={inviteData.message}
                   onChange={(e) => setInviteData({ ...inviteData, message: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="Welcome to the team. Looking forward to working with you"
                 />
               </div>

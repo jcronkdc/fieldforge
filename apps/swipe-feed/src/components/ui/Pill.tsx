@@ -18,7 +18,7 @@ export const Pill: React.FC<PillProps> = ({
   const variantStyles = {
     default: 'bg-slate-700 text-slate-300',
     success: 'bg-green-900/50 text-green-400',
-    warning: 'bg-amber-900/50 text-amber-400',
+    warning: 'bg-blue-900/50 text-blue-400',
     danger: 'bg-red-900/50 text-red-400',
     info: 'bg-blue-900/50 text-blue-400'
   };

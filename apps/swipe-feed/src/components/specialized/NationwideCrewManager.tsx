@@ -31,7 +31,7 @@ export const NationwideCrewManager: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-10 lg:px-8">
         <header className="space-y-3 border-b border-slate-800 pb-8">
-          <p className="text-sm font-medium text-amber-300">Crew coordination</p>
+          <p className="text-sm font-medium text-blue-300">Crew coordination</p>
           <h1 className="text-3xl font-semibold text-white">Give every crew the information they need before wheels-up</h1>
           <p className="max-w-4xl text-base text-slate-300">
             FieldForge helps construction management, safety, and logistics plan work across transmission, distribution,
@@ -50,7 +50,7 @@ export const NationwideCrewManager: React.FC = () => {
                 to="/crews/new"
                 className="flex items-center gap-3 rounded-md border border-slate-700 bg-slate-950/70 p-4 text-sm text-slate-200 hover:bg-slate-900"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-amber-100/80">
+                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-100/80">
                   <Users className="h-5 w-5 text-slate-900" />
                 </span>
                 <span>
@@ -62,7 +62,7 @@ export const NationwideCrewManager: React.FC = () => {
                 to="/import"
                 className="flex items-center gap-3 rounded-md border border-slate-700 bg-slate-950/70 p-4 text-sm text-slate-200 hover:bg-slate-900"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-amber-100/80">
+                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-100/80">
                   <ClipboardList className="h-5 w-5 text-slate-900" />
                 </span>
                 <span>
@@ -79,7 +79,7 @@ export const NationwideCrewManager: React.FC = () => {
               Save an empty roster template, fill it with your data, and import it when you are ready.
             </p>
             <div className="mt-4 flex items-center gap-2 rounded-md border border-dashed border-slate-700 bg-slate-950/70 p-4 text-sm text-slate-400">
-              <Phone className="h-5 w-5 text-amber-300" aria-hidden="true" />
+              <Phone className="h-5 w-5 text-blue-300" aria-hidden="true" />
               <span>Need help importing data? Contact support@fieldforge.app and we will assist.</span>
             </div>
           </aside>
@@ -105,7 +105,7 @@ export const NationwideCrewManager: React.FC = () => {
             {coordinationIdeas.map(({ title, description, icon: Icon }) => (
               <div key={title} className="rounded-md border border-slate-800 bg-slate-950/70 p-4">
                 <div className="flex items-center gap-3 text-white">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-md bg-amber-100/80">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-md bg-blue-100/80">
                     <Icon className="h-5 w-5 text-slate-900" aria-hidden="true" />
                   </span>
                   <h3 className="text-sm font-semibold">{title}</h3>

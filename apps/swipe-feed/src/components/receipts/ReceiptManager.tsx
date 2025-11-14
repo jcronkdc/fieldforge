@@ -295,7 +295,7 @@ export const ReceiptManager: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -310,7 +310,7 @@ export const ReceiptManager: React.FC = () => {
         </div>
         <button
           onClick={() => setShowUploadModal(true)}
-          className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center gap-2 min-h-[44px]"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 min-h-[44px]"
         >
           <Upload className="w-4 h-4" />
           Add Receipt
@@ -327,7 +327,7 @@ export const ReceiptManager: React.FC = () => {
                 ${stats.totalAmount.toFixed(2)}
               </p>
             </div>
-            <DollarSign className="w-8 h-8 text-amber-500" />
+            <DollarSign className="w-8 h-8 text-blue-500" />
           </div>
         </div>
 
@@ -399,7 +399,7 @@ export const ReceiptManager: React.FC = () => {
                 onClick={() => setFilterStatus(status)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] ${
                   filterStatus === status
-                    ? 'bg-amber-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -631,7 +631,7 @@ export const ReceiptManager: React.FC = () => {
               {uploadProgress > 0 && (
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className="bg-amber-600 h-2 rounded-full transition-all duration-300"
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${uploadProgress}%` }}
                   />
                 </div>
@@ -650,7 +650,7 @@ export const ReceiptManager: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 min-h-[44px]"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-[44px]"
                 >
                   Save Receipt
                 </button>

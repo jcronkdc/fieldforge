@@ -307,7 +307,7 @@ export const InspectionManager: React.FC = () => {
           
           <button
             onClick={() => setShowForm(true)}
-            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
           >
             <Plus className="w-5 h-5" />
             Schedule Inspection
@@ -362,7 +362,7 @@ export const InspectionManager: React.FC = () => {
                 onClick={() => setFilter(filterType as typeof filter)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                   filter === filterType
-                    ? 'bg-amber-600 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                 }`}
               >
@@ -376,7 +376,7 @@ export const InspectionManager: React.FC = () => {
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl">
           {loading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-700 mx-auto mb-4"></div>
               <p className="text-slate-400">Loading inspections...</p>
             </div>
           ) : filteredInspections.length === 0 ? (
@@ -599,7 +599,7 @@ export const InspectionManager: React.FC = () => {
                           <div key={item.id} className="bg-slate-800/30 rounded-lg p-4">
                             <div className="flex items-center justify-between mb-2">
                               <div>
-                                <span className="text-xs text-amber-400 uppercase">{item.category}</span>
+                                <span className="text-xs text-blue-400 uppercase">{item.category}</span>
                                 <p className="text-white">{item.item}</p>
                               </div>
                               <div className="flex gap-2">
@@ -657,7 +657,7 @@ export const InspectionManager: React.FC = () => {
                         <button
                           type="button"
                           onClick={addFinding}
-                          className="text-amber-500 hover:text-amber-400 text-sm flex items-center gap-1"
+                          className="text-blue-500 hover:text-blue-400 text-sm flex items-center gap-1"
                         >
                           <Plus className="w-4 h-4" />
                           Add Finding
@@ -747,7 +747,7 @@ export const InspectionManager: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
                   >
                     {selectedInspection ? 'Complete Inspection' : 'Schedule Inspection'}
                   </button>
@@ -829,7 +829,7 @@ export const InspectionManager: React.FC = () => {
                         {viewingInspection.checklist_items.map(item => (
                           <div key={item.id} className="flex items-center justify-between">
                             <div className="flex-1">
-                              <span className="text-xs text-amber-400 uppercase">{item.category}</span>
+                              <span className="text-xs text-blue-400 uppercase">{item.category}</span>
                               <p className="text-sm text-white">{item.item}</p>
                               {item.notes && <p className="text-xs text-slate-400 mt-1">{item.notes}</p>}
                             </div>
@@ -896,7 +896,7 @@ export const InspectionManager: React.FC = () => {
                   </button>
                   <button
                     onClick={() => setViewingInspection(null)}
-                    className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
                   >
                     Close
                   </button>

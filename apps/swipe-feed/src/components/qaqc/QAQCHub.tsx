@@ -205,7 +205,7 @@ export const QAQCHub: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -220,7 +220,7 @@ export const QAQCHub: React.FC = () => {
         </div>
         <button
           onClick={() => setShowCreateForm(true)}
-          className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center gap-2 min-h-[44px]"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 min-h-[44px]"
         >
           <Plus className="w-4 h-4" />
           Schedule Inspection
@@ -231,7 +231,7 @@ export const QAQCHub: React.FC = () => {
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
         <div className="bg-white rounded-lg shadow p-4 sm:p-5">
           <div className="flex items-center justify-between mb-2">
-            <ClipboardCheck className="w-6 h-6 text-amber-500" />
+            <ClipboardCheck className="w-6 h-6 text-blue-500" />
             <span className="text-xs text-gray-500">Total</span>
           </div>
           <p className="text-2xl font-bold text-gray-900">{metrics.totalInspections}</p>
@@ -297,7 +297,7 @@ export const QAQCHub: React.FC = () => {
               onClick={() => setFilterStatus(status)}
               className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] ${
                 filterStatus === status
-                  ? 'bg-amber-600 text-white'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -471,7 +471,7 @@ export const QAQCHub: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 min-h-[44px]"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-[44px]"
                 >
                   Schedule
                 </button>

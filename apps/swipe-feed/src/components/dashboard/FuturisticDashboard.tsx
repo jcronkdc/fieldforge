@@ -28,7 +28,7 @@ const telemetryCards = [
     label: 'Crew utilization',
     metric: '94%',
     caption: '3% above target',
-    tone: 'text-amber-400',
+    tone: 'text-blue-400',
     icon: Users
   },
   {
@@ -94,61 +94,58 @@ export const FuturisticDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="relative min-h-screen davinci-grid paper-texture">
-      {/* Renaissance Decorations */}
-      <div className="compass-rose" />
-      <div className="spiral-path" />
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-[34px] px-[34px] py-[55px]">
-        <header className="flex flex-col gap-[21px] border-b border-amber-500/20 pb-[34px] lg:flex-row lg:items-center lg:justify-between">
-          <div className="space-y-[13px]">
-            <p className="text-golden-sm text-amber-400/60 font-medium uppercase tracking-wider technical-annotation" data-note="OVERVIEW">Portfolio overview</p>
-            <h1 className="text-golden-2xl font-bold text-white measurement-line">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
+        <header className="flex flex-col gap-4 border-b border-gray-800 pb-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-3">
+            <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Portfolio overview</p>
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Maintain control across every transmission and substation build
             </h1>
-            <p className="max-w-3xl text-golden-base text-amber-400/60">
+            <p className="max-w-3xl text-base text-gray-400">
               Use this dashboard to move programs forward: align construction and commissioning, surface risk, and deliver the reporting executives expect without chasing spreadsheets.
             </p>
           </div>
           <Link
             to="/analytics"
-            className="btn-davinci px-[21px] py-[13px] flex items-center gap-[8px] field-touch"
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg flex items-center gap-2 hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg shadow-blue-500/25"
           >
             View executive analytics
             <ArrowRight className="w-5 h-5" />
           </Link>
         </header>
 
-        <section className="grid gap-[21px] sm:grid-cols-2 lg:grid-cols-3 paper-texture">
+        <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {telemetryCards.map(({ label, metric, caption, tone, icon: Icon }, index) => (
             <div
               key={label}
-              className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe"
+              className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  "
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="flex items-center gap-[13px]">
-                <div className="vitruvian-square">
-                  <Icon className="w-[34px] h-[34px] text-amber-400" />
+                <div className="">
+                  <Icon className="w-[34px] h-[34px] text-blue-400" />
                 </div>
                 <div>
-                  <p className={`text-golden-xl font-bold ${tone}`}>{metric}</p>
-                  <p className="text-golden-sm font-medium uppercase tracking-wider text-amber-400/60 technical-annotation" data-note={label.toUpperCase().replace(' ', '-')}>{label}</p>
+                  <p className={`text-xl font-bold ${tone}`}>{metric}</p>
+                  <p className="text-sm font-medium uppercase tracking-wider text-blue-400/60 " data-note={label.toUpperCase().replace(' ', '-')}>{label}</p>
                 </div>
               </div>
-              <p className="mt-[13px] text-golden-sm font-medium uppercase tracking-wider text-amber-400/40">{caption}</p>
+              <p className="mt-[13px] text-sm font-medium uppercase tracking-wider text-blue-400/40">{caption}</p>
             </div>
           ))}
         </section>
 
         <section className="grid gap-[21px] sm:grid-cols-2 lg:grid-cols-3">
           {summaryCards.map(({ title, description, cta, to, icon: Icon }, index) => (
-            <div key={title} className="card-engineering p-[21px] rounded-[13px] tech-border depth-layer-1 breathe corner-sketch" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="vitruvian-rect mb-[21px]">
-                <Icon className="w-[34px] h-[34px] text-amber-400" aria-hidden="true" />
+            <div key={title} className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700   " style={{ animationDelay: `${index * 0.1}s` }}>
+              <div className=" mb-[21px]">
+                <Icon className="w-[34px] h-[34px] text-blue-400" aria-hidden="true" />
               </div>
-              <h2 className="text-golden-base font-semibold text-white measurement-line">{title}</h2>
-              <p className="mt-[13px] text-golden-sm text-amber-400/60">{description}</p>
-              <Link to={to} className="mt-[21px] inline-flex items-center gap-[8px] text-golden-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors technical-annotation" data-note="EXPLORE">
+              <h2 className="text-base font-semibold text-white ">{title}</h2>
+              <p className="mt-[13px] text-sm text-blue-400/60">{description}</p>
+              <Link to={to} className="mt-[21px] inline-flex items-center gap-[8px] text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors " >
                 {cta}
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -157,48 +154,48 @@ export const FuturisticDashboard: React.FC = () => {
         </section>
 
         <section className="grid gap-[34px] lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-          <div className="dashboard-card p-[34px] rounded-[21px] tech-border depth-layer-1">
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[34px] rounded-[21px] border border-gray-700 ">
             <div className="flex items-center justify-between mb-[21px]">
-              <h2 className="text-golden-lg font-semibold text-white measurement-line">Implementation checklist</h2>
-              <span className="text-golden-sm font-semibold uppercase tracking-[0.2em] text-amber-400/60 technical-annotation" data-note="BEGIN">Start here</span>
+              <h2 className="text-lg font-semibold text-white ">Implementation checklist</h2>
+              <span className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400/60 " >Start here</span>
             </div>
-            <p className="text-golden-sm text-amber-400/60">
+            <p className="text-sm text-blue-400/60">
               Work through these actions to migrate active capital programs into FieldForge.
             </p>
-            <ol className="mt-[21px] space-y-[13px] text-golden-sm text-white">
+            <ol className="mt-[21px] space-y-[13px] text-sm text-white">
               {setupChecklist.map((item, index) => (
                 <li key={item} className="flex items-start gap-[13px]">
-                  <span className="mt-1 inline-flex h-[34px] w-[34px] items-center justify-center rounded-full tech-border text-golden-sm font-semibold text-amber-400 vitruvian-square">
+                  <span className="mt-1 inline-flex h-[34px] w-[34px] items-center justify-center rounded-full border border-gray-700 text-sm font-semibold text-blue-400 ">
                     {index + 1}
                   </span>
-                  <span className="text-amber-400/80 field-readable">{item}</span>
+                  <span className="text-blue-400/80 ">{item}</span>
                 </li>
               ))}
             </ol>
           </div>
 
           <div className="flex flex-col gap-[21px]">
-            <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe">
+            <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  ">
               <div className="flex items-center gap-[13px] mb-[13px]">
-                <HardHat className="w-[21px] h-[21px] text-amber-400" aria-hidden="true" />
-                <h2 className="text-golden-base font-semibold text-white measurement-line">Today's priorities</h2>
+                <HardHat className="w-[21px] h-[21px] text-blue-400" aria-hidden="true" />
+                <h2 className="text-base font-semibold text-white ">Today's priorities</h2>
               </div>
-              <p className="text-golden-sm text-amber-400/60 field-readable">
+              <p className="text-sm text-blue-400/60 ">
                 Start with crews deploying in the next 24 hours. Confirm documents, permits, and resource plans so field leaders sign off before mobilization.
               </p>
             </div>
 
-            <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.1s' }}>
+            <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.1s' }}>
               <div className="flex items-center gap-[13px] mb-[13px]">
-                <Calendar className="w-[21px] h-[21px] text-amber-400" aria-hidden="true" />
-                <h2 className="text-golden-base font-semibold text-white measurement-line">Upcoming reviews</h2>
+                <Calendar className="w-[21px] h-[21px] text-blue-400" aria-hidden="true" />
+                <h2 className="text-base font-semibold text-white ">Upcoming reviews</h2>
               </div>
               <ul className="space-y-[13px]">
                 {upcomingItems.map(({ title, description, to }) => (
-                  <li key={title} className="tech-border rounded-[8px] bg-slate-800/50 p-[13px]">
-                    <p className="font-semibold text-white text-golden-sm">{title}</p>
-                    <p className="mt-[8px] text-golden-sm text-amber-400/60">{description}</p>
-                    <Link to={to} className="mt-[8px] inline-flex items-center gap-[8px] text-xs font-semibold text-amber-400 hover:text-amber-300 transition-colors technical-annotation" data-note="GO">
+                  <li key={title} className="border border-gray-700 rounded-[8px] bg-slate-800/50 p-[13px]">
+                    <p className="font-semibold text-white text-sm">{title}</p>
+                    <p className="mt-[8px] text-sm text-blue-400/60">{description}</p>
+                    <Link to={to} className="mt-[8px] inline-flex items-center gap-[8px] text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors " >
                       Go to section
                       <ArrowRight className="h-3 w-3" />
                     </Link>
@@ -209,26 +206,26 @@ export const FuturisticDashboard: React.FC = () => {
           </div>
         </section>
 
-        <section className="dashboard-card p-[34px] rounded-[21px] tech-border depth-layer-1 corner-sketch">
+        <section className="bg-gray-800/50 border border-gray-700 rounded-lg p-[34px] rounded-[21px] border border-gray-700  ">
           <div className="flex items-center gap-[13px] mb-[21px]">
-            <FileText className="w-[21px] h-[21px] text-amber-400" aria-hidden="true" />
-            <h2 className="text-golden-lg font-semibold text-white measurement-line">Activity timeline</h2>
+            <FileText className="w-[21px] h-[21px] text-blue-400" aria-hidden="true" />
+            <h2 className="text-lg font-semibold text-white ">Activity timeline</h2>
           </div>
-          <p className="text-golden-sm text-amber-400/60 field-readable">
+          <p className="text-sm text-blue-400/60 ">
             As you capture daily reports, safety briefings, and commercial approvals, this feed becomes the single source of truth for your executive team.
           </p>
-          <div className="mt-[21px] flex items-center gap-[13px] rounded-[13px] border border-dashed border-amber-500/20 bg-slate-800/50 p-[21px] text-golden-sm text-amber-400/60">
+          <div className="mt-[21px] flex items-center gap-[13px] rounded-[13px] border border-dashed border-gray-700 bg-slate-800/50 p-[21px] text-sm text-blue-400/60">
             <CheckCircle className="w-5 h-5 text-green-400" aria-hidden="true" />
-            <span className="field-readable">Start logging operational data to bring the timeline to life for your stakeholders.</span>
+            <span className="">Start logging operational data to bring the timeline to life for your stakeholders.</span>
           </div>
         </section>
 
         {/* Leonardo Quote */}
         <div className="text-center opacity-30 mt-[89px]">
-          <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">
+          <p className="text-sm text-blue-400/60 font-light italic ">
             "As every divided kingdom falls, so every mind divided between many studies confounds and saps itself."
           </p>
-          <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+          <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
         </div>
       </div>
     </div>

@@ -266,7 +266,7 @@ export const ThreeWeekLookahead: React.FC = () => {
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
           >
             <Plus className="w-5 h-5" />
             Add Activity
@@ -311,7 +311,7 @@ export const ThreeWeekLookahead: React.FC = () => {
           <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-slate-400">Total Activities</span>
-              <Calendar className="w-5 h-5 text-amber-500" />
+              <Calendar className="w-5 h-5 text-blue-500" />
             </div>
             <div className="text-2xl font-bold text-white">{weekActivities.length}</div>
             <div className="text-sm text-slate-400">This week</div>
@@ -535,7 +535,7 @@ export const ThreeWeekLookahead: React.FC = () => {
                     <button
                       type="button"
                       onClick={addConstraint}
-                      className="text-amber-500 hover:text-amber-400 text-sm flex items-center gap-1"
+                      className="text-blue-500 hover:text-blue-400 text-sm flex items-center gap-1"
                     >
                       <Plus className="w-4 h-4" />
                       Add Constraint
@@ -621,7 +621,7 @@ export const ThreeWeekLookahead: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg transition"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
                   >
                     {selectedActivity ? 'Update' : 'Create'} Activity
                   </button>

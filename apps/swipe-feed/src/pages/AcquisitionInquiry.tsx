@@ -46,22 +46,22 @@ export const AcquisitionInquiry: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen davinci-grid paper-texture">
+    <div className="min-h-screen  ">
       {/* Renaissance Decorations */}
-      <div className="compass-rose" />
+      <div className="" />
       
       <div className="max-w-6xl mx-auto p-[34px]">
         {/* Header */}
-        <Link to="/" className="inline-flex items-center gap-[13px] text-amber-400 hover:text-amber-300 mb-[34px] technical-annotation" data-note="RETURN">
+        <Link to="/" className="inline-flex items-center gap-[13px] text-blue-400 hover:text-blue-300 mb-[34px] " >
           <ArrowRight className="w-5 h-5 rotate-180" />
           Back to Home
         </Link>
 
         <div className="text-center mb-[55px]">
-          <h1 className="text-golden-3xl font-bold text-white mb-[21px] measurement-line">
+          <h1 className="text-golden-3xl font-bold text-white mb-[21px] ">
             Partner with FieldForge
           </h1>
-          <p className="text-golden-lg text-amber-400/80 max-w-3xl mx-auto field-readable">
+          <p className="text-lg text-blue-400/80 max-w-3xl mx-auto ">
             Acquire our platform or commission custom construction software built by experts who understand your industry
           </p>
         </div>
@@ -70,20 +70,20 @@ export const AcquisitionInquiry: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-[34px] mb-[55px]">
           {/* Acquisition Option */}
           <div 
-            className={`card-vitruvian p-[34px] rounded-[21px] tech-border depth-layer-1 corner-sketch cursor-pointer transition-all ${
+            className={`bg-gray-800/50 border border-gray-700 rounded-lg p-[34px] rounded-[21px] border border-gray-700   cursor-pointer transition-all ${
               inquiryType === 'acquire' ? 'ring-2 ring-amber-400 scale-[1.02]' : 'hover:scale-[1.01]'
             }`}
             onClick={() => setInquiryType('acquire')}
           >
             <div className="flex items-center gap-[21px] mb-[21px]">
-              <div className="vitruvian-square">
-                <DollarSign className="w-[34px] h-[34px] text-amber-400" />
+              <div className="">
+                <DollarSign className="w-[34px] h-[34px] text-blue-400" />
               </div>
-              <h2 className="text-golden-xl font-bold text-white measurement-line">
+              <h2 className="text-xl font-bold text-white ">
                 Acquire FieldForge
               </h2>
             </div>
-            <p className="text-golden-base text-amber-400/60 mb-[21px] field-readable">
+            <p className="text-base text-blue-400/60 mb-[21px] ">
               Purchase the entire FieldForge platform, including source code, infrastructure, 
               and our development team. Perfect for companies looking to own their construction 
               management solution outright.
@@ -91,35 +91,35 @@ export const AcquisitionInquiry: React.FC = () => {
             <ul className="space-y-[13px]">
               <li className="flex items-start gap-[8px]">
                 <CheckCircle className="w-5 h-5 text-green-400 mt-[2px]" />
-                <span className="text-golden-sm text-amber-400/80">Full source code ownership</span>
+                <span className="text-sm text-blue-400/80">Full source code ownership</span>
               </li>
               <li className="flex items-start gap-[8px]">
                 <CheckCircle className="w-5 h-5 text-green-400 mt-[2px]" />
-                <span className="text-golden-sm text-amber-400/80">Existing customer base (optional)</span>
+                <span className="text-sm text-blue-400/80">Existing customer base (optional)</span>
               </li>
               <li className="flex items-start gap-[8px]">
                 <CheckCircle className="w-5 h-5 text-green-400 mt-[2px]" />
-                <span className="text-golden-sm text-amber-400/80">Development team retention</span>
+                <span className="text-sm text-blue-400/80">Development team retention</span>
               </li>
             </ul>
           </div>
 
           {/* Custom Development Option */}
           <div 
-            className={`card-vitruvian p-[34px] rounded-[21px] tech-border depth-layer-1 corner-sketch cursor-pointer transition-all ${
+            className={`bg-gray-800/50 border border-gray-700 rounded-lg p-[34px] rounded-[21px] border border-gray-700   cursor-pointer transition-all ${
               inquiryType === 'custom' ? 'ring-2 ring-amber-400 scale-[1.02]' : 'hover:scale-[1.01]'
             }`}
             onClick={() => setInquiryType('custom')}
           >
             <div className="flex items-center gap-[21px] mb-[21px]">
-              <div className="vitruvian-square">
-                <Code className="w-[34px] h-[34px] text-amber-400" />
+              <div className="">
+                <Code className="w-[34px] h-[34px] text-blue-400" />
               </div>
-              <h2 className="text-golden-xl font-bold text-white measurement-line">
+              <h2 className="text-xl font-bold text-white ">
                 Custom Development
               </h2>
             </div>
-            <p className="text-golden-base text-amber-400/60 mb-[21px] field-readable">
+            <p className="text-base text-blue-400/60 mb-[21px] ">
               Commission a custom construction management platform tailored to your specific 
               needs. Leverage our deep industry expertise to build exactly what your teams 
               need to succeed.
@@ -127,34 +127,34 @@ export const AcquisitionInquiry: React.FC = () => {
             <ul className="space-y-[13px]">
               <li className="flex items-start gap-[8px]">
                 <CheckCircle className="w-5 h-5 text-green-400 mt-[2px]" />
-                <span className="text-golden-sm text-amber-400/80">Built to your specifications</span>
+                <span className="text-sm text-blue-400/80">Built to your specifications</span>
               </li>
               <li className="flex items-start gap-[8px]">
                 <CheckCircle className="w-5 h-5 text-green-400 mt-[2px]" />
-                <span className="text-golden-sm text-amber-400/80">Industry best practices built-in</span>
+                <span className="text-sm text-blue-400/80">Industry best practices built-in</span>
               </li>
               <li className="flex items-start gap-[8px]">
                 <CheckCircle className="w-5 h-5 text-green-400 mt-[2px]" />
-                <span className="text-golden-sm text-amber-400/80">Ongoing support & maintenance</span>
+                <span className="text-sm text-blue-400/80">Ongoing support & maintenance</span>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Why Partner Section */}
-        <div className="dashboard-card p-[34px] rounded-[21px] tech-border depth-layer-1 mb-[55px]">
-          <h2 className="text-golden-xl font-bold text-white mb-[34px] measurement-line text-center">
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[34px] rounded-[21px] border border-gray-700  mb-[55px]">
+          <h2 className="text-xl font-bold text-white mb-[34px]  text-center">
             Why Partner with FieldForge
           </h2>
           <div className="grid md:grid-cols-2 gap-[21px]">
             {benefits.map((benefit, index) => (
-              <div key={benefit.title} className="flex gap-[21px] breathe" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="vitruvian-rect flex-shrink-0">
-                  <benefit.icon className="w-[21px] h-[21px] text-amber-400" />
+              <div key={benefit.title} className="flex gap-[21px] " style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className=" flex-shrink-0">
+                  <benefit.icon className="w-[21px] h-[21px] text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white text-golden-base mb-[8px]">{benefit.title}</h3>
-                  <p className="text-golden-sm text-amber-400/60">{benefit.description}</p>
+                  <h3 className="font-semibold text-white text-base mb-[8px]">{benefit.title}</h3>
+                  <p className="text-sm text-blue-400/60">{benefit.description}</p>
                 </div>
               </div>
             ))}
@@ -163,15 +163,15 @@ export const AcquisitionInquiry: React.FC = () => {
 
         {/* Contact Form */}
         {inquiryType && (
-          <div className="card-vitruvian p-[34px] rounded-[21px] tech-border depth-layer-1 corner-sketch">
-            <h2 className="text-golden-xl font-bold text-white mb-[34px] measurement-line text-center">
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[34px] rounded-[21px] border border-gray-700  ">
+            <h2 className="text-xl font-bold text-white mb-[34px]  text-center">
               {inquiryType === 'acquire' ? 'Acquisition Inquiry' : 'Custom Development Inquiry'}
             </h2>
             
             <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-[21px]">
               <div className="grid md:grid-cols-2 gap-[21px]">
                 <div>
-                  <label className="block text-golden-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="REQUIRED">
+                  <label className="block text-sm font-medium text-blue-400 mb-[8px] " >
                     Company Name *
                   </label>
                   <input
@@ -179,12 +179,12 @@ export const AcquisitionInquiry: React.FC = () => {
                     required
                     value={formData.companyName}
                     onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                    className="w-full input-davinci px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white field-readable"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white "
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-golden-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="REQUIRED">
+                  <label className="block text-sm font-medium text-blue-400 mb-[8px] " >
                     Contact Name *
                   </label>
                   <input
@@ -192,14 +192,14 @@ export const AcquisitionInquiry: React.FC = () => {
                     required
                     value={formData.contactName}
                     onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
-                    className="w-full input-davinci px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white field-readable"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white "
                   />
                 </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-[21px]">
                 <div>
-                  <label className="block text-golden-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="REQUIRED">
+                  <label className="block text-sm font-medium text-blue-400 mb-[8px] " >
                     Email *
                   </label>
                   <input
@@ -207,25 +207,25 @@ export const AcquisitionInquiry: React.FC = () => {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full input-davinci px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white field-readable"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white "
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-golden-sm font-medium text-amber-400 mb-[8px]">
+                  <label className="block text-sm font-medium text-blue-400 mb-[8px]">
                     Phone
                   </label>
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full input-davinci px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white field-readable"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white "
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-golden-sm font-medium text-amber-400 mb-[8px] technical-annotation" data-note="DESCRIBE">
+                <label className="block text-sm font-medium text-blue-400 mb-[8px] " >
                   {inquiryType === 'acquire' ? 'Acquisition Goals' : 'Project Description'} *
                 </label>
                 <textarea
@@ -233,7 +233,7 @@ export const AcquisitionInquiry: React.FC = () => {
                   rows={4}
                   value={formData.projectDescription}
                   onChange={(e) => setFormData({ ...formData, projectDescription: e.target.value })}
-                  className="w-full input-davinci px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white field-readable"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white "
                   placeholder={inquiryType === 'acquire' 
                     ? "Tell us about your acquisition goals and how FieldForge fits into your strategy..." 
                     : "Describe your construction management needs and specific requirements..."}
@@ -242,13 +242,13 @@ export const AcquisitionInquiry: React.FC = () => {
 
               <div className="grid md:grid-cols-2 gap-[21px]">
                 <div>
-                  <label className="block text-golden-sm font-medium text-amber-400 mb-[8px]">
+                  <label className="block text-sm font-medium text-blue-400 mb-[8px]">
                     Timeline
                   </label>
                   <select 
                     value={formData.timeline}
                     onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                    className="w-full input-davinci px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white field-readable"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white "
                   >
                     <option value="">Select timeline</option>
                     <option value="immediate">Immediate (&lt; 1 month)</option>
@@ -260,13 +260,13 @@ export const AcquisitionInquiry: React.FC = () => {
                 </div>
                 
                 <div>
-                  <label className="block text-golden-sm font-medium text-amber-400 mb-[8px]">
+                  <label className="block text-sm font-medium text-blue-400 mb-[8px]">
                     Budget Range
                   </label>
                   <select 
                     value={formData.budget}
                     onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                    className="w-full input-davinci px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white field-readable"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 px-[21px] py-[13px] rounded-[8px] bg-slate-800/50 text-white "
                   >
                     <option value="">Select budget</option>
                     <option value="under-100k">Under $100K</option>
@@ -282,7 +282,7 @@ export const AcquisitionInquiry: React.FC = () => {
               <div className="flex justify-center pt-[21px]">
                 <button
                   type="submit"
-                  className="btn-davinci px-[55px] py-[13px] text-white font-semibold field-touch glow-renaissance breathe"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[55px] py-[13px] text-white font-semibold   "
                 >
                   Submit Inquiry
                 </button>
@@ -293,10 +293,10 @@ export const AcquisitionInquiry: React.FC = () => {
 
         {/* Leonardo Quote */}
         <div className="text-center opacity-30 mt-[89px]">
-          <p className="text-golden-sm text-amber-400/60 font-light italic">
+          <p className="text-sm text-blue-400/60 font-light italic">
             "Where the spirit does not work with the hand, there is no art."
           </p>
-          <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+          <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
         </div>
       </div>
     </div>

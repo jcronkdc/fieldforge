@@ -22,7 +22,7 @@ export const SyncStatus: React.FC = () => {
     <div className="fixed bottom-20 right-4 lg:bottom-4 bg-slate-800/90 backdrop-blur-sm border border-slate-700 rounded-lg px-3 py-2 flex items-center space-x-2">
       {syncing ? (
         <>
-          <RefreshCw className="w-4 h-4 text-amber-500 animate-spin" />
+          <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />
           <span className="text-xs text-slate-400">Syncing</span>
         </>
       ) : (

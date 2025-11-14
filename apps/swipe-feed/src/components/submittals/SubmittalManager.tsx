@@ -147,7 +147,7 @@ export const SubmittalManager: React.FC = () => {
       case 'rejected':
         return <XCircle className="w-5 h-5 text-red-400" />;
       case 'under_review':
-        return <Clock className="w-5 h-5 text-amber-400" />;
+        return <Clock className="w-5 h-5 text-blue-400" />;
       case 'revise_resubmit':
         return <RefreshCw className="w-5 h-5 text-orange-400" />;
       default:
@@ -162,7 +162,7 @@ export const SubmittalManager: React.FC = () => {
       case 'high':
         return 'text-orange-400 bg-orange-400/20';
       case 'medium':
-        return 'text-amber-400 bg-amber-400/20';
+        return 'text-blue-400 bg-blue-400/20';
       default:
         return 'text-green-400 bg-green-400/20';
     }
@@ -175,9 +175,9 @@ export const SubmittalManager: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950   flex items-center justify-center">
         <div className="text-center">
-          <Compass className="w-[89px] h-[89px] text-amber-400 mx-auto mb-[21px] animate-spin" />
+          <Compass className="w-[89px] h-[89px] text-blue-400 mx-auto mb-[21px] animate-spin" />
           <p className="text-slate-400">Loading submittals...</p>
         </div>
       </div>
@@ -185,16 +185,16 @@ export const SubmittalManager: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950  ">
       <div className="p-[34px]">
         {/* Header */}
         <div className="mb-[55px] text-center relative">
           <div className="absolute top-0 left-8 opacity-20">
-            <Compass className="w-[144px] h-[144px] text-amber-400" style={{ animation: 'gear-rotate 60s linear infinite' }} />
+            <Compass className="w-[144px] h-[144px] text-blue-400" style={{ animation: ' 60s linear infinite' }} />
           </div>
-          <h1 className="text-golden-2xl font-bold text-white mb-[13px]">Submittal Manager</h1>
-          <p className="text-golden-base text-slate-300">Platform's Memory System</p>
-          <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation mt-[8px]">
+          <h1 className="text-2xl font-bold text-white mb-[13px]">Submittal Manager</h1>
+          <p className="text-base text-slate-300">Platform's Memory System</p>
+          <p className="text-sm text-blue-400/60 font-light italic  mt-[8px]">
             "Learning never exhausts the mind" — Leonardo da Vinci
           </p>
         </div>
@@ -208,7 +208,7 @@ export const SubmittalManager: React.FC = () => {
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full input-davinci bg-slate-800/50 text-white pl-[55px] pr-[21px] py-[13px] rounded-[8px] tech-border"
+                className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white pl-[55px] pr-[21px] py-[13px] rounded-[8px] border border-gray-700"
                 placeholder="Search submittals..."
               />
             </div>
@@ -221,7 +221,7 @@ export const SubmittalManager: React.FC = () => {
                 onClick={() => setFilter(status)}
                 className={`px-[21px] py-[13px] rounded-[8px] font-semibold transition-all ${
                   filter === status
-                    ? 'bg-amber-500 text-white'
+                    ? 'bg-blue-500 text-white'
                     : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
                 }`}
               >
@@ -232,7 +232,7 @@ export const SubmittalManager: React.FC = () => {
 
           <button
             onClick={() => setShowUploadForm(true)}
-            className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-bold transition-all btn-davinci breathe flex items-center gap-[8px]"
+            className="px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-bold transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all  flex items-center gap-[8px]"
           >
             <Upload className="w-5 h-5" />
             New Submittal
@@ -245,26 +245,26 @@ export const SubmittalManager: React.FC = () => {
             <div
               key={submittal.id}
               onClick={() => setSelectedSubmittal(submittal)}
-              className="card-vitruvian corner-sketch p-[21px] rounded-[13px] cursor-pointer hover:scale-[1.02] transition-all depth-layer-1"
+              className="card-vitruvian  p-[21px] rounded-[13px] cursor-pointer hover:scale-[1.02] transition-all "
             >
               <div className="flex items-start justify-between mb-[13px]">
                 <div className="flex items-center gap-[8px]">
                   {getStatusIcon(submittal.status)}
-                  <span className="text-sm text-slate-400 measurement-line">{submittal.submittal_number}</span>
+                  <span className="text-sm text-slate-400 ">{submittal.submittal_number}</span>
                 </div>
                 <span className={`px-[8px] py-[3px] rounded text-xs font-semibold ${getPriorityColor(submittal.priority)}`}>
                   {submittal.priority.toUpperCase()}
                 </span>
               </div>
 
-              <h3 className="text-lg font-semibold text-white mb-[8px] field-readable">{submittal.title}</h3>
+              <h3 className="text-lg font-semibold text-white mb-[8px] ">{submittal.title}</h3>
               <p className="text-sm text-slate-400 mb-[13px]">Spec: {submittal.spec_section}</p>
 
               <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-400">
                   Rev {submittal.revision_number}
                 </span>
-                <span className="text-slate-400 annotation" data-note="DUE">
+                <span className="text-slate-400 " >
                   {new Date(submittal.required_date).toLocaleDateString()}
                 </span>
               </div>
@@ -278,7 +278,7 @@ export const SubmittalManager: React.FC = () => {
             <div className="bg-slate-900 rounded-[21px] p-[34px] max-w-2xl w-full max-h-[90vh] overflow-y-auto card-vitruvian">
               <div className="flex justify-between items-start mb-[21px]">
                 <div>
-                  <h2 className="text-golden-xl font-bold text-white mb-[8px]">{selectedSubmittal.title}</h2>
+                  <h2 className="text-xl font-bold text-white mb-[8px]">{selectedSubmittal.title}</h2>
                   <p className="text-slate-400">{selectedSubmittal.submittal_number} • Rev {selectedSubmittal.revision_number}</p>
                 </div>
                 <button
@@ -292,7 +292,7 @@ export const SubmittalManager: React.FC = () => {
               <div className="space-y-[21px]">
                 <div>
                   <label className="text-sm font-medium text-slate-300">Spec Section</label>
-                  <p className="text-white technical-annotation" data-note="SPEC">{selectedSubmittal.spec_section}</p>
+                  <p className="text-white " >{selectedSubmittal.spec_section}</p>
                 </div>
 
                 <div>
@@ -340,7 +340,7 @@ export const SubmittalManager: React.FC = () => {
                   <div className="flex gap-[13px] mt-[34px]">
                     <button
                       onClick={() => updateStatus(selectedSubmittal.id, 'approved')}
-                      className="flex-1 px-[21px] py-[13px] bg-green-500 hover:bg-green-600 text-white rounded-[8px] font-semibold transition-all btn-davinci"
+                      className="flex-1 px-[21px] py-[13px] bg-green-500 hover:bg-green-600 text-white rounded-[8px] font-semibold transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all"
                     >
                       Approve
                     </button>
@@ -367,7 +367,7 @@ export const SubmittalManager: React.FC = () => {
         {showUploadForm && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
             <div className="bg-slate-900 rounded-[21px] p-[34px] max-w-lg w-full card-vitruvian">
-              <h2 className="text-golden-xl font-bold text-white mb-[21px]">New Submittal</h2>
+              <h2 className="text-xl font-bold text-white mb-[21px]">New Submittal</h2>
               
               <div className="space-y-[21px]">
                 <div>
@@ -378,7 +378,7 @@ export const SubmittalManager: React.FC = () => {
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="Electrical Panel Specifications"
                   />
                 </div>
@@ -391,7 +391,7 @@ export const SubmittalManager: React.FC = () => {
                     type="text"
                     value={formData.spec_section}
                     onChange={(e) => setFormData({ ...formData, spec_section: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="26 24 16"
                   />
                 </div>
@@ -403,7 +403,7 @@ export const SubmittalManager: React.FC = () => {
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] min-h-[89px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] min-h-[89px]"
                     placeholder="Detailed description of submittal..."
                   />
                 </div>
@@ -416,7 +416,7 @@ export const SubmittalManager: React.FC = () => {
                     <select
                       value={formData.priority}
                       onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                      className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     >
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
@@ -433,7 +433,7 @@ export const SubmittalManager: React.FC = () => {
                       type="date"
                       value={formData.required_date}
                       onChange={(e) => setFormData({ ...formData, required_date: e.target.value })}
-                      className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                      className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     />
                   </div>
                 </div>
@@ -456,7 +456,7 @@ export const SubmittalManager: React.FC = () => {
                   </button>
                   <button
                     onClick={handleSubmit}
-                    className="flex-1 px-[21px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all btn-davinci glow-renaissance"
+                    className="flex-1 px-[21px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all "
                   >
                     Create Submittal
                   </button>

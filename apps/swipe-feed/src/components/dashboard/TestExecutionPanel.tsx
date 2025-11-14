@@ -91,7 +91,7 @@ export const TestExecutionPanel: React.FC = () => {
             className={`px-6 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
               isRunning 
                 ? 'bg-gray-700 text-gray-400 cursor-not-allowed' 
-                : 'bg-amber-500 hover:bg-amber-600 text-white'
+                : 'bg-blue-500 hover:bg-blue-600 text-white'
             }`}
           >
             <Play className="w-4 h-4" />

@@ -148,7 +148,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                 <p className="text-sm text-gray-400">Total Crews</p>
                 <p className="text-2xl font-bold text-white">{crews.length}</p>
               </div>
-              <Users className="w-8 h-8 text-amber-400" />
+              <Users className="w-8 h-8 text-blue-400" />
             </div>
           </div>
           <div className="bg-gray-800/50 backdrop-blur-xl rounded-xl p-4 border border-gray-700/50">
@@ -218,7 +218,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
               return (
                 <div
                   key={crew.id}
-                  className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50 hover:border-amber-500/30 transition-all duration-200"
+                  className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50 hover:border-gray-700 transition-all duration-200"
                 >
                   {/* Crew Header */}
                   <div className="flex items-start justify-between mb-4">
@@ -276,7 +276,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                             setSelectedCrew(crew);
                             setShowAddMemberModal(true);
                           }}
-                          className="text-amber-400 hover:text-amber-300 transition-colors"
+                          className="text-blue-400 hover:text-blue-300 transition-colors"
                         >
                           <UserPlus className="w-4 h-4" />
                         </button>
@@ -359,7 +359,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                   type="text"
                   value={crewData.crew_name}
                   onChange={(e) => setCrewData({ ...crewData, crew_name: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="Alpha Crew"
                 />
               </div>
@@ -372,7 +372,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                   id="crew-type"
                   value={crewData.crew_type}
                   onChange={(e) => setCrewData({ ...crewData, crew_type: e.target.value as any })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                 >
                   {crewTypes.map((type) => (
                     <option key={type.value} value={type.value}>
@@ -391,7 +391,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                   value={crewData.description}
                   onChange={(e) => setCrewData({ ...crewData, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
                   placeholder="Primary installation crew for high voltage equipment"
                 />
               </div>
@@ -457,7 +457,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                           <p className="text-xs text-gray-400">{member.user?.job_title || member.role}</p>
                         </div>
                       </div>
-                      <Plus className="w-5 h-5 text-amber-400" />
+                      <Plus className="w-5 h-5 text-blue-400" />
                     </button>
                   ))}
                 </div>

@@ -146,7 +146,7 @@ export const ProjectManager: React.FC = () => {
                 placeholder="Search projects"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-xl border border-gray-600 bg-gray-700/50 pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                className="w-full rounded-xl border border-gray-600 bg-gray-700/50 pl-10 pr-4 py-2 text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
               />
             </div>
             <button
@@ -184,7 +184,7 @@ export const ProjectManager: React.FC = () => {
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
-                className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50 hover:border-amber-500/30 transition-all duration-200 group cursor-pointer"
+                className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 border border-gray-700/50 hover:border-gray-700 transition-all duration-200 group cursor-pointer"
                 onClick={() => {
                   setSelectedProject(project);
                   setView('team');
@@ -197,7 +197,7 @@ export const ProjectManager: React.FC = () => {
                       <Zap className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-white group-hover:text-amber-400 transition-colors">
+                      <h3 className="font-semibold text-white group-hover:text-blue-400 transition-colors">
                         {project.name}
                       </h3>
                       <p className="text-sm text-gray-400">#{project.project_number}</p>
@@ -248,7 +248,7 @@ export const ProjectManager: React.FC = () => {
                         <span>{project.start_date ? new Date(project.start_date).toLocaleDateString() : 'TBD'}</span>
                       </div>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-amber-400 transition-colors" />
+                    <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-400 transition-colors" />
                   </div>
                 </div>
 

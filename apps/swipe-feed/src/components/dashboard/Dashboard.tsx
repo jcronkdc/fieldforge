@@ -59,7 +59,7 @@ export const Dashboard: React.FC = () => {
             change: 5,
             trend: 'up',
             icon: Target,
-            color: 'text-amber-500',
+            color: 'text-blue-500',
             unit: '%'
           },
           {
@@ -144,7 +144,7 @@ export const Dashboard: React.FC = () => {
   const setDefaultMetrics = () => {
     // Fallback metrics with zero values
     setMetrics([
-      { title: 'Project Progress', value: 0, change: 0, trend: 'neutral', icon: Target, color: 'text-amber-500', unit: '%' },
+      { title: 'Project Progress', value: 0, change: 0, trend: 'neutral', icon: Target, color: 'text-blue-500', unit: '%' },
       { title: 'Safety Score', value: 100, change: 0, trend: 'neutral', icon: Shield, color: 'text-green-500', unit: '%' },
       { title: 'Active Crews', value: 0, change: 0, trend: 'neutral', icon: Users, color: 'text-blue-500', unit: 'teams' },
       { title: 'Equipment Count', value: 0, change: 0, trend: 'neutral', icon: Truck, color: 'text-purple-500', unit: 'units' },
@@ -249,19 +249,19 @@ export const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="space-y-[34px] p-[34px]">
-        <div className="skeleton h-20 rounded-[21px] border border-amber-500/20 bg-slate-900/50" />
+        <div className="skeleton h-20 rounded-[21px] border border-gray-700 bg-slate-900/50" />
         <div className="grid grid-cols-1 gap-[21px] md:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, idx) => (
-            <div key={idx} className="skeleton h-32 rounded-[13px] border border-amber-500/20 bg-slate-900/50" />
+            <div key={idx} className="skeleton h-32 rounded-[13px] border border-gray-700 bg-slate-900/50" />
           ))}
         </div>
         <div className="grid grid-cols-1 gap-[34px] lg:grid-cols-3">
-          <div className="skeleton h-64 rounded-[13px] border border-amber-500/20 bg-slate-900/50 lg:col-span-2" />
-          <div className="skeleton h-64 rounded-[13px] border border-amber-500/20 bg-slate-900/50" />
+          <div className="skeleton h-64 rounded-[13px] border border-gray-700 bg-slate-900/50 lg:col-span-2" />
+          <div className="skeleton h-64 rounded-[13px] border border-gray-700 bg-slate-900/50" />
         </div>
         <div className="grid grid-cols-1 gap-[34px] lg:grid-cols-2">
-          <div className="skeleton h-56 rounded-[13px] border border-amber-500/20 bg-slate-900/50" />
-          <div className="skeleton h-56 rounded-[13px] border border-amber-500/20 bg-slate-900/50" />
+          <div className="skeleton h-56 rounded-[13px] border border-gray-700 bg-slate-900/50" />
+          <div className="skeleton h-56 rounded-[13px] border border-gray-700 bg-slate-900/50" />
         </div>
       </div>
     );
@@ -273,26 +273,26 @@ export const Dashboard: React.FC = () => {
       <div className="flex items-center justify-between relative">
         {/* Technical Compass */}
         <div className="absolute -right-8 -top-8 opacity-5">
-          <Compass className="w-[144px] h-[144px] text-amber-400" style={{ animation: 'gear-rotate 30s linear infinite' }} />
+          <Compass className="w-[144px] h-[144px] text-blue-400" style={{ animation: ' 30s linear infinite' }} />
         </div>
         <div className="relative">
           <div className="absolute -left-[55px] top-1/2 transform -translate-y-1/2 hidden lg:block opacity-10">
-            <Ruler className="w-[34px] h-[34px] text-amber-400" />
+            <Ruler className="w-[34px] h-[34px] text-blue-400" />
           </div>
-          <h1 className="text-golden-xl font-bold text-white measurement-line">Construction Dashboard</h1>
-          <p className="mt-[8px] text-amber-400/60 technical-annotation" data-note="LIVE DATA">138kV substation upgrade • {new Date().toLocaleDateString()}</p>
+          <h1 className="text-xl font-bold text-white ">Construction Dashboard</h1>
+          <p className="mt-[8px] text-blue-400/60 " >138kV substation upgrade • {new Date().toLocaleDateString()}</p>
         </div>
         <div className="flex items-center gap-[21px]">
           <Link
             to="/field"
-            className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] btn-davinci field-touch glow-renaissance"
+            className="px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all  "
           >
             <HardHat className="w-5 h-5" />
             <span>Daily Report</span>
           </Link>
           <Link
             to="/safety/briefing"
-            className="px-[34px] py-[13px] bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] tech-border field-touch"
+            className="px-[34px] py-[13px] bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] border border-gray-700 "
           >
             <Shield className="w-5 h-5" />
             <span>Safety Brief</span>
@@ -305,16 +305,16 @@ export const Dashboard: React.FC = () => {
         {metrics.map((metric, index) => (
           <div
             key={metric.title}
-            className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[13px] p-[21px] hover:border-amber-500/40 transition-all card-vitruvian tech-border depth-layer-1"
+            className="bg-slate-900/80 backdrop-blur-sm border border-gray-700 rounded-[13px] p-[21px] hover:border-gray-700 transition-all bg-gray-800/50 border border-gray-700 rounded-lg border border-gray-700 "
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <p className="text-sm font-medium text-amber-400/60 annotation" data-note={metric.title.toUpperCase().replace(' ', '-')}>{metric.title}</p>
+                <p className="text-sm font-medium text-blue-400/60 " data-note={metric.title.toUpperCase().replace(' ', '-')}>{metric.title}</p>
                 <div className="flex items-baseline mt-[8px]">
-                  <span className="text-golden-base font-bold text-white">{metric.value}</span>
+                  <span className="text-base font-bold text-white">{metric.value}</span>
                   {metric.unit && (
-                    <span className="text-amber-400/60 text-sm ml-[5px]">{metric.unit}</span>
+                    <span className="text-blue-400/60 text-sm ml-[5px]">{metric.unit}</span>
                   )}
                 </div>
                 <div className="flex items-center mt-[13px]">
@@ -323,17 +323,17 @@ export const Dashboard: React.FC = () => {
                   ) : metric.trend === 'down' ? (
                     <ArrowDown className="w-4 h-4 text-red-400 mr-[5px]" />
                   ) : (
-                    <div className="w-4 h-4 bg-amber-500/20 rounded-full mr-[5px]" />
+                    <div className="w-4 h-4 bg-blue-500/20 rounded-full mr-[5px]" />
                   )}
                   <span className={`text-sm ${
                     metric.trend === 'up' ? 'text-green-400' : 
-                    metric.trend === 'down' ? 'text-red-400' : 'text-amber-400/60'
+                    metric.trend === 'down' ? 'text-red-400' : 'text-blue-400/60'
                   }`}>
                     {Math.abs(metric.change)}% from yesterday
                   </span>
                 </div>
               </div>
-              <div className={`p-[13px] rounded-[8px] bg-slate-800/50 ${metric.color.replace('text-', 'text-amber-400 bg-').replace('500', '500/20')}`}>
+              <div className={`p-[13px] rounded-[8px] bg-slate-800/50 ${metric.color.replace('text-', 'text-blue-400 bg-').replace('500', '500/20')}`}>
                 <metric.icon className="w-6 h-6" />
               </div>
             </div>
@@ -343,13 +343,13 @@ export const Dashboard: React.FC = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[34px]">
         {/* Project Timeline */}
-        <div className="lg:col-span-2 bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] card-engineering relative">
+        <div className="lg:col-span-2 bg-slate-900/80 backdrop-blur-sm border border-gray-700 rounded-[21px] p-[34px] bg-gray-800/50 border border-gray-700 rounded-lg relative">
           <div className="flex items-center justify-between mb-[34px]">
-            <h2 className="text-golden-base font-bold text-white flex items-center measurement-line">
-              <Calendar className="mr-[8px] w-5 h-5 text-amber-400" />
+            <h2 className="text-base font-bold text-white flex items-center ">
+              <Calendar className="mr-[8px] w-5 h-5 text-blue-400" />
               Project Timeline
             </h2>
-            <Link to="/schedule" className="text-sm font-medium text-amber-400 hover:text-amber-300 technical-annotation" data-note="SCHEDULE">
+            <Link to="/schedule" className="text-sm font-medium text-blue-400 hover:text-blue-300 " >
               View full schedule →
             </Link>
           </div>
@@ -358,32 +358,32 @@ export const Dashboard: React.FC = () => {
             {/* Timeline Progress Bar */}
             <div className="relative">
               <div className="h-[8px] bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full breathe" style={{ width: '67%' }}></div>
+                <div className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full " style={{ width: '67%' }}></div>
               </div>
               <div className="flex justify-between mt-[8px]">
-                <span className="text-xs text-amber-400/60">Start: Jan 15, 2025</span>
-                <span className="text-xs font-bold text-amber-400">Current: 67% Complete</span>
-                <span className="text-xs text-amber-400/60">End: Jul 15, 2025</span>
+                <span className="text-xs text-blue-400/60">Start: Jan 15, 2025</span>
+                <span className="text-xs font-bold text-blue-400">Current: 67% Complete</span>
+                <span className="text-xs text-blue-400/60">End: Jul 15, 2025</span>
               </div>
             </div>
 
             {/* Upcoming Milestones */}
             <div className="space-y-[13px] mt-[34px]">
-              <h3 className="text-sm font-medium text-amber-400 uppercase tracking-wider technical-annotation" data-note="MILESTONES">Upcoming Milestones</h3>
+              <h3 className="text-sm font-medium text-blue-400 uppercase tracking-wider " >Upcoming Milestones</h3>
               {[
                 { name: 'Foundation Complete', date: 'Nov 15', status: 'on-track' },
                 { name: 'Equipment Delivery', date: 'Nov 20', status: 'at-risk' },
                 { name: 'Primary Testing', date: 'Dec 1', status: 'on-track' },
                 { name: 'Energization', date: 'Dec 15', status: 'on-track' }
               ].map((milestone) => (
-                <div key={milestone.name} className="flex items-center justify-between py-[13px] px-[21px] bg-slate-800/30 rounded-[8px] hover:bg-slate-800/50 transition-all tech-border">
+                <div key={milestone.name} className="flex items-center justify-between py-[13px] px-[21px] bg-slate-800/30 rounded-[8px] hover:bg-slate-800/50 transition-all border border-gray-700">
                   <div className="flex items-center gap-[13px]">
                     <div className={`w-[8px] h-[8px] rounded-full ${
                       milestone.status === 'on-track' ? 'bg-green-400' : 'bg-orange-400'
                     }`}></div>
-                    <span className="text-white font-medium field-readable">{milestone.name}</span>
+                    <span className="text-white font-medium ">{milestone.name}</span>
                   </div>
-                  <span className="text-sm text-amber-400/60 annotation" data-note="DUE">{milestone.date}</span>
+                  <span className="text-sm text-blue-400/60 " >{milestone.date}</span>
                 </div>
               ))}
             </div>
@@ -391,17 +391,17 @@ export const Dashboard: React.FC = () => {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] card-vitruvian relative">
+        <div className="bg-slate-900/80 backdrop-blur-sm border border-gray-700 rounded-[21px] p-[34px] bg-gray-800/50 border border-gray-700 rounded-lg relative">
           {/* Technical Compass */}
           <div className="absolute top-[21px] right-[21px] opacity-5">
-            <Compass className="w-[55px] h-[55px] text-amber-400" style={{ animation: 'gear-rotate 45s linear infinite reverse' }} />
+            <Compass className="w-[55px] h-[55px] text-blue-400" style={{ animation: ' 45s linear infinite reverse' }} />
           </div>
           <div className="flex items-center justify-between mb-[34px]">
-            <h2 className="text-golden-base font-bold text-white flex items-center measurement-line">
-              <Activity className="w-5 h-5 mr-[8px] text-amber-400" />
+            <h2 className="text-base font-bold text-white flex items-center ">
+              <Activity className="w-5 h-5 mr-[8px] text-blue-400" />
               Recent Activity
             </h2>
-            <button className="text-amber-400 hover:text-amber-300 text-sm font-medium technical-annotation" data-note="LIVE">
+            <button className="text-blue-400 hover:text-blue-300 text-sm font-medium " >
               View All →
             </button>
           </div>
@@ -409,10 +409,10 @@ export const Dashboard: React.FC = () => {
           <div className="space-y-[13px]">
             {activities.map((activity, index) => {
               const Icon = getActivityIcon(activity.type);
-              const colorClass = getActivityColor(activity.type).replace('bg-', 'bg-amber-500/20 text-amber-400');
+              const colorClass = getActivityColor(activity.type).replace('bg-', 'bg-blue-500/20 text-blue-400');
               
               return (
-                <div key={activity.id} className="flex items-start gap-[13px] p-[13px] rounded-[8px] hover:bg-slate-800/30 transition-all cursor-pointer tech-border depth-layer-1" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div key={activity.id} className="flex items-start gap-[13px] p-[13px] rounded-[8px] hover:bg-slate-800/30 transition-all cursor-pointer border border-gray-700 " style={{ animationDelay: `${index * 0.1}s` }}>
                   <div className={`p-[8px] rounded-[8px] ${colorClass}`}>
                     <Icon className="w-4 h-4" />
                   </div>
@@ -435,49 +435,49 @@ export const Dashboard: React.FC = () => {
       {/* Quick Actions Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-[21px]">
         {[
-          { label: 'Start Daily Report', icon: FileText, color: 'text-amber-400', path: '/field' },
-          { label: 'Equipment Check', icon: Wrench, color: 'text-amber-400', path: '/equipment' },
-          { label: 'Submit RFI', icon: FileText, color: 'text-amber-400', path: '/documents' },
-          { label: 'View 3D Map', icon: MapPin, color: 'text-amber-400', path: '/map' }
+          { label: 'Start Daily Report', icon: FileText, color: 'text-blue-400', path: '/field' },
+          { label: 'Equipment Check', icon: Wrench, color: 'text-blue-400', path: '/equipment' },
+          { label: 'Submit RFI', icon: FileText, color: 'text-blue-400', path: '/documents' },
+          { label: 'View 3D Map', icon: MapPin, color: 'text-blue-400', path: '/map' }
         ].map((action, index) => (
           <Link
             key={action.label}
             to={action.path}
-            className="group relative overflow-hidden bg-slate-900/80 hover:bg-slate-800/80 border border-amber-500/20 rounded-[13px] p-[21px] transition-all card-vitruvian tech-border hover:scale-[1.02] hover:border-amber-500/40 depth-layer-1"
+            className="group relative overflow-hidden bg-slate-900/80 hover:bg-slate-800/80 border border-gray-700 rounded-[13px] p-[21px] transition-all bg-gray-800/50 border border-gray-700 rounded-lg border border-gray-700 hover:scale-[1.02] hover:border-gray-700 "
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <div className="absolute inset-0 bg-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">
               <action.icon className={`w-8 h-8 ${action.color} mb-[13px]`} />
-              <p className="text-white font-medium field-readable">{action.label}</p>
-              <p className="text-amber-400/60 text-xs mt-[5px] annotation" data-note="QUICK">Quick access →</p>
+              <p className="text-white font-medium ">{action.label}</p>
+              <p className="text-blue-400/60 text-xs mt-[5px] " >Quick access →</p>
             </div>
           </Link>
         ))}
       </div>
 
       {/* Footer Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-[21px] pt-[34px] border-t border-amber-500/20">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-[21px] pt-[34px] border-t border-gray-700
         {[
           { label: 'Total Man Hours', value: '12,456', icon: Timer },
           { label: 'Structures Set', value: '45/62', icon: Building2 },
           { label: 'Cable Pulled', value: '18.5 km', icon: Zap },
           { label: 'Tests Complete', value: '89%', icon: CheckCircle }
         ].map((stat, index) => (
-          <div key={stat.label} className="text-center vitruvian-rect" style={{ animationDelay: `${index * 0.15}s` }}>
-            <stat.icon className="w-8 h-8 text-amber-400/60 mx-auto mb-[8px]" />
-            <p className="text-golden-base font-bold text-white">{stat.value}</p>
-            <p className="text-sm text-amber-400/60 technical-annotation" data-note={stat.label.toUpperCase().replace(' ', '-')}>{stat.label}</p>
+          <div key={stat.label} className="text-center " style={{ animationDelay: `${index * 0.15}s` }}>
+            <stat.icon className="w-8 h-8 text-blue-400/60 mx-auto mb-[8px]" />
+            <p className="text-base font-bold text-white">{stat.value}</p>
+            <p className="text-sm text-blue-400/60 " data-note={stat.label.toUpperCase().replace(' ', '-')}>{stat.label}</p>
           </div>
         ))}
       </div>
 
       {/* Leonardo Quote */}
       <div className="text-center opacity-30 mt-[89px]">
-        <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">
+        <p className="text-sm text-blue-400/60 font-light italic ">
           "Knowing is not enough; we must apply. Being willing is not enough; we must do."
         </p>
-        <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+        <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
       </div>
     </div>
   );

@@ -89,7 +89,7 @@ export const QATestRunner: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-amber-500 mb-2">
+          <h1 className="text-4xl font-bold text-blue-500 mb-2">
             FieldForge QA Test Runner
           </h1>
           <p className="text-slate-400">
@@ -98,7 +98,7 @@ export const QATestRunner: React.FC = () => {
         </div>
 
         {/* Control Panel */}
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-amber-500/20">
+        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-gray-700
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-semibold mb-2">Test Controls</h2>
@@ -134,7 +134,7 @@ export const QATestRunner: React.FC = () => {
                   px-6 py-3 rounded-lg font-semibold transition-all
                   ${isRunning 
                     ? 'bg-gray-600 cursor-not-allowed' 
-                    : 'bg-amber-600 hover:bg-amber-700 transform hover:scale-105'
+                    : 'bg-blue-600 hover:bg-blue-700 transform hover:scale-105'
                   }
                 `}
               >
@@ -159,7 +159,7 @@ export const QATestRunner: React.FC = () => {
 
         {/* Results Summary */}
         {results && (
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-amber-500/20">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-gray-700
             <h2 className="text-xl font-semibold mb-4">Test Results Summary</h2>
             <div className="grid md:grid-cols-5 gap-4">
               <div className="bg-slate-900/50 rounded-lg p-4 text-center">
@@ -187,7 +187,7 @@ export const QATestRunner: React.FC = () => {
                 <div className="text-sm text-slate-400">Skipped</div>
               </div>
               <div className="bg-slate-900/50 rounded-lg p-4 text-center">
-                <div className="text-3xl font-bold text-amber-400">
+                <div className="text-3xl font-bold text-blue-400">
                   {results.summary.passRate}%
                 </div>
                 <div className="text-sm text-slate-400">Pass Rate</div>
@@ -201,7 +201,7 @@ export const QATestRunner: React.FC = () => {
 
         {/* Test Details */}
         {results && (
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-amber-500/20">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-gray-700
             <h2 className="text-xl font-semibold mb-4">Test Details</h2>
             <div className="space-y-2">
               {results.results.map((result: TestResult, index: number) => (
@@ -240,7 +240,7 @@ export const QATestRunner: React.FC = () => {
 
         {/* Console Output */}
         {logs.length > 0 && (
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 border border-amber-500/20">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 border border-gray-700
             <h2 className="text-xl font-semibold mb-4">Console Output</h2>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-xs overflow-auto max-h-96">
               {logs.map((log, index) => (

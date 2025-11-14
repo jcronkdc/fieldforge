@@ -152,7 +152,7 @@ export const AdminSetup: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-8">
       <div className="max-w-2xl w-full">
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-amber-500/30 p-8">
+        <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-gray-700 p-8">
           {/* Header */}
           <div className="flex items-center justify-center mb-8">
             <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center">
@@ -167,7 +167,7 @@ export const AdminSetup: React.FC = () => {
 
           {/* Account Details */}
           <div className="bg-slate-900/50 rounded-lg p-6 mb-6 space-y-4">
-            <h3 className="text-lg font-semibold text-amber-400 mb-4">Account Credentials</h3>
+            <h3 className="text-lg font-semibold text-blue-400 mb-4">Account Credentials</h3>
             
             <div className="flex items-center space-x-3">
               <Mail className="w-5 h-5 text-slate-400" />
@@ -184,7 +184,7 @@ export const AdminSetup: React.FC = () => {
             <div className="flex items-center space-x-3">
               <User className="w-5 h-5 text-slate-400" />
               <span className="text-slate-300">Role:</span>
-              <span className="text-amber-400 font-semibold">System Administrator</span>
+              <span className="text-blue-400 font-semibold">System Administrator</span>
             </div>
           </div>
 
@@ -262,8 +262,8 @@ export const AdminSetup: React.FC = () => {
           </div>
 
           {/* Info Box */}
-          <div className="mt-8 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
-            <p className="text-sm text-amber-400">
+          <div className="mt-8 p-4 bg-blue-500/10 border border-gray-700 rounded-lg">
+            <p className="text-sm text-blue-400">
               <strong>Note:</strong> This admin account has full system privileges including:
             </p>
             <ul className="mt-2 space-y-1 text-sm text-slate-300 ml-4">

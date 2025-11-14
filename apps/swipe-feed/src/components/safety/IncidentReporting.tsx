@@ -350,7 +350,7 @@ export const IncidentReporting: React.FC = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition disabled:opacity-50"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition disabled:opacity-50"
                   >
                     {loading ? 'Saving...' : (selectedIncident ? 'Update' : 'Submit')} Report
                   </button>

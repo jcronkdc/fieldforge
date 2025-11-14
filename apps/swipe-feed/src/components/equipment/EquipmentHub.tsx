@@ -143,10 +143,10 @@ export const EquipmentHub: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'available': return 'text-green-400 bg-green-400/10';
-      case 'in use': return 'text-amber-400 bg-amber-400/10';
+      case 'in use': return 'text-blue-400 bg-blue-400/10';
       case 'maintenance': return 'text-orange-400 bg-orange-400/10';
-      case 'retired': return 'text-amber-400/40 bg-amber-400/5';
-      default: return 'text-amber-400/60 bg-amber-400/5';
+      case 'retired': return 'text-blue-400/40 bg-blue-400/5';
+      default: return 'text-blue-400/60 bg-blue-400/5';
     }
   };
 
@@ -154,9 +154,9 @@ export const EquipmentHub: React.FC = () => {
     switch (condition) {
       case 'new': return 'text-green-400';
       case 'good': return 'text-green-400/80';
-      case 'fair': return 'text-amber-400';
+      case 'fair': return 'text-blue-400';
       case 'poor': return 'text-red-400';
-      default: return 'text-amber-400/60';
+      default: return 'text-blue-400/60';
     }
   };
 
@@ -172,91 +172,91 @@ export const EquipmentHub: React.FC = () => {
   });
 
   return (
-    <div className="davinci-grid p-[34px] max-w-7xl mx-auto space-y-[34px]">
+    <div className=" p-[34px] max-w-7xl mx-auto space-y-[34px]">
       {/* Renaissance Decorations */}
-      <div className="compass-rose" />
+      <div className="" />
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[21px]">
         <div>
-          <h1 className="text-golden-2xl font-bold text-white measurement-line flex items-center gap-[13px]">
-            <Package className="w-8 h-8 text-amber-400" />
+          <h1 className="text-2xl font-bold text-white  flex items-center gap-[13px]">
+            <Package className="w-8 h-8 text-blue-400" />
             Equipment Hub
           </h1>
-          <p className="text-golden-base text-amber-400/60 mt-[8px] technical-annotation" data-note="INVENTORY">Track and manage equipment inventory</p>
+          <p className="text-base text-blue-400/60 mt-[8px] " >Track and manage equipment inventory</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setShowScanner(true)}
-            className="btn-blueprint px-[21px] py-[13px] flex items-center gap-[8px] field-touch"
+            className="btn-blueprint px-[21px] py-[13px] flex items-center gap-[8px] "
           >
             <QrCode className="w-5 h-5" />
-            <span className="hidden sm:inline field-readable">Scan QR</span>
+            <span className="hidden sm:inline ">Scan QR</span>
           </button>
           <button
             onClick={() => setShowAddForm(true)}
-            className="btn-davinci px-[21px] py-[13px] flex items-center gap-[8px] field-touch"
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[21px] py-[13px] flex items-center gap-[8px] "
           >
             <Plus className="w-5 h-5" />
-            <span className="hidden sm:inline field-readable">Add Equipment</span>
+            <span className="hidden sm:inline ">Add Equipment</span>
           </button>
         </div>
       </div>
 
       {/* Stats Cards - Golden Ratio Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[21px] paper-texture">
-        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[21px] ">
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  ">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="INVENTORY">Total Equipment</p>
-              <p className="text-golden-xl font-bold text-white mt-[8px]">{equipment.length}</p>
+              <p className="text-sm text-blue-400/60 " >Total Equipment</p>
+              <p className="text-xl font-bold text-white mt-[8px]">{equipment.length}</p>
             </div>
-            <div className="vitruvian-square">
-              <Package className="w-[34px] h-[34px] text-amber-400" />
+            <div className="">
+              <Package className="w-[34px] h-[34px] text-blue-400" />
             </div>
           </div>
         </div>
 
-        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.1s' }}>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.1s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="STATUS">Available</p>
-              <p className="text-golden-xl font-bold text-green-400 mt-[8px]">
+              <p className="text-sm text-blue-400/60 " >Available</p>
+              <p className="text-xl font-bold text-green-400 mt-[8px]">
                 {equipment.filter(e => e.status === 'available').length}
               </p>
             </div>
-            <div className="vitruvian-square">
+            <div className="">
               <Truck className="w-[34px] h-[34px] text-green-400" />
             </div>
           </div>
         </div>
 
-        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.2s' }}>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.2s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="REPAIR">In Maintenance</p>
-              <p className="text-golden-xl font-bold text-orange-400 mt-[8px]">
+              <p className="text-sm text-blue-400/60 " >In Maintenance</p>
+              <p className="text-xl font-bold text-orange-400 mt-[8px]">
                 {equipment.filter(e => e.status === 'maintenance').length}
               </p>
             </div>
-            <div className="vitruvian-square">
+            <div className="">
               <Wrench className="w-[34px] h-[34px] text-orange-400" />
             </div>
           </div>
         </div>
 
-        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.3s' }}>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.3s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="URGENT">Due Service</p>
-              <p className="text-golden-xl font-bold text-red-400 mt-[8px]">
+              <p className="text-sm text-blue-400/60 " >Due Service</p>
+              <p className="text-xl font-bold text-red-400 mt-[8px]">
                 {equipment.filter(e => {
                   if (!e.next_maintenance_date) return false;
                   return differenceInDays(new Date(e.next_maintenance_date), new Date()) <= 7;
                 }).length}
               </p>
             </div>
-            <div className="vitruvian-square">
+            <div className="">
               <Calendar className="w-[34px] h-[34px] text-red-400" />
             </div>
           </div>
@@ -266,43 +266,43 @@ export const EquipmentHub: React.FC = () => {
       {/* Search and Filter - Renaissance Style */}
       <div className="flex flex-col sm:flex-row gap-[21px]">
         <div className="relative flex-1">
-          <Search className="absolute left-[13px] top-[13px] w-5 h-5 text-amber-400/60" />
+          <Search className="absolute left-[13px] top-[13px] w-5 h-5 text-blue-400/60" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by type, serial, or asset tag..."
-            className="w-full pl-[55px] pr-[21px] py-[13px] input-davinci bg-slate-800/50 text-white rounded-[8px] field-readable field-touch"
+            className="w-full pl-[55px] pr-[21px] py-[13px] w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white rounded-[8px]  "
           />
         </div>
         
         <div className="flex gap-2">
           <button
             onClick={() => setFilterStatus('all')}
-            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all field-touch ${
+            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all  ${
               filterStatus === 'all' 
-                ? 'btn-davinci' 
-                : 'tech-border bg-slate-800/50 text-amber-400/60 hover:bg-slate-700/50 hover:text-amber-400'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all' 
+                : 'border border-gray-700 bg-slate-800/50 text-blue-400/60 hover:bg-slate-700/50 hover:text-blue-400'
             }`}
           >
             All
           </button>
           <button
             onClick={() => setFilterStatus('available')}
-            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all field-touch ${
+            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all  ${
               filterStatus === 'available' 
-                ? 'btn-davinci' 
-                : 'tech-border bg-slate-800/50 text-amber-400/60 hover:bg-slate-700/50 hover:text-amber-400'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all' 
+                : 'border border-gray-700 bg-slate-800/50 text-blue-400/60 hover:bg-slate-700/50 hover:text-blue-400'
             }`}
           >
             Available
           </button>
           <button
             onClick={() => setFilterStatus('in use')}
-            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all field-touch ${
+            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all  ${
               filterStatus === 'in use' 
-                ? 'btn-davinci' 
-                : 'tech-border bg-slate-800/50 text-amber-400/60 hover:bg-slate-700/50 hover:text-amber-400'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all' 
+                : 'border border-gray-700 bg-slate-800/50 text-blue-400/60 hover:bg-slate-700/50 hover:text-blue-400'
             }`}
           >
             In Use
@@ -313,16 +313,16 @@ export const EquipmentHub: React.FC = () => {
       {/* Equipment Grid - Golden Ratio Layout */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[21px]">
         {loading && filteredEquipment.length === 0 ? (
-          <div className="col-span-full text-center py-[55px] text-amber-400/60">
+          <div className="col-span-full text-center py-[55px] text-blue-400/60">
             <div className="spinner-davinci mb-[21px]" />
-            <p className="technical-annotation">Loading equipment inventory...</p>
+            <p className="">Loading equipment inventory...</p>
           </div>
         ) : filteredEquipment.length === 0 ? (
           <div className="col-span-full text-center py-[55px]">
-            <div className="vitruvian-square mx-auto mb-[13px]">
-              <Package className="w-[55px] h-[55px] text-amber-400/40" />
+            <div className=" mx-auto mb-[13px]">
+              <Package className="w-[55px] h-[55px] text-blue-400/40" />
             </div>
-            <p className="text-amber-400/60 technical-annotation">No equipment found</p>
+            <p className="text-blue-400/60 ">No equipment found</p>
           </div>
         ) : (
           filteredEquipment.map(item => {
@@ -331,15 +331,15 @@ export const EquipmentHub: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className="card-engineering p-[21px] rounded-[13px] cursor-pointer transform hover:scale-[1.02] transition-all depth-layer-1 breathe"
+                className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] cursor-pointer transform hover:scale-[1.02] transition-all  "
                 onClick={() => setSelectedEquipment(item)}
                 style={{ animationDelay: `${filteredEquipment.indexOf(item) * 0.05}s` }}
               >
                 <div className="flex justify-between items-start mb-[13px]">
                   <div>
-                    <h3 className="text-golden-base font-medium text-white measurement-line">{item.equipment_type}</h3>
+                    <h3 className="text-base font-medium text-white ">{item.equipment_type}</h3>
                     {item.model && (
-                      <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="MODEL">{item.manufacturer} {item.model}</p>
+                      <p className="text-sm text-blue-400/60 " >{item.manufacturer} {item.model}</p>
                     )}
                   </div>
                   <div className="flex flex-col items-end gap-1">
@@ -436,14 +436,14 @@ export const EquipmentHub: React.FC = () => {
       {/* QR Scanner Modal - Renaissance Style */}
       {showScanner && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-[21px]">
-          <div className="card-vitruvian p-[34px] rounded-[21px] max-w-md w-full depth-layer-2 corner-sketch">
-            <h2 className="text-golden-lg font-bold text-white mb-[21px] measurement-line">Scan Equipment QR Code</h2>
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[34px] rounded-[21px] max-w-md w-full  ">
+            <h2 className="text-lg font-bold text-white mb-[21px] ">Scan Equipment QR Code</h2>
             
-            <div className="tech-border border-dashed rounded-[13px] p-[34px] text-center">
-              <div className="vitruvian-square mx-auto mb-[21px]">
-                <QrCode className="w-[55px] h-[55px] text-amber-400" />
+            <div className="border border-gray-700 border-dashed rounded-[13px] p-[34px] text-center">
+              <div className=" mx-auto mb-[21px]">
+                <QrCode className="w-[55px] h-[55px] text-blue-400" />
               </div>
-              <p className="text-amber-400/60 mb-[21px] technical-annotation" data-note="SCAN">
+              <p className="text-blue-400/60 mb-[21px] " >
                 Use your camera to scan the QR code on the equipment
               </p>
               
@@ -458,7 +458,7 @@ export const EquipmentHub: React.FC = () => {
               
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="btn-davinci px-[34px] py-[13px] field-touch field-readable"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[34px] py-[13px]  "
               >
                 Open Camera
               </button>
@@ -467,7 +467,7 @@ export const EquipmentHub: React.FC = () => {
             <div className="mt-4 flex gap-3">
               <button
                 onClick={() => setShowScanner(false)}
-                className="flex-1 px-[21px] py-[13px] btn-blueprint field-touch field-readable"
+                className="flex-1 px-[21px] py-[13px] btn-blueprint  "
               >
                 Cancel
               </button>
@@ -479,8 +479,8 @@ export const EquipmentHub: React.FC = () => {
       {/* Equipment Details Modal - Renaissance Style */}
       {selectedEquipment && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-[21px]">
-          <div className="card-vitruvian p-[34px] rounded-[21px] max-w-2xl w-full max-h-[90vh] overflow-y-auto depth-layer-2 corner-sketch">
-            <h2 className="text-golden-lg font-bold text-white mb-[21px] measurement-line">Equipment Details</h2>
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[34px] rounded-[21px] max-w-2xl w-full max-h-[90vh] overflow-y-auto  ">
+            <h2 className="text-lg font-bold text-white mb-[21px] ">Equipment Details</h2>
             
             <div className="space-y-4">
               <div>
@@ -539,7 +539,7 @@ export const EquipmentHub: React.FC = () => {
             <div className="mt-6 flex gap-3">
               <button
                 onClick={() => setSelectedEquipment(null)}
-                className="flex-1 px-[21px] py-[13px] btn-blueprint field-touch field-readable"
+                className="flex-1 px-[21px] py-[13px] btn-blueprint  "
               >
                 Close
               </button>
@@ -550,10 +550,10 @@ export const EquipmentHub: React.FC = () => {
 
       {/* Leonardo Quote */}
       <div className="text-center opacity-30 mt-[89px]">
-        <p className="text-golden-sm text-amber-400/60 font-light italic">
+        <p className="text-sm text-blue-400/60 font-light italic">
           "Mechanics is the paradise of the mathematical sciences."
         </p>
-        <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+        <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
       </div>
     </div>
   );

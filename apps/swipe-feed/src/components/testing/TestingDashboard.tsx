@@ -233,32 +233,32 @@ export const TestingDashboard: React.FC = () => {
       <div className="p-[34px] flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="spinner-davinci mb-[21px]"></div>
-          <p className="text-amber-400/60 technical-annotation">Loading test diagnostics...</p>
+          <p className="text-blue-400/60 ">Loading test diagnostics...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="davinci-grid p-[34px]">
+    <div className=" p-[34px]">
       {/* Renaissance Decorations */}
-      <div className="compass-rose" />
+      <div className="" />
       
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-[34px] gap-[21px]">
           <div>
-            <h1 className="text-golden-2xl font-bold text-white mb-[8px] measurement-line flex items-center gap-[13px]">
-              <Zap className="w-8 h-8 text-amber-400" />
+            <h1 className="text-2xl font-bold text-white mb-[8px]  flex items-center gap-[13px]">
+              <Zap className="w-8 h-8 text-blue-400" />
               Testing Dashboard
             </h1>
-            <p className="text-golden-base text-amber-400/60 technical-annotation" data-note="DIAGNOSTICS">Equipment testing and diagnostics center</p>
+            <p className="text-base text-blue-400/60 " >Equipment testing and diagnostics center</p>
           </div>
           
           <div className="flex items-center gap-[13px]">
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="input-davinci bg-slate-800/50 rounded-[8px] px-[21px] py-[13px] text-white field-readable"
+              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 rounded-[8px] px-[21px] py-[13px] text-white "
             >
               <option value="all">All Tests</option>
               {TEST_TYPES.map(type => (
@@ -269,7 +269,7 @@ export const TestingDashboard: React.FC = () => {
             <select
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value as typeof dateRange)}
-              className="input-davinci bg-slate-800/50 rounded-[8px] px-[21px] py-[13px] text-white field-readable"
+              className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 rounded-[8px] px-[21px] py-[13px] text-white "
             >
               <option value="week">This Week</option>
               <option value="month">This Month</option>
@@ -279,79 +279,79 @@ export const TestingDashboard: React.FC = () => {
 
             <button
               onClick={() => setShowTestForm(true)}
-              className="btn-davinci px-[21px] py-[13px] flex items-center gap-[8px] field-touch"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[21px] py-[13px] flex items-center gap-[8px] "
             >
               <Zap className="w-5 h-5" />
-              <span className="field-readable">New Test</span>
+              <span className="">New Test</span>
             </button>
           </div>
         </div>
 
         {/* Stats Cards - Golden Ratio Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-[21px] mb-[34px] paper-texture">
-          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-[21px] mb-[34px] ">
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  ">
             <div className="flex items-center justify-between mb-[8px]">
-              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="COUNT">Total Tests</span>
+              <span className="text-sm text-blue-400/60 " >Total Tests</span>
               <Activity className="w-[21px] h-[21px] text-cyan-400" />
             </div>
-            <div className="text-golden-xl font-bold text-white">{stats.total}</div>
-            <div className="text-golden-sm text-amber-400/40 mt-[8px]">This period</div>
+            <div className="text-xl font-bold text-white">{stats.total}</div>
+            <div className="text-sm text-blue-400/40 mt-[8px]">This period</div>
           </div>
 
-          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.1s' }}>
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.1s' }}>
             <div className="flex items-center justify-between mb-[8px]">
-              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="SUCCESS">Pass Rate</span>
+              <span className="text-sm text-blue-400/60 " >Pass Rate</span>
               <TrendingUp className="w-[21px] h-[21px] text-green-400" />
             </div>
-            <div className="text-golden-xl font-bold text-green-400">{stats.passRate}%</div>
-            <div className="text-golden-sm text-green-400/60 mt-[8px]">
+            <div className="text-xl font-bold text-green-400">{stats.passRate}%</div>
+            <div className="text-sm text-green-400/60 mt-[8px]">
               {stats.passed} passed
             </div>
           </div>
 
-          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.2s' }}>
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.2s' }}>
             <div className="flex items-center justify-between mb-[8px]">
-              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="FAILED">Failed</span>
+              <span className="text-sm text-blue-400/60 " >Failed</span>
               <AlertTriangle className="w-[21px] h-[21px] text-red-400" />
             </div>
-            <div className="text-golden-xl font-bold text-red-400">{stats.failed}</div>
-            <div className="text-golden-sm text-red-400/60 mt-[8px]">Need attention</div>
+            <div className="text-xl font-bold text-red-400">{stats.failed}</div>
+            <div className="text-sm text-red-400/60 mt-[8px]">Need attention</div>
           </div>
 
-          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.3s' }}>
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.3s' }}>
             <div className="flex items-center justify-between mb-[8px]">
-              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="WARNING">Warnings</span>
-              <AlertTriangle className="w-[21px] h-[21px] text-amber-400" />
+              <span className="text-sm text-blue-400/60 " >Warnings</span>
+              <AlertTriangle className="w-[21px] h-[21px] text-blue-400" />
             </div>
-            <div className="text-golden-xl font-bold text-amber-400">{stats.warnings}</div>
-            <div className="text-golden-sm text-amber-400/60 mt-[8px]">Monitor closely</div>
+            <div className="text-xl font-bold text-blue-400">{stats.warnings}</div>
+            <div className="text-sm text-blue-400/60 mt-[8px]">Monitor closely</div>
           </div>
 
-          <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.4s' }}>
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.4s' }}>
             <div className="flex items-center justify-between mb-[8px]">
-              <span className="text-golden-sm text-amber-400/60 technical-annotation" data-note="PLANNED">Scheduled</span>
+              <span className="text-sm text-blue-400/60 " >Scheduled</span>
               <Calendar className="w-[21px] h-[21px] text-purple-400" />
             </div>
-            <div className="text-golden-xl font-bold text-white">{upcomingTests.length}</div>
-            <div className="text-golden-sm text-amber-400/40 mt-[8px]">Upcoming tests</div>
+            <div className="text-xl font-bold text-white">{upcomingTests.length}</div>
+            <div className="text-sm text-blue-400/40 mt-[8px]">Upcoming tests</div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-[21px]">
           {/* Test Results */}
-          <div className="lg:col-span-2 dashboard-card rounded-[21px] tech-border depth-layer-1 corner-sketch">
-            <div className="p-[21px] border-b border-amber-500/20">
+          <div className="lg:col-span-2 bg-gray-800/50 border border-gray-700 rounded-lg rounded-[21px] border border-gray-700  ">
+            <div className="p-[21px] border-b border-gray-700
               <div className="flex items-center justify-between">
-                <h2 className="text-golden-lg font-bold text-white measurement-line">Test Results</h2>
+                <h2 className="text-lg font-bold text-white ">Test Results</h2>
                 <div className="flex gap-[8px]">
                   {(['all', 'pass', 'fail', 'warning'] as const).map((filterType) => (
                     <button
                       key={filterType}
                       onClick={() => setFilter(filterType)}
-                      className={`px-[13px] py-[8px] rounded-[8px] text-golden-sm transition field-touch ${
+                      className={`px-[13px] py-[8px] rounded-[8px] text-sm transition  ${
                         filter === filterType
-                          ? 'btn-davinci'
-                          : 'bg-slate-800/50 tech-border text-amber-400/60 hover:bg-slate-700/50'
+                          ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all'
+                          : 'bg-slate-800/50 border border-gray-700 text-blue-400/60 hover:bg-slate-700/50'
                       }`}
                     >
                       {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
@@ -364,10 +364,10 @@ export const TestingDashboard: React.FC = () => {
             <div className="divide-y divide-amber-500/10 max-h-[600px] overflow-y-auto">
               {filteredResults.length === 0 ? (
                 <div className="p-[55px] text-center">
-                  <div className="vitruvian-square mx-auto mb-[21px]">
-                    <Zap className="w-[55px] h-[55px] text-amber-400/40" />
+                  <div className=" mx-auto mb-[21px]">
+                    <Zap className="w-[55px] h-[55px] text-blue-400/40" />
                   </div>
-                  <p className="text-amber-400/60 technical-annotation">No test results found</p>
+                  <p className="text-blue-400/60 ">No test results found</p>
                 </div>
               ) : (
                 filteredResults.map((result) => {
@@ -740,10 +740,10 @@ export const TestingDashboard: React.FC = () => {
 
         {/* Leonardo Quote */}
         <div className="text-center opacity-30 mt-[89px]">
-          <p className="text-golden-sm text-amber-400/60 font-light italic">
+          <p className="text-sm text-blue-400/60 font-light italic">
             "Testing leads to failure, and failure leads to understanding."
           </p>
-          <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+          <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
         </div>
       </div>
     </div>

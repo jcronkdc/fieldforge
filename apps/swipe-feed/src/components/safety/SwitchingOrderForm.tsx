@@ -385,11 +385,11 @@ export const SwitchingOrderForm: React.FC = () => {
               </div>
             ))}
 
-            <div className="bg-amber-900/20 border border-amber-600/50 rounded-lg p-4">
+            <div className="bg-blue-900/20 border border-gray-700 rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-amber-300 font-medium">Grounding Requirements</p>
+                  <p className="text-blue-300 font-medium">Grounding Requirements</p>
                   <p className="text-gray-400 text-sm mt-1">
                     All grounds must be installed in accordance with company safety procedures.
                     Verify proper cluster size for system voltage.
@@ -482,11 +482,11 @@ export const SwitchingOrderForm: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-amber-900/20 border border-amber-600/50 rounded-lg p-4">
+            <div className="bg-blue-900/20 border border-gray-700 rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-amber-300 font-medium">Submission Confirmation</p>
+                  <p className="text-blue-300 font-medium">Submission Confirmation</p>
                   <p className="text-gray-400 text-sm mt-1">
                     By submitting this switching order, you confirm that all information is accurate
                     and that proper safety procedures will be followed.

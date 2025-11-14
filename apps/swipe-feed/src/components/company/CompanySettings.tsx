@@ -435,7 +435,7 @@ export const CompanySettings: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-amber-500">Loading company settings...</div>
+        <div className="text-blue-500">Loading company settings...</div>
       </div>
     );
   }
@@ -447,7 +447,7 @@ export const CompanySettings: React.FC = () => {
       {/* Header */}
       <div className="mb-[34px]">
         <h1 className="text-3xl font-bold text-white flex items-center gap-[13px]">
-          <Building2 className="w-8 h-8 text-amber-400" />
+          <Building2 className="w-8 h-8 text-blue-400" />
           Company Settings
         </h1>
         <p className="text-slate-400 mt-2">Manage your organization's configuration</p>
@@ -465,7 +465,7 @@ export const CompanySettings: React.FC = () => {
                   onClick={() => setActiveSection(section.id)}
                   className={`w-full flex items-center gap-[13px] px-[21px] py-[13px] rounded-[13px] transition-all ${
                     activeSection === section.id
-                      ? 'bg-amber-500/20 text-amber-400'
+                      ? 'bg-blue-500/20 text-blue-400'
                       : 'text-slate-400 hover:bg-slate-800'
                   }`}
                 >
@@ -483,7 +483,7 @@ export const CompanySettings: React.FC = () => {
           <div className="mt-[34px] p-[21px] bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px]">
             <div className="flex items-center justify-between mb-[13px]">
               <span className="text-sm font-medium text-slate-300">Plan</span>
-              <span className="text-sm text-amber-400 capitalize">{companyData.subscription.plan}</span>
+              <span className="text-sm text-blue-400 capitalize">{companyData.subscription.plan}</span>
             </div>
             <div className="flex items-center justify-between mb-[13px]">
               <span className="text-sm font-medium text-slate-300">Status</span>
@@ -514,7 +514,7 @@ export const CompanySettings: React.FC = () => {
                 className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]"
               >
                 <h2 className="text-xl font-semibold text-white mb-[34px] flex items-center gap-[13px]">
-                  <Building2 className="w-6 h-6 text-amber-400" />
+                  <Building2 className="w-6 h-6 text-blue-400" />
                   Company Information
                 </h2>
                 
@@ -702,7 +702,7 @@ export const CompanySettings: React.FC = () => {
                   <button
                     onClick={saveCompanyData}
                     disabled={saving}
-                    className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-[8px] font-semibold transition-all disabled:opacity-50 flex items-center gap-[8px]"
+                    className="px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-slate-900 rounded-[8px] font-semibold transition-all disabled:opacity-50 flex items-center gap-[8px]"
                   >
                     {saving ? (
                       <>
@@ -729,7 +729,7 @@ export const CompanySettings: React.FC = () => {
                 className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]"
               >
                 <h2 className="text-xl font-semibold text-white mb-[34px] flex items-center gap-[13px]">
-                  <Palette className="w-6 h-6 text-amber-400" />
+                  <Palette className="w-6 h-6 text-blue-400" />
                   Branding & Appearance
                 </h2>
                 
@@ -899,7 +899,7 @@ export const CompanySettings: React.FC = () => {
                   <button
                     onClick={saveCompanyData}
                     disabled={saving}
-                    className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-[8px] font-semibold transition-all disabled:opacity-50 flex items-center gap-[8px]"
+                    className="px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-slate-900 rounded-[8px] font-semibold transition-all disabled:opacity-50 flex items-center gap-[8px]"
                   >
                     {saving ? (
                       <>
@@ -926,7 +926,7 @@ export const CompanySettings: React.FC = () => {
                 className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]"
               >
                 <h2 className="text-xl font-semibold text-white mb-[34px] flex items-center gap-[13px]">
-                  <Settings className="w-6 h-6 text-amber-400" />
+                  <Settings className="w-6 h-6 text-blue-400" />
                   Default Settings
                 </h2>
                 
@@ -1034,7 +1034,7 @@ export const CompanySettings: React.FC = () => {
                         <button
                           onClick={() => handleCompanyChange('settings.autoNumberProjects', !companyData.settings.autoNumberProjects)}
                           className={`relative w-[55px] h-[29px] rounded-full transition-all ${
-                            companyData.settings.autoNumberProjects ? 'bg-amber-500' : 'bg-slate-700'
+                            companyData.settings.autoNumberProjects ? 'bg-blue-500' : 'bg-slate-700'
                           }`}
                         >
                           <div className={`absolute top-[3px] w-[23px] h-[23px] bg-white rounded-full transition-all ${
@@ -1060,7 +1060,7 @@ export const CompanySettings: React.FC = () => {
                         <button
                           onClick={() => handleCompanyChange('settings.requireApprovals', !companyData.settings.requireApprovals)}
                           className={`relative w-[55px] h-[29px] rounded-full transition-all ${
-                            companyData.settings.requireApprovals ? 'bg-amber-500' : 'bg-slate-700'
+                            companyData.settings.requireApprovals ? 'bg-blue-500' : 'bg-slate-700'
                           }`}
                         >
                           <div className={`absolute top-[3px] w-[23px] h-[23px] bg-white rounded-full transition-all ${
@@ -1102,7 +1102,7 @@ export const CompanySettings: React.FC = () => {
                   <button
                     onClick={saveCompanyData}
                     disabled={saving}
-                    className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-[8px] font-semibold transition-all disabled:opacity-50 flex items-center gap-[8px]"
+                    className="px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-slate-900 rounded-[8px] font-semibold transition-all disabled:opacity-50 flex items-center gap-[8px]"
                   >
                     {saving ? (
                       <>
@@ -1131,7 +1131,7 @@ export const CompanySettings: React.FC = () => {
                 <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]">
                   <div className="flex items-center justify-between mb-[34px]">
                     <h2 className="text-xl font-semibold text-white flex items-center gap-[13px]">
-                      <Users className="w-6 h-6 text-amber-400" />
+                      <Users className="w-6 h-6 text-blue-400" />
                       Roles & Permissions
                     </h2>
                     <button
@@ -1139,7 +1139,7 @@ export const CompanySettings: React.FC = () => {
                         setEditingRole(null);
                         setShowRoleModal(true);
                       }}
-                      className="px-[21px] py-[8px] bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-[8px] font-medium transition-all flex items-center gap-[8px]"
+                      className="px-[21px] py-[8px] bg-blue-500 hover:bg-blue-600 text-slate-900 rounded-[8px] font-medium transition-all flex items-center gap-[8px]"
                     >
                       <Plus className="w-4 h-4" />
                       Create Role
@@ -1193,12 +1193,12 @@ export const CompanySettings: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-amber-500/10 border border-amber-500/30 rounded-[13px] p-[21px]">
+                <div className="bg-blue-500/10 border border-gray-700 rounded-[13px] p-[21px]">
                   <div className="flex items-start gap-[13px]">
-                    <Info className="w-5 h-5 text-amber-400 flex-shrink-0 mt-[3px]" />
-                    <div className="text-sm text-amber-400">
+                    <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-[3px]" />
+                    <div className="text-sm text-blue-400">
                       <p className="font-medium mb-[5px]">About Roles</p>
-                      <p className="text-amber-400/80">
+                      <p className="text-blue-400/80">
                         System roles cannot be deleted but can be customized. 
                         Create custom roles to match your organization's structure.
                       </p>
@@ -1219,12 +1219,12 @@ export const CompanySettings: React.FC = () => {
                 <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]">
                   <div className="flex items-center justify-between mb-[34px]">
                     <h2 className="text-xl font-semibold text-white flex items-center gap-[13px]">
-                      <Key className="w-6 h-6 text-amber-400" />
+                      <Key className="w-6 h-6 text-blue-400" />
                       API Keys
                     </h2>
                     <button
                       onClick={() => setShowApiKeyModal(true)}
-                      className="px-[21px] py-[8px] bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-[8px] font-medium transition-all flex items-center gap-[8px]"
+                      className="px-[21px] py-[8px] bg-blue-500 hover:bg-blue-600 text-slate-900 rounded-[8px] font-medium transition-all flex items-center gap-[8px]"
                     >
                       <Plus className="w-4 h-4" />
                       Generate Key
@@ -1282,7 +1282,7 @@ export const CompanySettings: React.FC = () => {
 
                 <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]">
                   <h3 className="text-xl font-semibold text-white mb-[21px] flex items-center gap-[13px]">
-                    <Link2 className="w-6 h-6 text-amber-400" />
+                    <Link2 className="w-6 h-6 text-blue-400" />
                     Available Integrations
                   </h3>
                   
@@ -1306,7 +1306,7 @@ export const CompanySettings: React.FC = () => {
                           className={`px-[21px] py-[8px] rounded-[8px] text-sm font-medium transition-all ${
                             integration.connected
                               ? 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                              : 'bg-amber-500 text-slate-900 hover:bg-amber-600'
+                              : 'bg-blue-500 text-slate-900 hover:bg-blue-600'
                           }`}
                         >
                           {integration.connected ? 'Configure' : 'Connect'}
@@ -1328,13 +1328,13 @@ export const CompanySettings: React.FC = () => {
               >
                 <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]">
                   <h2 className="text-xl font-semibold text-white mb-[34px] flex items-center gap-[13px]">
-                    <CreditCard className="w-6 h-6 text-amber-400" />
+                    <CreditCard className="w-6 h-6 text-blue-400" />
                     Billing & Subscription
                   </h2>
                   
                   <div className="grid gap-[34px]">
                     {/* Current Plan */}
-                    <div className="p-[21px] bg-amber-500/10 border border-amber-500/30 rounded-[13px]">
+                    <div className="p-[21px] bg-blue-500/10 border border-gray-700 rounded-[13px]">
                       <div className="flex items-start justify-between">
                         <div>
                           <h3 className="text-lg font-medium text-white capitalize">
@@ -1370,7 +1370,7 @@ export const CompanySettings: React.FC = () => {
                           </div>
                           <div className="w-full bg-slate-800 rounded-full h-[8px] overflow-hidden">
                             <div
-                              className="h-full bg-amber-500 rounded-full"
+                              className="h-full bg-blue-500 rounded-full"
                               style={{ width: `${(companyData.subscription.usedSeats / companyData.subscription.seats) * 100}%` }}
                             />
                           </div>
@@ -1382,7 +1382,7 @@ export const CompanySettings: React.FC = () => {
                             <span className="text-sm text-slate-400">42.3 GB / 100 GB</span>
                           </div>
                           <div className="w-full bg-slate-800 rounded-full h-[8px] overflow-hidden">
-                            <div className="h-full bg-amber-500 rounded-full" style={{ width: '42.3%' }} />
+                            <div className="h-full bg-blue-500 rounded-full" style={{ width: '42.3%' }} />
                           </div>
                         </div>
                       </div>
@@ -1401,7 +1401,7 @@ export const CompanySettings: React.FC = () => {
                                 Unlimited users • Priority support • Custom integrations
                               </p>
                             </div>
-                            <button className="px-[21px] py-[8px] bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-[8px] font-medium transition-all">
+                            <button className="px-[21px] py-[8px] bg-blue-500 hover:bg-blue-600 text-slate-900 rounded-[8px] font-medium transition-all">
                               Contact Sales
                             </button>
                           </div>
@@ -1434,7 +1434,7 @@ export const CompanySettings: React.FC = () => {
                 className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]"
               >
                 <h2 className="text-xl font-semibold text-white mb-[34px] flex items-center gap-[13px]">
-                  <Shield className="w-6 h-6 text-amber-400" />
+                  <Shield className="w-6 h-6 text-blue-400" />
                   Compliance & Security
                 </h2>
                 
@@ -1484,7 +1484,7 @@ export const CompanySettings: React.FC = () => {
                           <span className={`px-[13px] py-[5px] text-sm rounded-full ${
                             item.status === 'Compliant'
                               ? 'bg-green-500/20 text-green-400'
-                              : 'bg-amber-500/20 text-amber-400'
+                              : 'bg-blue-500/20 text-blue-400'
                           }`}>
                             {item.status}
                           </span>
@@ -1522,7 +1522,7 @@ export const CompanySettings: React.FC = () => {
                 className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-[13px] p-[34px]"
               >
                 <h2 className="text-xl font-semibold text-white mb-[34px] flex items-center gap-[13px]">
-                  <Database className="w-6 h-6 text-amber-400" />
+                  <Database className="w-6 h-6 text-blue-400" />
                   Data Management
                 </h2>
                 
@@ -1582,7 +1582,7 @@ export const CompanySettings: React.FC = () => {
                             Automatic daily backups at 2:00 AM EST
                           </p>
                         </div>
-                        <button className="px-[21px] py-[8px] bg-amber-500 hover:bg-amber-600 text-slate-900 rounded-[8px] font-medium transition-all">
+                        <button className="px-[21px] py-[8px] bg-blue-500 hover:bg-blue-600 text-slate-900 rounded-[8px] font-medium transition-all">
                           Configure
                         </button>
                       </div>
@@ -1604,7 +1604,7 @@ export const CompanySettings: React.FC = () => {
             exit={{ opacity: 0, y: 20 }}
             className="fixed bottom-[34px] right-[34px] bg-slate-800 border border-slate-700 rounded-[13px] p-[21px] flex items-center gap-[13px] shadow-lg"
           >
-            <RefreshCw className="w-5 h-5 text-amber-400 animate-spin" />
+            <RefreshCw className="w-5 h-5 text-blue-400 animate-spin" />
             <span className="text-white font-medium">Saving changes...</span>
           </motion.div>
         )}

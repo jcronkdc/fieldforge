@@ -97,7 +97,7 @@ export const ShowcasePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden davinci-grid">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden ">
         <motion.div 
           style={{ opacity }}
           className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-blue-500/10"
@@ -105,7 +105,7 @@ export const ShowcasePage: React.FC = () => {
         
         {/* Sacred Geometry Background */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-amber-500/5" 
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-gray-700 
                style={{ transform: `translate(-50%, -50%) rotate(${scrollY * 0.03}deg)` }} />
         </div>
         
@@ -116,8 +116,8 @@ export const ShowcasePage: React.FC = () => {
             transition={{ duration: 0.8 }}
           >
             <div className="flex justify-center mb-6">
-              <div className="p-4 bg-amber-500/20 rounded-2xl backdrop-blur-xl">
-                <Construction className="w-16 h-16 text-amber-400" />
+              <div className="p-4 bg-blue-500/20 rounded-2xl backdrop-blur-xl">
+                <Construction className="w-16 h-16 text-blue-400" />
               </div>
             </div>
             
@@ -139,14 +139,14 @@ export const ShowcasePage: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-[21px] justify-center">
               <Link
                 to="/signup"
-                className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-[8px] transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] btn-davinci touch-golden glow-renaissance"
+                className="px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-[8px] transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all touch-golden "
               >
                 Start Free Trial
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <button
                 onClick={() => setIsPlaying(true)}
-                className="px-[34px] py-[13px] bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white font-semibold rounded-[8px] transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] tech-border touch-golden"
+                className="px-[34px] py-[13px] bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white font-semibold rounded-[8px] transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] border border-gray-700 touch-golden"
               >
                 <Play className="w-5 h-5" />
                 Watch 2-Min Demo
@@ -201,7 +201,7 @@ export const ShowcasePage: React.FC = () => {
                 className="text-center"
               >
                 <div className="flex justify-center mb-4">
-                  <stat.icon className="w-12 h-12 text-amber-400" />
+                  <stat.icon className="w-12 h-12 text-blue-400" />
                 </div>
                 <div className="text-4xl font-bold text-white mb-2">{stat.value}</div>
                 <div className="text-slate-400">{stat.label}</div>
@@ -242,13 +242,13 @@ export const ShowcasePage: React.FC = () => {
                   onClick={() => setActiveFeature(index)}
                   className={`p-[21px] rounded-[13px] cursor-pointer transition-all card-vitruvian ${
                     activeFeature === index
-                      ? 'bg-amber-500/20 border-2 border-amber-500 depth-layer-2'
-                      : 'bg-white/5 border-2 border-transparent hover:bg-white/10 depth-layer-1'
+                      ? 'bg-blue-500/20 border-2 border-gray-700 '
+                      : 'bg-white/5 border-2 border-transparent hover:bg-white/10 '
                   }`}
                 >
                   <div className="flex items-start gap-4">
-                    <div className="p-3 bg-amber-500/20 rounded-xl">
-                      <feature.icon className="w-6 h-6 text-amber-400" />
+                    <div className="p-3 bg-blue-500/20 rounded-xl">
+                      <feature.icon className="w-6 h-6 text-blue-400" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-xl font-semibold text-white mb-2">
@@ -258,7 +258,7 @@ export const ShowcasePage: React.FC = () => {
                         {feature.description}
                       </p>
                       {feature.stats && (
-                        <div className="text-amber-400 font-semibold">
+                        <div className="text-blue-400 font-semibold">
                           {feature.stats}
                         </div>
                       )}
@@ -278,7 +278,7 @@ export const ShowcasePage: React.FC = () => {
               <div className="aspect-video bg-slate-800 rounded-2xl overflow-hidden shadow-2xl">
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center p-8">
-                    {React.createElement(features[activeFeature].icon, { className: "w-24 h-24 text-amber-400 mx-auto mb-4" })}
+                    {React.createElement(features[activeFeature].icon, { className: "w-24 h-24 text-blue-400 mx-auto mb-4" })}
                     <h3 className="text-2xl font-bold text-white mb-2">
                       {features[activeFeature].title}
                     </h3>
@@ -290,7 +290,7 @@ export const ShowcasePage: React.FC = () => {
               </div>
               
               {/* Decorative Elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-amber-500/20 rounded-full blur-2xl" />
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-blue-500/20 rounded-full blur-2xl" />
               <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl" />
             </motion.div>
           </div>
@@ -324,8 +324,8 @@ export const ShowcasePage: React.FC = () => {
               <div className="p-6 border-b border-white/10">
                 <h3 className="text-lg font-semibold text-slate-400">Feature</h3>
               </div>
-              <div className="p-6 border-b border-white/10 bg-amber-500/10">
-                <h3 className="text-lg font-semibold text-amber-400">FieldForge</h3>
+              <div className="p-6 border-b border-white/10 bg-blue-500/10">
+                <h3 className="text-lg font-semibold text-blue-400">FieldForge</h3>
               </div>
               <div className="p-6 border-b border-white/10">
                 <h3 className="text-lg font-semibold text-slate-400">Others</h3>
@@ -344,11 +344,11 @@ export const ShowcasePage: React.FC = () => {
                 <div className="p-4 border-b border-white/10 text-white">
                   {item.feature}
                 </div>
-                <div className="p-4 border-b border-white/10 bg-amber-500/10">
+                <div className="p-4 border-b border-white/10 bg-blue-500/10">
                   {item.fieldforge === true ? (
                     <CheckCircle className="w-6 h-6 text-green-400 mx-auto" />
                   ) : (
-                    <span className="text-amber-400">{item.fieldforge}</span>
+                    <span className="text-blue-400">{item.fieldforge}</span>
                   )}
                 </div>
                 <div className="p-4 border-b border-white/10">
@@ -375,7 +375,7 @@ export const ShowcasePage: React.FC = () => {
             viewport={{ once: true }}
             className="bg-gradient-to-br from-amber-500/20 to-amber-600/20 rounded-3xl p-12 text-center"
           >
-            <Sparkles className="w-12 h-12 text-amber-400 mx-auto mb-6" />
+            <Sparkles className="w-12 h-12 text-blue-400 mx-auto mb-6" />
             <blockquote className="text-2xl md:text-3xl font-medium text-white mb-6">
               "FieldForge saved us 2 hours per crew per day. 
               That's $300,000 in productivity gains this year alone. 
@@ -408,7 +408,7 @@ export const ShowcasePage: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Link
                 to="/signup"
-                className="px-8 py-4 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+                className="px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2"
               >
                 Start 30-Day Free Trial
                 <ArrowRight className="w-5 h-5" />

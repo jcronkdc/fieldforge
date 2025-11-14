@@ -40,7 +40,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ onClose 
     <div className="fixed right-4 top-20 w-96 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl z-50">
       <div className="flex items-center justify-between p-4 border-b border-slate-700">
         <h3 className="text-lg font-semibold text-white flex items-center">
-          <Bell className="w-5 h-5 mr-2 text-amber-500" />
+          <Bell className="w-5 h-5 mr-2 text-blue-500" />
           Notifications
         </h3>
         <button onClick={onClose} className="text-slate-400 hover:text-white">
@@ -66,7 +66,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ onClose 
       </div>
       
       <div className="p-4 border-t border-slate-700">
-        <button className="w-full text-center text-amber-500 hover:text-amber-400 text-sm font-medium">
+        <button className="w-full text-center text-blue-500 hover:text-blue-400 text-sm font-medium">
           View All Notifications
         </button>
       </div>

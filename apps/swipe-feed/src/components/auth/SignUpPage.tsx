@@ -105,13 +105,13 @@ export const SignUpPage: React.FC = () => {
         <div className="flex items-center justify-center mb-8">
           <div className="flex items-center space-x-3">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-              step >= 1 ? 'bg-amber-500 text-white' : 'bg-slate-700 text-slate-400'
+              step >= 1 ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-400'
             }`}>
               1
             </div>
-            <div className={`w-20 h-1 ${step >= 2 ? 'bg-amber-500' : 'bg-slate-700'}`}></div>
+            <div className={`w-20 h-1 ${step >= 2 ? 'bg-blue-500' : 'bg-slate-700'}`}></div>
             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-              step >= 2 ? 'bg-amber-500 text-white' : 'bg-slate-700 text-slate-400'
+              step >= 2 ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-400'
             }`}>
               2
             </div>

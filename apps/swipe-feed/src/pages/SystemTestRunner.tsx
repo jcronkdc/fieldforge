@@ -79,7 +79,7 @@ export const SystemTestRunner: React.FC = () => {
                 flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all
                 ${isRunning
                   ? 'bg-slate-700 text-slate-400 cursor-not-allowed'
-                  : 'bg-amber-500 hover:bg-amber-600 text-white hover:scale-105'
+                  : 'bg-blue-500 hover:bg-blue-600 text-white hover:scale-105'
                 }
               `}
             >
@@ -118,15 +118,15 @@ export const SystemTestRunner: React.FC = () => {
               <div className={`rounded-lg p-4 border ${
                 summary.percentage === 100 
                   ? 'bg-green-900/20 border-green-700' 
-                  : 'bg-amber-900/20 border-amber-700'
+                  : 'bg-blue-900/20 border-gray-700
               }`}>
                 <div className={`text-3xl font-bold ${
-                  summary.percentage === 100 ? 'text-green-400' : 'text-amber-400'
+                  summary.percentage === 100 ? 'text-green-400' : 'text-blue-400'
                 }`}>
                   {summary.percentage}%
                 </div>
                 <div className={`text-sm ${
-                  summary.percentage === 100 ? 'text-green-400' : 'text-amber-400'
+                  summary.percentage === 100 ? 'text-green-400' : 'text-blue-400'
                 }`}>
                   Success Rate
                 </div>
@@ -186,7 +186,7 @@ export const SystemTestRunner: React.FC = () => {
         {/* Initial State */}
         {!isRunning && testResults.length === 0 && (
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-12 text-center border border-slate-700">
-            <PlayCircle className="w-16 h-16 text-amber-500 mx-auto mb-4" />
+            <PlayCircle className="w-16 h-16 text-blue-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-white mb-2">Ready to Test</h2>
             <p className="text-slate-400 mb-6">
               Click "Run All Tests" to execute the complete test suite

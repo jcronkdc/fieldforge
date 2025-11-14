@@ -519,7 +519,7 @@ export const Settings: React.FC = () => {
           <button
             onClick={() => updateSetting(item.key, !value)}
             className={`relative w-[55px] h-[26px] rounded-full transition-all ${
-              value ? 'bg-amber-500' : 'bg-slate-600'
+              value ? 'bg-blue-500' : 'bg-slate-600'
             }`}
           >
             <span
@@ -572,7 +572,7 @@ export const Settings: React.FC = () => {
         return (
           <button
             onClick={item.action}
-            className="px-[21px] py-[8px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all"
+            className="px-[21px] py-[8px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all"
           >
             {item.label}
           </button>
@@ -586,7 +586,7 @@ export const Settings: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-amber-500">Loading settings...</div>
+        <div className="text-blue-500">Loading settings...</div>
       </div>
     );
   }

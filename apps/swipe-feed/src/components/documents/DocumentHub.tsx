@@ -246,7 +246,7 @@ export const DocumentHub: React.FC = () => {
   if (loading && documents.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
@@ -269,7 +269,7 @@ export const DocumentHub: React.FC = () => {
           </button>
           <button
             onClick={() => setShowUploadModal(true)}
-            className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors flex items-center gap-2 min-h-[44px]"
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 min-h-[44px]"
           >
             <Upload className="w-4 h-4" />
             <span className="hidden sm:inline">Upload</span>
@@ -285,7 +285,7 @@ export const DocumentHub: React.FC = () => {
               <p className="text-sm text-gray-600">Total Documents</p>
               <p className="text-2xl font-bold text-gray-900">{documents.length}</p>
             </div>
-            <FileText className="w-8 h-8 text-amber-500" />
+            <FileText className="w-8 h-8 text-blue-500" />
           </div>
         </div>
 
@@ -355,7 +355,7 @@ export const DocumentHub: React.FC = () => {
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded transition-colors min-w-[44px] min-h-[44px] ${
                 viewMode === 'grid'
-                  ? 'bg-amber-600 text-white'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -365,7 +365,7 @@ export const DocumentHub: React.FC = () => {
               onClick={() => setViewMode('list')}
               className={`p-2 rounded transition-colors min-w-[44px] min-h-[44px] ${
                 viewMode === 'list'
-                  ? 'bg-amber-600 text-white'
+                  ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -380,7 +380,7 @@ export const DocumentHub: React.FC = () => {
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <button
             onClick={() => setCurrentFolder(null)}
-            className="hover:text-amber-600 transition-colors"
+            className="hover:text-blue-600 transition-colors"
           >
             All Documents
           </button>
@@ -402,7 +402,7 @@ export const DocumentHub: React.FC = () => {
                 onClick={() => setCurrentFolder(folder.id)}
                 className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow text-center"
               >
-                <Folder className="w-12 h-12 text-amber-500 mx-auto mb-2" />
+                <Folder className="w-12 h-12 text-blue-500 mx-auto mb-2" />
                 <p className="text-sm font-medium text-gray-900 truncate">{folder.name}</p>
                 <p className="text-xs text-gray-500 mt-1">{folder.document_count} items</p>
               </button>
@@ -591,7 +591,7 @@ export const DocumentHub: React.FC = () => {
                   id="is_public"
                   checked={uploadDetails.is_public}
                   onChange={(e) => setUploadDetails({...uploadDetails, is_public: e.target.checked})}
-                  className="w-4 h-4 text-amber-600 rounded focus:ring-amber-500"
+                  className="w-4 h-4 text-blue-600 rounded focus:ring-amber-500"
                 />
                 <label htmlFor="is_public" className="ml-2 text-sm text-gray-700">
                   Make document publicly accessible
@@ -612,7 +612,7 @@ export const DocumentHub: React.FC = () => {
                 />
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700"
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
                   Select File
                 </button>
@@ -621,7 +621,7 @@ export const DocumentHub: React.FC = () => {
               {uploadProgress > 0 && (
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    className="bg-amber-600 h-2 rounded-full transition-all duration-300"
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${uploadProgress}%` }}
                   />
                 </div>
@@ -673,7 +673,7 @@ export const DocumentHub: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 min-h-[44px]"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-[44px]"
                 >
                   Create
                 </button>

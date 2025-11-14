@@ -210,10 +210,10 @@ export const CompanySettings: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950   flex items-center justify-center">
         <div className="text-center">
-          <Building className="w-[89px] h-[89px] text-amber-400 mx-auto mb-[21px] animate-pulse" />
-          <p className="text-amber-400/60">Loading company settings...</p>
+          <Building className="w-[89px] h-[89px] text-blue-400 mx-auto mb-[21px] animate-pulse" />
+          <p className="text-blue-400/60">Loading company settings...</p>
         </div>
       </div>
     );
@@ -221,11 +221,11 @@ export const CompanySettings: React.FC = () => {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950   flex items-center justify-center">
         <div className="text-center">
           <Shield className="w-[89px] h-[89px] text-red-400 mx-auto mb-[21px]" />
-          <h1 className="text-golden-xl font-bold text-white mb-[8px]">Access Denied</h1>
-          <p className="text-amber-400/60">Only administrators can access company settings</p>
+          <h1 className="text-xl font-bold text-white mb-[8px]">Access Denied</h1>
+          <p className="text-blue-400/60">Only administrators can access company settings</p>
         </div>
       </div>
     );
@@ -236,19 +236,19 @@ export const CompanySettings: React.FC = () => {
       {/* Header */}
       <div className="relative">
         <div className="absolute -right-8 -top-8 opacity-5">
-          <Compass className="w-[144px] h-[144px] text-amber-400" style={{ animation: 'gear-rotate 35s linear infinite reverse' }} />
+          <Compass className="w-[144px] h-[144px] text-blue-400" style={{ animation: ' 35s linear infinite reverse' }} />
         </div>
         <div className="relative">
           <div className="absolute -left-[55px] top-1/2 transform -translate-y-1/2 hidden lg:block opacity-10">
-            <Building className="w-[34px] h-[34px] text-amber-400" />
+            <Building className="w-[34px] h-[34px] text-blue-400" />
           </div>
-          <h1 className="text-golden-xl font-bold text-white mb-[8px] measurement-line">Company Settings</h1>
-          <p className="text-amber-400/60 technical-annotation" data-note="ADMIN ONLY">Manage organization-wide configuration</p>
+          <h1 className="text-xl font-bold text-white mb-[8px] ">Company Settings</h1>
+          <p className="text-blue-400/60 " >Manage organization-wide configuration</p>
         </div>
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex gap-[8px] border-b border-amber-500/20 pb-[8px]">
+      <div className="flex gap-[8px] border-b border-gray-700 pb-[8px]">
         {[
           { id: 'profile', label: 'Company Profile', icon: Building },
           { id: 'branding', label: 'Branding', icon: Palette },
@@ -261,8 +261,8 @@ export const CompanySettings: React.FC = () => {
             onClick={() => setActiveTab(tab.id as any)}
             className={`px-[21px] py-[13px] rounded-t-[8px] font-medium transition-all flex items-center gap-[8px] ${
               activeTab === tab.id
-                ? 'bg-amber-500/20 text-amber-400 border-b-2 border-amber-500'
-                : 'text-amber-400/60 hover:text-amber-400 hover:bg-amber-500/10'
+                ? 'bg-blue-500/20 text-blue-400 border-b-2 border-gray-700
+                : 'text-blue-400/60 hover:text-blue-400 hover:bg-blue-500/10'
             }`}
           >
             <tab.icon className="w-4 h-4" />
@@ -272,43 +272,43 @@ export const CompanySettings: React.FC = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="bg-slate-900/80 backdrop-blur-sm border border-amber-500/20 rounded-[21px] p-[34px] card-engineering">
+      <div className="bg-slate-900/80 backdrop-blur-sm border border-gray-700 rounded-[21px] p-[34px] bg-gray-800/50 border border-gray-700 rounded-lg">
         {/* Company Profile Tab */}
         {activeTab === 'profile' && (
           <div className="space-y-[34px]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[21px]">
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px] annotation" data-note="REQUIRED">Company Name</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px] " >Company Name</label>
                 <input
                   type="text"
                   value={companyData.name}
                   onChange={(e) => setCompanyData({ ...companyData, name: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] tech-border"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] border border-gray-700"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px] annotation" data-note="LEGAL">Legal Name</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px] " >Legal Name</label>
                 <input
                   type="text"
                   value={companyData.legal_name}
                   onChange={(e) => setCompanyData({ ...companyData, legal_name: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] tech-border"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] border border-gray-700"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[21px]">
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px]">Tax ID / EIN</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px]">Tax ID / EIN</label>
                 <input
                   type="text"
                   value={companyData.tax_id}
                   onChange={(e) => setCompanyData({ ...companyData, tax_id: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px]">Phone</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px]">Phone</label>
                 <input
                   type="tel"
                   value={companyData.contact.phone}
@@ -316,13 +316,13 @@ export const CompanySettings: React.FC = () => {
                     ...companyData,
                     contact: { ...companyData.contact, phone: e.target.value }
                   })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-amber-400/60 mb-[8px]">Address</label>
+              <label className="block text-sm font-medium text-blue-400/60 mb-[8px]">Address</label>
               <div className="space-y-[13px]">
                 <input
                   type="text"
@@ -332,7 +332,7 @@ export const CompanySettings: React.FC = () => {
                     address: { ...companyData.address, street: e.target.value }
                   })}
                   placeholder="Street Address"
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 />
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-[13px]">
                   <input
@@ -343,7 +343,7 @@ export const CompanySettings: React.FC = () => {
                       address: { ...companyData.address, city: e.target.value }
                     })}
                     placeholder="City"
-                    className="input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   />
                   <input
                     type="text"
@@ -353,7 +353,7 @@ export const CompanySettings: React.FC = () => {
                       address: { ...companyData.address, state: e.target.value }
                     })}
                     placeholder="State"
-                    className="input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   />
                   <input
                     type="text"
@@ -363,7 +363,7 @@ export const CompanySettings: React.FC = () => {
                       address: { ...companyData.address, zip: e.target.value }
                     })}
                     placeholder="ZIP"
-                    className="input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   />
                   <select
                     value={companyData.address.country}
@@ -371,7 +371,7 @@ export const CompanySettings: React.FC = () => {
                       ...companyData,
                       address: { ...companyData.address, country: e.target.value }
                     })}
-                    className="input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   >
                     <option value="US">USA</option>
                     <option value="CA">Canada</option>
@@ -383,14 +383,14 @@ export const CompanySettings: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[21px]">
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px]">Default Language</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px]">Default Language</label>
                 <select
                   value={companyData.settings.default_language}
                   onChange={(e) => setCompanyData({
                     ...companyData,
                     settings: { ...companyData.settings, default_language: e.target.value }
                   })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 >
                   <option value="en">English</option>
                   <option value="es">Español</option>
@@ -398,14 +398,14 @@ export const CompanySettings: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px]">Timezone</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px]">Timezone</label>
                 <select
                   value={companyData.settings.timezone}
                   onChange={(e) => setCompanyData({
                     ...companyData,
                     settings: { ...companyData.settings, timezone: e.target.value }
                   })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 >
                   <option value="America/New_York">Eastern Time</option>
                   <option value="America/Chicago">Central Time</option>
@@ -421,20 +421,20 @@ export const CompanySettings: React.FC = () => {
         {activeTab === 'branding' && (
           <div className="space-y-[34px]">
             <div>
-              <label className="block text-sm font-medium text-amber-400/60 mb-[8px] annotation" data-note="LOGO">Company Logo</label>
+              <label className="block text-sm font-medium text-blue-400/60 mb-[8px] " >Company Logo</label>
               <div className="flex items-center gap-[21px]">
                 {companyData.branding.logo_url ? (
                   <img 
                     src={companyData.branding.logo_url} 
                     alt="Company Logo" 
-                    className="w-[89px] h-[89px] rounded-[13px] border border-amber-500/20 object-cover"
+                    className="w-[89px] h-[89px] rounded-[13px] border border-gray-700 object-cover"
                   />
                 ) : (
-                  <div className="w-[89px] h-[89px] rounded-[13px] border-2 border-dashed border-amber-500/20 flex items-center justify-center">
-                    <Upload className="w-8 h-8 text-amber-400/60" />
+                  <div className="w-[89px] h-[89px] rounded-[13px] border-2 border-dashed border-gray-700 flex items-center justify-center">
+                    <Upload className="w-8 h-8 text-blue-400/60" />
                   </div>
                 )}
-                <label className="px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-medium cursor-pointer transition-all btn-davinci">
+                <label className="px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-medium cursor-pointer transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all">
                   Upload Logo
                   <input
                     type="file"
@@ -448,7 +448,7 @@ export const CompanySettings: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[21px]">
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px]">Primary Color</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px]">Primary Color</label>
                 <div className="flex gap-[13px]">
                   <input
                     type="color"
@@ -457,7 +457,7 @@ export const CompanySettings: React.FC = () => {
                       ...companyData,
                       branding: { ...companyData.branding, primary_color: e.target.value }
                     })}
-                    className="w-[55px] h-[55px] rounded-[8px] border border-amber-500/20 cursor-pointer"
+                    className="w-[55px] h-[55px] rounded-[8px] border border-gray-700 cursor-pointer"
                   />
                   <input
                     type="text"
@@ -466,12 +466,12 @@ export const CompanySettings: React.FC = () => {
                       ...companyData,
                       branding: { ...companyData.branding, primary_color: e.target.value }
                     })}
-                    className="flex-1 input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="flex-1 w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px]">Secondary Color</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px]">Secondary Color</label>
                 <div className="flex gap-[13px]">
                   <input
                     type="color"
@@ -480,7 +480,7 @@ export const CompanySettings: React.FC = () => {
                       ...companyData,
                       branding: { ...companyData.branding, secondary_color: e.target.value }
                     })}
-                    className="w-[55px] h-[55px] rounded-[8px] border border-amber-500/20 cursor-pointer"
+                    className="w-[55px] h-[55px] rounded-[8px] border border-gray-700 cursor-pointer"
                   />
                   <input
                     type="text"
@@ -489,7 +489,7 @@ export const CompanySettings: React.FC = () => {
                       ...companyData,
                       branding: { ...companyData.branding, secondary_color: e.target.value }
                     })}
-                    className="flex-1 input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="flex-1 w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   />
                 </div>
               </div>
@@ -503,7 +503,7 @@ export const CompanySettings: React.FC = () => {
             {Object.entries(companyData.integrations).map(([key, integration]) => (
               <div key={key} className="p-[21px] bg-slate-800/30 rounded-[13px] space-y-[13px]">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-golden-base font-medium text-white capitalize">{key} Integration</h3>
+                  <h3 className="text-base font-medium text-white capitalize">{key} Integration</h3>
                   <button
                     onClick={() => setCompanyData({
                       ...companyData,
@@ -513,7 +513,7 @@ export const CompanySettings: React.FC = () => {
                       }
                     })}
                     className={`w-[55px] h-[34px] rounded-full transition-all relative ${
-                      integration.enabled ? 'bg-amber-500' : 'bg-slate-700'
+                      integration.enabled ? 'bg-blue-500' : 'bg-slate-700'
                     }`}
                   >
                     <div className={`absolute top-[3px] w-[28px] h-[28px] bg-white rounded-full transition-all ${
@@ -531,7 +531,7 @@ export const CompanySettings: React.FC = () => {
                         [key]: { ...integration, provider: e.target.value }
                       }
                     })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   >
                     <option value="">Select Provider</option>
                     {key === 'accounting' && (
@@ -567,8 +567,8 @@ export const CompanySettings: React.FC = () => {
           <div className="space-y-[34px]">
             <div className="p-[21px] bg-slate-800/30 rounded-[13px] flex items-center justify-between">
               <div>
-                <p className="text-sm text-amber-400/60">Current Plan</p>
-                <p className="text-golden-base font-bold text-white">{companyData.subscription.plan}</p>
+                <p className="text-sm text-blue-400/60">Current Plan</p>
+                <p className="text-base font-bold text-white">{companyData.subscription.plan}</p>
               </div>
               <div className={`px-[13px] py-[5px] rounded-full text-sm font-medium ${
                 companyData.subscription.status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
@@ -579,16 +579,16 @@ export const CompanySettings: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[21px]">
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px]">Licensed Seats</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px]">Licensed Seats</label>
                 <input
                   type="number"
                   value={companyData.subscription.seats}
                   readOnly
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] opacity-60"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] opacity-60"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-amber-400/60 mb-[8px]">Billing Email</label>
+                <label className="block text-sm font-medium text-blue-400/60 mb-[8px]">Billing Email</label>
                 <input
                   type="email"
                   value={companyData.subscription.billing_email}
@@ -596,17 +596,17 @@ export const CompanySettings: React.FC = () => {
                     ...companyData,
                     subscription: { ...companyData.subscription, billing_email: e.target.value }
                   })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 />
               </div>
             </div>
 
-            <div className="p-[21px] bg-amber-500/10 border border-amber-500/20 rounded-[13px]">
+            <div className="p-[21px] bg-blue-500/10 border border-gray-700 rounded-[13px]">
               <div className="flex items-start gap-[13px]">
-                <AlertTriangle className="w-5 h-5 text-amber-400 mt-[2px]" />
+                <AlertTriangle className="w-5 h-5 text-blue-400 mt-[2px]" />
                 <div>
-                  <p className="text-amber-400 font-medium">Next Billing Date</p>
-                  <p className="text-amber-400/80 text-sm mt-[5px]">
+                  <p className="text-blue-400 font-medium">Next Billing Date</p>
+                  <p className="text-blue-400/80 text-sm mt-[5px]">
                     Your subscription will renew on {new Date(companyData.subscription.next_billing_date || Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString()}
                   </p>
                 </div>
@@ -619,7 +619,7 @@ export const CompanySettings: React.FC = () => {
         {activeTab === 'data' && (
           <div className="space-y-[34px]">
             <div>
-              <h3 className="text-golden-base font-medium text-white mb-[21px]">Data Retention Policy</h3>
+              <h3 className="text-base font-medium text-white mb-[21px]">Data Retention Policy</h3>
               <div className="space-y-[13px]">
                 {Object.entries(companyData.data_retention).map(([key, months]) => (
                   <div key={key} className="flex items-center justify-between">
@@ -630,7 +630,7 @@ export const CompanySettings: React.FC = () => {
                         ...companyData,
                         data_retention: { ...companyData.data_retention, [key]: parseInt(e.target.value) }
                       })}
-                      className="w-[144px] input-davinci bg-slate-800/50 text-white px-[21px] py-[8px] rounded-[8px]"
+                      className="w-[144px] w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[8px] rounded-[8px]"
                     >
                       <option value="6">6 months</option>
                       <option value="12">1 year</option>
@@ -669,7 +669,7 @@ export const CompanySettings: React.FC = () => {
               </div>
             </div>
 
-            <button className="w-full px-[34px] py-[13px] bg-slate-800/50 hover:bg-slate-700/50 border border-amber-500/20 rounded-[8px] font-medium text-white transition-all flex items-center justify-center gap-[8px] tech-border">
+            <button className="w-full px-[34px] py-[13px] bg-slate-800/50 hover:bg-slate-700/50 border border-gray-700 rounded-[8px] font-medium text-white transition-all flex items-center justify-center gap-[8px] border border-gray-700">
               <Archive className="w-5 h-5" />
               Export All Company Data
             </button>
@@ -682,7 +682,7 @@ export const CompanySettings: React.FC = () => {
         <button
           onClick={saveCompanyData}
           disabled={saving}
-          className="px-[55px] py-[21px] bg-amber-500 hover:bg-amber-600 disabled:bg-amber-700 text-white rounded-[13px] font-bold transition-all flex items-center gap-[13px] btn-davinci glow-renaissance breathe field-touch"
+          className="px-[55px] py-[21px] bg-blue-500 hover:bg-blue-600 disabled:bg-blue-700 text-white rounded-[13px] font-bold transition-all flex items-center gap-[13px] bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all   "
         >
           {saving ? (
             <>
@@ -700,10 +700,10 @@ export const CompanySettings: React.FC = () => {
 
       {/* Leonardo Quote */}
       <div className="text-center opacity-30 mt-[89px]">
-        <p className="text-golden-sm text-amber-400/60 font-light italic technical-annotation">
+        <p className="text-sm text-blue-400/60 font-light italic ">
           "He who is fixed to a star does not change his mind"
         </p>
-        <p className="text-xs text-amber-400/40 mt-2">— Leonardo da Vinci</p>
+        <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
       </div>
     </div>
   );

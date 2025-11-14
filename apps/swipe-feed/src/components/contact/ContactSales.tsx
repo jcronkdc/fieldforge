@@ -189,14 +189,14 @@ export const ContactSales: React.FC = () => {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950   flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center p-[55px] max-w-2xl"
         >
           <CheckCircle2 className="w-[89px] h-[89px] text-green-400 mx-auto mb-[34px]" />
-          <h1 className="text-golden-xl font-bold text-white mb-[21px]">Thank You!</h1>
+          <h1 className="text-xl font-bold text-white mb-[21px]">Thank You!</h1>
           <p className="text-xl text-slate-300 mb-[34px]">
             We've received your information and will be in touch within 24 hours.
           </p>
@@ -209,7 +209,7 @@ export const ContactSales: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 davinci-grid paper-texture">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950  ">
       <div className="max-w-4xl mx-auto px-4 py-[89px]">
         {/* Header */}
         <motion.div
@@ -217,7 +217,7 @@ export const ContactSales: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-[55px]"
         >
-          <h1 className="text-golden-xl md:text-golden-2xl font-bold text-white mb-[21px]">
+          <h1 className="text-xl md:text-2xl font-bold text-white mb-[21px]">
             Let's Transform Your
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">
@@ -245,7 +245,7 @@ export const ContactSales: React.FC = () => {
                   s.number < step
                     ? 'bg-green-500'
                     : s.number === step
-                    ? 'bg-amber-500'
+                    ? 'bg-blue-500'
                     : 'bg-slate-700'
                 }`}>
                   {s.number < step ? (
@@ -270,7 +270,7 @@ export const ContactSales: React.FC = () => {
           key={step}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="card-vitruvian corner-sketch p-[55px] rounded-[21px] mb-[34px]"
+          className="card-vitruvian  p-[55px] rounded-[21px] mb-[34px]"
         >
           {/* Step 1: Company Info */}
           {step === 1 && (
@@ -283,7 +283,7 @@ export const ContactSales: React.FC = () => {
                   type="text"
                   value={formData.companyName}
                   onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   placeholder="ABC Construction Inc."
                 />
               </div>
@@ -295,7 +295,7 @@ export const ContactSales: React.FC = () => {
                 <select
                   value={formData.industrySegment}
                   onChange={(e) => setFormData({ ...formData, industrySegment: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 >
                   <option value="">Select industry...</option>
                   {industrySements.map(segment => (
@@ -315,7 +315,7 @@ export const ContactSales: React.FC = () => {
                       onClick={() => setFormData({ ...formData, companySize: size })}
                       className={`px-[21px] py-[13px] rounded-[8px] text-sm transition-all ${
                         formData.companySize === size
-                          ? 'bg-amber-500 text-white'
+                          ? 'bg-blue-500 text-white'
                           : 'bg-slate-800/50 text-slate-300 hover:bg-slate-700/50'
                       }`}
                     >
@@ -332,7 +332,7 @@ export const ContactSales: React.FC = () => {
                 <select
                   value={formData.annualRevenue}
                   onChange={(e) => setFormData({ ...formData, annualRevenue: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 >
                   <option value="">Prefer not to say</option>
                   <option value="< $1M">Less than $1M</option>
@@ -356,7 +356,7 @@ export const ContactSales: React.FC = () => {
                   <select
                     value={formData.avgProjectSize}
                     onChange={(e) => setFormData({ ...formData, avgProjectSize: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   >
                     <option value="">Select range...</option>
                     <option value="< $100K">Less than $100K</option>
@@ -375,7 +375,7 @@ export const ContactSales: React.FC = () => {
                     type="number"
                     value={formData.projectsPerYear}
                     onChange={(e) => setFormData({ ...formData, projectsPerYear: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="10"
                   />
                 </div>
@@ -398,7 +398,7 @@ export const ContactSales: React.FC = () => {
                             setFormData({ ...formData, mainChallenges: formData.mainChallenges.filter(c => c !== challenge) });
                           }
                         }}
-                        className="w-5 h-5 text-amber-500 bg-slate-800/50 border-slate-600 rounded"
+                        className="w-5 h-5 text-blue-500 bg-slate-800/50 border-slate-600 rounded"
                       />
                       <span className="text-sm text-slate-300">{challenge}</span>
                     </label>
@@ -414,7 +414,7 @@ export const ContactSales: React.FC = () => {
                   type="text"
                   value={formData.currentSoftware.join(', ')}
                   onChange={(e) => setFormData({ ...formData, currentSoftware: e.target.value.split(', ').filter(s => s) })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                   placeholder="Procore, Excel, Paper forms..."
                 />
               </div>
@@ -433,7 +433,7 @@ export const ContactSales: React.FC = () => {
                     type="text"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="John Smith"
                   />
                 </div>
@@ -446,7 +446,7 @@ export const ContactSales: React.FC = () => {
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="Operations Manager"
                   />
                 </div>
@@ -461,7 +461,7 @@ export const ContactSales: React.FC = () => {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="john@company.com"
                   />
                 </div>
@@ -474,7 +474,7 @@ export const ContactSales: React.FC = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                    className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                     placeholder="(555) 123-4567"
                   />
                 </div>
@@ -487,7 +487,7 @@ export const ContactSales: React.FC = () => {
                 <select
                   value={formData.bestTimeToCall}
                   onChange={(e) => setFormData({ ...formData, bestTimeToCall: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 >
                   <option value="">Any time</option>
                   <option value="Morning (8am-12pm)">Morning (8am-12pm)</option>
@@ -518,7 +518,7 @@ export const ContactSales: React.FC = () => {
                             setFormData({ ...formData, interestedFeatures: formData.interestedFeatures.filter(f => f !== feature) });
                           }
                         }}
-                        className="w-5 h-5 text-amber-500 bg-slate-800/50 border-slate-600 rounded"
+                        className="w-5 h-5 text-blue-500 bg-slate-800/50 border-slate-600 rounded"
                       />
                       <span className="text-sm text-slate-300">{feature}</span>
                     </label>
@@ -533,7 +533,7 @@ export const ContactSales: React.FC = () => {
                 <select
                   value={formData.timeline}
                   onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 >
                   <option value="">Select timeline...</option>
                   <option value="ASAP">As soon as possible</option>
@@ -551,7 +551,7 @@ export const ContactSales: React.FC = () => {
                 <select
                   value={formData.source}
                   onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px]"
                 >
                   <option value="">Select source...</option>
                   <option value="Google Search">Google Search</option>
@@ -570,7 +570,7 @@ export const ContactSales: React.FC = () => {
                 <textarea
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  className="w-full input-davinci bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] min-h-[144px]"
+                  className="w-full w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white px-[21px] py-[13px] rounded-[8px] min-h-[144px]"
                   placeholder="Tell us more about your specific needs..."
                 />
               </div>
@@ -583,7 +583,7 @@ export const ContactSales: React.FC = () => {
           {step > 1 && (
             <button
               onClick={handleBack}
-              className="flex items-center gap-[8px] px-[34px] py-[13px] text-white hover:text-amber-400 transition-colors"
+              className="flex items-center gap-[8px] px-[34px] py-[13px] text-white hover:text-blue-400 transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
               Back
@@ -594,7 +594,7 @@ export const ContactSales: React.FC = () => {
             {step < 4 ? (
               <button
                 onClick={handleNext}
-                className="flex items-center gap-[8px] px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all btn-davinci"
+                className="flex items-center gap-[8px] px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all"
               >
                 Next
                 <ChevronRight className="w-5 h-5" />
@@ -603,7 +603,7 @@ export const ContactSales: React.FC = () => {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="flex items-center gap-[8px] px-[34px] py-[13px] bg-amber-500 hover:bg-amber-600 text-white rounded-[8px] font-semibold transition-all btn-davinci breathe disabled:opacity-50"
+                className="flex items-center gap-[8px] px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all  disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>

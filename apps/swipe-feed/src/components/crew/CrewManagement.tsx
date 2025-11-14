@@ -246,87 +246,87 @@ export const CrewManagement: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     );
   }
 
   return (
-    <div className="davinci-grid p-[34px] max-w-7xl mx-auto space-y-[34px]">
+    <div className=" p-[34px] max-w-7xl mx-auto space-y-[34px]">
       {/* Renaissance Decorations */}
-      <div className="compass-rose" />
+      <div className="" />
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[21px]">
         <div>
-          <h1 className="text-golden-2xl font-bold text-white measurement-line flex items-center gap-[13px]">
-            <Users className="w-8 h-8 text-amber-400" />
+          <h1 className="text-2xl font-bold text-white  flex items-center gap-[13px]">
+            <Users className="w-8 h-8 text-blue-400" />
             Crew Management
           </h1>
-          <p className="text-golden-base text-amber-400/60 mt-[8px] technical-annotation" data-note="WORKFORCE">Manage construction crews and assignments</p>
+          <p className="text-base text-blue-400/60 mt-[8px] " >Manage construction crews and assignments</p>
         </div>
         <button
           onClick={() => setShowCreateForm(true)}
-          className="btn-davinci px-[21px] py-[13px] flex items-center gap-[8px] field-touch"
+          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[21px] py-[13px] flex items-center gap-[8px] "
         >
           <Plus className="w-5 h-5" />
-          <span className="field-readable">New Crew</span>
+          <span className="">New Crew</span>
         </button>
       </div>
 
       {/* Stats Cards - Golden Ratio Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[21px] paper-texture">
-        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[21px] ">
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  ">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="COUNT">Total Crews</p>
-              <p className="text-golden-xl font-bold text-white mt-[8px]">{crews.length}</p>
+              <p className="text-sm text-blue-400/60 " >Total Crews</p>
+              <p className="text-xl font-bold text-white mt-[8px]">{crews.length}</p>
             </div>
-            <div className="vitruvian-square">
-              <Users className="w-[34px] h-[34px] text-amber-400" />
+            <div className="">
+              <Users className="w-[34px] h-[34px] text-blue-400" />
             </div>
           </div>
         </div>
 
-        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.1s' }}>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.1s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="ACTIVE">Active Workers</p>
-              <p className="text-golden-xl font-bold text-green-400 mt-[8px]">
+              <p className="text-sm text-blue-400/60 " >Active Workers</p>
+              <p className="text-xl font-bold text-green-400 mt-[8px]">
                 {crews.reduce((sum, crew) => sum + crew.active_members, 0)}
               </p>
             </div>
-            <div className="vitruvian-square">
+            <div className="">
               <HardHat className="w-[34px] h-[34px] text-green-400" />
             </div>
           </div>
         </div>
 
-        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.2s' }}>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.2s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="READY">Available Crews</p>
-              <p className="text-golden-xl font-bold text-blue-400 mt-[8px]">
+              <p className="text-sm text-blue-400/60 " >Available Crews</p>
+              <p className="text-xl font-bold text-blue-400 mt-[8px]">
                 {crews.filter(c => !c.current_project_name).length}
               </p>
             </div>
-            <div className="vitruvian-square">
+            <div className="">
               <CheckCircle className="w-[34px] h-[34px] text-blue-400" />
             </div>
           </div>
         </div>
 
-        <div className="card-vitruvian p-[21px] rounded-[13px] tech-border depth-layer-1 breathe" style={{ animationDelay: '0.3s' }}>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.3s' }}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-golden-sm text-amber-400/60 technical-annotation" data-note="AVERAGE">Avg Crew Size</p>
-              <p className="text-golden-xl font-bold text-purple-400 mt-[8px]">
+              <p className="text-sm text-blue-400/60 " >Avg Crew Size</p>
+              <p className="text-xl font-bold text-purple-400 mt-[8px]">
                 {crews.length > 0 
                   ? Math.round(crews.reduce((sum, crew) => sum + crew.active_members, 0) / crews.length)
                   : 0}
               </p>
             </div>
-            <div className="vitruvian-square">
+            <div className="">
               <TrendingUp className="w-[34px] h-[34px] text-purple-400" />
             </div>
           </div>
@@ -409,9 +409,9 @@ export const CrewManagement: React.FC = () => {
                   
                   {crew.current_project_name ? (
                     <div className="flex items-center gap-2">
-                      <HardHat className="w-4 h-4 text-amber-500" />
+                      <HardHat className="w-4 h-4 text-blue-500" />
                       <span className="text-gray-600">Assigned to:</span>
-                      <span className="font-medium text-amber-700">{crew.current_project_name}</span>
+                      <span className="font-medium text-blue-700">{crew.current_project_name}</span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
@@ -452,14 +452,14 @@ export const CrewManagement: React.FC = () => {
                 <div className="mt-6 flex gap-2">
                   <button
                     onClick={() => setSelectedCrew(crew)}
-                    className="flex-1 px-4 py-2 bg-amber-600 text-white rounded hover:bg-amber-700 transition-colors text-sm font-medium min-h-[44px]"
+                    className="flex-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm font-medium min-h-[44px]"
                   >
                     View Details
                   </button>
                   {!crew.current_project_name && (
                     <button
                       onClick={() => assignCrewToProject(crew.id, 'mock-project-id')}
-                      className="flex-1 px-4 py-2 border border-amber-600 text-amber-600 rounded hover:bg-amber-50 transition-colors text-sm font-medium min-h-[44px]"
+                      className="flex-1 px-4 py-2 border border-gray-700 text-blue-600 rounded hover:bg-blue-50 transition-colors text-sm font-medium min-h-[44px]"
                     >
                       Assign to Project
                     </button>
@@ -558,7 +558,7 @@ export const CrewManagement: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 min-h-[44px]"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 min-h-[44px]"
                 >
                   Create Crew
                 </button>
