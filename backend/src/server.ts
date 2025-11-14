@@ -33,6 +33,8 @@ import { createEmergencyRouter } from "./construction/emergency/emergencyRoutes.
 import { createUserRouter } from "./routes/userRoutes.js";
 import { createSubmittalsRouter } from "./routes/submittalsRoutes.js";
 import { createOutagesRouter } from "./routes/outagesRoutes.js";
+import { createSettingsRouter } from "./routes/settingsRoutes.js";
+import { createCompanyRouter } from "./routes/companyRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -163,6 +165,12 @@ app.use("/api/submittals", createSubmittalsRouter());
 
 // Outage Coordination - PLATFORM'S PLANNING BRAIN ✅
 app.use("/api/outages", createOutagesRouter());
+
+// User Settings Management - PREFERENCES & CUSTOMIZATION ✅
+app.use("/api/user", createSettingsRouter());
+
+// Company Settings Management - ADMIN ONLY ✅
+app.use("/api/company", createCompanyRouter());
 
 // Error handling middleware (must be last)
 app.use(notFoundHandler); // Handle 404s
