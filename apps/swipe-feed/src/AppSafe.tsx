@@ -34,6 +34,7 @@ import { AcquisitionInquiry } from './pages/AcquisitionInquiry';
 // Social & AI Components
 import { SocialFeed } from './components/feed/SocialFeed';
 import { AIAssistant } from './components/ai/AIAssistant';
+import { FieldForgeAI } from './components/ai/FieldForgeAI';
 import { RealTimeViz } from './components/visualization/RealTimeViz';
 
 // Layout Components  
@@ -63,6 +64,10 @@ import { FieldOperationsIndex } from './pages/FieldOperationsIndex';
 // Specialized components for electrical contractors
 import { SubstationManager } from './components/specialized/SubstationManager';
 import { NationwideCrewManager } from './components/specialized/NationwideCrewManager';
+
+// 3D Visualization
+import { ProjectMap3D } from './components/visualization/ProjectMap3D';
+import { SubstationModel } from './components/visualization/SubstationModel';
 
 // Onboarding for electrical contractors
 import { ElectricalContractorWelcome } from './components/onboarding/ElectricalContractorWelcome';
@@ -256,6 +261,9 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
                     <Route path="/substations" element={<SubstationManager />} />
                     <Route path="/crews" element={<NationwideCrewManager />} />
                     <Route path="/messages" element={<TeamMessaging />} />
+                    <Route path="/project-map" element={<ProjectMap3D />} />
+                    <Route path="/substation-3d" element={<SubstationModel />} />
+                    <Route path="/ai-assistant" element={<FieldForgeAI />} />
                     <Route path="*" element={<Navigate to="/dashboard" replace />} />
                   </Route>
                 </>

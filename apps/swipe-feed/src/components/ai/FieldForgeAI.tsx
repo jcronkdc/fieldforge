@@ -1,639 +1,594 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
-  Brain, Mic, MicOff, Send, AlertTriangle, Zap,
-  TrendingUp, Shield, Calendar, Users, Truck,
-  FileText, Activity, HelpCircle, X, Minimize2,
-  Maximize2, Volume2, VolumeX, ChevronDown, Sparkles,
-  Bot, User, Clock, AlertCircle, CheckCircle
+  Brain,
+  Send,
+  Mic,
+  MicOff,
+  Sparkles,
+  AlertTriangle,
+  TrendingUp,
+  Calendar,
+  Users,
+  Zap,
+  Shield,
+  Clock,
+  BarChart3,
+  Activity,
+  Bot,
+  Loader2,
+  ChevronDown,
+  FileText,
+  HelpCircle,
+  Settings,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+
+// Types
+type MessageRole = 'user' | 'assistant' | 'system';
+type InsightType = 'safety' | 'efficiency' | 'schedule' | 'resource' | 'predictive';
 
 interface Message {
   id: string;
-  type: 'user' | 'ai';
+  role: MessageRole;
   content: string;
-  timestamp: string;
-  category?: 'safety' | 'schedule' | 'equipment' | 'compliance' | 'general';
-  actionable?: boolean;
-  actions?: AIAction[];
-}
-
-interface AIAction {
-  id: string;
-  label: string;
-  action: string;
-  params?: any;
+  timestamp: Date;
+  insights?: Insight[];
+  actions?: QuickAction[];
 }
 
 interface Insight {
-  id: string;
-  type: 'warning' | 'suggestion' | 'prediction' | 'success';
+  type: InsightType;
   title: string;
   description: string;
-  impact: 'high' | 'medium' | 'low';
-  category: string;
-  timestamp: string;
+  priority: 'high' | 'medium' | 'low';
+  metric?: string;
+  trend?: 'up' | 'down' | 'stable';
 }
 
-interface QuickPrompt {
-  id: string;
+interface QuickAction {
   label: string;
-  prompt: string;
+  action: string;
   icon: React.ElementType;
-  category: string;
 }
 
-export const FieldForgeAI: React.FC = () => {
-  const { user } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [insights, setInsights] = useState<Insight[]>([]);
-  const [input, setInput] = useState('');
-  const [isListening, setIsListening] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<any>(null);
-
-  const quickPrompts: QuickPrompt[] = [
-    {
-      id: '1',
-      label: 'Safety Analysis',
-      prompt: 'Analyze current safety conditions and identify any potential hazards',
-      icon: Shield,
-      category: 'safety'
-    },
-    {
-      id: '2',
-      label: 'Schedule Optimization',
-      prompt: 'Review the project schedule and suggest optimizations',
-      icon: Calendar,
-      category: 'schedule'
-    },
-    {
-      id: '3',
-      label: 'Equipment Status',
-      prompt: 'Check equipment health and predict maintenance needs',
-      icon: Truck,
-      category: 'equipment'
-    },
-    {
-      id: '4',
-      label: 'Crew Productivity',
-      prompt: 'Analyze crew productivity and suggest improvements',
-      icon: Users,
-      category: 'productivity'
-    },
-    {
-      id: '5',
-      label: 'Compliance Check',
-      prompt: 'Review all compliance requirements and identify any gaps',
-      icon: FileText,
-      category: 'compliance'
-    },
-    {
-      id: '6',
-      label: 'Cost Analysis',
-      prompt: 'Analyze project costs and identify potential savings',
-      icon: TrendingUp,
-      category: 'finance'
-    }
-  ];
-
-  useEffect(() => {
-    // Initialize with welcome message
-    if (messages.length === 0) {
-      const welcomeMessage: Message = {
-        id: '1',
-        type: 'ai',
-        content: `Hello ${user?.email?.split('@')[0] || 'there'}! I'm your FieldForge AI assistant. I can help you with safety analysis, schedule optimization, equipment monitoring, and much more. How can I assist you today?`,
-        timestamp: new Date().toISOString(),
-        category: 'general'
-      };
-      setMessages([welcomeMessage]);
-    }
-
-    // Simulate real-time insights
-    const insightInterval = setInterval(() => {
-      generateInsight();
-    }, 30000); // Every 30 seconds
-
-    return () => clearInterval(insightInterval);
-  }, []);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  // Initialize speech recognition
-  useEffect(() => {
-    if (typeof window !== 'undefined' && 'webkitSpeechRecognition' in window) {
-      const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = 'en-US';
-
-      recognitionRef.current.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setInput(transcript);
-        setIsListening(false);
-      };
-
-      recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error', event.error);
-        setIsListening(false);
-        toast.error('Speech recognition failed');
-      };
-
-      recognitionRef.current.onend = () => {
-        setIsListening(false);
-      };
-    }
-  }, []);
-
-  const generateInsight = () => {
-    const insightTypes = [
-      {
-        type: 'warning' as const,
-        title: 'Equipment Maintenance Due',
-        description: 'Crane 01 has exceeded 80% of its maintenance interval. Schedule service soon.',
-        impact: 'medium' as const,
-        category: 'equipment'
-      },
-      {
-        type: 'suggestion' as const,
-        title: 'Weather Window Opportunity',
-        description: 'Clear weather forecasted for next 5 days. Optimal for concrete pouring.',
-        impact: 'high' as const,
-        category: 'schedule'
-      },
-      {
-        type: 'prediction' as const,
-        title: 'Material Shortage Risk',
-        description: 'Current consumption rate suggests rebar shortage by Thursday.',
-        impact: 'high' as const,
-        category: 'materials'
-      },
-      {
-        type: 'success' as const,
-        title: 'Safety Milestone Achieved',
-        description: '100 days without incidents. Team morale is high.',
-        impact: 'low' as const,
-        category: 'safety'
-      }
-    ];
-
-    const randomInsight = insightTypes[Math.floor(Math.random() * insightTypes.length)];
-    
-    const newInsight: Insight = {
-      id: Date.now().toString(),
-      ...randomInsight,
-      timestamp: new Date().toISOString()
-    };
-
-    setInsights(prev => [newInsight, ...prev].slice(0, 5)); // Keep only 5 latest
+interface PredictiveAnalytics {
+  projectCompletion: {
+    estimated: string;
+    confidence: number;
+    factors: string[];
   };
-
-  const processMessage = async (message: string) => {
-    setIsProcessing(true);
-
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      type: 'user',
-      content: message,
-      timestamp: new Date().toISOString()
-    };
-    setMessages(prev => [...prev, userMessage]);
-
-    // Simulate AI processing
-    setTimeout(() => {
-      const aiResponse = generateAIResponse(message);
-      setMessages(prev => [...prev, aiResponse]);
-      setIsProcessing(false);
-
-      // Speak response if voice enabled
-      if (voiceEnabled && 'speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(aiResponse.content);
-        utterance.rate = 0.9;
-        utterance.pitch = 1;
-        utterance.onstart = () => setIsSpeaking(true);
-        utterance.onend = () => setIsSpeaking(false);
-        speechSynthesis.speak(utterance);
-      }
-    }, 1500);
+  safetyRisk: {
+    level: 'low' | 'medium' | 'high';
+    areas: string[];
+    recommendations: string[];
   };
+  resourceUtilization: {
+    current: number;
+    optimal: number;
+    suggestions: string[];
+  };
+  weatherImpact: {
+    nextWeek: string[];
+    recommendations: string[];
+  };
+}
 
-  const generateAIResponse = (input: string): Message => {
-    const lowerInput = input.toLowerCase();
-    
-    // Safety-related queries
-    if (lowerInput.includes('safety') || lowerInput.includes('hazard') || lowerInput.includes('danger')) {
-      return {
-        id: Date.now().toString(),
-        type: 'ai',
-        content: `Based on current site conditions, I've identified 3 potential safety concerns:
+// Suggested queries for different categories
+const suggestedQueries = {
+  safety: [
+    "What are today's safety concerns?",
+    "Show me recent incident trends",
+    "Which crews need safety refreshers?",
+    "Analyze PPE compliance rates"
+  ],
+  schedule: [
+    "What's the critical path status?",
+    "Show me potential delays",
+    "Which tasks are behind schedule?",
+    "Optimize tomorrow's crew assignments"
+  ],
+  resources: [
+    "Check equipment utilization",
+    "What materials are running low?",
+    "Show crew availability next week",
+    "Analyze overtime trends"
+  ],
+  analytics: [
+    "Show project health metrics",
+    "Compare this week to last week",
+    "What's our efficiency trend?",
+    "Predict completion date"
+  ]
+};
 
-1. **Wet conditions** near the excavation area - recommend additional barriers
-2. **Crane operation** proximity to power lines - maintain 20ft clearance
-3. **Missing harnesses** detected in Zone C - immediate action required
+// AI response simulator (in production, this would call a real AI service)
+const generateAIResponse = async (query: string): Promise<Message> => {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
 
-I've created safety alerts for all supervisors. Would you like me to initiate an emergency safety briefing?`,
-        timestamp: new Date().toISOString(),
-        category: 'safety',
-        actionable: true,
+  const lowerQuery = query.toLowerCase();
+  
+  // Safety-related queries
+  if (lowerQuery.includes('safety') || lowerQuery.includes('incident') || lowerQuery.includes('ppe')) {
+    return {
+      id: Date.now().toString(),
+      role: 'assistant',
+      content: "Based on current site conditions, I've identified 3 key safety areas requiring attention. Heat stress risk is elevated due to today's temperature (89°F). I've also noticed PPE compliance has dropped 5% in the west sector.",
+      timestamp: new Date(),
+      insights: [
+        {
+          type: 'safety',
+          title: 'Heat Stress Alert',
+          description: 'Temperature exceeds 85°F. Implement mandatory hydration breaks.',
+          priority: 'high',
+          metric: '89°F',
+          trend: 'up'
+        },
+        {
+          type: 'safety',
+          title: 'PPE Compliance',
+          description: 'West sector showing 92% compliance, below 95% target.',
+          priority: 'medium',
+          metric: '92%',
+          trend: 'down'
+        }
+      ],
         actions: [
-          { id: '1', label: 'Send Safety Alert', action: 'safety_alert' },
-          { id: '2', label: 'Schedule Briefing', action: 'schedule_briefing' }
+        { label: 'Send Heat Alert', action: 'alert-heat', icon: AlertTriangle },
+        { label: 'Schedule Safety Brief', action: 'schedule-brief', icon: Calendar },
+        { label: 'View PPE Report', action: 'view-ppe', icon: FileText }
         ]
       };
     }
 
     // Schedule-related queries
-    if (lowerInput.includes('schedule') || lowerInput.includes('deadline') || lowerInput.includes('delay')) {
+  if (lowerQuery.includes('schedule') || lowerQuery.includes('delay') || lowerQuery.includes('behind')) {
       return {
         id: Date.now().toString(),
-        type: 'ai',
-        content: `Analyzing project schedule... 
-
-Current status:
-- **On Track**: Foundation work (85% complete)
-- **At Risk**: Steel assembly (2 days behind due to weather)
-- **Critical Path**: Electrical rough-in must start by Monday
-
-I recommend reallocating 3 crew members from Zone A to steel assembly to recover the delay. This maintains the critical path without overtime costs.`,
-        timestamp: new Date().toISOString(),
-        category: 'schedule',
-        actionable: true,
+      role: 'assistant',
+      content: "The project is currently 2 days behind schedule, primarily due to weather delays last week. However, I've identified opportunities to accelerate 3 tasks by reallocating crews from completed sections. Implementing these changes could recover 1.5 days.",
+      timestamp: new Date(),
+      insights: [
+        {
+          type: 'schedule',
+          title: 'Critical Path Analysis',
+          description: 'Substation grounding installation is the current bottleneck.',
+          priority: 'high',
+          metric: '-2 days',
+          trend: 'down'
+        },
+        {
+          type: 'efficiency',
+          title: 'Recovery Opportunity',
+          description: 'Parallel task execution possible for sections 4 & 5.',
+          priority: 'medium',
+          metric: '+1.5 days',
+          trend: 'up'
+        }
+      ],
         actions: [
-          { id: '1', label: 'Reallocate Crew', action: 'crew_reallocation' },
-          { id: '2', label: 'Update Schedule', action: 'update_schedule' }
+        { label: 'Optimize Schedule', action: 'optimize', icon: TrendingUp },
+        { label: 'Reallocate Crews', action: 'reallocate', icon: Users },
+        { label: 'Update Timeline', action: 'update-timeline', icon: Calendar }
         ]
       };
     }
 
-    // Equipment-related queries
-    if (lowerInput.includes('equipment') || lowerInput.includes('machine') || lowerInput.includes('maintenance')) {
+  // Resource queries
+  if (lowerQuery.includes('equipment') || lowerQuery.includes('utilization') || lowerQuery.includes('crew')) {
       return {
         id: Date.now().toString(),
-        type: 'ai',
-        content: `Equipment analysis complete:
-
-**Operational**: 12 units (86%)
-**Maintenance Due**: 2 units
-- Excavator 03: Oil change required (operating hours: 498)
-- Generator 02: Filter replacement needed
-
-**Predictive Alert**: Crane 01 showing unusual vibration patterns. Recommend inspection within 48 hours to prevent failure.
-
-All other equipment operating within normal parameters.`,
-        timestamp: new Date().toISOString(),
-        category: 'equipment',
-        actionable: true,
+      role: 'assistant',
+      content: "Equipment utilization is at 78%, which is below our 85% target. I've noticed Crane #3 has been idle for 6 hours today. Crew Alpha is operating at 95% efficiency, while Crew Beta is at 72% due to waiting on materials.",
+      timestamp: new Date(),
+      insights: [
+        {
+          type: 'resource',
+          title: 'Equipment Optimization',
+          description: 'Crane #3 could be reassigned to Section B.',
+          priority: 'medium',
+          metric: '78%',
+          trend: 'stable'
+        },
+        {
+          type: 'efficiency',
+          title: 'Crew Performance Gap',
+          description: 'Material delays affecting Crew Beta productivity.',
+          priority: 'high',
+          metric: '72%',
+          trend: 'down'
+        }
+      ],
         actions: [
-          { id: '1', label: 'Schedule Maintenance', action: 'schedule_maintenance' },
-          { id: '2', label: 'Order Parts', action: 'order_parts' }
+        { label: 'Reassign Equipment', action: 'reassign', icon: Truck },
+        { label: 'Order Materials', action: 'order', icon: Package },
+        { label: 'View Utilization', action: 'view-util', icon: BarChart3 }
         ]
       };
     }
 
-    // Cost/Finance queries
-    if (lowerInput.includes('cost') || lowerInput.includes('budget') || lowerInput.includes('expense')) {
+  // Default intelligent response
       return {
         id: Date.now().toString(),
-        type: 'ai',
-        content: `Financial analysis for current period:
+    role: 'assistant',
+    content: "I've analyzed your query and current project status. Overall project health is good with 82% on-time task completion. I recommend focusing on the upcoming transformer installation as it's a critical path item. Would you like me to dive deeper into any specific area?",
+    timestamp: new Date(),
+    insights: [
+      {
+        type: 'predictive',
+        title: 'Project Health Score',
+        description: 'Overall project tracking well with minor schedule pressure.',
+        priority: 'low',
+        metric: '82%',
+        trend: 'stable'
+      }
+    ],
+    actions: [
+      { label: 'View Dashboard', action: 'dashboard', icon: LayoutDashboard },
+      { label: 'Daily Report', action: 'report', icon: FileText }
+    ]
+  };
+};
 
-**Budget Status**: 78% utilized ($2.34M of $3M)
-**Burn Rate**: $142K/week (on target)
+// Insight card component
+function InsightCard({ insight }: { insight: Insight }) {
+  const iconMap = {
+    safety: Shield,
+    efficiency: TrendingUp,
+    schedule: Calendar,
+    resource: Users,
+    predictive: Brain
+  };
+  
+  const Icon = iconMap[insight.type];
+  const priorityColors = {
+    high: 'border-red-500/30 bg-red-500/10',
+    medium: 'border-yellow-500/30 bg-yellow-500/10',
+    low: 'border-green-500/30 bg-green-500/10'
+  };
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      className={`p-4 rounded-lg border ${priorityColors[insight.priority]} backdrop-blur-sm`}
+    >
+      <div className="flex items-start justify-between">
+        <div className="flex items-start gap-3">
+          <div className={`p-2 rounded-lg ${
+            insight.priority === 'high' ? 'bg-red-500/20' :
+            insight.priority === 'medium' ? 'bg-yellow-500/20' :
+            'bg-green-500/20'
+          }`}>
+            <Icon className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <h4 className="font-semibold text-white text-sm">{insight.title}</h4>
+            <p className="text-slate-300 text-xs mt-1">{insight.description}</p>
+          </div>
+        </div>
+        {insight.metric && (
+          <div className="text-right">
+            <div className="text-lg font-bold text-white">{insight.metric}</div>
+            {insight.trend && (
+              <div className={`text-xs ${
+                insight.trend === 'up' ? 'text-green-400' :
+                insight.trend === 'down' ? 'text-red-400' :
+                'text-gray-400'
+              }`}>
+                {insight.trend === 'up' ? '↑' : insight.trend === 'down' ? '↓' : '→'}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
 
-**Cost Optimization Opportunities**:
-1. Bulk material ordering could save ~$18K
-2. Crew optimization could reduce overtime by 15%
-3. Equipment sharing with Site B could save $8K/month
-
-Projected completion within budget if current efficiency maintained.`,
-        timestamp: new Date().toISOString(),
-        category: 'general'
-      };
+// Main FieldForgeAI component
+export const FieldForgeAI: React.FC = () => {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: '1',
+      role: 'assistant',
+      content: "Hello! I'm FieldForge AI, your intelligent construction assistant. I can help you with safety analysis, schedule optimization, resource planning, and predictive insights. What would you like to know about your project?",
+      timestamp: new Date()
     }
-
-    // Default response
-    return {
+  ]);
+  
+  const [input, setInput] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<keyof typeof suggestedQueries>('safety');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  // Auto-scroll to bottom
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+  
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+  
+  // Handle message submission
+  const handleSubmit = async (query: string) => {
+    if (!query.trim() || isLoading) return;
+    
+    const userMessage: Message = {
       id: Date.now().toString(),
-      type: 'ai',
-      content: `I understand you're asking about "${input}". Let me analyze the relevant data across all systems...
-
-Based on current project data, I can help you with:
-- Safety compliance and hazard detection
-- Schedule optimization and resource allocation  
-- Equipment health monitoring
-- Cost analysis and savings opportunities
-- Crew productivity insights
-- Weather impact planning
-
-Could you please be more specific about what aspect you'd like me to focus on?`,
-      timestamp: new Date().toISOString(),
-      category: 'general'
+      role: 'user',
+      content: query,
+      timestamp: new Date()
     };
-  };
-
-  const handleSend = () => {
-    if (input.trim() && !isProcessing) {
-      processMessage(input.trim());
-      setInput('');
+    
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+    setShowSuggestions(false);
+    
+    try {
+      const response = await generateAIResponse(query);
+      setMessages(prev => [...prev, response]);
+    } catch (error) {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: 'I apologize, but I encountered an error processing your request. Please try again.',
+        timestamp: new Date()
+      }]);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const handleQuickPrompt = (prompt: string) => {
-    processMessage(prompt);
-  };
-
-  const handleAction = (action: AIAction) => {
-    switch (action.action) {
-      case 'safety_alert':
-        toast.error('🚨 Safety alert sent to all supervisors');
-        break;
-      case 'schedule_briefing':
-        toast.success('Safety briefing scheduled for 2:00 PM');
-        break;
-      case 'crew_reallocation':
-        toast.success('Crew reallocation request submitted');
-        break;
-      case 'schedule_maintenance':
-        toast.success('Maintenance scheduled for tomorrow');
-        break;
-      default:
-        toast.success(`Action initiated: ${action.label}`);
+  
+  // Voice input simulation
+  const toggleVoiceInput = () => {
+    setIsListening(!isListening);
+    if (!isListening) {
+      // In production, this would use Web Speech API
+      setTimeout(() => {
+        setInput("What's the current safety status across all active sites?");
+        setIsListening(false);
+      }, 2000);
     }
   };
-
-  const toggleVoice = () => {
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-    } else if (recognitionRef.current) {
-      recognitionRef.current.start();
-      setIsListening(true);
-    }
-  };
-
-  const getInsightIcon = (type: string) => {
-    switch (type) {
-      case 'warning': return AlertCircle;
-      case 'suggestion': return Sparkles;
-      case 'prediction': return TrendingUp;
-      case 'success': return CheckCircle;
-      default: return Info;
-    }
-  };
-
-  const getInsightColor = (type: string) => {
-    switch (type) {
-      case 'warning': return 'text-amber-400 bg-amber-400/20';
-      case 'suggestion': return 'text-blue-400 bg-blue-400/20';
-      case 'prediction': return 'text-purple-400 bg-purple-400/20';
-      case 'success': return 'text-green-400 bg-green-400/20';
-      default: return 'text-gray-400 bg-gray-400/20';
-    }
+  
+  // Quick action handler
+  const handleQuickAction = (action: string) => {
+    console.log('Executing action:', action);
+    // In production, this would trigger actual actions
   };
 
   return (
-    <>
-      {/* AI Button */}
-      <AnimatePresence>
-        {!isOpen && (
-          <motion.button
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            onClick={() => setIsOpen(true)}
-            className="fixed bottom-[34px] right-[34px] w-[68px] h-[68px] bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 rounded-full shadow-lg flex items-center justify-center group transition-all z-50"
-          >
-            <Brain className="w-8 h-8 text-white group-hover:scale-110 transition-transform" />
-            <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full animate-pulse" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* AI Chat Interface */}
-      <AnimatePresence>
-        {isOpen && (
+    <div className="h-full flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Header */}
+      <div className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+              <Brain className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-white">FieldForge AI Assistant</h2>
+              <p className="text-sm text-slate-400">Intelligent construction insights & automation</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="p-2 text-slate-400 hover:text-white transition-colors">
+              <HelpCircle className="w-5 h-5" />
+            </button>
+            <button className="p-2 text-slate-400 hover:text-white transition-colors">
+              <Settings className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+        {messages.map((message) => (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className={`fixed z-50 bg-slate-900 border border-slate-700 rounded-[21px] shadow-2xl ${
-              isMinimized 
-                ? 'bottom-[34px] right-[34px] w-[350px] h-[60px]'
-                : 'bottom-[34px] right-[34px] w-[450px] h-[600px] max-h-[80vh]'
-            }`}
+            key={message.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between p-[21px] border-b border-slate-700">
-              <div className="flex items-center gap-[13px]">
-                <div className="w-[34px] h-[34px] bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-white" />
+            <div className={`max-w-3xl ${message.role === 'user' ? 'order-2' : 'order-1'}`}>
+              <div className={`flex items-start gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                <div className={`p-2 rounded-lg ${
+                  message.role === 'user' 
+                    ? 'bg-blue-600' 
+                    : 'bg-gradient-to-r from-purple-600 to-blue-600'
+                }`}>
+                  {message.role === 'user' ? (
+                    <User className="w-4 h-4 text-white" />
+                  ) : (
+                    <Bot className="w-4 h-4 text-white" />
+                  )}
                 </div>
-                <div>
-                  <h3 className="text-white font-semibold">FieldForge AI</h3>
-                  <p className="text-xs text-slate-400">
-                    {isSpeaking ? 'Speaking...' : isListening ? 'Listening...' : 'Always learning'}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-[8px]">
-                <button
-                  onClick={() => setVoiceEnabled(!voiceEnabled)}
-                  className="p-[8px] text-slate-400 hover:text-white transition-all"
-                >
-                  {voiceEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
-                </button>
                 
-                <button
-                  onClick={() => setIsMinimized(!isMinimized)}
-                  className="p-[8px] text-slate-400 hover:text-white transition-all"
-                >
-                  {isMinimized ? <Maximize2 className="w-5 h-5" /> : <Minimize2 className="w-5 h-5" />}
-                </button>
-                
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="p-[8px] text-slate-400 hover:text-white transition-all"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+                <div className="space-y-2">
+                  <div className={`px-4 py-3 rounded-lg ${
+                    message.role === 'user'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-800/50 text-white border border-slate-700'
+                  }`}>
+                    <p className="text-sm leading-relaxed">{message.content}</p>
             </div>
 
-            {!isMinimized && (
-              <>
-                {/* Insights Bar */}
-                {insights.length > 0 && (
-                  <div className="p-[13px] border-b border-slate-700 bg-slate-800/50">
-                    <div className="flex items-center gap-[8px] mb-[8px]">
-                      <Activity className="w-4 h-4 text-amber-400" />
-                      <span className="text-xs font-medium text-slate-300">Real-time Insights</span>
-                    </div>
-                    <div className="space-y-[5px]">
-                      {insights.slice(0, 2).map(insight => {
-                        const Icon = getInsightIcon(insight.type);
-                        const colorClass = getInsightColor(insight.type);
-                        return (
-                          <div
-                            key={insight.id}
-                            className={`text-xs p-[8px] rounded-[8px] flex items-start gap-[8px] ${colorClass}`}
-                          >
-                            <Icon className="w-3 h-3 flex-shrink-0 mt-[2px]" />
-                            <div className="flex-1">
-                              <p className="font-medium">{insight.title}</p>
-                              <p className="opacity-80 text-[10px] mt-[2px]">{insight.description}</p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                  {/* Insights */}
+                  {message.insights && message.insights.length > 0 && (
+                    <div className="grid gap-2 mt-3">
+                      {message.insights.map((insight, idx) => (
+                        <InsightCard key={idx} insight={insight} />
+                      ))}
                   </div>
                 )}
 
-                {/* Messages */}
-                <div className="flex-1 overflow-y-auto p-[21px] space-y-[13px]" style={{ height: 'calc(100% - 180px)' }}>
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <div className={`max-w-[80%] ${message.type === 'user' ? 'order-2' : 'order-1'}`}>
-                        <div className="flex items-start gap-[8px]">
-                          {message.type === 'ai' && (
-                            <div className="w-[28px] h-[28px] bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center flex-shrink-0">
-                              <Bot className="w-4 h-4 text-white" />
-                            </div>
-                          )}
-                          
-                          <div className={`p-[13px] rounded-[13px] ${
-                            message.type === 'user' 
-                              ? 'bg-amber-500 text-slate-900' 
-                              : 'bg-slate-800 text-white'
-                          }`}>
-                            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                            
+                  {/* Quick Actions */}
                             {message.actions && message.actions.length > 0 && (
-                              <div className="mt-[8px] flex flex-wrap gap-[8px]">
-                                {message.actions.map(action => (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      {message.actions.map((action, idx) => (
                                   <button
-                                    key={action.id}
-                                    onClick={() => handleAction(action)}
-                                    className="px-[13px] py-[5px] bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 rounded-[8px] text-xs font-medium transition-all"
-                                  >
+                          key={idx}
+                          onClick={() => handleQuickAction(action.action)}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm text-white transition-colors"
+                        >
+                          <action.icon className="w-4 h-4" />
                                     {action.label}
                                   </button>
                                 ))}
                               </div>
                             )}
                             
-                            <p className="text-xs opacity-70 mt-[5px]">
-                              {new Date(message.timestamp).toLocaleTimeString()}
-                            </p>
-                          </div>
-                          
-                          {message.type === 'user' && (
-                            <div className="w-[28px] h-[28px] bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
-                              <User className="w-4 h-4 text-slate-300" />
+                  <div className="text-xs text-slate-500 mt-1">
+                    {message.timestamp.toLocaleTimeString()}
                             </div>
-                          )}
                         </div>
                       </div>
                     </div>
-                  ))}
-                  
-                  {isProcessing && (
-                    <div className="flex items-center gap-[8px]">
-                      <div className="w-[28px] h-[28px] bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center">
+          </motion.div>
+        ))}
+        
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-3 text-slate-400"
+          >
+            <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">
                         <Bot className="w-4 h-4 text-white" />
                       </div>
-                      <div className="bg-slate-800 rounded-[13px] p-[13px]">
-                        <div className="flex gap-[5px]">
-                          <span className="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                          <span className="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                          <span className="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span className="text-sm">Analyzing your request...</span>
                         </div>
-                      </div>
-                    </div>
+          </motion.div>
                   )}
                   
                   <div ref={messagesEndRef} />
                 </div>
 
-                {/* Quick Prompts */}
-                <div className="px-[21px] py-[13px] border-t border-slate-700">
-                  <div className="flex gap-[8px] overflow-x-auto pb-[8px]">
-                    {quickPrompts.map((prompt) => {
-                      const Icon = prompt.icon;
-                      return (
-                        <button
-                          key={prompt.id}
-                          onClick={() => handleQuickPrompt(prompt.prompt)}
-                          className="flex items-center gap-[5px] px-[13px] py-[5px] bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-[8px] text-xs whitespace-nowrap transition-all"
-                        >
-                          <Icon className="w-3 h-3" />
-                          {prompt.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Input Area */}
-                <div className="p-[21px] border-t border-slate-700">
-                  <div className="flex items-end gap-[13px]">
+      {/* Suggestions */}
+      <AnimatePresence>
+        {showSuggestions && !isLoading && messages.length === 1 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="border-t border-slate-700"
+          >
+            <div className="px-6 py-4">
+              <div className="flex items-center gap-4 mb-3">
+                <Sparkles className="w-4 h-4 text-purple-400" />
+                <span className="text-sm text-slate-300">Suggested queries</span>
+                <div className="flex gap-2">
+                  {Object.keys(suggestedQueries).map((cat) => (
                     <button
-                      onClick={toggleVoice}
-                      className={`p-[13px] rounded-[13px] transition-all ${
-                        isListening
-                          ? 'bg-red-500 text-white animate-pulse'
-                          : 'bg-slate-800 text-slate-400 hover:text-white'
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat as keyof typeof suggestedQueries)}
+                      className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                        selectedCategory === cat
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                       }`}
                     >
-                      {isListening ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />}
+                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
                     </button>
-                    
-                    <div className="flex-1">
-                      <textarea
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault();
-                            handleSend();
-                          }
-                        }}
-                        placeholder="Ask me anything about your project..."
-                        className="w-full px-[13px] py-[8px] bg-slate-800 text-white rounded-[13px] resize-none focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-slate-500"
-                        rows={1}
-                      />
+                  ))}
+                </div>
                     </div>
-                    
+              <div className="grid grid-cols-2 gap-2">
+                {suggestedQueries[selectedCategory].map((query, idx) => (
                     <button
-                      onClick={handleSend}
-                      disabled={!input.trim() || isProcessing}
-                      className="p-[13px] bg-amber-500 hover:bg-amber-600 disabled:bg-slate-700 text-white rounded-[13px] transition-all"
-                    >
-                      <Send className="w-5 h-5" />
+                    key={idx}
+                    onClick={() => handleSubmit(query)}
+                    className="text-left px-3 py-2 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg text-sm text-slate-300 hover:text-white transition-colors border border-slate-700"
+                  >
+                    {query}
                     </button>
+                ))}
                   </div>
                 </div>
-              </>
-            )}
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+      
+      {/* Input Area */}
+      <div className="border-t border-slate-700 bg-slate-800/50 backdrop-blur-sm px-6 py-4">
+        <form onSubmit={(e) => { e.preventDefault(); handleSubmit(input); }} className="flex gap-3">
+          <div className="flex-1 relative">
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask me anything about your construction project..."
+              className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              disabled={isLoading}
+            />
+            {isListening && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                <div className="flex gap-1">
+                  <div className="w-1 h-4 bg-red-500 animate-pulse"></div>
+                  <div className="w-1 h-6 bg-red-500 animate-pulse animation-delay-100"></div>
+                  <div className="w-1 h-3 bg-red-500 animate-pulse animation-delay-200"></div>
+                  <div className="w-1 h-5 bg-red-500 animate-pulse animation-delay-300"></div>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <button
+            type="button"
+            onClick={toggleVoiceInput}
+            className={`p-3 rounded-lg transition-colors ${
+              isListening 
+                ? 'bg-red-600 hover:bg-red-700 text-white' 
+                : 'bg-slate-700 hover:bg-slate-600 text-white'
+            }`}
+            disabled={isLoading}
+          >
+            {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+          </button>
+          
+          <button
+            type="submit"
+            disabled={!input.trim() || isLoading}
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <Send className="w-5 h-5" />
+            )}
+            Send
+          </button>
+        </form>
+        
+        <div className="mt-3 flex items-center justify-center gap-6 text-xs text-slate-500">
+          <div className="flex items-center gap-1">
+            <Activity className="w-3 h-3" />
+            <span>Real-time analysis</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Shield className="w-3 h-3" />
+            <span>Secure & private</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Zap className="w-3 h-3" />
+            <span>Powered by AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
+
+// Add missing imports
+import { User, LayoutDashboard, Package } from 'lucide-react';

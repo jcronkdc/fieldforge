@@ -7,7 +7,7 @@ import {
   FileText, Calendar, Cloud, MessageSquare, Map, Brain,
   Settings, LogOut, Menu, X, Bell, Zap, Users, AlertTriangle,
   Activity, Wrench, Truck, Building2, Radio, ChevronDown, Sun, Moon,
-  DollarSign, Phone
+  DollarSign, Phone, MapPin
 } from 'lucide-react';
 import { PushNotifications } from '../notifications/PushNotifications';
 import { NotificationCenter } from '../notifications/NotificationCenter';
@@ -82,6 +82,30 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
       icon: Building2,
       path: '/projects',
       badge: null,
+      color: 'text-slate-900'
+    },
+    {
+      label: 'Project Map 3D',
+      icon: MapPin,
+      path: '/project-map',
+      badge: 'NEW',
+      badgeColor: 'bg-purple-500 text-white',
+      color: 'text-slate-900'
+    },
+    {
+      label: 'Equipment 3D',
+      icon: Wrench,
+      path: '/substation-3d',
+      badge: 'NEW',
+      badgeColor: 'bg-indigo-500 text-white',
+      color: 'text-slate-900'
+    },
+    {
+      label: 'AI Assistant',
+      icon: Brain,
+      path: '/ai-assistant',
+      badge: 'AI',
+      badgeColor: 'bg-gradient-to-r from-purple-500 to-blue-500 text-white',
       color: 'text-slate-900'
     },
     {
