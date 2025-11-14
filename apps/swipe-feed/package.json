@@ -20,6 +20,7 @@
   "dependencies": {
     "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.18.0",
+    "@stripe/stripe-js": "^8.4.0",
     "@supabase/supabase-js": "^2.45.4",
     "@types/three": "^0.181.0",
     "ably": "^1.2.42",

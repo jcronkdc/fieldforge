@@ -37,6 +37,8 @@ import { createCompanyRouter } from "./routes/companyRoutes.js";
 import { createMapRouter } from "./routes/mapRoutes.js";
 import { createSubstationRouter } from "./routes/substationRoutes.js";
 import { createAIRouter } from "./routes/aiRoutes.js";
+import { createStripeRouter } from "./routes/stripeRoutes.js";
+import { createStripeWebhookRouter } from "./routes/stripeWebhookRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -100,7 +102,10 @@ app.get('/api/health', (_req: Request, res: Response) => {
   });
 });
 
-// Apply authentication middleware to ALL API routes (except health check and leads)
+// Stripe webhook endpoint (no auth required, needs raw body)
+app.use("/api/webhook", express.raw({ type: 'application/json' }), createStripeWebhookRouter());
+
+// Apply authentication middleware to ALL API routes (except health check, leads, and webhooks)
 app.use('/api', authenticateRequest);
 
 // Apply granular rate limiting for sensitive/compute-intensive endpoints
@@ -189,6 +194,9 @@ app.use("/api/substations", createSubstationRouter());
 
 // FieldForge AI - INTELLIGENT CONSTRUCTION ASSISTANT ✅
 app.use("/api/ai", createAIRouter());
+
+// Payment Processing - STRIPE INTEGRATION ✅  
+app.use("/api/payments", createStripeRouter());
 
 // Settings are now part of user routes (/api/users/settings)
 

@@ -5,11 +5,12 @@ import {
   Wifi, WifiOff, RefreshCw, Trash2, Save, Volume2,
   Clock, Database, HardDrive, ToggleLeft, ToggleRight,
   Smartphone, Monitor, Palette, Languages, ChevronRight,
-  AlertCircle, CheckCircle, Info, X, Activity
+  AlertCircle, CheckCircle, Info, X, Activity, CreditCard
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
+import { BillingSettings } from './BillingSettings';
 
 interface SettingsData {
   // Display
@@ -307,6 +308,12 @@ export const Settings: React.FC = () => {
           action: () => setShowImportDialog(true)
         }
       ]
+    },
+    {
+      id: 'billing',
+      title: 'Billing & Subscription',
+      icon: CreditCard,
+      items: [] // This section uses a custom component
     },
     {
       id: 'developer',
@@ -802,6 +809,15 @@ export const Settings: React.FC = () => {
         </div>
       </div>
                       )}
+                    </motion.div>
+                  )}
+
+                  {activeSection === 'billing' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                    >
+                      <BillingSettings />
                     </motion.div>
                   )}
 

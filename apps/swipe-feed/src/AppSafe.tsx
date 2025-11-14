@@ -30,6 +30,7 @@ import { PricingPage } from './pages/PricingPage';
 import { ContactSales } from './components/contact/ContactSales';
 import { ShowcasePage } from './components/showcase/ShowcasePage';
 import { AcquisitionInquiry } from './pages/AcquisitionInquiry';
+import { PaymentSuccess } from './pages/PaymentSuccess';
 
 // Social & AI Components
 import { SocialFeed } from './components/feed/SocialFeed';
@@ -219,6 +220,7 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
               <Route path="/pricing" element={<PricingPage />} />
               <Route path="/contact" element={<ContactSales />} />
               <Route path="/showcase" element={<ShowcasePage />} />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
               
               <Route path="/signup" element={
                 session ? <Navigate to="/dashboard" replace /> : <FuturisticSignUp />
