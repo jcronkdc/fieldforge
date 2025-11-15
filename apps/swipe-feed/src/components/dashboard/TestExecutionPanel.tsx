@@ -133,7 +133,7 @@ export const TestExecutionPanel: React.FC = () => {
       {/* Progress Bar */}
       <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
         <div 
-          className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500"
+          className="h-full bg-gradient-to-r from-blue-500 to-orange-500 transition-all duration-500"
           style={{ width: `${(passedTests + failedTests) / totalTests * 100}%` }}
         />
       </div>

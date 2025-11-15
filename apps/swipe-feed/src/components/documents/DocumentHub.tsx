@@ -334,14 +334,14 @@ export const DocumentHub: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search documents..."
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
             />
           </div>
           
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+            className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
           >
             {documentTypes.map(type => (
               <option key={type} value={type}>
@@ -561,7 +561,7 @@ export const DocumentHub: React.FC = () => {
                 <select
                   value={uploadDetails.type}
                   onChange={(e) => setUploadDetails({...uploadDetails, type: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                 >
                   <option value="drawing">Drawing</option>
                   <option value="report">Report</option>
@@ -580,7 +580,7 @@ export const DocumentHub: React.FC = () => {
                   type="text"
                   value={uploadDetails.tags}
                   onChange={(e) => setUploadDetails({...uploadDetails, tags: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., electrical, phase-1, approved"
                 />
               </div>
@@ -591,7 +591,7 @@ export const DocumentHub: React.FC = () => {
                   id="is_public"
                   checked={uploadDetails.is_public}
                   onChange={(e) => setUploadDetails({...uploadDetails, is_public: e.target.checked})}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-amber-500"
+                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
                 />
                 <label htmlFor="is_public" className="ml-2 text-sm text-gray-700">
                   Make document publicly accessible
@@ -658,7 +658,7 @@ export const DocumentHub: React.FC = () => {
                   required
                   value={newFolder.name}
                   onChange={(e) => setNewFolder({ name: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., Electrical Drawings"
                 />
               </div>

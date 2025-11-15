@@ -738,13 +738,6 @@ export const TestingDashboard: React.FC = () => {
           </div>
         )}
 
-        {/* Leonardo Quote */}
-        <div className="text-center opacity-30 mt-[89px]">
-          <p className="text-sm text-blue-400/60 font-light italic">
-            "Testing leads to failure, and failure leads to understanding."
-          </p>
-          <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
-        </div>
       </div>
     </div>
   );

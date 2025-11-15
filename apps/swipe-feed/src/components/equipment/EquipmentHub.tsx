@@ -548,13 +548,6 @@ export const EquipmentHub: React.FC = () => {
         </div>
       )}
 
-      {/* Leonardo Quote */}
-      <div className="text-center opacity-30 mt-[89px]">
-        <p className="text-sm text-blue-400/60 font-light italic">
-          "Mechanics is the paradise of the mathematical sciences."
-        </p>
-        <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
-      </div>
     </div>
   );
 };

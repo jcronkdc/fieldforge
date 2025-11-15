@@ -335,7 +335,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                   type="email"
                   value={inviteData.email}
                   onChange={(e) => setInviteData({ ...inviteData, email: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                   placeholder="worker@company.com"
                 />
               </div>
@@ -347,7 +347,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                 <select
                   value={inviteData.role}
                   onChange={(e) => setInviteData({ ...inviteData, role: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 >
                   {roles.filter(r => r.value !== 'owner').map((role) => (
                     <option key={role.value} value={role.value}>
@@ -365,7 +365,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                   value={inviteData.message}
                   onChange={(e) => setInviteData({ ...inviteData, message: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                   placeholder="Welcome to the team. Looking forward to working with you"
                 />
               </div>
@@ -386,7 +386,7 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
                 <button
                   onClick={handleInvite}
                   disabled={!inviteData.email || sending}
-                  className="px-5 py-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50"
+                  className="px-5 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-amber-500/25 transition-all duration-200 flex items-center space-x-2 disabled:opacity-50"
                 >
                   {sending ? (
                     <>

@@ -122,7 +122,7 @@ const FixedLandingPage = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <button
                 onClick={() => navigate('/signup')}
-                className="px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold rounded-lg shadow-lg transform transition hover:scale-105"
+                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold rounded-lg shadow-lg transform transition hover:scale-105"
               >
                 Start Free Trial
               </button>

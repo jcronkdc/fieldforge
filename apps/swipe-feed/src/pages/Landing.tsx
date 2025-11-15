@@ -168,13 +168,6 @@ export const Landing: React.FC = () => {
             </div>
           </div>
 
-          {/* Leonardo's Wisdom */}
-          <div className="text-center opacity-30 mt-[89px]">
-            <p className="text-sm text-blue-400/60 font-light italic ">
-              "Obstacles cannot crush me; every obstacle yields to stern resolve"
-            </p>
-            <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
-          </div>
         </div>
       </div>
     </>

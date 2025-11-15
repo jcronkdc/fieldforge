@@ -293,9 +293,6 @@ export const OutageCoordination: React.FC = () => {
           </div>
           <h1 className="text-2xl font-bold text-white mb-[13px]">Outage Coordination</h1>
           <p className="text-base text-slate-300">Platform's Planning Brain</p>
-          <p className="text-sm text-blue-400/60 font-light italic  mt-[8px]">
-            "The noblest pleasure is the joy of understanding" — Leonardo da Vinci
-          </p>
       </div>
 
       {/* Active Outages Alert */}

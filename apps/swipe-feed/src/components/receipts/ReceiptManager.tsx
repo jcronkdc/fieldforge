@@ -388,7 +388,7 @@ export const ReceiptManager: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search vendors, descriptions..."
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
             />
           </div>
           
@@ -516,7 +516,7 @@ export const ReceiptManager: React.FC = () => {
                   required
                   value={newReceipt.vendor_name}
                   onChange={(e) => setNewReceipt({...newReceipt, vendor_name: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., Home Depot"
                 />
               </div>
@@ -532,7 +532,7 @@ export const ReceiptManager: React.FC = () => {
                     step="0.01"
                     value={newReceipt.amount}
                     onChange={(e) => setNewReceipt({...newReceipt, amount: e.target.value})}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                     placeholder="0.00"
                   />
                 </div>
@@ -546,7 +546,7 @@ export const ReceiptManager: React.FC = () => {
                     step="0.01"
                     value={newReceipt.tax_amount}
                     onChange={(e) => setNewReceipt({...newReceipt, tax_amount: e.target.value})}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                     placeholder="0.00"
                   />
                 </div>
@@ -561,7 +561,7 @@ export const ReceiptManager: React.FC = () => {
                   required
                   value={newReceipt.date}
                   onChange={(e) => setNewReceipt({...newReceipt, date: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                 />
               </div>
 
@@ -572,7 +572,7 @@ export const ReceiptManager: React.FC = () => {
                 <select
                   value={newReceipt.category}
                   onChange={(e) => setNewReceipt({...newReceipt, category: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                 >
                   {categories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
@@ -588,7 +588,7 @@ export const ReceiptManager: React.FC = () => {
                   type="text"
                   value={newReceipt.receipt_number}
                   onChange={(e) => setNewReceipt({...newReceipt, receipt_number: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., INV-12345"
                 />
               </div>
@@ -600,7 +600,7 @@ export const ReceiptManager: React.FC = () => {
                 <textarea
                   value={newReceipt.description}
                   onChange={(e) => setNewReceipt({...newReceipt, description: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   rows={3}
                   placeholder="What was purchased?"
                 />

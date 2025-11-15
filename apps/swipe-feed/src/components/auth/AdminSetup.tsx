@@ -155,7 +155,7 @@ export const AdminSetup: React.FC = () => {
         <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl border border-gray-700 p-8">
           {/* Header */}
           <div className="flex items-center justify-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
               <Shield className="w-8 h-8 text-white" />
             </div>
           </div>
@@ -226,7 +226,7 @@ export const AdminSetup: React.FC = () => {
               <button
                 onClick={createAdminAccount}
                 disabled={loading}
-                className="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all flex items-center justify-center"
+                className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-amber-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all flex items-center justify-center"
               >
                 {loading && status === 'creating' ? (
                   <>

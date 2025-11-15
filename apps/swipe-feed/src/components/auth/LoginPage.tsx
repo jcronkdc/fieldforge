@@ -58,7 +58,7 @@ export const LoginPage: React.FC = () => {
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-2xl mb-4">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-2xl mb-4">
               <Zap className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-4xl font-bold text-white mb-2">FieldForge</h1>
@@ -106,7 +106,7 @@ export const LoginPage: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="foreman@construction.com"
                 required
-                className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 aria-invalid={Boolean(error)}
                 aria-describedby={error ? 'login-error' : undefined}
               />
@@ -125,7 +125,7 @@ export const LoginPage: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   required
-                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all pr-12"
+                  className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all pr-12"
                   aria-invalid={Boolean(error)}
                   aria-describedby={error ? 'login-error' : undefined}
                 />
@@ -146,7 +146,7 @@ export const LoginPage: React.FC = () => {
                 <input
                   type="checkbox"
                   id="remember-me"
-                  className="w-4 h-4 bg-slate-800 border-slate-700 rounded text-blue-500 focus:ring-amber-500"
+                  className="w-4 h-4 bg-slate-800 border-slate-700 rounded text-blue-500 focus:ring-blue-500"
                 />
                 <span className="ml-2 text-sm text-slate-400">Remember me</span>
               </label>
@@ -198,7 +198,7 @@ export const LoginPage: React.FC = () => {
       </div>
 
       {/* Right Panel - Features */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-amber-600/20 to-orange-600/20 backdrop-blur-sm relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-amber-600/20 to-purple-600/20 backdrop-blur-sm relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/5"></div>
         
         {/* Floating Elements */}

@@ -291,13 +291,6 @@ export const AcquisitionInquiry: React.FC = () => {
           </div>
         )}
 
-        {/* Leonardo Quote */}
-        <div className="text-center opacity-30 mt-[89px]">
-          <p className="text-sm text-blue-400/60 font-light italic">
-            "Where the spirit does not work with the hand, there is no art."
-          </p>
-          <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
-        </div>
       </div>
     </div>
   );

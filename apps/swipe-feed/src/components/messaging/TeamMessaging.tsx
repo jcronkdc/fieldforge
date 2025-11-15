@@ -315,7 +315,7 @@ export const TeamMessaging: React.FC = () => {
               placeholder="Search channels..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="w-full pl-9 pr-3 py-2 bg-slate-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -492,7 +492,7 @@ export const TeamMessaging: React.FC = () => {
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
                 placeholder={`Message #${selectedChannel.name}`}
-                className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={sending}
               />
               <button
@@ -599,7 +599,7 @@ export const TeamMessaging: React.FC = () => {
                   required
                   value={newChannel.name}
                   onChange={(e) => setNewChannel({...newChannel, name: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="e.g., concrete-crew"
                 />
               </div>
@@ -611,7 +611,7 @@ export const TeamMessaging: React.FC = () => {
                 <textarea
                   value={newChannel.description}
                   onChange={(e) => setNewChannel({...newChannel, description: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   rows={2}
                   placeholder="What's this channel about?"
                 />
@@ -624,7 +624,7 @@ export const TeamMessaging: React.FC = () => {
                 <select
                   value={newChannel.type}
                   onChange={(e) => setNewChannel({...newChannel, type: e.target.value as 'public' | 'private'})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="public">Public - Anyone can join</option>
                   <option value="private">Private - Invite only</option>

@@ -220,13 +220,6 @@ export const FuturisticDashboard: React.FC = () => {
           </div>
         </section>
 
-        {/* Leonardo Quote */}
-        <div className="text-center opacity-30 mt-[89px]">
-          <p className="text-sm text-blue-400/60 font-light italic ">
-            "As every divided kingdom falls, so every mind divided between many studies confounds and saps itself."
-          </p>
-          <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
-        </div>
       </div>
     </div>
   );

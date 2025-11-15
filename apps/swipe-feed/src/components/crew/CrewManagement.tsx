@@ -343,14 +343,14 @@ export const CrewManagement: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search crews..."
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
             />
           </div>
           
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+            className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
           >
             <option value="all">All Types</option>
             {crewTypes.map(type => (
@@ -486,7 +486,7 @@ export const CrewManagement: React.FC = () => {
                   required
                   value={newCrew.name}
                   onChange={(e) => setNewCrew({...newCrew, name: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., Alpha Electrical Team"
                 />
               </div>
@@ -500,7 +500,7 @@ export const CrewManagement: React.FC = () => {
                   required
                   value={newCrew.code}
                   onChange={(e) => setNewCrew({...newCrew, code: e.target.value.toUpperCase()})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 font-mono min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 font-mono min-h-[44px]"
                   placeholder="e.g., ELEC-01"
                   maxLength={10}
                 />
@@ -513,7 +513,7 @@ export const CrewManagement: React.FC = () => {
                 <select
                   value={newCrew.type}
                   onChange={(e) => setNewCrew({...newCrew, type: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                 >
                   {crewTypes.map(type => (
                     <option key={type} value={type}>{type}</option>
@@ -529,7 +529,7 @@ export const CrewManagement: React.FC = () => {
                   type="text"
                   value={newCrew.base_location}
                   onChange={(e) => setNewCrew({...newCrew, base_location: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., Main Office, Field Site A"
                 />
               </div>
@@ -542,7 +542,7 @@ export const CrewManagement: React.FC = () => {
                   type="number"
                   value={newCrew.max_members}
                   onChange={(e) => setNewCrew({...newCrew, max_members: parseInt(e.target.value)})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   min={1}
                   max={50}
                 />

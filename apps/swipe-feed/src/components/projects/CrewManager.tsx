@@ -247,7 +247,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                     <div className="mb-4 p-3 bg-gray-700/30 rounded-lg">
                       <p className="text-xs text-gray-400 mb-1">Crew Lead</p>
                       <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                           <span className="text-white text-xs font-semibold">
                             {crew.lead.first_name[0]}{crew.lead.last_name[0]}
                           </span>
@@ -359,7 +359,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                   type="text"
                   value={crewData.crew_name}
                   onChange={(e) => setCrewData({ ...crewData, crew_name: e.target.value })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                   placeholder="Alpha Crew"
                 />
               </div>
@@ -372,7 +372,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                   id="crew-type"
                   value={crewData.crew_type}
                   onChange={(e) => setCrewData({ ...crewData, crew_type: e.target.value as any })}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 >
                   {crewTypes.map((type) => (
                     <option key={type.value} value={type.value}>
@@ -391,7 +391,7 @@ export const CrewManager: React.FC<CrewManagerProps> = ({ project, userRole, onB
                   value={crewData.description}
                   onChange={(e) => setCrewData({ ...crewData, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-4 py-2 bg-gray-700/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                   placeholder="Primary installation crew for high voltage equipment"
                 />
               </div>

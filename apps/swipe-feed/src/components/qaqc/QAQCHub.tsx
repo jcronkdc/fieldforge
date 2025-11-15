@@ -427,7 +427,7 @@ export const QAQCHub: React.FC = () => {
                 <select
                   value={newInspection.inspection_type}
                   onChange={(e) => setNewInspection({...newInspection, inspection_type: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                 >
                   {inspectionTypes.map(type => (
                     <option key={type} value={type}>{type}</option>
@@ -444,7 +444,7 @@ export const QAQCHub: React.FC = () => {
                   required
                   value={newInspection.scheduled_date}
                   onChange={(e) => setNewInspection({...newInspection, scheduled_date: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                 />
               </div>
 
@@ -455,7 +455,7 @@ export const QAQCHub: React.FC = () => {
                 <textarea
                   value={newInspection.notes}
                   onChange={(e) => setNewInspection({...newInspection, notes: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   rows={3}
                   placeholder="Any special requirements or areas of focus..."
                 />

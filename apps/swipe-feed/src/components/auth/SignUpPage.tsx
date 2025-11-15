@@ -94,7 +94,7 @@ export const SignUpPage: React.FC = () => {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link to="/login" className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-2xl mb-4">
+          <Link to="/login" className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-2xl mb-4">
             <Zap className="w-10 h-10 text-white" />
           </Link>
           <h1 className="text-4xl font-bold text-white mb-2">Join FieldForge</h1>
@@ -154,7 +154,7 @@ export const SignUpPage: React.FC = () => {
                   onChange={(e) => updateFormData('email', e.target.value)}
                   placeholder="foreman@construction.com"
                   required
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   aria-invalid={Boolean(error)}
                   aria-describedby={error ? 'signup-error' : undefined}
                 />
@@ -172,7 +172,7 @@ export const SignUpPage: React.FC = () => {
                     onChange={(e) => updateFormData('password', e.target.value)}
                     placeholder="Minimum 8 characters"
                     required
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent pr-12"
+                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
                     aria-invalid={Boolean(error)}
                     aria-describedby={error ? 'signup-error' : undefined}
                   />
@@ -198,7 +198,7 @@ export const SignUpPage: React.FC = () => {
                   onChange={(e) => updateFormData('confirmPassword', e.target.value)}
                   placeholder="Re-enter password"
                   required
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   aria-invalid={Boolean(error)}
                   aria-describedby={error ? 'signup-error' : undefined}
                 />
@@ -224,7 +224,7 @@ export const SignUpPage: React.FC = () => {
                     onChange={(e) => updateFormData('firstName', e.target.value)}
                     placeholder="John"
                     required
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
@@ -239,7 +239,7 @@ export const SignUpPage: React.FC = () => {
                     onChange={(e) => updateFormData('lastName', e.target.value)}
                     placeholder="Smith"
                     required
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -255,7 +255,7 @@ export const SignUpPage: React.FC = () => {
                   value={formData.phone}
                   onChange={(e) => updateFormData('phone', e.target.value)}
                   placeholder="(555) 123-4567"
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -271,7 +271,7 @@ export const SignUpPage: React.FC = () => {
                   onChange={(e) => updateFormData('company', e.target.value)}
                   placeholder="Construction Company Inc."
                   required
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -287,7 +287,7 @@ export const SignUpPage: React.FC = () => {
                   onChange={(e) => updateFormData('jobTitle', e.target.value)}
                   placeholder="Project Manager"
                   required
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -301,7 +301,7 @@ export const SignUpPage: React.FC = () => {
                   value={formData.employeeId}
                   onChange={(e) => updateFormData('employeeId', e.target.value)}
                   placeholder="Optional"
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>

@@ -194,9 +194,6 @@ export const SubmittalManager: React.FC = () => {
           </div>
           <h1 className="text-2xl font-bold text-white mb-[13px]">Submittal Manager</h1>
           <p className="text-base text-slate-300">Platform's Memory System</p>
-          <p className="text-sm text-blue-400/60 font-light italic  mt-[8px]">
-            "Learning never exhausts the mind" — Leonardo da Vinci
-          </p>
         </div>
 
         {/* Controls */}

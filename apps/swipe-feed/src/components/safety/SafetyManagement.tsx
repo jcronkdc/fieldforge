@@ -436,7 +436,7 @@ export const SafetyManagement: React.FC = () => {
                   required
                   value={incidentForm.type}
                   onChange={(e) => setIncidentForm({...incidentForm, type: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., Slip and Fall, Equipment Malfunction"
                 />
               </div>
@@ -448,7 +448,7 @@ export const SafetyManagement: React.FC = () => {
                 <select
                   value={incidentForm.severity}
                   onChange={(e) => setIncidentForm({...incidentForm, severity: e.target.value as any})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -466,7 +466,7 @@ export const SafetyManagement: React.FC = () => {
                   required
                   value={incidentForm.location_description}
                   onChange={(e) => setIncidentForm({...incidentForm, location_description: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="Specific location of incident"
                 />
               </div>
@@ -479,7 +479,7 @@ export const SafetyManagement: React.FC = () => {
                   required
                   value={incidentForm.description}
                   onChange={(e) => setIncidentForm({...incidentForm, description: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   rows={3}
                   placeholder="Describe what happened..."
                 />
@@ -492,7 +492,7 @@ export const SafetyManagement: React.FC = () => {
                 <textarea
                   value={incidentForm.immediate_actions}
                   onChange={(e) => setIncidentForm({...incidentForm, immediate_actions: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   rows={2}
                   placeholder="What was done immediately after the incident?"
                 />
@@ -533,7 +533,7 @@ export const SafetyManagement: React.FC = () => {
                   required
                   value={permitForm.type}
                   onChange={(e) => setPermitForm({...permitForm, type: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., Hot Work, Confined Space, Working at Heights"
                 />
               </div>
@@ -546,7 +546,7 @@ export const SafetyManagement: React.FC = () => {
                   required
                   value={permitForm.work_description}
                   onChange={(e) => setPermitForm({...permitForm, work_description: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                   rows={3}
                   placeholder="Describe the work to be performed..."
                 />
@@ -561,7 +561,7 @@ export const SafetyManagement: React.FC = () => {
                   required
                   value={permitForm.hazards}
                   onChange={(e) => setPermitForm({...permitForm, hazards: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., Fire, Electrical, Fall from height"
                 />
               </div>
@@ -575,7 +575,7 @@ export const SafetyManagement: React.FC = () => {
                   required
                   value={permitForm.controls}
                   onChange={(e) => setPermitForm({...permitForm, controls: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                   placeholder="e.g., Fire extinguisher, Lock out tag out, Safety harness"
                 />
               </div>
@@ -589,7 +589,7 @@ export const SafetyManagement: React.FC = () => {
                   required
                   value={permitForm.valid_until}
                   onChange={(e) => setPermitForm({...permitForm, valid_until: e.target.value})}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500 min-h-[44px]"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 min-h-[44px]"
                 />
               </div>
 

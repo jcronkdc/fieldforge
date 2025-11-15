@@ -100,7 +100,7 @@ export const ShowcasePage: React.FC = () => {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden ">
         <motion.div 
           style={{ opacity }}
-          className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-blue-500/10"
+          className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-blue-500/10"
         />
         
         {/* Sacred Geometry Background */}
@@ -373,7 +373,7 @@ export const ShowcasePage: React.FC = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-br from-amber-500/20 to-amber-600/20 rounded-3xl p-12 text-center"
+            className="bg-gradient-to-br from-blue-500/20 to-amber-600/20 rounded-3xl p-12 text-center"
           >
             <Sparkles className="w-12 h-12 text-blue-400 mx-auto mb-6" />
             <blockquote className="text-2xl md:text-3xl font-medium text-white mb-6">

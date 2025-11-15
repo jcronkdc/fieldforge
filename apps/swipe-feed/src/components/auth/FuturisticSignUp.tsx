@@ -255,7 +255,7 @@ export const FuturisticSignUp: React.FC = () => {
       <div className="relative z-10 w-full max-w-2xl px-6">
         {/* Logo Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full mb-4 animate-pulse shadow-[0_0_40px_rgba(255,184,0,0.5)]">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-4 animate-pulse shadow-[0_0_40px_rgba(255,184,0,0.5)]">
             <Zap className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-4xl font-bold font-['Orbitron'] text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2">

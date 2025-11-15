@@ -284,7 +284,7 @@ export const ProjectMetrics: React.FC = () => {
                 </div>
                 <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-blue-500 to-amber-600 rounded-full transition-all duration-500"
                     style={{ width: `${selectedProjectData.progress}%` }}
                   />
                 </div>

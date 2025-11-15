@@ -434,7 +434,7 @@ export const InspectionManager: React.FC = () => {
                             </div>
                             <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
                               <div 
-                                className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full transition-all duration-500"
+                                className="h-full bg-gradient-to-r from-blue-500 to-amber-600 rounded-full transition-all duration-500"
                                 style={{ width: `${calculateChecklistScore(inspection.checklist_items)}%` }}
                               />
                             </div>
@@ -819,7 +819,7 @@ export const InspectionManager: React.FC = () => {
                         </div>
                         <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
                           <div 
-                            className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full"
+                            className="h-full bg-gradient-to-r from-blue-500 to-amber-600 rounded-full"
                             style={{ width: `${calculateChecklistScore(viewingInspection.checklist_items)}%` }}
                           />
                         </div>

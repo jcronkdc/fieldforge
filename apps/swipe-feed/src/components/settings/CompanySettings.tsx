@@ -698,13 +698,6 @@ export const CompanySettings: React.FC = () => {
         </button>
       </div>
 
-      {/* Leonardo Quote */}
-      <div className="text-center opacity-30 mt-[89px]">
-        <p className="text-sm text-blue-400/60 font-light italic ">
-          "He who is fixed to a star does not change his mind"
-        </p>
-        <p className="text-xs text-blue-400/40 mt-2">— Leonardo da Vinci</p>
-      </div>
     </div>
   );
 };

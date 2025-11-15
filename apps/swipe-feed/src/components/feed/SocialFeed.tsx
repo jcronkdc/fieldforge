@@ -208,7 +208,7 @@ export const SocialFeed: React.FC = () => {
         <div className="max-w-2xl mx-auto p-4">
           <div className="bg-gray-800/50 rounded-2xl p-4 border border-gray-700">
             <div className="flex items-start space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                 <HardHat className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
@@ -415,7 +415,7 @@ export const SocialFeed: React.FC = () => {
                         <input
                           type="text"
                           placeholder="Add a comment"
-                          className="w-full px-3 py-2 bg-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                          className="w-full px-3 py-2 bg-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                         />
                       </div>
                       <button className="p-2 text-blue-400 hover:text-blue-300 transition-colors">
