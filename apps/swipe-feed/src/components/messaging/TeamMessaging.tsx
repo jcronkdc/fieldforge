@@ -58,6 +58,7 @@ export const TeamMessaging: React.FC = () => {
   const [sending, setSending] = useState(false);
   const [showChannelInfo, setShowChannelInfo] = useState(false);
   const [showCreateChannel, setShowCreateChannel] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // New channel form
@@ -293,9 +294,25 @@ export const TeamMessaging: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
+      {/* Mobile Header */}
+      <div className="md:hidden bg-slate-900 text-white p-4 flex items-center justify-between">
+        <button
+          onClick={() => setShowMobileSidebar(!showMobileSidebar)}
+          className="p-2 hover:bg-slate-800 rounded"
+        >
+          <MessageSquare className="w-5 h-5" />
+        </button>
+        <h1 className="text-lg font-semibold">
+          {selectedChannel ? `#${selectedChannel.name}` : 'Team Chat'}
+        </h1>
+        <div className="w-9" /> {/* Spacer for centering */}
+      </div>
+
       {/* Sidebar - Channels */}
-      <div className="w-64 bg-slate-900 text-white flex flex-col">
+      <div className={`w-full md:w-64 bg-slate-900 text-white flex flex-col md:h-screen ${
+        showMobileSidebar ? 'block' : 'hidden md:block'
+      }`}>
         <div className="p-4 border-b border-slate-800">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Team Chat</h2>
@@ -328,7 +345,10 @@ export const TeamMessaging: React.FC = () => {
               .map(channel => (
                 <button
                   key={channel.id}
-                  onClick={() => setSelectedChannel(channel)}
+                  onClick={() => {
+                    setSelectedChannel(channel);
+                    setShowMobileSidebar(false); // Hide sidebar on mobile after selection
+                  }}
                   className={`w-full text-left px-3 py-2 rounded-lg mb-1 transition-colors ${
                     selectedChannel?.id === channel.id ? 'bg-blue-600' : 'hover:bg-slate-800'
                   }`}

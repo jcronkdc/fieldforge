@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building, Code, DollarSign, Users, Zap, Shield, CheckCircle, ArrowRight, Compass, Ruler } from 'lucide-react';
+import { Building, Code, DollarSign, Users, Zap, Shield, CheckCircle, ArrowRight, Compass, Ruler, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export const AcquisitionInquiry: React.FC = () => {
@@ -15,11 +15,63 @@ export const AcquisitionInquiry: React.FC = () => {
     budget: ''
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Send to backend
-    alert('Thank you for your inquiry. We will contact you within 24 hours.');
-    navigate('/');
+    
+    if (!inquiryType) {
+      setSubmitError('Please select an inquiry type');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch('/api/acquisition-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          inquiryType,
+          ...formData,
+          submittedAt: new Date().toISOString(),
+          ipAddress: '', // Will be set server-side
+          userAgent: navigator.userAgent
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to submit inquiry');
+      }
+
+      setIsSuccess(true);
+      
+      // Reset form and redirect after delay
+      setTimeout(() => {
+        setFormData({
+          companyName: '',
+          contactName: '',
+          email: '',
+          phone: '',
+          projectDescription: '',
+          timeline: '',
+          budget: ''
+        });
+        setInquiryType(null);
+        setIsSuccess(false);
+        navigate('/');
+      }, 3000);
+      
+    } catch (error: any) {
+      console.error('Error submitting acquisition inquiry:', error);
+      setSubmitError(error.message || 'Failed to submit. Please try again or contact us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const benefits = [
@@ -161,12 +213,30 @@ export const AcquisitionInquiry: React.FC = () => {
           </div>
         </div>
 
+        {/* Success Message */}
+        {isSuccess && (
+          <div className="bg-green-500/10 border border-green-500/50 rounded-[21px] p-[55px] text-center max-w-2xl mx-auto mb-[34px]">
+            <CheckCircle2 className="w-[55px] h-[55px] text-green-400 mx-auto mb-[21px]" />
+            <h2 className="text-xl font-bold text-white mb-[13px]">Thank You!</h2>
+            <p className="text-blue-400/80">
+              We've received your inquiry and will contact you within 24 hours.
+            </p>
+          </div>
+        )}
+
         {/* Contact Form */}
-        {inquiryType && (
+        {inquiryType && !isSuccess && (
           <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[34px] rounded-[21px] border border-gray-700  ">
             <h2 className="text-xl font-bold text-white mb-[34px]  text-center">
               {inquiryType === 'acquire' ? 'Acquisition Inquiry' : 'Custom Development Inquiry'}
             </h2>
+            
+            {submitError && (
+              <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-[21px] mb-[34px] flex items-center gap-[13px]">
+                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+                <span className="text-red-400 text-sm">{submitError}</span>
+              </div>
+            )}
             
             <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-[21px]">
               <div className="grid md:grid-cols-2 gap-[21px]">
@@ -282,9 +352,20 @@ export const AcquisitionInquiry: React.FC = () => {
               <div className="flex justify-center pt-[21px]">
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[55px] py-[13px] text-white font-semibold   "
+                  disabled={isSubmitting}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[55px] py-[13px] text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-[8px]"
                 >
-                  Submit Inquiry
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Submitting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="w-5 h-5" />
+                      <span>Submit Inquiry</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>

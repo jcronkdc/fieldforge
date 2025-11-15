@@ -28,6 +28,7 @@ import { createTestingRouter } from "./construction/testing/testingRoutes.js";
 import { createDrawingRouter } from "./construction/drawings/drawingRoutes.js";
 import { createEquipmentTestingRouter } from "./construction/equipment/equipmentTestingRoutes.js";
 import { createLeadRouter } from "./routes/leadRoutes.js";
+import { createAcquisitionRouter } from "./routes/acquisitionRoutes.js";
 import { createEnvironmentalRouter } from "./construction/environmental/environmentalRoutes.js";
 import { createEmergencyRouter } from "./construction/emergency/emergencyRoutes.js";
 import { createUserRouter } from "./routes/userRoutes.js";
@@ -91,6 +92,9 @@ app.get("/health", (_req: Request, res: Response) => {
 
 // Public lead capture endpoint (no auth required)
 app.use("/api/leads", createLeadRouter());
+
+// Public acquisition inquiry endpoint (no auth required)
+app.use("/api/acquisition-inquiry", createAcquisitionRouter());
 
 // Health check endpoint (no auth required)
 app.get('/api/health', (_req: Request, res: Response) => {

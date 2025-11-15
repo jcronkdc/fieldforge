@@ -492,11 +492,11 @@ export const NewElectricalLanding: React.FC = () => {
             <h3 className="text-2xl font-bold text-white mb-6 text-center">
               Test Drive the Platform
             </h3>
-            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-slate-900/50 rounded-xl p-6 border border-blue-500/20">
                 <div className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-2">Field Worker</div>
                 <div className="text-white font-mono mb-1">demo@fieldforge.com</div>
-                <div className="text-xs text-slate-400 font-mono">password: demo123</div>
+                <div className="text-xs text-slate-400 font-mono">password: FieldForge2025!Demo</div>
               </div>
               <div className="bg-slate-900/50 rounded-xl p-6 border border-purple-500/20">
                 <div className="text-sm font-semibold text-purple-400 uppercase tracking-wider mb-2">Manager</div>
@@ -541,11 +541,17 @@ export const NewElectricalLanding: React.FC = () => {
             <div className="flex items-center gap-8 text-sm text-slate-400">
               <span>© 2025 Cronk Companies LLC</span>
               <span>•</span>
-              <button className="hover:text-white transition-colors">Privacy</button>
+              <a href="/privacy" className="hover:text-white transition-colors">
+                Privacy
+              </a>
               <span>•</span>
-              <button className="hover:text-white transition-colors">Terms</button>
+              <a href="/terms" className="hover:text-white transition-colors">
+                Terms
+              </a>
               <span>•</span>
-              <button className="hover:text-white transition-colors">Support</button>
+              <a href="/support" className="hover:text-white transition-colors">
+                Support
+              </a>
             </div>
           </div>
         </div>

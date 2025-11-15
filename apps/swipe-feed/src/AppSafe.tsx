@@ -32,6 +32,11 @@ import { ShowcasePage } from './components/showcase/ShowcasePage';
 import { AcquisitionInquiry } from './pages/AcquisitionInquiry';
 import { PaymentSuccess } from './pages/PaymentSuccess';
 
+// Legal / Support Pages
+import { LegalPrivacy } from './pages/LegalPrivacy';
+import { LegalTerms } from './pages/LegalTerms';
+import { SupportPage } from './pages/SupportPage';
+
 // Social & AI Components
 import { SocialFeed } from './components/feed/SocialFeed';
 import { AIAssistant } from './components/ai/AIAssistant';
@@ -223,6 +228,9 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
               <Route path="/contact" element={<ContactSales />} />
               <Route path="/showcase" element={<ShowcasePage />} />
               <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/privacy" element={<LegalPrivacy />} />
+              <Route path="/terms" element={<LegalTerms />} />
+              <Route path="/support" element={<SupportPage />} />
               
               <Route path="/signup" element={
                 session ? <Navigate to="/dashboard" replace /> : <FuturisticSignUp />
