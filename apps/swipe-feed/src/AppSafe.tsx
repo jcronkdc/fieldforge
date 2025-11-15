@@ -217,7 +217,6 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
               } />
               <Route path="/landing" element={<Landing />} />
               <Route path="/simple" element={<Landing />} />
-              <Route path="/renaissance-landing" element={<Landing />} />
               
               {/* Marketing Pages - Always Public */}
               <Route path="/pricing" element={<PricingPage />} />

@@ -86,7 +86,7 @@ function EquipmentMarker({ equipment }: { equipment: Equipment }) {
             <div className="font-bold">{equipment.name}</div>
             <div className="text-slate-400">{equipment.type}</div>
             <div className="text-slate-400">Operator: {equipment.operator}</div>
-            <div className={`text-${equipment.status === 'active' ? 'green' : equipment.status === 'idle' ? 'amber' : 'red'}-400`}>
+            <div className={`text-${equipment.status === 'active' ? 'green' : equipment.status === 'idle' ? 'yellow' : 'red'}-400`}>
               {equipment.status.toUpperCase()}
             </div>
           </div>
@@ -148,7 +148,7 @@ function CrewMarker({ crew }: { crew: CrewMember }) {
             {crew.heartRate && (
               <div className="text-red-400">HR: {crew.heartRate} bpm</div>
             )}
-            <div className={`text-${crew.status === 'active' ? 'blue' : crew.status === 'break' ? 'amber' : 'gray'}-400`}>
+            <div className={`text-${crew.status === 'active' ? 'blue' : crew.status === 'break' ? 'yellow' : 'gray'}-400`}>
               {crew.status.toUpperCase()}
             </div>
           </div>

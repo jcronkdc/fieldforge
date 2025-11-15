@@ -358,7 +358,7 @@ export const Dashboard: React.FC = () => {
             {/* Timeline Progress Bar */}
             <div className="relative">
               <div className="h-[8px] bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-blue-500 to-amber-600 rounded-full " style={{ width: '67%' }}></div>
+                <div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full " style={{ width: '67%' }}></div>
               </div>
               <div className="flex justify-between mt-[8px]">
                 <span className="text-xs text-blue-400/60">Start: Jan 15, 2025</span>

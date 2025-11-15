@@ -16,7 +16,7 @@ const spinnerSizes: Record<'small' | 'medium' | 'large' | 'fullscreen', string> 
 
 const Spinner: React.FC<{ size: FuturisticLoaderProps['size'] }> = ({ size = 'medium' }) => (
   <span
-    className={`inline-flex animate-spin rounded-full border-slate-700/60 border-t-amber-400/80 ${spinnerSizes[size]}`}
+    className={`inline-flex animate-spin rounded-full border-slate-700/60 border-t-blue-400/80 ${spinnerSizes[size]}`}
     role="status"
     aria-label="Loading"
   />
