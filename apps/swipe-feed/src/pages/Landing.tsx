@@ -42,13 +42,13 @@ export const Landing: React.FC = () => {
           {/* Technical Compass Rose */}
           <div className=" top-10 right-10" />
           
-          {/* Vitruvian Circle Overlay */}
+          {/* Circle Overlay */}
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-gray-700 
                style={{ transform: `translate(-50%, -50%) rotate(${scrollY * 0.05}deg)` }} />
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[382px] h-[382px] rounded-full border border-gray-700 
                style={{ transform: `translate(-50%, -50%) rotate(-${scrollY * 0.08}deg)` }} />
           
-          {/* Renaissance Glow Orbs */}
+          {/* Glow Orbs */}
           <div className="absolute top-20 left-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" 
                style={{ transform: `translateZ(${scrollY * 0.1}px)` }} />
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" 
@@ -76,7 +76,7 @@ export const Landing: React.FC = () => {
             </div>
             <span className="">Construction Management</span>
             <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-[#B87333] to-amber-600 text-blueprint">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600">
               Built for the Field
             </span>
           </h1>
@@ -89,20 +89,20 @@ export const Landing: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-[21px] justify-center mb-[55px] ">
             <Link 
               to="/signup" 
-              className="group px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all touch-golden  relative overflow-hidden "
+              className="group px-[34px] py-[13px] bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-semibold transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] hover:from-blue-600 hover:to-purple-700 relative overflow-hidden"
             >
               <span className="relative z-10">Start Free Trial</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" />
             </Link>
             <Link 
               to="/showcase" 
-              className="px-[34px] py-[13px] bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-[8px] font-semibold transition-all transform hover:scale-105 border border-gray-700 touch-golden relative"
+              className="px-[34px] py-[13px] bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white rounded-[8px] font-semibold transition-all transform hover:scale-105 border border-gray-700 relative"
             >
               <span className="relative z-10">Explore Features</span>
             </Link>
             <Link 
               to="/contact" 
-              className="px-[34px] py-[13px] border-2 border-gray-700 hover:border-gray-700 text-blue-300 hover:bg-blue-500/5 rounded-[8px] font-semibold transition-all transform hover:scale-105 border border-gray-700 touch-golden relative"
+              className="px-[34px] py-[13px] border-2 border-gray-700 hover:border-blue-500 text-blue-300 hover:bg-blue-500/5 rounded-[8px] font-semibold transition-all transform hover:scale-105 relative"
             >
               <span className="relative z-10">Request Demo</span>
             </Link>

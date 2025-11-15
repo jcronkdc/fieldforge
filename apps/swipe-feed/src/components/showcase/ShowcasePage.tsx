@@ -124,7 +124,7 @@ export const ShowcasePage: React.FC = () => {
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               Construction Software
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
                 That Actually Works
               </span>
               <br />
@@ -139,14 +139,14 @@ export const ShowcasePage: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-[21px] justify-center">
               <Link
                 to="/signup"
-                className="px-[34px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-[8px] transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all touch-golden "
+                className="px-[34px] py-[13px] bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] hover:from-blue-600 hover:to-purple-700"
               >
                 Start Free Trial
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <button
                 onClick={() => setIsPlaying(true)}
-                className="px-[34px] py-[13px] bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white font-semibold rounded-[8px] transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] border border-gray-700 touch-golden"
+                className="px-[34px] py-[13px] bg-white/10 backdrop-blur-xl hover:bg-white/20 text-white font-semibold rounded-[8px] transition-all transform hover:scale-105 flex items-center justify-center gap-[13px] border border-gray-700"
               >
                 <Play className="w-5 h-5" />
                 Watch 2-Min Demo
@@ -240,7 +240,7 @@ export const ShowcasePage: React.FC = () => {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   onClick={() => setActiveFeature(index)}
-                  className={`p-[21px] rounded-[13px] cursor-pointer transition-all card-vitruvian ${
+                  className={`p-[21px] rounded-[13px] cursor-pointer transition-all bg-gray-800/50 border border-gray-700 rounded-lg ${
                     activeFeature === index
                       ? 'bg-blue-500/20 border-2 border-gray-700 '
                       : 'bg-white/5 border-2 border-transparent hover:bg-white/10 '
@@ -373,7 +373,7 @@ export const ShowcasePage: React.FC = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-br from-blue-500/20 to-amber-600/20 rounded-3xl p-12 text-center"
+            className="bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-3xl p-12 text-center"
           >
             <Sparkles className="w-12 h-12 text-blue-400 mx-auto mb-6" />
             <blockquote className="text-2xl md:text-3xl font-medium text-white mb-6">

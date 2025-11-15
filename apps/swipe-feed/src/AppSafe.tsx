@@ -51,7 +51,6 @@ import { ProjectManager } from './components/projects/ProjectManager';
 // Test Components
 import { QATestRunner } from './pages/QATestRunner';
 import { AcquisitionEvaluation } from './tests/AcquisitionEvaluation';
-import { RenaissanceTest } from './pages/RenaissanceTest';
 
 // Onboarding
 import { WelcomePage } from './pages/WelcomePage';
@@ -241,9 +240,6 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
               
               {/* Acquisition Evaluation - Always accessible */}
               <Route path="/acquisition" element={<AcquisitionEvaluation />} />
-              
-              {/* Renaissance Theme Test - Always accessible */}
-              <Route path="/renaissance-test" element={<RenaissanceTest />} />
               
               {/* Acquisition & Custom Development - Always accessible */}
               <Route path="/acquisition-inquiry" element={<AcquisitionInquiry />} />
