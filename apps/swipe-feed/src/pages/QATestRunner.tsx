@@ -98,7 +98,7 @@ export const QATestRunner: React.FC = () => {
         </div>
 
         {/* Control Panel */}
-        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-gray-700
+        <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-gray-700">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-semibold mb-2">Test Controls</h2>
@@ -159,7 +159,7 @@ export const QATestRunner: React.FC = () => {
 
         {/* Results Summary */}
         {results && (
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-gray-700
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-gray-700">
             <h2 className="text-xl font-semibold mb-4">Test Results Summary</h2>
             <div className="grid md:grid-cols-5 gap-4">
               <div className="bg-slate-900/50 rounded-lg p-4 text-center">
@@ -201,7 +201,7 @@ export const QATestRunner: React.FC = () => {
 
         {/* Test Details */}
         {results && (
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-gray-700
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 mb-8 border border-gray-700">
             <h2 className="text-xl font-semibold mb-4">Test Details</h2>
             <div className="space-y-2">
               {results.results.map((result: TestResult, index: number) => (
@@ -240,7 +240,7 @@ export const QATestRunner: React.FC = () => {
 
         {/* Console Output */}
         {logs.length > 0 && (
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 border border-gray-700
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg p-6 border border-gray-700">
             <h2 className="text-xl font-semibold mb-4">Console Output</h2>
             <div className="bg-black/50 rounded-lg p-4 font-mono text-xs overflow-auto max-h-96">
               {logs.map((log, index) => (

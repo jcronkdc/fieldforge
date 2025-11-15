@@ -105,7 +105,7 @@ export const ShowcasePage: React.FC = () => {
         
         {/* Sacred Geometry Background */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-gray-700 
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-gray-700"
                style={{ transform: `translate(-50%, -50%) rotate(${scrollY * 0.03}deg)` }} />
         </div>
         

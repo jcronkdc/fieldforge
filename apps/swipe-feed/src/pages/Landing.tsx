@@ -43,9 +43,9 @@ export const Landing: React.FC = () => {
           <div className=" top-10 right-10" />
           
           {/* Circle Overlay */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-gray-700 
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[618px] h-[618px] rounded-full border border-gray-700"
                style={{ transform: `translate(-50%, -50%) rotate(${scrollY * 0.05}deg)` }} />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[382px] h-[382px] rounded-full border border-gray-700 
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[382px] h-[382px] rounded-full border border-gray-700"
                style={{ transform: `translate(-50%, -50%) rotate(-${scrollY * 0.08}deg)` }} />
           
           {/* Glow Orbs */}

@@ -12,7 +12,10 @@
     "typecheck": "cd backend && npm run typecheck && cd ../apps/swipe-feed && npm run typecheck"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "concurrently": "^7.6.0",
+    "@vercel/node": "^3.0.0",
+    "http-proxy-middleware": "^2.0.6",
+    "express": "^4.18.0"
   },
   "engines": {
     "node": "22.x"
