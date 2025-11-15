@@ -1,7 +1,7 @@
 # 🚀 **FIELDFORGE PRODUCTION CHECKLIST**
 
-**Status:** Platform Deployed & Live  
-**Deployment URL:** https://fieldforge-hkms2yqyl-justins-projects-d7153a8c.vercel.app  
+**Status:** Platform Deployed & Live
+**Deployment URL:** https://fieldforge-7ulpba2la-justins-projects-d7153a8c.vercel.app
 **Last Updated:** November 15, 2024
 
 ---
