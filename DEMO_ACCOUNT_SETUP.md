@@ -5,14 +5,10 @@
 Use these credentials to test FieldForge without creating an account:
 
 ```
-# DEMO ACCOUNTS (Updated - Home Page Credentials)
-Field Worker: demo@fieldforge.com / demo123
-Manager: manager@fieldforge.com / demo123
-Administrator: admin@fieldforge.com / demo123
-
-# SINGLE DEMO ACCOUNT (Old Setup)
-Email: demo@fieldforge.com
-Password: FieldForge2025!Demo
+# DEMO ACCOUNTS (Unified, 8+ character password)
+Field Worker:   demo@fieldforge.com    / FieldForge2025!Demo
+Manager:        manager@fieldforge.com / FieldForge2025!Demo
+Administrator:  admin@fieldforge.com   / FieldForge2025!Demo
 ```
 
 ## 📋 Manual Demo Account Creation (if needed)
@@ -99,6 +95,34 @@ BEGIN
   END IF;
 END $$;
 ```
+
+## 🚀 **IMMEDIATE NEXT STEP: Create Demo Accounts**
+
+**Status:** Backend APIs functional ✅ - Ready for demo account creation
+
+### **Quick Manual Setup:**
+1. **Go to Supabase Dashboard:**
+   https://supabase.com/dashboard/project/lzfzkrylexsarpxypktt/auth/users
+
+2. **Create Three Accounts:**
+   ```
+   Account 1: demo@fieldforge.com / FieldForge2025!Demo
+   Account 2: manager@fieldforge.com / FieldForge2025!Demo
+   Account 3: admin@fieldforge.com / FieldForge2025!Demo
+   ```
+   - Click "Add user" → "Create new user"
+   - Enter email and password
+   - ✅ Check "Auto Confirm Email"
+   - Click "Create user"
+
+3. **Run SQL Setup:**
+   - Go to SQL Editor in Supabase
+   - Run the contents of `supabase/create_demo_accounts.sql`
+
+4. **Test Login:**
+   - Visit: https://fieldforge-dtotsf378-justins-projects-d7153a8c.vercel.app/login
+   - Try logging in with any demo account
+   - Should redirect to dashboard
 
 ## 🔑 What the Demo Account Includes
 
