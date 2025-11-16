@@ -5,6 +5,12 @@
 Use these credentials to test FieldForge without creating an account:
 
 ```
+# DEMO ACCOUNTS (Updated - Home Page Credentials)
+Field Worker: demo@fieldforge.com / demo123
+Manager: manager@fieldforge.com / demo123
+Administrator: admin@fieldforge.com / demo123
+
+# SINGLE DEMO ACCOUNT (Old Setup)
 Email: demo@fieldforge.com
 Password: FieldForge2025!Demo
 ```

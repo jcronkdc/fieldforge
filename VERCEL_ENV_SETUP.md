@@ -1,84 +1,153 @@
-# Vercel Environment Variables Setup
+# 🚀 **VERCEL ENVIRONMENT VARIABLES - PRODUCTION SETUP**
 
-## Required Environment Variables
+## **Current Status: PARTIALLY CONFIGURED**
+- ✅ **Frontend Variables**: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, VITE_API_BASE_URL
+- ✅ **Stripe Frontend**: ITE_STRIPE_PUBLISHABLE_KEY (needs rename to VITE_STRIPE_PUBLISHABLE_KEY)
+- ✅ **Services**: ABLY keys, XAI_API_KEY, ADMIN_TOKEN
+- ❌ **Backend Critical**: DATABASE_URL, SUPABASE_SERVICE_KEY
+- ❌ **Payments**: STRIPE_SECRET_KEY, webhook secrets, price IDs
+- ❌ **Production Domain**: CORS_ORIGIN, FRONTEND_URL
 
-You need to add these environment variables in your Vercel project settings:
+---
 
-### 1. Go to Vercel Dashboard
-1. Navigate to your project
-2. Click on "Settings" tab
-3. Click on "Environment Variables" in the left sidebar
+## **🔴 IMMEDIATE ACTION REQUIRED**
 
-### 2. Add These Variables
+### **Execute These Commands to Complete Setup:**
 
-| Variable Name | Description | Where to Find It |
-|--------------|-------------|------------------|
-| `VITE_SUPABASE_URL` | Your Supabase project URL | Supabase Dashboard → Settings → API |
-| `VITE_SUPABASE_ANON_KEY` | Your Supabase anonymous key | Supabase Dashboard → Settings → API |
-| `VITE_GOOGLE_PLACES_API_KEY` | Google Places API key | Google Cloud Console |
+```bash
+# 1. Database Connection (Critical for backend)
+vercel env add DATABASE_URL
+# Value: postgresql://[user]:[password]@[host]:5432/postgres
 
-### 3. Example Values Format
+# 2. Supabase Admin Key (Critical for user management)
+vercel env add SUPABASE_SERVICE_KEY
+# Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
-```env
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-VITE_GOOGLE_PLACES_API_KEY=AIzaSy...
+# 3. Stripe Secrets (Critical for payments)
+vercel env add STRIPE_SECRET_KEY
+# Value: sk_live_...
+
+vercel env add STRIPE_WEBHOOK_SECRET
+# Value: whsec_...
+
+# 4. Stripe Price IDs (Required for subscriptions)
+vercel env add STRIPE_STARTER_PRICE_ID
+# Value: price_...
+
+vercel env add STRIPE_PRO_PRICE_ID
+# Value: price_...
+
+vercel env add STRIPE_ENTERPRISE_PRICE_ID
+# Value: price_...
+
+# 5. Fix Stripe Frontend Key Name (Typo)
+vercel env rm ITE_STRIPE_PUBLISHABLE_KEY
+vercel env add VITE_STRIPE_PUBLISHABLE_KEY
+# Value: pk_live_...
+
+# 6. Production Domain (Set after domain setup)
+vercel env add CORS_ORIGIN
+# Value: https://fieldforge.com
+
+vercel env add FRONTEND_URL
+# Value: https://fieldforge.com
 ```
 
-## Important Notes
+---
 
-⚠️ **VITE_ Prefix Required**: All client-side environment variables in Vite must be prefixed with `VITE_`
+## **📋 SETUP INSTRUCTIONS**
 
-⚠️ **Apply to All Environments**: Make sure to add these variables for:
-- Production
-- Preview
-- Development
+### **Step 1: Gather Required Values**
+1. **Supabase Service Key**: https://supabase.com/dashboard/project/lzfzkrylexsarpxypktt/settings/api
+2. **Database URL**: Supabase project settings → Database → Connection string
+3. **Stripe Keys**: https://dashboard.stripe.com/apikeys
+4. **Stripe Price IDs**: Create products in Stripe → Products → Pricing
 
-## After Adding Variables
+### **Step 2: Execute Commands**
+Run each `vercel env add` command and paste the value when prompted.
 
-1. **Redeploy your project** for changes to take effect
-2. **Verify routes work** by visiting `/test-routing` on your deployed site
-3. **Test authentication** by trying to log in with the demo account:
-   - Email: `demo@fieldforge.com`
-   - Password: `FieldForge2025!Demo`
+### **Step 3: Redeploy**
+```bash
+vercel --prod
+```
 
-## Troubleshooting
+### **Step 4: Verify**
+```bash
+vercel env ls  # Should show all variables
+```
 
-### If routes return 404:
-- Verify `vercel.json` exists with proper rewrites
-- Check that the build output directory is `dist`
+---
 
-### If authentication fails:
-- Verify Supabase URL and anon key are correct
-- Check that the values don't have extra spaces or quotes
-- Ensure variables are prefixed with `VITE_`
+## **🎯 WHAT THIS UNLOCKS**
 
-### If the app shows blank page:
-- Check browser console for errors
-- Verify all environment variables are set
-- Check build logs in Vercel dashboard
+**After completing this setup, these features become fully functional:**
 
-## Build Command Verification
+### ✅ **Authentication**
+- User registration and login
+- Password reset functionality
+- Session management
+- Admin user creation
 
-In Vercel project settings, ensure:
-- **Framework Preset**: Vite
-- **Build Command**: `npm run build` or leave as auto-detected
-- **Output Directory**: `dist`
-- **Install Command**: `npm install` or leave as auto-detected
+### ✅ **Database Operations**
+- Project creation and management
+- User profile management
+- Data persistence
+- Real-time updates
 
-## Test URLs After Deployment
+### ✅ **Payment Processing**
+- Subscription management
+- Stripe checkout integration
+- Customer portal access
+- Webhook processing
 
-Once deployed, test these URLs:
-- `/` - Should show futuristic landing page
-- `/test-routing` - Should show route testing page
-- `/login` - Should show login page
-- `/signup` - Should show signup page
-- `/dashboard` - Should redirect to `/` if not logged in
+### ✅ **Admin Features**
+- User management
+- System administration
+- Audit logging
+- Service integrations
 
-## Support
+---
 
-If issues persist after following this guide:
-1. Check Vercel build logs for errors
-2. Verify all environment variables are correctly set
-3. Test locally with the same environment variables
-4. Clear browser cache and try again
+## **🔍 VERIFICATION TESTS**
+
+**After deployment, test these endpoints:**
+```bash
+# API connectivity
+curl https://fieldforge-dtotsf378-justins-projects-d7153a8c.vercel.app/api/projects
+
+# Authentication (after adding demo accounts)
+# Visit login page and try demo credentials
+
+# Payments (after Stripe setup)
+# Visit pricing page and test checkout flow
+```
+
+---
+
+## **🚨 CRITICAL DEPENDENCIES**
+
+**This setup blocks:**
+- Demo account creation and testing
+- Project creation functionality
+- Payment processing
+- Admin operations
+- Full production readiness
+
+**Must be completed before:**
+- Domain setup and SSL
+- Production monitoring
+- Mobile device testing
+- Final launch verification
+
+---
+
+## **🍄 MYCELIAL STATUS**
+
+**The fruiting body is deployed, but the mycelial network lacks critical nutrients.**
+
+- **Frontend**: Connected and breathing
+- **Backend**: Starved of database and service connections
+- **Payments**: Circuits incomplete
+- **Admin**: Power source disconnected
+
+**Complete this setup to restore full mycelial flow.** 🍄⚡🔧

@@ -29,22 +29,36 @@
 
 ## 🔴 **IMMEDIATE ACTIONS REQUIRED**
 
-### 1. **Vercel Environment Variables**
-```bash
-# Add these in Vercel Dashboard → Settings → Environment Variables
+### 1. **Vercel Environment Variables - IN PROGRESS**
+**Status:** Partially configured - missing critical backend variables
 
-DATABASE_URL=                      # PostgreSQL connection string
-SUPABASE_URL=                     # From Supabase dashboard
-SUPABASE_ANON_KEY=                # From Supabase dashboard
-SUPABASE_SERVICE_KEY=             # From Supabase dashboard
-STRIPE_SECRET_KEY=                # From Stripe dashboard
-STRIPE_WEBHOOK_SECRET=            # After setting up webhook
-STRIPE_STARTER_PRICE_ID=          # From Stripe products
-STRIPE_PRO_PRICE_ID=              # From Stripe products
-STRIPE_ENTERPRISE_PRICE_ID=       # From Stripe products
-CORS_ORIGIN=https://fieldforge.com
-FRONTEND_URL=https://fieldforge.com
+**✅ Currently Set:**
+- VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, VITE_API_BASE_URL
+- ITE_STRIPE_PUBLISHABLE_KEY (needs rename), ABLY keys, ADMIN_TOKEN
+
+**❌ Still Missing (Execute these commands):**
+```bash
+# Critical for backend operations
+vercel env add DATABASE_URL
+vercel env add SUPABASE_SERVICE_KEY
+
+# Critical for payments
+vercel env add STRIPE_SECRET_KEY
+vercel env add STRIPE_WEBHOOK_SECRET
+vercel env add STRIPE_STARTER_PRICE_ID
+vercel env add STRIPE_PRO_PRICE_ID
+vercel env add STRIPE_ENTERPRISE_PRICE_ID
+
+# Fix typo in existing variable
+vercel env rm ITE_STRIPE_PUBLISHABLE_KEY
+vercel env add VITE_STRIPE_PUBLISHABLE_KEY
+
+# For production domain (after setup)
+vercel env add CORS_ORIGIN
+vercel env add FRONTEND_URL
 ```
+
+**📋 Setup Guide:** See `VERCEL_ENV_SETUP.md` for complete instructions.
 
 ### 2. **Supabase Setup**
 - [ ] Create Supabase project
@@ -128,6 +142,6 @@ Track these KPIs post-launch:
 
 Every pathway is traced. Every connection verified. The platform breathes.
 
-**Next Step:** Configure Vercel environment variables to activate full production mode.
+**Next Step:** Execute the Vercel environment variable setup commands in `VERCEL_ENV_SETUP.md` to activate full production functionality.
 
 ---
