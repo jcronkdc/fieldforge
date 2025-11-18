@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { 
   Cloud, TreePine, Droplets, Wind, AlertTriangle, CheckCircle, 
   FileText, Calendar, TrendingUp, Download, Upload, Plus,
-  AlertCircle, Activity, ThermometerSun, Volume2, Filter
+  AlertCircle, Activity, ThermometerSun, Volume2, Filter, Video
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface EnvironmentalReading {
   id: string;
@@ -65,6 +66,7 @@ export const EnvironmentalCompliance: React.FC = () => {
   const [showReadingForm, setShowReadingForm] = useState(false);
   const [selectedMetric, setSelectedMetric] = useState<string>('all');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const [showCollaboration, setShowCollaboration] = useState(false);
 
   // Form states
   const [readingForm, setReadingForm] = useState({
@@ -388,6 +390,35 @@ export const EnvironmentalCompliance: React.FC = () => {
     );
   }
 
+  // Full-screen collaboration mode
+  if (showCollaboration) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex flex-col">
+        {/* Context Banner */}
+        <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6" />
+            <div>
+              <h2 className="font-semibold">Environmental Audit Call</h2>
+              <p className="text-sm text-green-100">Compliance reviews • Permit discussions • Incident analysis • Regulatory coordination</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            Back to Compliance
+          </button>
+        </div>
+
+        {/* Collaboration Hub */}
+        <div className="flex-1 overflow-hidden">
+          <CollaborationHub />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -399,13 +430,22 @@ export const EnvironmentalCompliance: React.FC = () => {
           </h1>
           <p className="text-slate-400 mt-2">Monitor environmental metrics and maintain regulatory compliance</p>
         </div>
-        <button
-          onClick={() => setShowReadingForm(true)}
-          className="px-[21px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] touch-golden"
-        >
-          <Plus className="w-4 h-4" />
-          Record Reading
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowCollaboration(!showCollaboration)}
+            className="bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-[21px] py-[13px] rounded-[8px] flex items-center gap-[8px] transition-all"
+          >
+            <Video className="w-5 h-5" />
+            <span className="hidden sm:inline">Audit Call</span>
+          </button>
+          <button
+            onClick={() => setShowReadingForm(true)}
+            className="px-[21px] py-[13px] bg-blue-500 hover:bg-blue-600 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] touch-golden"
+          >
+            <Plus className="w-4 h-4" />
+            Record Reading
+          </button>
+        </div>
       </div>
 
       {/* Metrics Overview */}

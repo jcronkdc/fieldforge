@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Users, AlertCircle, CheckCircle, Plus, ChevronLeft, ChevronRight, Zap } from 'lucide-react';
+import { Calendar, Clock, Users, AlertCircle, CheckCircle, Plus, ChevronLeft, ChevronRight, Zap, Video } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface Activity {
   id: number;
@@ -49,6 +50,7 @@ export const ThreeWeekLookahead: React.FC = () => {
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentWeek, setCurrentWeek] = useState(0); // 0 = current week, 1 = next week, etc.
+  const [showCollaboration, setShowCollaboration] = useState(false);
   const [formData, setFormData] = useState({
     activity_name: '',
     description: '',
@@ -256,6 +258,35 @@ export const ThreeWeekLookahead: React.FC = () => {
     return score;
   };
 
+  // Full-screen collaboration mode
+  if (showCollaboration) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex flex-col">
+        {/* Context Banner */}
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6" />
+            <div>
+              <h2 className="font-semibold">Planning Session</h2>
+              <p className="text-sm text-purple-100">Schedule coordination • Constraint resolution • Resource planning • Team alignment</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            Back to Lookahead
+          </button>
+        </div>
+
+        {/* Collaboration Hub */}
+        <div className="flex-1 overflow-hidden">
+          <CollaborationHub />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6">
       <div className="max-w-7xl mx-auto">
@@ -264,13 +295,22 @@ export const ThreeWeekLookahead: React.FC = () => {
             <h1 className="text-3xl font-bold text-white mb-2">📅 Three Week Lookahead</h1>
             <p className="text-slate-400">Plan and track upcoming activities</p>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
-          >
-            <Plus className="w-5 h-5" />
-            Add Activity
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowCollaboration(!showCollaboration)}
+              className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+            >
+              <Video className="w-5 h-5" />
+              <span className="hidden sm:inline">Planning Call</span>
+            </button>
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+            >
+              <Plus className="w-5 h-5" />
+              Add Activity
+            </button>
+          </div>
         </div>
 
         {/* Week Navigation */}

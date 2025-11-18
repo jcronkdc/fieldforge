@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Users, HardHat, Plus, UserPlus, TrendingUp, Shield, Phone, Award, ChevronRight, Search, Filter, Star, Clock, AlertCircle, CheckCircle, Loader2, MapPin, Compass, Ruler } from 'lucide-react';
+import { Users, HardHat, Plus, UserPlus, TrendingUp, Shield, Phone, Award, ChevronRight, Search, Filter, Star, Clock, AlertCircle, CheckCircle, Loader2, MapPin, Compass, Ruler, Video } from 'lucide-react';
 import { format } from 'date-fns';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface Crew {
   id: string;
@@ -41,6 +42,7 @@ export const CrewManagement: React.FC = () => {
   const [showAddMemberForm, setShowAddMemberForm] = useState(false);
   const [filterType, setFilterType] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showCollaboration, setShowCollaboration] = useState(false);
 
   // Form states
   const [newCrew, setNewCrew] = useState({
@@ -251,6 +253,35 @@ export const CrewManagement: React.FC = () => {
     );
   }
 
+  // Full-screen collaboration mode
+  if (showCollaboration) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex flex-col">
+        {/* Context Banner */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6" />
+            <div>
+              <h2 className="font-semibold">Crew Coordination Call</h2>
+              <p className="text-sm text-blue-100">Crew planning • Assignment coordination • Skill discussions • Team briefings</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            Back to Crew Management
+          </button>
+        </div>
+
+        {/* Collaboration Hub */}
+        <div className="flex-1 overflow-hidden">
+          <CollaborationHub />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className=" p-[34px] max-w-7xl mx-auto space-y-[34px]">
       {/* Renaissance Decorations */}
@@ -265,13 +296,22 @@ export const CrewManagement: React.FC = () => {
           </h1>
           <p className="text-base text-blue-400/60 mt-[8px] " >Manage construction crews and assignments</p>
         </div>
-        <button
-          onClick={() => setShowCreateForm(true)}
-          className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[21px] py-[13px] flex items-center gap-[8px] "
-        >
-          <Plus className="w-5 h-5" />
-          <span className="">New Crew</span>
-        </button>
+        <div className="flex items-center gap-[13px]">
+          <button
+            onClick={() => setShowCollaboration(!showCollaboration)}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[21px] py-[13px] flex items-center gap-[8px]"
+          >
+            <Video className="w-5 h-5" />
+            <span className="hidden sm:inline">Crew Coordination</span>
+          </button>
+          <button
+            onClick={() => setShowCreateForm(true)}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[21px] py-[13px] flex items-center gap-[8px] "
+          >
+            <Plus className="w-5 h-5" />
+            <span className="">New Crew</span>
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards - Golden Ratio Grid */}

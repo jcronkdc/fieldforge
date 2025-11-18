@@ -501,12 +501,12 @@ export const NewElectricalLanding: React.FC = () => {
               <div className="bg-slate-900/50 rounded-xl p-6 border border-purple-500/20">
                 <div className="text-sm font-semibold text-purple-400 uppercase tracking-wider mb-2">Manager</div>
                 <div className="text-white font-mono mb-1">manager@fieldforge.com</div>
-                <div className="text-xs text-slate-400 font-mono">password: demo123</div>
+                <div className="text-xs text-slate-400 font-mono">password: FieldForge2025!Demo</div>
               </div>
               <div className="bg-slate-900/50 rounded-xl p-6 border border-green-500/20">
                 <div className="text-sm font-semibold text-green-400 uppercase tracking-wider mb-2">Administrator</div>
                 <div className="text-white font-mono mb-1">admin@fieldforge.com</div>
-                <div className="text-xs text-slate-400 font-mono">password: demo123</div>
+                <div className="text-xs text-slate-400 font-mono">password: FieldForge2025!Demo</div>
               </div>
             </div>
             <div className="text-center space-y-3">

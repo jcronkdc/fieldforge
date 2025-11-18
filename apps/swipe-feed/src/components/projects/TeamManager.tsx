@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft, UserPlus, Mail, Shield, Users, Settings,
   MoreVertical, Trash2, Edit, ChevronDown, Send,
-  CheckCircle, Clock, AlertCircle, UserCheck, X
+  CheckCircle, Clock, AlertCircle, UserCheck, X, MessageSquare
 } from 'lucide-react';
 import { projectService, Project, ProjectTeamMember } from '../../lib/services/projectService';
 import { EmptyState } from '../EmptyState';
@@ -12,13 +12,15 @@ interface TeamManagerProps {
   userRole: string | null;
   onBack: () => void;
   onManageCrews: () => void;
+  onOpenCollaboration?: () => void;
 }
 
 export const TeamManager: React.FC<TeamManagerProps> = ({ 
   project, 
   userRole, 
   onBack, 
-  onManageCrews 
+  onManageCrews,
+  onOpenCollaboration
 }) => {
   const [teamMembers, setTeamMembers] = useState<ProjectTeamMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -143,6 +145,16 @@ export const TeamManager: React.FC<TeamManagerProps> = ({
               </div>
             </div>
             <div className="flex items-center space-x-3">
+              {/* Team Collaboration Button - Always visible to team members */}
+              <button
+                onClick={onOpenCollaboration}
+                className="btn btn-gradient"
+                title="Open team collaboration (chat + video)"
+              >
+                <MessageSquare className="w-5 h-5" />
+                <span>Team Collaboration</span>
+              </button>
+              
               {canManageCrews && (
                 <button
                   onClick={onManageCrews}

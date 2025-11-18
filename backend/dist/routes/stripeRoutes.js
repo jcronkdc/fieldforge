@@ -9,10 +9,11 @@ const stripe_1 = __importDefault(require("stripe"));
 // Create router function
 function createStripeRouter() {
     const router = (0, express_1.Router)();
-    // Initialize Stripe with your secret key
-    const stripe = new stripe_1.default(process.env.STRIPE_SECRET_KEY || '', {
+    // Initialize Stripe only if API key is present
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    const stripe = stripeKey ? new stripe_1.default(stripeKey, {
         apiVersion: '2025-10-29.clover'
-    });
+    }) : null;
     // FieldForge pricing tiers
     const PRICING_PLANS = {
         starter: {
@@ -59,6 +60,10 @@ function createStripeRouter() {
     };
     // Create Stripe Checkout session
     router.post('/create-checkout-session', async (req, res) => {
+        if (!stripe) {
+            console.warn('Stripe checkout called but STRIPE_SECRET_KEY not configured');
+            return res.status(503).json({ error: 'Payment processing not configured' });
+        }
         try {
             const { plan, billingCycle = 'monthly' } = req.body;
             const userId = req.user?.id;
@@ -126,6 +131,10 @@ function createStripeRouter() {
     });
     // Get customer portal session
     router.post('/create-portal-session', async (req, res) => {
+        if (!stripe) {
+            console.warn('Stripe portal called but STRIPE_SECRET_KEY not configured');
+            return res.status(503).json({ error: 'Payment processing not configured' });
+        }
         try {
             const { customerId } = req.body;
             if (!customerId) {
@@ -147,6 +156,16 @@ function createStripeRouter() {
     });
     // Get subscription status
     router.get('/subscription-status', async (req, res) => {
+        if (!stripe) {
+            // Return mock subscription status when Stripe not configured
+            return res.json({
+                status: 'trialing',
+                plan: 'Starter',
+                trial: true,
+                currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+                cancelAtPeriodEnd: false
+            });
+        }
         try {
             const { customerId } = req.query;
             if (!customerId || typeof customerId !== 'string') {

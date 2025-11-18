@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FileText, ZoomIn, ZoomOut, RotateCw, Download, Upload, Grid, Maximize2, Layers, Ruler, Edit2, MessageSquare, Check, X, Plus } from 'lucide-react';
+import { FileText, ZoomIn, ZoomOut, RotateCw, Download, Upload, Grid, Maximize2, Layers, Ruler, Edit2, MessageSquare, Check, X, Plus, Users } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface Drawing {
   id: number;
@@ -62,6 +63,7 @@ export const DrawingViewer: React.FC = () => {
   const [selectedDrawing, setSelectedDrawing] = useState<Drawing | null>(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [showCollaboration, setShowCollaboration] = useState(false);
   const [filter, setFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [viewerState, setViewerState] = useState<ViewerState>({
@@ -349,14 +351,29 @@ export const DrawingViewer: React.FC = () => {
             </button>
           </div>
 
-          <a
-            href={selectedDrawing.file_url}
-            download={selectedDrawing.name}
-            className="bg-slate-800/90 backdrop-blur-sm rounded-lg p-2 text-slate-400 hover:text-white hover:bg-slate-700 transition"
-            title="Download"
-          >
-            <Download className="w-5 h-5" />
-          </a>
+          <div className="bg-slate-800/90 backdrop-blur-sm rounded-lg p-2 flex items-center gap-2">
+            <button
+              onClick={() => setShowCollaboration(!showCollaboration)}
+              className={`px-3 py-2 rounded transition flex items-center gap-2 ${
+                showCollaboration
+                  ? 'text-white bg-gradient-to-r from-blue-500 to-purple-600'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-700'
+              }`}
+              title="Collaborate with team (cursor control + video)"
+            >
+              <Users className="w-5 h-5" />
+              {showCollaboration ? 'Collaboration On' : 'Collaborate'}
+            </button>
+            <div className="w-px h-6 bg-slate-600" />
+            <a
+              href={selectedDrawing.file_url}
+              download={selectedDrawing.name}
+              className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded transition"
+              title="Download"
+            >
+              <Download className="w-5 h-5" />
+            </a>
+          </div>
         </div>
 
         {/* Drawing Display */}
@@ -475,7 +492,7 @@ export const DrawingViewer: React.FC = () => {
   return (
     <div className="h-screen flex">
       {/* Sidebar */}
-      <div className="w-80 bg-slate-800 border-r border-slate-700 flex flex-col">
+      <div className="w-80 bg-slate-800 border-r border-slate-700 flex flex-col" style={{ display: showCollaboration ? 'none' : 'flex' }}>
         <div className="p-6 border-b border-slate-700">
           <h1 className="text-2xl font-bold text-white mb-4">📐 Drawing Viewer</h1>
           
@@ -571,9 +588,34 @@ export const DrawingViewer: React.FC = () => {
       </div>
 
       {/* Viewer */}
-      <div className="flex-1">
+      <div className={`transition-all ${showCollaboration ? 'w-1/2' : 'flex-1'}`}>
         {renderViewer()}
       </div>
+
+      {/* Collaboration Panel (Side-by-Side) */}
+      {showCollaboration && selectedDrawing && (
+        <div className="w-1/2 bg-slate-800 border-l border-slate-700 overflow-y-auto">
+          <div className="p-4">
+            <div className="bg-blue-900/30 border border-blue-500/50 rounded-lg p-4 mb-4">
+              <div className="flex items-center gap-3">
+                <Users className="w-6 h-6 text-blue-400" />
+                <div>
+                  <h3 className="text-lg font-bold text-blue-300">Collaborative Drawing Review</h3>
+                  <p className="text-sm text-blue-400/80">
+                    {selectedDrawing.name} • Rev {selectedDrawing.revision}
+                  </p>
+                  <p className="text-xs text-blue-500/60 mt-1">
+                    Share your cursor to point at specific areas • Use video to discuss changes
+                  </p>
+                </div>
+              </div>
+            </div>
+            <CollaborationHub 
+              projectId={selectedDrawing.project_id.toString()} 
+            />
+          </div>
+        </div>
+      )}
 
       {/* Upload Form Modal */}
       {uploadForm.file && (

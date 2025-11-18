@@ -5,10 +5,11 @@ import Stripe from 'stripe';
 export function createStripeRouter() {
   const router = Router();
   
-  // Initialize Stripe with your secret key
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+  // Initialize Stripe only if API key is present
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  const stripe = stripeKey ? new Stripe(stripeKey, {
     apiVersion: '2025-10-29.clover'
-  });
+  }) : null;
 
   // FieldForge pricing tiers
   const PRICING_PLANS = {
@@ -57,6 +58,11 @@ export function createStripeRouter() {
 
   // Create Stripe Checkout session
   router.post('/create-checkout-session', async (req: Request, res: Response) => {
+    if (!stripe) {
+      console.warn('Stripe checkout called but STRIPE_SECRET_KEY not configured');
+      return res.status(503).json({ error: 'Payment processing not configured' });
+    }
+    
     try {
       const { plan, billingCycle = 'monthly' } = req.body;
       const userId = (req as any).user?.id;
@@ -129,6 +135,11 @@ export function createStripeRouter() {
 
   // Get customer portal session
   router.post('/create-portal-session', async (req: Request, res: Response) => {
+    if (!stripe) {
+      console.warn('Stripe portal called but STRIPE_SECRET_KEY not configured');
+      return res.status(503).json({ error: 'Payment processing not configured' });
+    }
+    
     try {
       const { customerId } = req.body;
       
@@ -153,6 +164,17 @@ export function createStripeRouter() {
 
   // Get subscription status
   router.get('/subscription-status', async (req: Request, res: Response) => {
+    if (!stripe) {
+      // Return mock subscription status when Stripe not configured
+      return res.json({
+        status: 'trialing',
+        plan: 'Starter',
+        trial: true,
+        currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        cancelAtPeriodEnd: false
+      });
+    }
+    
     try {
       const { customerId } = req.query;
       

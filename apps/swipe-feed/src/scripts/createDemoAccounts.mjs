@@ -8,7 +8,7 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || process.env.SUPAB
 const demoAccounts = [
   {
     email: 'demo@fieldforge.com',
-    password: 'demo123',
+    password: 'FieldForge2025!Demo',
     firstName: 'Demo',
     lastName: 'Worker',
     jobTitle: 'Field Technician',
@@ -16,7 +16,7 @@ const demoAccounts = [
   },
   {
     email: 'manager@fieldforge.com',
-    password: 'demo123',
+    password: 'FieldForge2025!Demo',
     firstName: 'Demo',
     lastName: 'Manager',
     jobTitle: 'Project Manager',
@@ -24,7 +24,7 @@ const demoAccounts = [
   },
   {
     email: 'admin@fieldforge.com',
-    password: 'demo123',
+    password: 'FieldForge2025!Demo',
     firstName: 'Demo',
     lastName: 'Admin',
     jobTitle: 'Administrator',

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, Activity, AlertTriangle, CheckCircle, Clock, Calendar, TrendingUp, BarChart3, Shield, FileText, Download, Filter, Compass, Ruler } from 'lucide-react';
+import { Zap, Activity, AlertTriangle, CheckCircle, Clock, Calendar, TrendingUp, BarChart3, Shield, FileText, Download, Filter, Compass, Ruler, Video } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface TestResult {
   id: number;
@@ -68,6 +69,7 @@ export const TestingDashboard: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'pass' | 'fail' | 'warning'>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
   const [dateRange, setDateRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
+  const [showCollaboration, setShowCollaboration] = useState(false);
   const [formData, setFormData] = useState({
     equipment_id: 0,
     test_type: 'insulation',
@@ -239,6 +241,35 @@ export const TestingDashboard: React.FC = () => {
     );
   }
 
+  // Full-screen collaboration mode
+  if (showCollaboration) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex flex-col">
+        {/* Context Banner */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6" />
+            <div>
+              <h2 className="font-semibold">Testing Review Call</h2>
+              <p className="text-sm text-blue-100">Test verification • Results analysis • Diagnostic discussions • Compliance reviews</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            Back to Testing
+          </button>
+        </div>
+
+        {/* Collaboration Hub */}
+        <div className="flex-1 overflow-hidden">
+          <CollaborationHub />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className=" p-[34px]">
       {/* Renaissance Decorations */}
@@ -255,6 +286,14 @@ export const TestingDashboard: React.FC = () => {
           </div>
           
           <div className="flex items-center gap-[13px]">
+            <button
+              onClick={() => setShowCollaboration(!showCollaboration)}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg px-[21px] py-[13px] flex items-center gap-[8px] transition-all"
+            >
+              <Video className="w-5 h-5" />
+              <span className="hidden sm:inline">Review Call</span>
+            </button>
+            
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}

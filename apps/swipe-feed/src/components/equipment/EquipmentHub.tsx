@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Package, Truck, Wrench, Calendar, QrCode, Search, Filter, Plus, AlertTriangle, Compass, Ruler } from 'lucide-react';
+import { Package, Truck, Wrench, Calendar, QrCode, Search, Filter, Plus, AlertTriangle, Compass, Ruler, Video } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { format, differenceInDays } from 'date-fns';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface Equipment {
   id: string;
@@ -36,6 +37,7 @@ export const EquipmentHub: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [showAddForm, setShowAddForm] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const [showCollaboration, setShowCollaboration] = useState(false);
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -171,6 +173,34 @@ export const EquipmentHub: React.FC = () => {
     return matchesSearch && matchesFilter;
   });
 
+  // If showing collaboration, render it fullscreen
+  if (showCollaboration) {
+    return (
+      <div className="p-[34px] max-w-7xl mx-auto">
+        <div className="mb-6">
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2"
+          >
+            ← Back to Equipment Hub
+          </button>
+        </div>
+        <div className="bg-blue-900/30 border border-blue-500/50 rounded-lg p-4 mb-4">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6 text-blue-400" />
+            <div>
+              <h3 className="text-lg font-bold text-blue-300">Equipment Team Collaboration</h3>
+              <p className="text-sm text-blue-400/80">
+                Video inspections • Remote equipment reviews • Maintenance coordination
+              </p>
+            </div>
+          </div>
+        </div>
+        <CollaborationHub projectId="equipment-hub" />
+      </div>
+    );
+  }
+
   return (
     <div className=" p-[34px] max-w-7xl mx-auto space-y-[34px]">
       {/* Renaissance Decorations */}
@@ -187,6 +217,14 @@ export const EquipmentHub: React.FC = () => {
         </div>
         <div className="flex gap-2">
           <button
+            onClick={() => setShowCollaboration(true)}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[21px] py-[13px] flex items-center gap-[8px]"
+            title="Start video inspection or equipment discussion"
+          >
+            <Video className="w-5 h-5" />
+            <span className="hidden sm:inline">Video Inspection</span>
+          </button>
+          <button
             onClick={() => setShowScanner(true)}
             className="btn-blueprint px-[21px] py-[13px] flex items-center gap-[8px] "
           >
@@ -195,7 +233,7 @@ export const EquipmentHub: React.FC = () => {
           </button>
           <button
             onClick={() => setShowAddForm(true)}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[21px] py-[13px] flex items-center gap-[8px] "
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all px-[21px] py-[13px] flex items-center gap-[8px] "
           >
             <Plus className="w-5 h-5" />
             <span className="hidden sm:inline ">Add Equipment</span>

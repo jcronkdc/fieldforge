@@ -1,70 +1,64 @@
+/**
+ * Vercel Serverless Function - Express Backend Wrapper
+ * 
+ * This handler imports the full FieldForge Express backend
+ * and routes all /api/* requests through it.
+ */
+
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
-  const { path } = req.query;
+// Lazy-load the Express app to avoid cold start issues
+let app: any = null;
 
-  // Handle different API endpoints
-  if (Array.isArray(path)) {
-    const endpoint = path.join('/');
-
-    // Stripe payments endpoints
-    if (endpoint.startsWith('payments/')) {
-      return handleStripePayments(req, res, endpoint);
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  try {
+    // Set Vercel environment flag to prevent Express from calling listen()
+    process.env.VERCEL = '1';
+    
+    // Load the Express app on first request
+    if (!app) {
+      const serverModule = await import('../backend/dist/server.js');
+      
+      console.log('Server module details:', {
+        moduleKeys: Object.keys(serverModule),
+        hasDefault: !!serverModule.default,
+        defaultType: typeof serverModule.default,
+        defaultIsFunction: typeof serverModule.default === 'function',
+        defaultConstructor: serverModule.default?.constructor?.name,
+        defaultKeys: serverModule.default ? Object.keys(serverModule.default).slice(0, 10) : []
+      });
+      
+      // Try to get the app - it might be wrapped
+      app = serverModule.default?.default || serverModule.default || serverModule;
+      
+      console.log('Final app details:', {
+        type: typeof app,
+        isFunction: typeof app === 'function',
+        constructor: app?.constructor?.name
+      });
+      
+      if (typeof app !== 'function') {
+        // Last resort: maybe it's in a different export
+        const allExports = Object.entries(serverModule)
+          .filter(([key, value]) => typeof value === 'function')
+          .map(([key]) => key);
+        
+        console.error('ERROR: app is not a function!', {
+          type: typeof app,
+          availableFunctionExports: allExports
+        });
+        throw new Error(`Invalid Express app export: type=${typeof app}, available functions: ${allExports.join(', ')}`);
+      }
     }
-
-    // Webhook endpoints
-    if (endpoint.startsWith('webhook/')) {
-      return handleStripeWebhook(req, res, endpoint);
-    }
-
-    // Lead/contact endpoints
-    if (endpoint === 'leads') {
-      return handleLeads(req, res);
-    }
-  }
-
-  // Default response for unhandled endpoints
-  res.status(404).json({
-    error: 'Endpoint not implemented',
-    message: 'This API endpoint is not yet available in the deployed version.',
-    path: req.url
-  });
-}
-
-// Simple Stripe payments handler (mock for now)
-function handleStripePayments(req: VercelRequest, res: VercelResponse, endpoint: string) {
-  if (req.method === 'POST' && endpoint === 'payments/create-checkout-session') {
-    res.json({
-      url: 'https://checkout.stripe.com/test_session_placeholder',
-      message: 'Stripe integration coming soon - contact support for beta access'
+    
+    // Express apps can be used as request handlers
+    return app(req, res);
+  } catch (error) {
+    console.error('Serverless function error:', error);
+    return res.status(500).json({
+      error: 'Internal Server Error',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      details: process.env.NODE_ENV === 'development' ? error : undefined
     });
-  } else if (req.method === 'GET' && endpoint === 'payments/subscription-status') {
-    res.json({
-      status: 'trialing',
-      plan: 'Starter',
-      trial: true,
-      currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-      cancelAtPeriodEnd: false
-    });
-  } else {
-    res.status(404).json({ error: 'Payment endpoint not found' });
-  }
-}
-
-// Simple webhook handler (mock)
-function handleStripeWebhook(req: VercelRequest, res: VercelResponse, endpoint: string) {
-  res.json({ received: true, endpoint });
-}
-
-// Simple leads handler
-function handleLeads(req: VercelRequest, res: VercelResponse) {
-  if (req.method === 'POST') {
-    res.json({
-      success: true,
-      message: 'Thank you for your inquiry. We will contact you within 24 hours.',
-      id: 'lead_' + Date.now()
-    });
-  } else {
-    res.status(405).json({ error: 'Method not allowed' });
   }
 }

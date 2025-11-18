@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Receipt, Camera, Upload, Download, Search, Calendar, DollarSign, Building2, Tag, Loader2, CheckCircle, AlertCircle, Filter, FileText } from 'lucide-react';
+import { Receipt, Camera, Upload, Download, Search, Calendar, DollarSign, Building2, Tag, Loader2, CheckCircle, AlertCircle, Filter, FileText, Video } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface ReceiptData {
   id: string;
@@ -48,6 +49,7 @@ export const ReceiptManager: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [showCollaboration, setShowCollaboration] = useState(false);
 
   // Form state
   const [newReceipt, setNewReceipt] = useState({
@@ -300,6 +302,35 @@ export const ReceiptManager: React.FC = () => {
     );
   }
 
+  // Full-screen collaboration mode
+  if (showCollaboration) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex flex-col">
+        {/* Context Banner */}
+        <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6" />
+            <div>
+              <h2 className="font-semibold">Approval Review Call</h2>
+              <p className="text-sm text-green-100">Expense reviews • Approval discussions • Budget analysis • Vendor coordination</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            Back to Receipts
+          </button>
+        </div>
+
+        {/* Collaboration Hub */}
+        <div className="flex-1 overflow-hidden">
+          <CollaborationHub />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
@@ -308,13 +339,22 @@ export const ReceiptManager: React.FC = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Receipt Manager</h1>
           <p className="text-gray-600 mt-1">Track and manage expense receipts</p>
         </div>
-        <button
-          onClick={() => setShowUploadModal(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 min-h-[44px]"
-        >
-          <Upload className="w-4 h-4" />
-          Add Receipt
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowCollaboration(!showCollaboration)}
+            className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg transition-all flex items-center gap-2 min-h-[44px]"
+          >
+            <Video className="w-4 h-4" />
+            <span className="hidden sm:inline">Approval Call</span>
+          </button>
+          <button
+            onClick={() => setShowUploadModal(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 min-h-[44px]"
+          >
+            <Upload className="w-4 h-4" />
+            Add Receipt
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}

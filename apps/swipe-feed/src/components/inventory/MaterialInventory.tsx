@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Package, AlertTriangle, TrendingUp, TrendingDown, Plus, Edit2, Search, Filter, BarChart3 } from 'lucide-react';
+import { Package, AlertTriangle, TrendingUp, TrendingDown, Plus, Edit2, Search, Filter, BarChart3, Video } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface Material {
   id: number;
@@ -57,6 +58,7 @@ export const MaterialInventory: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
+  const [showCollaboration, setShowCollaboration] = useState(false);
   const [transactionData, setTransactionData] = useState({
     material_id: 0,
     transaction_type: 'issue' as Transaction['transaction_type'],
@@ -238,6 +240,35 @@ export const MaterialInventory: React.FC = () => {
     outOfStock: materials.filter(m => m.quantity_available <= 0).length
   };
 
+  // Full-screen collaboration mode
+  if (showCollaboration) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex flex-col">
+        {/* Context Banner */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6" />
+            <div>
+              <h2 className="font-semibold">Procurement Coordination</h2>
+              <p className="text-sm text-blue-100">Material planning • Supplier coordination • Stock discussions • Order reviews</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            Back to Inventory
+          </button>
+        </div>
+
+        {/* Collaboration Hub */}
+        <div className="flex-1 overflow-hidden">
+          <CollaborationHub />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6">
       <div className="max-w-7xl mx-auto">
@@ -246,13 +277,22 @@ export const MaterialInventory: React.FC = () => {
             <h1 className="text-3xl font-bold text-white mb-2">📦 Material Inventory</h1>
             <p className="text-slate-400">Track and manage construction materials</p>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
-          >
-            <Plus className="w-5 h-5" />
-            Add Material
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowCollaboration(!showCollaboration)}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+            >
+              <Video className="w-5 h-5" />
+              <span className="hidden sm:inline">Procurement Call</span>
+            </button>
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+            >
+              <Plus className="w-5 h-5" />
+              Add Material
+            </button>
+          </div>
         </div>
 
         {/* Stats Cards */}

@@ -12,10 +12,12 @@ import {
   Calendar,
   DollarSign,
   Send,
-  Eye
+  Eye,
+  Video
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { EmptyState } from '../EmptyState';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface RFI {
   id: string;
@@ -41,6 +43,7 @@ export const RFIManager: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [loading, setLoading] = useState(true);
+  const [showCollaboration, setShowCollaboration] = useState(false);
 
   const [newRFI, setNewRFI] = useState({
     title: '',
@@ -147,14 +150,54 @@ export const RFIManager: React.FC = () => {
     'schedule', 'safety', 'testing', 'commissioning', 'other'
   ];
 
+  // Full-screen collaboration mode
+  if (showCollaboration) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex flex-col">
+        {/* Context Banner */}
+        <div className="bg-gradient-to-r from-yellow-600 to-orange-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6" />
+            <div>
+              <h2 className="font-semibold">RFI Resolution Call</h2>
+              <p className="text-sm text-yellow-100">Question clarification • Design discussions • Specification reviews • Impact analysis</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            Back to RFIs
+          </button>
+        </div>
+
+        {/* Collaboration Hub */}
+        <div className="flex-1 overflow-hidden">
+          <CollaborationHub />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-gray-900 rounded-lg p-6">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-          <FileQuestion className="w-6 h-6 text-yellow-500" />
-          RFI Management
-        </h2>
-        <p className="text-gray-400">Track and manage Requests for Information</p>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+              <FileQuestion className="w-6 h-6 text-yellow-500" />
+              RFI Management
+            </h2>
+            <p className="text-gray-400">Track and manage Requests for Information</p>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(!showCollaboration)}
+            className="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all"
+          >
+            <Video className="w-5 h-5" />
+            <span className="hidden sm:inline">Resolution Call</span>
+          </button>
+        </div>
       </div>
 
       {!isCreatingNew ? (

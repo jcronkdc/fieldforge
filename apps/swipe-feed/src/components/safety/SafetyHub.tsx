@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, AlertTriangle, Activity, FileText, Users, Calendar, TrendingUp, Clock, Compass, Zap } from 'lucide-react';
+import { Shield, AlertTriangle, Activity, FileText, Users, Calendar, TrendingUp, Clock, Compass, Zap, Video } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { format, differenceInDays } from 'date-fns';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface SafetyMetrics {
   daysWithoutIncident: number;
@@ -45,6 +46,7 @@ export const SafetyHub: React.FC = () => {
   const [recentIncidents, setRecentIncidents] = useState<SafetyIncident[]>([]);
   const [loading, setLoading] = useState(false);
   const [showReportForm, setShowReportForm] = useState(false);
+  const [showCollaboration, setShowCollaboration] = useState(false);
   const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
@@ -185,6 +187,23 @@ export const SafetyHub: React.FC = () => {
     }
   };
 
+  // If showing collaboration, render it fullscreen
+  if (showCollaboration) {
+    return (
+      <div className="p-[34px] max-w-7xl mx-auto">
+        <div className="mb-6">
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2"
+          >
+            ← Back to Safety Hub
+          </button>
+        </div>
+        <CollaborationHub projectId="safety-hub" />
+      </div>
+    );
+  }
+
   return (
     <div className="p-[34px] max-w-7xl mx-auto space-y-[34px]">
       {/* Header */}
@@ -200,13 +219,24 @@ export const SafetyHub: React.FC = () => {
           <h1 className="text-xl font-bold text-white mb-[8px] ">Safety Hub</h1>
           <p className="text-blue-400/60 " >Monitor safety performance and manage incidents</p>
         </div>
-        <button
-          onClick={() => setShowReportForm(true)}
-          className="px-[34px] py-[13px] bg-red-600 hover:bg-red-700 text-white rounded-[8px] font-semibold flex items-center gap-[8px] transition-all bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all  "
-        >
-          <AlertTriangle className="w-4 h-4" />
-          Report Incident
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Safety Team Collaboration Button */}
+          <button
+            onClick={() => setShowCollaboration(true)}
+            className="px-[21px] py-[13px] bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all flex items-center gap-[8px] font-semibold"
+            title="Start safety team video call or chat"
+          >
+            <Video className="w-4 h-4" />
+            Safety Team Call
+          </button>
+          <button
+            onClick={() => setShowReportForm(true)}
+            className="px-[34px] py-[13px] bg-red-600 hover:bg-red-700 text-white rounded-[8px] font-semibold flex items-center gap-[8px] transition-all"
+          >
+            <AlertTriangle className="w-4 h-4" />
+            Report Incident
+          </button>
+        </div>
       </div>
 
       {/* Key Metrics */}

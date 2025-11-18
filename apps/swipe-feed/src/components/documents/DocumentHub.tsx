@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FileText, Upload, Download, Share2, Folder, Search, Filter, Grid, List, File, Image, FileSpreadsheet, Eye, Trash2, Plus, Loader2, X, Calendar, User, FolderOpen } from 'lucide-react';
+import { FileText, Upload, Download, Share2, Folder, Search, Filter, Grid, List, File, Image, FileSpreadsheet, Eye, Trash2, Plus, Loader2, X, Calendar, User, FolderOpen, Video } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface Document {
   id: string;
@@ -46,6 +47,7 @@ export const DocumentHub: React.FC = () => {
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showCollaboration, setShowCollaboration] = useState(false);
 
   // Form states
   const [newFolder, setNewFolder] = useState({ name: '' });
@@ -251,6 +253,35 @@ export const DocumentHub: React.FC = () => {
     );
   }
 
+  // Full-screen collaboration mode
+  if (showCollaboration) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex flex-col">
+        {/* Context Banner */}
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6" />
+            <div>
+              <h2 className="font-semibold">Document Review Call</h2>
+              <p className="text-sm text-blue-100">File reviews • Collaborative markups • Version discussions • Approval coordination</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            Back to Documents
+          </button>
+        </div>
+
+        {/* Collaboration Hub */}
+        <div className="flex-1 overflow-hidden">
+          <CollaborationHub />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
@@ -260,6 +291,13 @@ export const DocumentHub: React.FC = () => {
           <p className="text-gray-600 mt-1">Central repository for all project documents</p>
         </div>
         <div className="flex gap-2">
+          <button
+            onClick={() => setShowCollaboration(!showCollaboration)}
+            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg transition-all flex items-center gap-2 min-h-[44px]"
+          >
+            <Video className="w-4 h-4" />
+            <span className="hidden sm:inline">Review Call</span>
+          </button>
           <button
             onClick={() => setShowCreateFolder(true)}
             className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2 min-h-[44px]"

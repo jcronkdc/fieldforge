@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import {
   Folder, FolderPlus, Archive, Users, Settings, ChevronRight,
   Calendar, Zap, Shield, Search, Filter, Plus, MoreVertical,
-  Building2, UserPlus, Mail, Clock, CheckCircle, AlertCircle
+  Building2, UserPlus, Mail, Clock, CheckCircle, AlertCircle, MessageSquare
 } from 'lucide-react';
 import { projectService, Project } from '../../lib/services/projectService';
 import { ProjectCreator } from './ProjectCreator';
 import { TeamManager } from './TeamManager';
 import { CrewManager } from './CrewManager';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 import { EmptyState } from '../EmptyState';
 
 export const ProjectManager: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [view, setView] = useState<'list' | 'create' | 'team' | 'crews'>('list');
+  const [view, setView] = useState<'list' | 'create' | 'team' | 'crews' | 'collaboration'>('list');
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showArchived, setShowArchived] = useState(false);
@@ -99,6 +100,7 @@ export const ProjectManager: React.FC = () => {
         userRole={userRole}
         onBack={() => setView('list')}
         onManageCrews={() => setView('crews')}
+        onOpenCollaboration={() => setView('collaboration')}
       />
     );
   }
@@ -110,6 +112,39 @@ export const ProjectManager: React.FC = () => {
         userRole={userRole}
         onBack={() => setView('team')}
       />
+    );
+  }
+
+  if (view === 'collaboration' && selectedProject) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4">
+        <div className="max-w-7xl mx-auto">
+          {/* Header with Back Button */}
+          <div className="bg-gray-800/50 backdrop-blur-xl rounded-2xl p-6 mb-6 border border-gray-700/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setView('team')}
+                  className="btn btn-ghost px-2 py-2"
+                  type="button"
+                  aria-label="Back to team"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-400 rotate-180" />
+                </button>
+                <div>
+                  <h1 className="text-2xl font-bold text-white">{selectedProject.name}</h1>
+                  <p className="text-gray-400 text-sm">Team Collaboration • {selectedProject.project_number}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Collaboration Hub */}
+          <CollaborationHub 
+            projectId={selectedProject.id} 
+          />
+        </div>
+      </div>
     );
   }
 

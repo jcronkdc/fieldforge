@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Power, AlertTriangle, Users, Clock, MapPin, Phone, Calendar, CheckCircle, XCircle, Radio, Zap, Shield, Ruler } from 'lucide-react';
+import { Power, AlertTriangle, Users, Clock, MapPin, Phone, Calendar, CheckCircle, XCircle, Radio, Zap, Shield, Ruler, Video } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface Outage {
   id: string;
@@ -43,6 +44,7 @@ export const OutageCoordination: React.FC = () => {
   const [filter, setFilter] = useState('all');
   const [selectedOutage, setSelectedOutage] = useState<Outage | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCollaboration, setShowCollaboration] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -283,6 +285,35 @@ export const OutageCoordination: React.FC = () => {
     );
   }
 
+  // Full-screen collaboration mode
+  if (showCollaboration) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex flex-col">
+        {/* Context Banner */}
+        <div className="bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Video className="w-6 h-6" />
+            <div>
+              <h2 className="font-semibold">Outage Planning Call</h2>
+              <p className="text-sm text-red-100">Switching coordination • Multi-crew planning • Safety reviews • Customer impact discussions</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            Back to Outage Coordination
+          </button>
+        </div>
+
+        {/* Collaboration Hub */}
+        <div className="flex-1 overflow-hidden">
+          <CollaborationHub />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950  ">
       <div className="p-[34px]">
@@ -293,6 +324,13 @@ export const OutageCoordination: React.FC = () => {
           </div>
           <h1 className="text-2xl font-bold text-white mb-[13px]">Outage Coordination</h1>
           <p className="text-base text-slate-300">Platform's Planning Brain</p>
+          <button
+            onClick={() => setShowCollaboration(!showCollaboration)}
+            className="mt-4 bg-gradient-to-r from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 text-white px-[21px] py-[13px] rounded-[8px] flex items-center gap-[8px] mx-auto transition-all"
+          >
+            <Video className="w-5 h-5" />
+            <span className="hidden sm:inline">Planning Call</span>
+          </button>
       </div>
 
       {/* Active Outages Alert */}

@@ -40,6 +40,8 @@ import { createSubstationRouter } from "./routes/substationRoutes.js";
 import { createAIRouter } from "./routes/aiRoutes.js";
 import { createStripeRouter } from "./routes/stripeRoutes.js";
 import { createStripeWebhookRouter } from "./routes/stripeWebhookRoutes.js";
+import { createMessagingRouter } from "./messaging/messagingRoutes.js";
+import { createCollaborationRouter } from "./collaboration/collaborationRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -54,6 +56,9 @@ import { createStripeWebhookRouter } from "./routes/stripeWebhookRoutes.js";
 
 const env = loadEnv();
 const app = express();
+
+// Trust Vercel proxy for accurate client IP detection
+app.set('trust proxy', 1);
 
 // Configure CORS with security best practices
 const corsOptions = {
@@ -201,6 +206,12 @@ app.use("/api/ai", createAIRouter());
 
 // Payment Processing - STRIPE INTEGRATION ✅  
 app.use("/api/payments", createStripeRouter());
+
+// Team Messaging - REAL-TIME COLLABORATION WITH INVITE-ONLY GROUPS ✅
+app.use("/api/messaging", createMessagingRouter());
+
+// Video Collaboration - DAILY.CO INTEGRATION WITH CURSOR CONTROL ✅
+app.use("/api/collaboration", createCollaborationRouter());
 
 // Settings are now part of user routes (/api/users/settings)
 

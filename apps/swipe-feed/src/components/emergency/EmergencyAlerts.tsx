@@ -3,12 +3,13 @@ import {
   AlertTriangle, Bell, Radio, MapPin, Users, Phone,
   CheckCircle2, XCircle, Clock, Volume2, Zap, Shield,
   Navigation, Send, ChevronRight, Siren, AlertCircle,
-  Info, X, Map, PhoneCall, MessageSquare, Megaphone
+  Info, X, Map, PhoneCall, MessageSquare, Megaphone, Video
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface EmergencyAlert {
   id: string;
@@ -46,6 +47,7 @@ export const EmergencyAlerts: React.FC = () => {
   const [acknowledgments, setAcknowledgments] = useState<Record<string, AlertAcknowledgment>>({});
   const [selectedAlert, setSelectedAlert] = useState<EmergencyAlert | null>(null);
   const [showBroadcastForm, setShowBroadcastForm] = useState(false);
+  const [showEmergencyCall, setShowEmergencyCall] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -315,6 +317,32 @@ export const EmergencyAlerts: React.FC = () => {
     );
   }
 
+  // If showing emergency call, render collaboration fullscreen
+  if (showEmergencyCall) {
+    return (
+      <div className="p-6">
+        <div className="mb-6">
+          <button
+            onClick={() => setShowEmergencyCall(false)}
+            className="text-red-400 hover:text-red-300 transition-colors flex items-center gap-2 font-semibold"
+          >
+            ← Back to Emergency Alerts
+          </button>
+        </div>
+        <div className="bg-red-900/20 border-2 border-red-500/50 rounded-lg p-4 mb-4">
+          <div className="flex items-center gap-3">
+            <Siren className="w-6 h-6 text-red-400 animate-pulse" />
+            <div>
+              <h3 className="text-lg font-bold text-red-300">Emergency Response Call Active</h3>
+              <p className="text-sm text-red-400/80">All safety personnel notified</p>
+            </div>
+          </div>
+        </div>
+        <CollaborationHub projectId="emergency-response" />
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-6">
       {/* Hidden audio element for alert sounds */}
@@ -329,13 +357,24 @@ export const EmergencyAlerts: React.FC = () => {
           </h1>
           <p className="text-slate-400 mt-2">Real-time emergency broadcasts and site-wide alerts</p>
         </div>
-        <button
-          onClick={() => setShowBroadcastForm(true)}
-          className="px-[21px] py-[13px] bg-red-600 hover:bg-red-700 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] touch-golden animate-pulse"
-        >
-          <Megaphone className="w-4 h-4" />
-          Broadcast Alert
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Emergency Video Call Button */}
+          <button
+            onClick={() => setShowEmergencyCall(true)}
+            className="px-[21px] py-[13px] bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px] animate-pulse"
+            title="Start emergency video response call"
+          >
+            <Video className="w-4 h-4" />
+            Emergency Call
+          </button>
+          <button
+            onClick={() => setShowBroadcastForm(true)}
+            className="px-[21px] py-[13px] bg-red-600 hover:bg-red-700 text-white rounded-[8px] font-semibold transition-all flex items-center gap-[8px]"
+          >
+            <Megaphone className="w-4 h-4" />
+            Broadcast Alert
+          </button>
+        </div>
       </div>
 
       {/* Active Alerts */}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ClipboardCheck, CheckCircle, XCircle, AlertTriangle, Calendar, TrendingUp, Users, FileText, Camera, Download, Upload, Loader2, Plus } from 'lucide-react';
+import { ClipboardCheck, CheckCircle, XCircle, AlertTriangle, Calendar, TrendingUp, Users, FileText, Camera, Download, Upload, Loader2, Plus, Video } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface Inspection {
   id: string;
@@ -52,6 +53,7 @@ export const QAQCHub: React.FC = () => {
   });
   const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCollaboration, setShowCollaboration] = useState(false);
   const [selectedInspection, setSelectedInspection] = useState<Inspection | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [currentProjectId, setCurrentProjectId] = useState<string>('');
@@ -210,6 +212,34 @@ export const QAQCHub: React.FC = () => {
     );
   }
 
+  // If showing collaboration, render fullscreen
+  if (showCollaboration) {
+    return (
+      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+        <div className="mb-6">
+          <button
+            onClick={() => setShowCollaboration(false)}
+            className="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2"
+          >
+            ← Back to QA/QC Hub
+          </button>
+        </div>
+        <div className="bg-blue-900/30 border border-blue-500/50 rounded-lg p-4 mb-4">
+          <div className="flex items-center gap-3">
+            <ClipboardCheck className="w-6 h-6 text-blue-400" />
+            <div>
+              <h3 className="text-lg font-bold text-blue-300">Collaborative Inspection Review</h3>
+              <p className="text-sm text-blue-400/80">
+                Video inspections • Remote quality checks • Finding discussions
+              </p>
+            </div>
+          </div>
+        </div>
+        <CollaborationHub projectId="qaqc-hub" />
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
@@ -218,13 +248,23 @@ export const QAQCHub: React.FC = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Quality Control Hub</h1>
           <p className="text-gray-600 mt-1">Track inspections and maintain quality standards</p>
         </div>
-        <button
-          onClick={() => setShowCreateForm(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 min-h-[44px]"
-        >
-          <Plus className="w-4 h-4" />
-          Schedule Inspection
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowCollaboration(true)}
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-4 py-2 flex items-center gap-2 min-h-[44px]"
+            title="Start collaborative inspection review"
+          >
+            <Video className="w-4 h-4" />
+            <span className="hidden sm:inline">Inspection Call</span>
+          </button>
+          <button
+            onClick={() => setShowCreateForm(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 min-h-[44px]"
+          >
+            <Plus className="w-4 h-4" />
+            Schedule Inspection
+          </button>
+        </div>
       </div>
 
       {/* Metrics Grid - Mobile Responsive */}

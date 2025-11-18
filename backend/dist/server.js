@@ -32,6 +32,7 @@ const testingRoutes_js_1 = require("./construction/testing/testingRoutes.js");
 const drawingRoutes_js_1 = require("./construction/drawings/drawingRoutes.js");
 const equipmentTestingRoutes_js_1 = require("./construction/equipment/equipmentTestingRoutes.js");
 const leadRoutes_js_1 = require("./routes/leadRoutes.js");
+const acquisitionRoutes_js_1 = require("./routes/acquisitionRoutes.js");
 const environmentalRoutes_js_1 = require("./construction/environmental/environmentalRoutes.js");
 const emergencyRoutes_js_1 = require("./construction/emergency/emergencyRoutes.js");
 const userRoutes_js_1 = require("./routes/userRoutes.js");
@@ -55,6 +56,8 @@ const stripeWebhookRoutes_js_1 = require("./routes/stripeWebhookRoutes.js");
  */
 const env = (0, env_js_1.loadEnv)();
 const app = (0, express_1.default)();
+// Trust Vercel proxy for accurate client IP detection
+app.set('trust proxy', 1);
 // Configure CORS with security best practices
 const corsOptions = {
     origin: process.env.NODE_ENV === 'production'
@@ -86,6 +89,8 @@ app.get("/health", (_req, res) => {
 });
 // Public lead capture endpoint (no auth required)
 app.use("/api/leads", (0, leadRoutes_js_1.createLeadRouter)());
+// Public acquisition inquiry endpoint (no auth required)
+app.use("/api/acquisition-inquiry", (0, acquisitionRoutes_js_1.createAcquisitionRouter)());
 // Health check endpoint (no auth required)
 app.get('/api/health', (_req, res) => {
     res.json({

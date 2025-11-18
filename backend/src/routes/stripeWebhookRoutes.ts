@@ -5,14 +5,19 @@ import Stripe from 'stripe';
 export function createStripeWebhookRouter() {
   const router = Router();
   
-  // Initialize Stripe with your secret key
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+  // Initialize Stripe only if API key is present
+  const stripeKey = process.env.STRIPE_SECRET_KEY;
+  const stripe = stripeKey ? new Stripe(stripeKey, {
     apiVersion: '2025-10-29.clover'
-  });
+  }) : null;
 
   // Webhook handler for Stripe events (no auth required)
   // This must use raw body parsing, so it needs special handling
   router.post('/stripe/webhook', async (req: Request, res: Response) => {
+    if (!stripe) {
+      console.warn('Stripe webhook called but STRIPE_SECRET_KEY not configured');
+      return res.status(503).json({ error: 'Stripe not configured' });
+    }
     const sig = req.headers['stripe-signature'];
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 

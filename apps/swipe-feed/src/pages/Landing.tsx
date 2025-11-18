@@ -153,17 +153,17 @@ export const Landing: React.FC = () => {
               <div>
                 <span className="font-medium">Field Worker:</span>
                 <div className="text-white">demo@fieldforge.com</div>
-                <div className="text-xs text-blue-400/60">password: demo123</div>
+                <div className="text-xs text-blue-400/60">password: FieldForge2025!Demo</div>
               </div>
               <div>
                 <span className="font-medium">Manager:</span>
                 <div className="text-white">manager@fieldforge.com</div>
-                <div className="text-xs text-blue-400/60">password: demo123</div>
+                <div className="text-xs text-blue-400/60">password: FieldForge2025!Demo</div>
               </div>
               <div>
                 <span className="font-medium">Admin:</span>
                 <div className="text-white">admin@fieldforge.com</div>
-                <div className="text-xs text-blue-400/60">password: demo123</div>
+                <div className="text-xs text-blue-400/60">password: FieldForge2025!Demo</div>
               </div>
             </div>
           </div>

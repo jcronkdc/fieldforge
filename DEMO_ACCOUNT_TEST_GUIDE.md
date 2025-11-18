@@ -16,19 +16,19 @@ Test the complete user flow:
 
 ## 🔐 **DEMO CREDENTIALS**
 
-From Landing page (`/landing`):
+From Landing page (`/landing` or new electrical landing):
 
 **Field Worker:**
 - Email: `demo@fieldforge.com`
-- Password: `demo123`
+- Password: `FieldForge2025!Demo`
 
 **Manager:**
 - Email: `manager@fieldforge.com`
-- Password: `demo123`
+- Password: `FieldForge2025!Demo`
 
 **Admin:**
 - Email: `admin@fieldforge.com`
-- Password: `demo123`
+- Password: `FieldForge2025!Demo`
 
 ---
 
@@ -136,7 +136,7 @@ SELECT * FROM pg_policies WHERE tablename = 'project_team';
 
 1. Navigate to `/login`
 2. Enter email: `demo@fieldforge.com`
-3. Enter password: `demo123`
+3. Enter password: `FieldForge2025!Demo`
 4. Click "Sign In"
 5. **Expected:** Redirect to `/dashboard`, session active
 

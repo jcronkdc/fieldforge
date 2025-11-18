@@ -16,6 +16,9 @@ export interface Env {
   NOTIFY_TWILIO_FROM?: string;
   APP_BASE_URL?: string;
   ABLY_API_KEY?: string;
+  DAILY_API_KEY?: string;
+  STRIPE_SECRET_KEY?: string;
+  STRIPE_WEBHOOK_SECRET?: string;
 }
 
 export function loadEnv(): Env {
@@ -54,6 +57,9 @@ export function loadEnv(): Env {
     NOTIFY_TWILIO_FROM,
     APP_BASE_URL,
     ABLY_API_KEY,
+    DAILY_API_KEY,
+    STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET,
   } = process.env;
 
   if (!DATABASE_URL) {
@@ -81,6 +87,9 @@ export function loadEnv(): Env {
     AI_PROVIDER_URL,
     AI_PROVIDER_API_KEY,
     AI_PROVIDER_MODEL,
+    DAILY_API_KEY,
+    STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET,
   };
 }
 

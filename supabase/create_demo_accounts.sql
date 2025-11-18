@@ -276,7 +276,7 @@ BEGIN
 
   RAISE NOTICE 'Demo accounts setup script completed!';
   RAISE NOTICE 'Available demo accounts:';
-  RAISE NOTICE '  - Field Worker: demo@fieldforge.com / demo123';
-  RAISE NOTICE '  - Manager: manager@fieldforge.com / demo123';
-  RAISE NOTICE '  - Admin: admin@fieldforge.com / demo123';
+  RAISE NOTICE '  - Field Worker: demo@fieldforge.com / FieldForge2025!Demo';
+  RAISE NOTICE '  - Manager: manager@fieldforge.com / FieldForge2025!Demo';
+  RAISE NOTICE '  - Admin: admin@fieldforge.com / FieldForge2025!Demo';
 END $$;
