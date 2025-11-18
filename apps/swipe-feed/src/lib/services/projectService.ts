@@ -87,6 +87,24 @@ export interface CrewMember {
 }
 
 class ProjectService {
+  // Helper to map role to permissions (mycelial pattern matching)
+  private getRolePermissions(role: string): { canEdit: boolean; canInvite: boolean; canViewBudget: boolean } {
+    switch (role) {
+      case 'admin':
+      case 'owner':
+      case 'manager':
+        return { canEdit: true, canInvite: true, canViewBudget: true };
+      case 'supervisor':
+        return { canEdit: true, canInvite: false, canViewBudget: true };
+      case 'worker':
+        return { canEdit: false, canInvite: false, canViewBudget: false };
+      case 'viewer':
+        return { canEdit: false, canInvite: false, canViewBudget: true };
+      default:
+        return { canEdit: false, canInvite: false, canViewBudget: false };
+    }
+  }
+
   // Create a new project
   async createProject(project: Partial<Project>): Promise<Project | null> {
     try {
@@ -97,6 +115,7 @@ class ProjectService {
         .from('projects')
         .insert({
           ...project,
+          created_by: user.id, // Triggers auto_add_project_creator_trigger
           status: project.status || 'planning'
         })
         .select()
@@ -104,10 +123,8 @@ class ProjectService {
 
       if (error) throw error;
 
-      // Add creator as project owner
-      if (data) {
-        await this.addTeamMember(data.id, user.id, 'owner');
-      }
+      // Note: auto_add_project_creator_trigger automatically adds creator as admin
+      // No need to manually call addTeamMember for creator
 
       return data;
     } catch (error: any) {
@@ -202,7 +219,7 @@ class ProjectService {
   async getProjectTeam(projectId: string): Promise<ProjectTeamMember[]> {
     try {
       const { data, error } = await supabase
-        .from('project_team')
+        .from('project_members')
         .select(`
           *,
           user:user_profiles(
@@ -228,13 +245,20 @@ class ProjectService {
   // Add team member (existing user)
   async addTeamMember(projectId: string, userId: string, role: string): Promise<boolean> {
     try {
+      // Note: auto_add_project_creator_trigger handles creator automatically
+      // This method is for adding additional team members
+      const permissions = this.getRolePermissions(role);
+      
       const { error } = await supabase
-        .from('project_team')
+        .from('project_members')
         .insert({
           project_id: projectId,
           user_id: userId,
-          role,
-          status: 'active'
+          role: role === 'owner' ? 'admin' : role, // Map owner → admin
+          status: 'active',
+          can_edit: permissions.canEdit,
+          can_invite: permissions.canInvite,
+          can_view_budget: permissions.canViewBudget
         });
 
       if (error) throw error;
@@ -301,7 +325,7 @@ class ProjectService {
   async updateTeamMemberRole(projectId: string, userId: string, newRole: string): Promise<boolean> {
     try {
       const { error } = await supabase
-        .from('project_team')
+        .from('project_members')
         .update({ role: newRole })
         .eq('project_id', projectId)
         .eq('user_id', userId);
@@ -318,7 +342,7 @@ class ProjectService {
   async removeTeamMember(projectId: string, userId: string): Promise<boolean> {
     try {
       const { error } = await supabase
-        .from('project_team')
+        .from('project_members')
         .update({ status: 'inactive' })
         .eq('project_id', projectId)
         .eq('user_id', userId);
@@ -433,7 +457,7 @@ class ProjectService {
       if (!user) return null;
 
       const { data, error } = await supabase
-        .from('project_team')
+        .from('project_members')
         .select('role')
         .eq('project_id', projectId)
         .eq('user_id', user.id)
