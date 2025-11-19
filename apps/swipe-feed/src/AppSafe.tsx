@@ -66,6 +66,12 @@ import { DailyOperations } from './components/fieldops/DailyOperations';
 import { TimeTracking } from './components/time/TimeTracking';
 import { WeatherDashboard } from './components/weather/WeatherDashboard';
 import { TeamMessaging } from './components/messaging/TeamMessaging';
+import { QAQCHub } from './components/qaqc/QAQCHub';
+import { EquipmentHub } from './components/equipment/EquipmentHub';
+import { DocumentHub } from './components/documents/DocumentHub';
+import { SafetyHub } from './components/safety/SafetyHub';
+import { ProjectSchedule } from './components/projects/ProjectSchedule';
+import { ThreeWeekLookahead } from './components/scheduling/ThreeWeekLookahead';
 
 // Field operations
 import { FieldOperationsIndex } from './pages/FieldOperationsIndex';
@@ -275,9 +281,35 @@ const AppContent: React.FC<{ session: Session | null; isOffline: boolean }> = ({
                     <Route path="/substations" element={<SubstationManager />} />
                     <Route path="/crews" element={<NationwideCrewManager />} />
                     <Route path="/messages" element={<TeamMessaging />} />
+                    
+                    {/* QA/QC Routes */}
+                    <Route path="/qaqc" element={<QAQCHub />} />
+                    
+                    {/* Equipment Routes */}
+                    <Route path="/equipment" element={<EquipmentHub />} />
+                    
+                    {/* Document Routes */}
+                    <Route path="/documents" element={<DocumentHub />} />
+                    
+                    {/* Safety Routes */}
+                    <Route path="/safety" element={<SafetyHub />} />
+                    
+                    {/* Schedule Routes */}
+                    <Route path="/schedule" element={<ThreeWeekLookahead />} />
+                    <Route path="/schedule/lookahead" element={<ThreeWeekLookahead />} />
+                    <Route path="/schedule/overview" element={<ProjectSchedule />} />
+                    
+                    {/* Weather */}
+                    <Route path="/weather" element={<WeatherDashboard />} />
+                    
+                    {/* 3D Visualization */}
                     <Route path="/project-map" element={<ProjectMap3D />} />
                     <Route path="/substation-3d" element={<SubstationModel />} />
+                    
+                    {/* AI Assistant */}
                     <Route path="/ai-assistant" element={<FieldForgeAI />} />
+                    
+                    {/* Catch all - redirect to dashboard */}
                     <Route path="*" element={<Navigate to="/dashboard" replace />} />
                   </Route>
                 </>
