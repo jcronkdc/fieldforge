@@ -279,79 +279,79 @@ export const EquipmentHub: React.FC = () => {
             <div>
               <p className="text-sm text-blue-400/60 " >Due Service</p>
               <p className="text-xl font-bold text-red-400 mt-[8px]">
-                {equipment.filter(e => {
-                  if (!e.next_maintenance_date) return false;
-                  return differenceInDays(new Date(e.next_maintenance_date), new Date()) <= 7;
-                }).length}
-              </p>
-            </div>
-            <div className="">
-              <Calendar className="w-[34px] h-[34px] text-red-400" />
-            </div>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <Calendar className="w-8 h-8 text-red-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Due Soon</span>
           </div>
+          <p className="text-3xl font-bold text-red-400">
+            {equipment.filter(e => {
+              if (!e.next_maintenance_date) return false;
+              return differenceInDays(new Date(e.next_maintenance_date), new Date()) <= 7;
+            }).length}
+          </p>
+          <p className="text-sm text-gray-400 mt-1">Next 7 days</p>
         </div>
-      </div>
+      </section>
 
-      {/* Search and Filter - Renaissance Style */}
-      <div className="flex flex-col sm:flex-row gap-[21px]">
+      {/* Search and Filter */}
+      <section className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-[13px] top-[13px] w-5 h-5 text-blue-400/60" />
+          <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-500" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by type, serial, or asset tag..."
-            className="w-full pl-[55px] pr-[21px] py-[13px] w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-slate-800/50 text-white rounded-[8px]  "
+            className="w-full pl-12 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all"
           />
         </div>
         
         <div className="flex gap-2">
           <button
             onClick={() => setFilterStatus('all')}
-            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all  ${
+            className={`px-6 py-3 rounded-lg font-medium transition-all ${
               filterStatus === 'all' 
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all' 
-                : 'border border-gray-700 bg-slate-800/50 text-blue-400/60 hover:bg-slate-700/50 hover:text-blue-400'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25' 
+                : 'bg-gray-800 border border-gray-700 text-gray-400 hover:text-white hover:border-blue-500/50'
             }`}
           >
             All
           </button>
           <button
             onClick={() => setFilterStatus('available')}
-            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all  ${
+            className={`px-6 py-3 rounded-lg font-medium transition-all ${
               filterStatus === 'available' 
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all' 
-                : 'border border-gray-700 bg-slate-800/50 text-blue-400/60 hover:bg-slate-700/50 hover:text-blue-400'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25' 
+                : 'bg-gray-800 border border-gray-700 text-gray-400 hover:text-white hover:border-blue-500/50'
             }`}
           >
             Available
           </button>
           <button
             onClick={() => setFilterStatus('in use')}
-            className={`px-[21px] py-[13px] rounded-[8px] font-medium transition-all  ${
+            className={`px-6 py-3 rounded-lg font-medium transition-all ${
               filterStatus === 'in use' 
-                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all' 
-                : 'border border-gray-700 bg-slate-800/50 text-blue-400/60 hover:bg-slate-700/50 hover:text-blue-400'
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25' 
+                : 'bg-gray-800 border border-gray-700 text-gray-400 hover:text-white hover:border-blue-500/50'
             }`}
           >
             In Use
           </button>
         </div>
-      </div>
+      </section>
 
-      {/* Equipment Grid - Golden Ratio Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[21px]">
+      {/* Equipment Grid */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading && filteredEquipment.length === 0 ? (
-          <div className="col-span-full text-center py-[55px] text-blue-400/60">
-            <div className="spinner-davinci mb-[21px]" />
-            <p className="">Loading equipment inventory...</p>
+          <div className="col-span-full text-center py-12">
+            <Loader2 className="w-12 h-12 animate-spin text-blue-400 mx-auto mb-4" />
+            <p className="text-gray-400">Loading equipment inventory...</p>
           </div>
         ) : filteredEquipment.length === 0 ? (
-          <div className="col-span-full text-center py-[55px]">
-            <div className=" mx-auto mb-[13px]">
-              <Package className="w-[55px] h-[55px] text-blue-400/40" />
-            </div>
-            <p className="text-blue-400/60 ">No equipment found</p>
+          <div className="col-span-full text-center py-12">
+            <Package className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+            <p className="text-gray-400 text-lg font-medium">No equipment found</p>
           </div>
         ) : (
           filteredEquipment.map(item => {
@@ -360,24 +360,23 @@ export const EquipmentHub: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] cursor-pointer transform hover:scale-[1.02] transition-all  "
+                className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 cursor-pointer hover:border-blue-500/50 hover:bg-gray-800/80 transition-all"
                 onClick={() => setSelectedEquipment(item)}
-                style={{ animationDelay: `${filteredEquipment.indexOf(item) * 0.05}s` }}
               >
-                <div className="flex justify-between items-start mb-[13px]">
+                <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-base font-medium text-white ">{item.equipment_type}</h3>
+                    <h3 className="text-lg font-semibold text-white">{item.equipment_type}</h3>
                     {item.model && (
-                      <p className="text-sm text-blue-400/60 " >{item.manufacturer} {item.model}</p>
+                      <p className="text-sm text-gray-400">{item.manufacturer} {item.model}</p>
                     )}
                   </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(item.status)}`}>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${getStatusColor(item.status)}`}>
                       {item.status}
                     </span>
                     {maintenanceStatus && (
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${maintenanceStatus.color}`}>
-                        <Wrench className="w-3 h-3 inline mr-1" />
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${maintenanceStatus.color}`}>
+                        <Wrench className="w-3 h-3" />
                         {maintenanceStatus.text}
                       </span>
                     )}
