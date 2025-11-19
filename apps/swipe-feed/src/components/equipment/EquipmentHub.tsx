@@ -202,23 +202,23 @@ export const EquipmentHub: React.FC = () => {
   }
 
   return (
-    <div className=" p-[34px] max-w-7xl mx-auto space-y-[34px]">
-      {/* Renaissance Decorations */}
-      <div className="" />
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[21px]">
-        <div>
-          <h1 className="text-2xl font-bold text-white  flex items-center gap-[13px]">
-            <Package className="w-8 h-8 text-blue-400" />
+      <header className="flex flex-col gap-4 border-b border-gray-800 pb-8 lg:flex-row lg:items-center lg:justify-between">
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Equipment Management</p>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent flex items-center gap-4">
+            <Package className="w-12 h-12 text-blue-400" />
             Equipment Hub
           </h1>
-          <p className="text-base text-blue-400/60 mt-[8px] " >Track and manage equipment inventory</p>
+          <p className="max-w-3xl text-base text-gray-400">Track and manage equipment inventory with QR scanning and video inspections.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <button
             onClick={() => setShowCollaboration(true)}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-[21px] py-[13px] flex items-center gap-[8px]"
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg flex items-center gap-2 hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg shadow-blue-500/25"
             title="Start video inspection or equipment discussion"
           >
             <Video className="w-5 h-5" />
@@ -226,61 +226,52 @@ export const EquipmentHub: React.FC = () => {
           </button>
           <button
             onClick={() => setShowScanner(true)}
-            className="btn-blueprint px-[21px] py-[13px] flex items-center gap-[8px] "
+            className="px-6 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg hover:border-blue-500/50 hover:bg-gray-800/80 transition-all flex items-center gap-2"
           >
             <QrCode className="w-5 h-5" />
-            <span className="hidden sm:inline ">Scan QR</span>
+            <span className="hidden sm:inline">Scan QR</span>
           </button>
           <button
             onClick={() => setShowAddForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all px-[21px] py-[13px] flex items-center gap-[8px] "
+            className="px-6 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg hover:border-blue-500/50 hover:bg-gray-800/80 transition-all flex items-center gap-2"
           >
             <Plus className="w-5 h-5" />
-            <span className="hidden sm:inline ">Add Equipment</span>
+            <span className="hidden sm:inline">Add Equipment</span>
           </button>
         </div>
-      </div>
+      </header>
 
-      {/* Stats Cards - Golden Ratio Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[21px] ">
-        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  ">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-blue-400/60 " >Total Equipment</p>
-              <p className="text-xl font-bold text-white mt-[8px]">{equipment.length}</p>
-            </div>
-            <div className="">
-              <Package className="w-[34px] h-[34px] text-blue-400" />
-            </div>
+      {/* Stats Cards */}
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <Package className="w-8 h-8 text-blue-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Total</span>
           </div>
+          <p className="text-3xl font-bold text-white">{equipment.length}</p>
+          <p className="text-sm text-gray-400 mt-1">Equipment</p>
         </div>
 
-        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.1s' }}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-blue-400/60 " >Available</p>
-              <p className="text-xl font-bold text-green-400 mt-[8px]">
-                {equipment.filter(e => e.status === 'available').length}
-              </p>
-            </div>
-            <div className="">
-              <Truck className="w-[34px] h-[34px] text-green-400" />
-            </div>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <Truck className="w-8 h-8 text-green-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Available</span>
           </div>
+          <p className="text-3xl font-bold text-green-400">
+            {equipment.filter(e => e.status === 'available').length}
+          </p>
+          <p className="text-sm text-gray-400 mt-1">Ready to use</p>
         </div>
 
-        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.2s' }}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-blue-400/60 " >In Maintenance</p>
-              <p className="text-xl font-bold text-orange-400 mt-[8px]">
-                {equipment.filter(e => e.status === 'maintenance').length}
-              </p>
-            </div>
-            <div className="">
-              <Wrench className="w-[34px] h-[34px] text-orange-400" />
-            </div>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <Wrench className="w-8 h-8 text-orange-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Maintenance</span>
           </div>
+          <p className="text-3xl font-bold text-orange-400">
+            {equipment.filter(e => e.status === 'maintenance').length}
+          </p>
+          <p className="text-sm text-gray-400 mt-1">In service</p>
         </div>
 
         <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.3s' }}>
