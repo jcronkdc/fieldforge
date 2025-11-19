@@ -228,12 +228,19 @@ export const TimeTracking: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
+      
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Time Tracking</h1>
-        <p className="text-gray-400">Track your work hours and manage timesheets</p>
-      </div>
+      <header className="flex flex-col gap-4 border-b border-gray-800 pb-8">
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Time Management</p>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Time Tracking
+          </h1>
+          <p className="max-w-3xl text-base text-gray-400">Track your work hours and manage timesheets.</p>
+        </div>
+      </header>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

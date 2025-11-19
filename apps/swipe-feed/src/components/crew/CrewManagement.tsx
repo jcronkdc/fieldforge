@@ -283,8 +283,8 @@ export const CrewManagement: React.FC = () => {
   }
 
   return (
-    <div className=" p-[34px] max-w-7xl mx-auto space-y-[34px]">
-      {/* Renaissance Decorations */}
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
       <div className="" />
       
       {/* Header */}
