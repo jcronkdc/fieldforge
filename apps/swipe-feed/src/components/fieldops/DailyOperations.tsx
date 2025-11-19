@@ -278,12 +278,18 @@ export const DailyOperations: React.FC = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">⚡ Daily Operations</h1>
-            <p className="text-slate-400">Field activity tracking and reporting</p>
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
+        
+        {/* Header */}
+        <header className="flex flex-col gap-4 border-b border-gray-800 pb-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-3">
+            <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Field Operations</p>
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent flex items-center gap-4">
+              <Activity className="w-12 h-12 text-blue-400" />
+              Daily Operations
+            </h1>
+            <p className="max-w-3xl text-base text-gray-400">Track daily field activities, crew reporting, and project progress.</p>
           </div>
           
           <div className="flex items-center gap-3">
@@ -291,12 +297,12 @@ export const DailyOperations: React.FC = () => {
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2 text-white"
+              className="px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all"
             />
             
             <button
               onClick={() => setShowCollaboration(!showCollaboration)}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-2 rounded-lg flex items-center gap-2 transition"
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg shadow-blue-500/25 flex items-center gap-2"
             >
               <Video className="w-5 h-5" />
               <span className="hidden sm:inline">Field Call</span>
