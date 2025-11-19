@@ -283,19 +283,24 @@ export const DocumentHub: React.FC = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
+      
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Document Hub</h1>
-          <p className="text-gray-600 mt-1">Central repository for all project documents</p>
+      <header className="flex flex-col gap-4 border-b border-gray-800 pb-8 lg:flex-row lg:items-center lg:justify-between">
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Document Management</p>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Document Hub
+          </h1>
+          <p className="max-w-3xl text-base text-gray-400">Central repository for all project documents with collaborative review features.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <button
             onClick={() => setShowCollaboration(!showCollaboration)}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg transition-all flex items-center gap-2 min-h-[44px]"
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg flex items-center gap-2 hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg shadow-blue-500/25"
           >
-            <Video className="w-4 h-4" />
+            <Video className="w-5 h-5" />
             <span className="hidden sm:inline">Review Call</span>
           </button>
           <button

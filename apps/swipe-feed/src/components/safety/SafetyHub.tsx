@@ -205,48 +205,48 @@ export const SafetyHub: React.FC = () => {
   }
 
   return (
-    <div className="p-[34px] max-w-7xl mx-auto space-y-[34px]">
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
+      
       {/* Header */}
-      <div className="flex items-center justify-between relative">
-        {/* Technical Compass */}
-        <div className="absolute -left-8 -top-8 opacity-5">
-          <Shield className="w-[144px] h-[144px] text-blue-400" style={{ animation: ' 60s linear infinite' }} />
+      <header className="flex flex-col gap-4 border-b border-gray-800 pb-8 lg:flex-row lg:items-center lg:justify-between">
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Safety Management</p>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent flex items-center gap-4">
+            <Shield className="w-12 h-12 text-blue-400" />
+            Safety Hub
+          </h1>
+          <p className="max-w-3xl text-base text-gray-400">Monitor safety performance, manage incidents, and collaborate with your safety team.</p>
         </div>
-        <div className="relative">
-          <div className="absolute -left-[55px] top-1/2 transform -translate-y-1/2 hidden lg:block opacity-10">
-            <Zap className="w-[34px] h-[34px] text-blue-400" />
-          </div>
-          <h1 className="text-xl font-bold text-white mb-[8px] ">Safety Hub</h1>
-          <p className="text-blue-400/60 " >Monitor safety performance and manage incidents</p>
-        </div>
-        <div className="flex items-center gap-3">
-          {/* Safety Team Collaboration Button */}
+        <div className="flex gap-3">
           <button
             onClick={() => setShowCollaboration(true)}
-            className="px-[21px] py-[13px] bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all flex items-center gap-[8px] font-semibold"
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg shadow-blue-500/25 flex items-center gap-2"
             title="Start safety team video call or chat"
           >
-            <Video className="w-4 h-4" />
+            <Video className="w-5 h-5" />
             Safety Team Call
           </button>
           <button
             onClick={() => setShowReportForm(true)}
-            className="px-[34px] py-[13px] bg-red-600 hover:bg-red-700 text-white rounded-[8px] font-semibold flex items-center gap-[8px] transition-all"
+            className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-all flex items-center gap-2"
           >
-            <AlertTriangle className="w-4 h-4" />
+            <AlertTriangle className="w-5 h-5" />
             Report Incident
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[21px]">
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-gray-700 rounded-[13px] p-[21px] card-vitruvian border border-gray-700 hover:border-gray-700 transition-all ">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-blue-400/60 " >Days Without Incident</p>
-              <p className="text-base font-bold text-white mt-[8px]">{metrics.daysWithoutIncident}</p>
-              <p className="text-xs text-green-400 mt-[8px]">Target: 365 days</p>
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <Shield className="w-8 h-8 text-green-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Days Safe</span>
+          </div>
+          <p className="text-3xl font-bold text-white">{metrics.daysWithoutIncident}</p>
+          <p className="text-sm text-gray-400 mt-1">Without incident</p>
+          <p className="text-xs text-green-400 mt-2">Target: 365 days</p>
             </div>
             <Shield className="w-10 h-10 text-green-400" />
           </div>
