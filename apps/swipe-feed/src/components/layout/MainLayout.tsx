@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { PushNotifications } from '../notifications/PushNotifications';
 import { NotificationCenter } from '../notifications/NotificationCenter';
+import { NotificationBell } from '../notifications/NotificationBell';
 import { WeatherWidget } from '../weather/WeatherWidget';
 
 const headerTelemetry = [
@@ -378,7 +379,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
               <Radio className="w-4 h-4" />
               Emergency
             </button>
-            <PushNotifications />
+            {/* Real-time Notification Bell - MF-38 */}
+            <NotificationBell />
             <button
               onClick={toggleTheme}
               className="flex items-center gap-2 rounded-full border border-gray-700 px-3 py-1.5 text-sm font-semibold text-blue-400 hover:bg-blue-500/10 transition-all"

@@ -103,13 +103,15 @@ function updateAuthState(newState: Partial<AuthState>) {
     }
   });
   
-  // Debug logging
-  console.log('🔐 Auth state updated:', {
-    authenticated: globalAuthState.isAuthenticated,
-    user: globalAuthState.user?.email,
-    loading: globalAuthState.loading,
-    error: globalAuthState.error
-  });
+  // Debug logging (development only)
+  if (import.meta.env.DEV) {
+    console.log('🔐 Auth state updated:', {
+      authenticated: globalAuthState.isAuthenticated,
+      user: globalAuthState.user?.email,
+      loading: globalAuthState.loading,
+      error: globalAuthState.error
+    });
+  }
 }
 
 // Load user profile

@@ -24,13 +24,13 @@ export function createProjectRouter(): Router {
         SELECT DISTINCT
           p.*,
           c.name as company_name,
-          pt.role as user_role,
-          COUNT(DISTINCT pt2.user_id) as team_count,
+          pm.role as user_role,
+          COUNT(DISTINCT pm2.user_id) as team_count,
           COUNT(DISTINCT si.id) as active_incidents
         FROM projects p
         LEFT JOIN companies c ON p.company_id = c.id
-        INNER JOIN project_team pt ON p.id = pt.project_id AND pt.user_id = $1
-        LEFT JOIN project_team pt2 ON p.id = pt2.project_id
+        INNER JOIN project_members pm ON p.id = pm.project_id AND pm.user_id = $1 AND pm.status = 'active'
+        LEFT JOIN project_members pm2 ON p.id = pm2.project_id AND pm2.status = 'active'
         LEFT JOIN safety_incidents si ON p.id = si.project_id AND si.status = 'open'
         WHERE 1=1
       `;
@@ -55,7 +55,7 @@ export function createProjectRouter(): Router {
         paramIndex++;
       }
 
-      queryText += ' GROUP BY p.id, c.name, pt.role ORDER BY p.created_at DESC';
+      queryText += ' GROUP BY p.id, c.name, pm.role ORDER BY p.created_at DESC';
 
       const result = await query(queryText, params);
       res.json(result.rows);
@@ -77,8 +77,8 @@ export function createProjectRouter(): Router {
 
       // Check if user has access to this project
       const accessCheck = await query(
-        'SELECT role FROM project_team WHERE project_id = $1 AND user_id = $2',
-        [projectId, userId]
+        'SELECT role FROM project_members WHERE project_id = $1 AND user_id = $2 AND status = $3',
+        [projectId, userId, 'active']
       );
 
       if (accessCheck.rows.length === 0) {
@@ -162,11 +162,11 @@ export function createProjectRouter(): Router {
 
         const project = projectResult.rows[0];
 
-        // Add creator as project manager
+        // Add creator as project admin with full permissions
         await query(
-          `INSERT INTO project_team 
-           (project_id, user_id, role, permissions, status)
-           VALUES ($1, $2, 'project_manager', '["all"]', 'active')`,
+          `INSERT INTO project_members 
+           (project_id, user_id, role, can_edit, can_invite, can_view_budget, status)
+           VALUES ($1, $2, 'admin', true, true, true, 'active')`,
           [project.id, userId]
         );
 
@@ -206,7 +206,7 @@ export function createProjectRouter(): Router {
 
       // Check permissions
       const permCheck = await query(
-        `SELECT role FROM project_team 
+        `SELECT role FROM project_members 
          WHERE project_id = $1 AND user_id = $2 
          AND role IN ('project_manager', 'admin')`,
         [projectId, userId]
@@ -266,7 +266,7 @@ export function createProjectRouter(): Router {
 
       // Verify access
       const accessCheck = await query(
-        'SELECT 1 FROM project_team WHERE project_id = $1 AND user_id = $2',
+        'SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2',
         [projectId, userId]
       );
 
@@ -280,7 +280,7 @@ export function createProjectRouter(): Router {
           u.email,
           u.raw_user_meta_data->>'full_name' as name,
           u.raw_user_meta_data->>'avatar_url' as avatar_url
-        FROM project_team pt
+        FROM project_members pt
         JOIN auth.users u ON pt.user_id = u.id
         WHERE pt.project_id = $1
         ORDER BY pt.created_at
@@ -307,7 +307,7 @@ export function createProjectRouter(): Router {
 
       // Check permissions
       const permCheck = await query(
-        `SELECT role FROM project_team 
+        `SELECT role FROM project_members 
          WHERE project_id = $1 AND user_id = $2 
          AND role IN ('project_manager', 'admin')`,
         [projectId, userId]
@@ -319,7 +319,7 @@ export function createProjectRouter(): Router {
 
       // Add team member
       const result = await query(
-        `INSERT INTO project_team 
+        `INSERT INTO project_members 
          (project_id, user_id, role, permissions, status)
          VALUES ($1, $2, $3, $4, 'active')
          ON CONFLICT (project_id, user_id) 
@@ -343,7 +343,7 @@ export function createProjectRouter(): Router {
 
       // Check permissions
       const permCheck = await query(
-        `SELECT role FROM project_team 
+        `SELECT role FROM project_members 
          WHERE project_id = $1 AND user_id = $2 
          AND role IN ('project_manager', 'admin')`,
         [projectId, userId]
@@ -355,14 +355,14 @@ export function createProjectRouter(): Router {
 
       // Can't remove the last project manager
       const managerCount = await query(
-        `SELECT COUNT(*) FROM project_team 
+        `SELECT COUNT(*) FROM project_members 
          WHERE project_id = $1 AND role = 'project_manager'`,
         [projectId]
       );
 
       if (managerCount.rows[0].count <= 1) {
         const isManager = await query(
-          `SELECT 1 FROM project_team 
+          `SELECT 1 FROM project_members 
            WHERE project_id = $1 AND user_id = $2 AND role = 'project_manager'`,
           [projectId, memberId]
         );
@@ -375,7 +375,7 @@ export function createProjectRouter(): Router {
       }
 
       await query(
-        'DELETE FROM project_team WHERE project_id = $1 AND user_id = $2',
+        'DELETE FROM project_members WHERE project_id = $1 AND user_id = $2',
         [projectId, memberId]
       );
 

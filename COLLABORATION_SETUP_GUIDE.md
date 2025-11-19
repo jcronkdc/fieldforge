@@ -295,3 +295,4 @@ For Daily.co specific issues, see: https://docs.daily.co/
 **Last Updated**: 2025-11-18  
 **Version**: MF-7 (Collaboration Integration)
 
+

@@ -4,6 +4,62 @@ exports.createAnalyticsRouter = createAnalyticsRouter;
 const express_1 = require("express");
 const auth_js_1 = require("../../middleware/auth.js");
 const database_js_1 = require("../../database.js");
+// Helper function to calculate week-over-week changes
+async function calculateWeekOverWeekChange(projectId, metric) {
+    try {
+        let table = '';
+        let countField = '*';
+        switch (metric) {
+            case 'inspections':
+                table = 'qaqc_inspections';
+                break;
+            case 'safety_incidents':
+                table = 'safety_incidents';
+                break;
+            case 'crew_members':
+                table = 'crew_members';
+                break;
+            case 'equipment':
+                table = 'equipment';
+                break;
+            default:
+                return 0;
+        }
+        const result = await (0, database_js_1.query)(`
+      SELECT 
+        COUNT(CASE WHEN created_at >= NOW() - INTERVAL '7 days' THEN 1 END) as this_week,
+        COUNT(CASE WHEN created_at >= NOW() - INTERVAL '14 days' AND created_at < NOW() - INTERVAL '7 days' THEN 1 END) as last_week
+      FROM ${table}
+      WHERE project_id = $1
+    `, [projectId]);
+        const thisWeek = parseInt(result.rows[0]?.this_week || '0');
+        const lastWeek = parseInt(result.rows[0]?.last_week || '0');
+        if (lastWeek === 0)
+            return 0;
+        return Math.round(((thisWeek - lastWeek) / lastWeek) * 100);
+    }
+    catch (error) {
+        console.error('[analytics] Failed to calculate week-over-week change:', error);
+        return 0;
+    }
+}
+// Helper function to get RFI count
+async function getRFICount(projectId) {
+    try {
+        const result = await (0, database_js_1.query)(`
+      SELECT COUNT(*) as count
+      FROM rfis
+      WHERE project_id = $1
+      AND status IN ('open', 'pending')
+    `, [projectId]);
+        return parseInt(result.rows[0]?.count || '0');
+    }
+    catch (error) {
+        // RFI table might not exist yet
+        console.warn('[analytics] RFI tracking not available:', error);
+        return 0;
+    }
+}
 function createAnalyticsRouter() {
     const router = (0, express_1.Router)();
     // ============================================================================
@@ -13,6 +69,7 @@ function createAnalyticsRouter() {
     router.get('/dashboard', auth_js_1.authenticateRequest, async (req, res) => {
         try {
             const companyId = req.user?.company_id || req.headers['x-company-id'];
+            const projectId = req.query.project_id || req.headers['x-project-id'];
             // PARALLEL QUERIES FOR REAL METRICS
             const [projectMetrics, safetyMetrics, crewMetrics, equipmentMetrics, scheduleMetrics, budgetMetrics] = await Promise.all([
                 // PROJECT PROGRESS - REAL CALCULATION
@@ -110,13 +167,19 @@ function createAnalyticsRouter() {
             const projectProgress = Math.round(parseFloat(projectData.avg_completion_percentage) || 0);
             // Schedule variance (negative means behind)
             const scheduleVariance = -Math.round(parseFloat(scheduleData.avg_days_behind) || 0);
+            // Calculate week-over-week changes
+            const progressChange = await calculateWeekOverWeekChange(projectId, 'inspections');
+            const safetyChange = -1 * await calculateWeekOverWeekChange(projectId, 'safety_incidents'); // Negative = better
+            const crewChange = await calculateWeekOverWeekChange(projectId, 'crew_members');
+            const equipmentChange = await calculateWeekOverWeekChange(projectId, 'equipment');
+            const rfiCount = await getRFICount(projectId);
             // RETURN REAL METRICS TO REPLACE DASHBOARD FAKE DATA
             res.json({
                 metrics: [
                     {
                         title: 'Project Progress',
                         value: projectProgress,
-                        change: 0, // TODO: Calculate week-over-week change
+                        change: progressChange,
                         trend: projectProgress > 50 ? 'up' : 'down',
                         icon: 'Target',
                         color: 'text-amber-500',
@@ -125,7 +188,7 @@ function createAnalyticsRouter() {
                     {
                         title: 'Safety Score',
                         value: safetyScore,
-                        change: 0, // TODO: Calculate change
+                        change: safetyChange,
                         trend: safetyData.days_without_incident > 7 ? 'up' : 'down',
                         icon: 'Shield',
                         color: 'text-green-500',
@@ -134,7 +197,7 @@ function createAnalyticsRouter() {
                     {
                         title: 'Active Crews',
                         value: parseInt(crewData.active_crews) || 0,
-                        change: 0, // TODO: Calculate change
+                        change: crewChange,
                         trend: 'up',
                         icon: 'Users',
                         color: 'text-blue-500',
@@ -143,7 +206,7 @@ function createAnalyticsRouter() {
                     {
                         title: 'Equipment Utilization',
                         value: equipmentUtilization,
-                        change: 0, // TODO: Calculate change
+                        change: equipmentChange,
                         trend: equipmentUtilization > 80 ? 'up' : 'down',
                         icon: 'Truck',
                         color: 'text-purple-500',
@@ -160,7 +223,7 @@ function createAnalyticsRouter() {
                     },
                     {
                         title: 'Open RFIs',
-                        value: 0, // TODO: Implement RFI tracking
+                        value: rfiCount,
                         change: 0,
                         trend: 'stable',
                         icon: 'FileText',

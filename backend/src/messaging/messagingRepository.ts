@@ -453,3 +453,28 @@ export async function leaveConversation(
     'system'
   );
 }
+
+// Get conversation participants
+export async function getConversationParticipants(conversationId: string): Promise<Array<{
+  userId: string;
+  username?: string;
+  displayName?: string;
+}>> {
+  const result = await query(
+    `SELECT 
+      cp.user_id,
+      u.email as username,
+      up.full_name as display_name
+     FROM conversation_participants cp
+     LEFT JOIN auth.users u ON u.id = cp.user_id
+     LEFT JOIN user_profiles up ON up.user_id = cp.user_id
+     WHERE cp.conversation_id = $1`,
+    [conversationId]
+  );
+  
+  return result.rows.map(row => ({
+    userId: row.user_id,
+    username: row.username,
+    displayName: row.display_name
+  }));
+}

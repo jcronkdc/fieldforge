@@ -4,6 +4,7 @@ exports.createMessagingRouter = createMessagingRouter;
 const express_1 = require("express");
 const messagingRepository_js_1 = require("./messagingRepository.js");
 const messagingPublisher_js_1 = require("../realtime/messagingPublisher.js");
+const notificationRepository_js_1 = require("../notifications/notificationRepository.js");
 function createMessagingRouter() {
     const router = (0, express_1.Router)();
     // Get user's conversations
@@ -102,6 +103,31 @@ function createMessagingRouter() {
                 message,
                 senderId
             });
+            // Create notifications for all participants (except sender)
+            try {
+                const participants = await (0, messagingRepository_js_1.getConversationParticipants)(conversationId);
+                const senderInfo = participants.find(p => p.userId === senderId);
+                const senderName = senderInfo?.displayName || senderInfo?.username || 'Someone';
+                // Get conversation name from first message or use default
+                const conversationName = metadata?.conversationName || 'Conversation';
+                // Notify all participants except sender
+                for (const participant of participants) {
+                    if (participant.userId !== senderId) {
+                        // Check if message contains mention
+                        const hasMention = content.includes(`@${participant.username}`) || content.includes(`@${participant.displayName}`);
+                        if (hasMention) {
+                            await (0, notificationRepository_js_1.notifyMention)(participant.userId, conversationId, conversationName, senderId, senderName, content);
+                        }
+                        else {
+                            await (0, notificationRepository_js_1.notifyNewMessage)(participant.userId, conversationId, conversationName, senderId, senderName, content);
+                        }
+                    }
+                }
+            }
+            catch (notifError) {
+                // Don't fail the message send if notifications fail
+                console.error('[messaging] Failed to create notifications:', notifError);
+            }
             res.json({ message });
         }
         catch (error) {

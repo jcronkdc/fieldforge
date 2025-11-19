@@ -173,3 +173,4 @@ COMMENT ON TABLE collaboration_room_participants IS 'Participants in collaborati
 COMMENT ON TABLE collaboration_cursor_positions IS 'Real-time cursor positions for collaborative editing';
 COMMENT ON TABLE collaboration_recordings IS 'Meeting recordings stored via Daily.co';
 
+

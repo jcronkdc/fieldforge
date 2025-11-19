@@ -22,13 +22,13 @@ function createProjectRouter() {
         SELECT DISTINCT
           p.*,
           c.name as company_name,
-          pt.role as user_role,
-          COUNT(DISTINCT pt2.user_id) as team_count,
+          pm.role as user_role,
+          COUNT(DISTINCT pm2.user_id) as team_count,
           COUNT(DISTINCT si.id) as active_incidents
         FROM projects p
         LEFT JOIN companies c ON p.company_id = c.id
-        INNER JOIN project_team pt ON p.id = pt.project_id AND pt.user_id = $1
-        LEFT JOIN project_team pt2 ON p.id = pt2.project_id
+        INNER JOIN project_members pm ON p.id = pm.project_id AND pm.user_id = $1 AND pm.status = 'active'
+        LEFT JOIN project_members pm2 ON p.id = pm2.project_id AND pm2.status = 'active'
         LEFT JOIN safety_incidents si ON p.id = si.project_id AND si.status = 'open'
         WHERE 1=1
       `;
@@ -49,7 +49,7 @@ function createProjectRouter() {
                 params.push(role);
                 paramIndex++;
             }
-            queryText += ' GROUP BY p.id, c.name, pt.role ORDER BY p.created_at DESC';
+            queryText += ' GROUP BY p.id, c.name, pm.role ORDER BY p.created_at DESC';
             const result = await (0, database_js_1.query)(queryText, params);
             res.json(result.rows);
         }
@@ -67,7 +67,7 @@ function createProjectRouter() {
                 return res.status(401).json({ error: 'Authentication required' });
             }
             // Check if user has access to this project
-            const accessCheck = await (0, database_js_1.query)('SELECT role FROM project_team WHERE project_id = $1 AND user_id = $2', [projectId, userId]);
+            const accessCheck = await (0, database_js_1.query)('SELECT role FROM project_members WHERE project_id = $1 AND user_id = $2 AND status = $3', [projectId, userId, 'active']);
             if (accessCheck.rows.length === 0) {
                 return res.status(403).json({ error: 'Access denied to this project' });
             }
@@ -125,10 +125,10 @@ function createProjectRouter() {
            RETURNING *`, [name, project_number, description, project_type, company_id,
                     start_date, end_date, budget, location, status, userId]);
                 const project = projectResult.rows[0];
-                // Add creator as project manager
-                await (0, database_js_1.query)(`INSERT INTO project_team 
-           (project_id, user_id, role, permissions, status)
-           VALUES ($1, $2, 'project_manager', '["all"]', 'active')`, [project.id, userId]);
+                // Add creator as project admin with full permissions
+                await (0, database_js_1.query)(`INSERT INTO project_members 
+           (project_id, user_id, role, can_edit, can_invite, can_view_budget, status)
+           VALUES ($1, $2, 'admin', true, true, true, 'active')`, [project.id, userId]);
                 await (0, database_js_1.query)('COMMIT');
                 await (0, auditLog_js_1.logAuditEvent)({
                     action: 'project_created',
@@ -161,7 +161,7 @@ function createProjectRouter() {
                 return res.status(401).json({ error: 'Authentication required' });
             }
             // Check permissions
-            const permCheck = await (0, database_js_1.query)(`SELECT role FROM project_team 
+            const permCheck = await (0, database_js_1.query)(`SELECT role FROM project_members 
          WHERE project_id = $1 AND user_id = $2 
          AND role IN ('project_manager', 'admin')`, [projectId, userId]);
             if (permCheck.rows.length === 0) {
@@ -208,7 +208,7 @@ function createProjectRouter() {
             const userId = req.user?.id;
             const { projectId } = req.params;
             // Verify access
-            const accessCheck = await (0, database_js_1.query)('SELECT 1 FROM project_team WHERE project_id = $1 AND user_id = $2', [projectId, userId]);
+            const accessCheck = await (0, database_js_1.query)('SELECT 1 FROM project_members WHERE project_id = $1 AND user_id = $2', [projectId, userId]);
             if (accessCheck.rows.length === 0) {
                 return res.status(403).json({ error: 'Access denied' });
             }
@@ -218,7 +218,7 @@ function createProjectRouter() {
           u.email,
           u.raw_user_meta_data->>'full_name' as name,
           u.raw_user_meta_data->>'avatar_url' as avatar_url
-        FROM project_team pt
+        FROM project_members pt
         JOIN auth.users u ON pt.user_id = u.id
         WHERE pt.project_id = $1
         ORDER BY pt.created_at
@@ -241,14 +241,14 @@ function createProjectRouter() {
                 return res.status(401).json({ error: 'Authentication required' });
             }
             // Check permissions
-            const permCheck = await (0, database_js_1.query)(`SELECT role FROM project_team 
+            const permCheck = await (0, database_js_1.query)(`SELECT role FROM project_members 
          WHERE project_id = $1 AND user_id = $2 
          AND role IN ('project_manager', 'admin')`, [projectId, userId]);
             if (permCheck.rows.length === 0) {
                 return res.status(403).json({ error: 'Insufficient permissions' });
             }
             // Add team member
-            const result = await (0, database_js_1.query)(`INSERT INTO project_team 
+            const result = await (0, database_js_1.query)(`INSERT INTO project_members 
          (project_id, user_id, role, permissions, status)
          VALUES ($1, $2, $3, $4, 'active')
          ON CONFLICT (project_id, user_id) 
@@ -267,17 +267,17 @@ function createProjectRouter() {
             const userId = req.user?.id;
             const { projectId, memberId } = req.params;
             // Check permissions
-            const permCheck = await (0, database_js_1.query)(`SELECT role FROM project_team 
+            const permCheck = await (0, database_js_1.query)(`SELECT role FROM project_members 
          WHERE project_id = $1 AND user_id = $2 
          AND role IN ('project_manager', 'admin')`, [projectId, userId]);
             if (permCheck.rows.length === 0) {
                 return res.status(403).json({ error: 'Insufficient permissions' });
             }
             // Can't remove the last project manager
-            const managerCount = await (0, database_js_1.query)(`SELECT COUNT(*) FROM project_team 
+            const managerCount = await (0, database_js_1.query)(`SELECT COUNT(*) FROM project_members 
          WHERE project_id = $1 AND role = 'project_manager'`, [projectId]);
             if (managerCount.rows[0].count <= 1) {
-                const isManager = await (0, database_js_1.query)(`SELECT 1 FROM project_team 
+                const isManager = await (0, database_js_1.query)(`SELECT 1 FROM project_members 
            WHERE project_id = $1 AND user_id = $2 AND role = 'project_manager'`, [projectId, memberId]);
                 if (isManager.rows.length > 0) {
                     return res.status(400).json({
@@ -285,7 +285,7 @@ function createProjectRouter() {
                     });
                 }
             }
-            await (0, database_js_1.query)('DELETE FROM project_team WHERE project_id = $1 AND user_id = $2', [projectId, memberId]);
+            await (0, database_js_1.query)('DELETE FROM project_members WHERE project_id = $1 AND user_id = $2', [projectId, memberId]);
             res.json({ message: 'Team member removed successfully' });
         }
         catch (error) {

@@ -44,6 +44,10 @@ const substationRoutes_js_1 = require("./routes/substationRoutes.js");
 const aiRoutes_js_1 = require("./routes/aiRoutes.js");
 const stripeRoutes_js_1 = require("./routes/stripeRoutes.js");
 const stripeWebhookRoutes_js_1 = require("./routes/stripeWebhookRoutes.js");
+const messagingRoutes_js_1 = require("./messaging/messagingRoutes.js");
+const collaborationRoutes_js_1 = require("./collaboration/collaborationRoutes.js");
+const feedRoutes_js_1 = require("./feed/feedRoutes.js");
+const notificationRoutes_js_1 = require("./notifications/notificationRoutes.js");
 /**
  * © 2025 FieldForge. All Rights Reserved.
  * PROPRIETARY AND CONFIDENTIAL - DO NOT DISTRIBUTE
@@ -165,6 +169,14 @@ app.use("/api/substations", (0, substationRoutes_js_1.createSubstationRouter)())
 app.use("/api/ai", (0, aiRoutes_js_1.createAIRouter)());
 // Payment Processing - STRIPE INTEGRATION ✅  
 app.use("/api/payments", (0, stripeRoutes_js_1.createStripeRouter)());
+// Team Messaging - REAL-TIME COLLABORATION WITH INVITE-ONLY GROUPS ✅
+app.use("/api/messaging", (0, messagingRoutes_js_1.createMessagingRouter)());
+// Video Collaboration - DAILY.CO INTEGRATION WITH CURSOR CONTROL ✅
+app.use("/api/collaboration", (0, collaborationRoutes_js_1.createCollaborationRouter)());
+// Social Feed - LIKES, COMMENTS, REPOSTS ✅
+app.use("/api/feed", (0, feedRoutes_js_1.createFeedRouter)());
+// Notifications - PERSISTENT NOTIFICATIONS FOR COLLABORATIVE FEATURES ✅
+app.use("/api/notifications", (0, notificationRoutes_js_1.createNotificationRouter)());
 // Settings are now part of user routes (/api/users/settings)
 // Error handling middleware (must be last)
 app.use(errorHandler_js_1.notFoundHandler); // Handle 404s

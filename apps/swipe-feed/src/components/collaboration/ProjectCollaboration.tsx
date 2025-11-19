@@ -35,7 +35,36 @@ export const ProjectCollaboration: React.FC<ProjectCollaborationProps> = ({
   const [callObject, setCallObject] = useState<DailyCall | null>(null);
   const [participants, setParticipants] = useState<any[]>([]);
   const [isInCall, setIsInCall] = useState(false);
+  const [availableRooms, setAvailableRooms] = useState<any[]>([]);
+  const [loadingRooms, setLoadingRooms] = useState(false);
+  const [showRoomBrowser, setShowRoomBrowser] = useState(false);
   const callFrameRef = useRef<HTMLDivElement>(null);
+
+  // Load available rooms for this project (MF-39: Room Discovery)
+  const loadAvailableRooms = async () => {
+    setLoadingRooms(true);
+    try {
+      const response = await fetch(`/api/collaboration/projects/${projectId}/rooms`);
+      if (!response.ok) {
+        throw new Error('Failed to load rooms');
+      }
+      const data = await response.json();
+      setAvailableRooms(data.rooms || []);
+    } catch (error) {
+      console.error('Failed to load available rooms:', error);
+      toast.error('Could not load available rooms');
+      setAvailableRooms([]);
+    } finally {
+      setLoadingRooms(false);
+    }
+  };
+
+  // Load rooms on mount
+  useEffect(() => {
+    if (projectId) {
+      loadAvailableRooms();
+    }
+  }, [projectId]);
 
   // Create a new collaboration room
   const createRoom = async () => {
@@ -236,7 +265,7 @@ export const ProjectCollaboration: React.FC<ProjectCollaborationProps> = ({
       </div>
 
       <div className="collaboration-content">
-        {!room && !loading && (
+        {!room && !loading && !showRoomBrowser && (
           <div className="text-center py-12">
             <div className="mb-6">
               <span className="text-6xl">🤝</span>
@@ -248,13 +277,150 @@ export const ProjectCollaboration: React.FC<ProjectCollaborationProps> = ({
               Create a video room to collaborate with your team in real-time.
               Share your screen, control cursors, and work together seamlessly.
             </p>
-            <button
-              onClick={createRoom}
-              disabled={loading}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-            >
-              {loading ? 'Creating Room...' : 'Create Collaboration Room'}
-            </button>
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={createRoom}
+                disabled={loading}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              >
+                {loading ? 'Creating Room...' : 'Create New Room'}
+              </button>
+              {availableRooms.length > 0 && (
+                <button
+                  onClick={() => setShowRoomBrowser(true)}
+                  className="px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Browse {availableRooms.length} Active Room{availableRooms.length !== 1 ? 's' : ''}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* MF-39: Room Discovery UI - Browse all project rooms before joining */}
+        {showRoomBrowser && !room && (
+          <div className="room-browser">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  🏠 Available Collaboration Rooms
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {availableRooms.length} active room{availableRooms.length !== 1 ? 's' : ''} in this project
+                </p>
+              </div>
+              <button
+                onClick={() => setShowRoomBrowser(false)}
+                className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              >
+                ← Back
+              </button>
+            </div>
+
+            {loadingRooms ? (
+              <div className="flex justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              </div>
+            ) : availableRooms.length === 0 ? (
+              <div className="text-center py-12">
+                <span className="text-6xl mb-4 block">📭</span>
+                <p className="text-gray-600 dark:text-gray-400">No active rooms in this project</p>
+                <button
+                  onClick={() => {
+                    setShowRoomBrowser(false);
+                    createRoom();
+                  }}
+                  className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Create First Room
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {availableRooms.map((availableRoom: any) => {
+                  const createdAt = new Date(availableRoom.createdAt);
+                  const participantCount = availableRoom.participants?.length || 0;
+                  const isHost = availableRoom.createdBy === session?.user?.id;
+                  
+                  return (
+                    <div 
+                      key={availableRoom.id} 
+                      className="room-card p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-lg transition-shadow"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                              {availableRoom.roomName || 'Collaboration Room'}
+                            </h4>
+                            {isHost && (
+                              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs rounded-full">
+                                Host
+                              </span>
+                            )}
+                            {availableRoom.status === 'active' && (
+                              <span className="flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs rounded-full">
+                                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                Live
+                              </span>
+                            )}
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            <div className="flex items-center gap-2">
+                              <span>👥</span>
+                              <span>{participantCount} participant{participantCount !== 1 ? 's' : ''}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span>🕐</span>
+                              <span>Created {createdAt.toLocaleTimeString()}</span>
+                            </div>
+                          </div>
+
+                          {availableRoom.settings && (
+                            <div className="flex gap-2 text-xs">
+                              {availableRoom.settings.enableCursorControl && (
+                                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded">
+                                  🖱️ Cursor Control
+                                </span>
+                              )}
+                              {availableRoom.settings.enableScreenShare && (
+                                <span className="px-2 py-1 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded">
+                                  🖥️ Screen Share
+                                </span>
+                              )}
+                              {availableRoom.settings.enableRecording && (
+                                <span className="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded">
+                                  ⏺️ Recording
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        <button
+                          onClick={() => {
+                            setRoom(availableRoom);
+                            setShowRoomBrowser(false);
+                            joinRoom(availableRoom.dailyRoomUrl, availableRoom.id);
+                          }}
+                          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                        >
+                          Join Room →
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+              <p className="text-sm text-yellow-800 dark:text-yellow-300">
+                🔒 <strong>Invite-Only:</strong> You can see all rooms for transparency, but only project members with permissions can join.
+                Room hosts control who can participate.
+              </p>
+            </div>
           </div>
         )}
 
@@ -345,10 +511,34 @@ export const ProjectCollaboration: React.FC<ProjectCollaborationProps> = ({
           border-radius: 12px;
           overflow: hidden;
         }
+
+        .room-browser {
+          animation: fadeIn 0.3s ease-in;
+        }
+
+        .room-card {
+          transition: all 0.2s ease;
+        }
+
+        .room-card:hover {
+          transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
       `}</style>
     </div>
   );
 };
 
 export default ProjectCollaboration;
+
 

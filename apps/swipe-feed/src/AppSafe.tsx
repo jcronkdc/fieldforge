@@ -153,19 +153,24 @@ function AppSafe() {
           <p className="text-slate-300 mb-6">{error}</p>
           <div className="space-y-3">
             <button
+              onClick={() => window.history.back()}
+              className="w-full px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors"
+            >
+              ← Go Back
+            </button>
+            <button
               onClick={() => window.location.reload()}
               className="w-full px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors"
             >
-              Retry Connection
+              🔄 Retry Connection
             </button>
             <button
               onClick={() => {
-                // Error state is managed by useRobustAuth
-                window.location.reload();
+                window.location.href = '/';
               }}
               className="w-full px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors"
             >
-              Continue Anyway
+              🏠 Return Home
             </button>
           </div>
         </div>

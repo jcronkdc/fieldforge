@@ -46,7 +46,11 @@ interface TeamMember {
   last_seen?: string;
 }
 
-export const TeamMessaging: React.FC = () => {
+interface TeamMessagingProps {
+  onStartVideoCall?: () => void;
+}
+
+export const TeamMessaging: React.FC<TeamMessagingProps> = ({ onStartVideoCall }) => {
   const { session } = useAuth();
   const [channels, setChannels] = useState<Channel[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -60,6 +64,10 @@ export const TeamMessaging: React.FC = () => {
   const [showCreateChannel, setShowCreateChannel] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // MF-40: Typing Indicators State
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // New channel form
   const [newChannel, setNewChannel] = useState<{
@@ -88,7 +96,7 @@ export const TeamMessaging: React.FC = () => {
       last_message: { content: 'Weekly progress meeting at 2 PM', created_at: new Date(Date.now() - 14400000).toISOString(), user_name: 'David Lee' } }
   ];
 
-  // Mock team members
+  // Mock team members (fallback)
   const mockTeamMembers: TeamMember[] = [
     { id: '1', name: 'John Smith', role: 'Site Supervisor', status: 'online' },
     { id: '2', name: 'Mike Johnson', role: 'Electrical Lead', status: 'online' },
@@ -98,13 +106,64 @@ export const TeamMessaging: React.FC = () => {
     { id: '6', name: 'Robert Brown', role: 'QC Inspector', status: 'offline', last_seen: new Date(Date.now() - 3600000).toISOString() }
   ];
 
+  // Load conversations from real API
+  const loadConversations = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/messaging/conversations?userId=${session?.user?.id}&limit=50`);
+      if (!response.ok) {
+        throw new Error('Failed to load conversations');
+      }
+      const data = await response.json();
+      
+      // Convert conversations to channel format
+      const convertedChannels: Channel[] = data.conversations.map((conv: any) => ({
+        id: conv.id,
+        name: conv.name || 'Direct Message',
+        type: conv.type === 'direct' ? 'direct' : conv.type === 'group' ? 'private' : 'public',
+        description: conv.description,
+        members: conv.participants?.length || 0,
+        unread_count: conv.unreadCount || 0,
+        last_message: conv.lastMessage ? {
+          content: conv.lastMessage.content,
+          created_at: conv.lastMessage.created_at,
+          user_name: conv.lastMessage.senderDisplayName || conv.lastMessage.senderUsername || 'Unknown'
+        } : undefined,
+        is_emergency: conv.settings?.isEmergency || false
+      }));
+
+      setChannels(convertedChannels.length > 0 ? convertedChannels : defaultChannels);
+      if (convertedChannels.length > 0) {
+        setSelectedChannel(convertedChannels[0]);
+      } else {
+        setSelectedChannel(defaultChannels[0]);
+      }
+      
+      setTeamMembers(mockTeamMembers); // TODO: Load real team members from project API
+    } catch (error) {
+      console.error('Failed to load conversations:', error);
+      // Fallback to mock data on error
+      setChannels(defaultChannels);
+      setTeamMembers(mockTeamMembers);
+      setSelectedChannel(defaultChannels[0]);
+      toast.error('Using offline mode - could not connect to messaging server');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    // Initialize with default data
-    setChannels(defaultChannels);
-    setTeamMembers(mockTeamMembers);
-    setSelectedChannel(defaultChannels[0]);
-    setLoading(false);
-  }, []);
+    // Load real conversations from API
+    if (session?.user?.id) {
+      loadConversations();
+    } else {
+      // Fallback to mock data if not logged in
+      setChannels(defaultChannels);
+      setTeamMembers(mockTeamMembers);
+      setSelectedChannel(defaultChannels[0]);
+      setLoading(false);
+    }
+  }, [session]);
 
   useEffect(() => {
     if (selectedChannel) {
@@ -117,8 +176,44 @@ export const TeamMessaging: React.FC = () => {
   }, [messages]);
 
   const fetchMessages = async (channelId: string) => {
-    // Mock messages for selected channel
-    const mockMessages: Message[] = [
+    try {
+      const response = await fetch(
+        `/api/messaging/conversations/${channelId}/messages?userId=${session?.user?.id}&limit=50`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Failed to load messages');
+      }
+      
+      const data = await response.json();
+      
+      // Convert to Message format
+      const convertedMessages: Message[] = data.messages.map((msg: any) => ({
+        id: msg.id,
+        channel_id: channelId,
+        user_id: msg.senderId,
+        user_name: msg.senderDisplayName || msg.senderUsername || 'Unknown',
+        user_avatar: msg.senderAvatarUrl,
+        content: msg.content,
+        attachments: msg.metadata?.attachments,
+        created_at: msg.createdAt || msg.created_at,
+        edited_at: msg.editedAt,
+        is_read: true, // TODO: Track read status
+        mentions: msg.metadata?.mentions
+      }));
+      
+      setMessages(convertedMessages);
+      
+      // Mark conversation as read
+      await fetch(`/api/messaging/conversations/${channelId}/read`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: session?.user?.id })
+      });
+    } catch (error) {
+      console.error('Failed to fetch messages:', error);
+      // Fallback to mock messages
+      const mockMessages: Message[] = [
       {
         id: '1',
         channel_id: channelId,
@@ -170,6 +265,7 @@ export const TeamMessaging: React.FC = () => {
     setChannels(prev => prev.map(ch => 
       ch.id === channelId ? { ...ch, unread_count: 0 } : ch
     ));
+    }
   };
 
   const sendMessage = async (e: React.FormEvent) => {
@@ -180,16 +276,44 @@ export const TeamMessaging: React.FC = () => {
     setSending(true);
     
     try {
-      // In production, this would send to a real messaging API
+      const mentions = extractMentions(messageInput);
+      const isEmergency = messageInput.toLowerCase().includes('emergency') || 
+                          messageInput.toLowerCase().includes('urgent') ||
+                          messageInput.toLowerCase().includes('accident');
+
+      // Send to real API
+      const response = await fetch(`/api/messaging/conversations/${selectedChannel.id}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          senderId: session?.user?.id,
+          content: messageInput,
+          messageType: 'text',
+          metadata: {
+            mentions: mentions.length > 0 ? mentions : undefined,
+            isEmergency
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      const data = await response.json();
+      
+      // Add message to local state (optimistic update or use response)
       const newMessage: Message = {
-        id: Date.now().toString(),
+        id: data.message.id,
         channel_id: selectedChannel.id,
         user_id: session?.user?.id || 'current-user',
         user_name: session?.user?.user_metadata?.full_name || 'You',
         content: messageInput,
-        created_at: new Date().toISOString(),
+        created_at: data.message.createdAt || new Date().toISOString(),
         is_read: false,
-        mentions: extractMentions(messageInput)
+        mentions
       };
 
       setMessages(prev => [...prev, newMessage]);
@@ -211,16 +335,14 @@ export const TeamMessaging: React.FC = () => {
       setMessageInput('');
       
       // Check for emergency keywords
-      if (messageInput.toLowerCase().includes('emergency') || 
-          messageInput.toLowerCase().includes('urgent') ||
-          messageInput.toLowerCase().includes('accident')) {
+      if (isEmergency) {
         toast.error('Emergency keyword detected! Safety team has been notified.', { duration: 5000 });
       } else {
         toast.success('Message sent');
       }
     } catch (error) {
       console.error('Failed to send message:', error);
-      toast.error('Failed to send message');
+      toast.error('Failed to send message - check connection');
     } finally {
       setSending(false);
     }
@@ -232,8 +354,31 @@ export const TeamMessaging: React.FC = () => {
     if (!newChannel.name) return;
 
     try {
+      // Call real API to create group conversation (invite-only enforced by backend)
+      const response = await fetch('/api/messaging/conversations/group', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          creatorId: session?.user?.id,
+          name: newChannel.name,
+          description: newChannel.description,
+          participantIds: [], // Creator automatically added by backend
+          settings: {
+            isEmergency: newChannel.is_emergency
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create channel');
+      }
+
+      const data = await response.json();
+      
       const channel: Channel = {
-        id: Date.now().toString(),
+        id: data.conversation.id,
         name: newChannel.name.toLowerCase().replace(/\s+/g, '-'),
         type: newChannel.type,
         description: newChannel.description,
@@ -247,10 +392,10 @@ export const TeamMessaging: React.FC = () => {
       setShowCreateChannel(false);
       setNewChannel({ name: '', type: 'public', description: '', is_emergency: false });
       
-      toast.success('Channel created successfully');
+      toast.success('Channel created successfully - invite-only group');
     } catch (error) {
       console.error('Failed to create channel:', error);
-      toast.error('Failed to create channel');
+      toast.error('Failed to create channel - check connection');
     }
   };
 
@@ -258,6 +403,56 @@ export const TeamMessaging: React.FC = () => {
     const mentions = text.match(/@\w+/g) || [];
     return mentions.map(m => m.substring(1));
   };
+
+  // MF-40: Publish typing indicator (debounced)
+  const handleTypingStart = () => {
+    if (!selectedChannel || !session?.user?.id) return;
+
+    // Clear existing timeout
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    // Publish typing start event to Ably (backend will handle real-time broadcast)
+    // TODO: When ABLY_API_KEY is available, this will broadcast to other users
+    fetch(`/api/messaging/conversations/${selectedChannel.id}/typing`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: session.user.id,
+        userName: session.user.user_metadata?.full_name || session.user.email || 'User',
+        isTyping: true
+      })
+    }).catch(err => console.error('Failed to publish typing event:', err));
+
+    // Auto-hide after 3 seconds of inactivity
+    typingTimeoutRef.current = setTimeout(() => {
+      fetch(`/api/messaging/conversations/${selectedChannel.id}/typing`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: session.user.id,
+          userName: session.user.user_metadata?.full_name || session.user.email || 'User',
+          isTyping: false
+        })
+      }).catch(err => console.error('Failed to publish typing stop event:', err));
+    }, 3000);
+  };
+
+  // MF-40: Handle message input change with typing indicator
+  const handleMessageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessageInput(e.target.value);
+    handleTypingStart();
+  };
+
+  // Cleanup typing timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -422,9 +617,16 @@ export const TeamMessaging: React.FC = () => {
                   <Phone className="w-5 h-5 text-gray-600" />
                 </button>
                 <button
-                  onClick={() => toast('Video calls coming soon!')}
+                  onClick={() => {
+                    if (onStartVideoCall) {
+                      onStartVideoCall();
+                      toast.success('Switching to video collaboration...');
+                    } else {
+                      toast('Video collaboration available in the Video tab!');
+                    }
+                  }}
                   className="p-2 hover:bg-gray-100 rounded-lg"
-                  title="Start Video Call"
+                  title="Start Video Call - Switch to Video Tab"
                 >
                   <Video className="w-5 h-5 text-gray-600" />
                 </button>
@@ -499,6 +701,24 @@ export const TeamMessaging: React.FC = () => {
 
           {/* Message Input */}
           <form onSubmit={sendMessage} className="border-t bg-white p-4">
+            {/* MF-40: Typing Indicators - Show who's typing (max 3 users) */}
+            {typingUsers.length > 0 && (
+              <div className="mb-2 px-4 py-2 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                  </div>
+                  <span>
+                    {typingUsers.slice(0, 3).join(', ')}
+                    {typingUsers.length > 3 && ` and ${typingUsers.length - 3} more`}
+                    {typingUsers.length === 1 ? ' is' : ' are'} typing...
+                  </span>
+                </div>
+              </div>
+            )}
+            
             <div className="flex gap-3">
               <button
                 type="button"
@@ -510,7 +730,7 @@ export const TeamMessaging: React.FC = () => {
               <input
                 type="text"
                 value={messageInput}
-                onChange={(e) => setMessageInput(e.target.value)}
+                onChange={handleMessageInputChange}
                 placeholder={`Message #${selectedChannel.name}`}
                 className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={sending}
@@ -683,3 +903,5 @@ export const TeamMessaging: React.FC = () => {
     </div>
   );
 };
+
+export default TeamMessaging;

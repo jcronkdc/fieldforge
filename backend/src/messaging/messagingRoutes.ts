@@ -13,8 +13,10 @@ import {
   getTypingIndicators,
   addParticipantsToConversation,
   leaveConversation,
+  getConversationParticipants,
 } from "./messagingRepository.js";
 import { publishMessageEvent } from "../realtime/messagingPublisher.js";
+import { notifyNewMessage, notifyMention } from "../notifications/notificationRepository.js";
 
 export function createMessagingRouter(): Router {
   const router = Router();
@@ -150,6 +152,47 @@ export function createMessagingRouter(): Router {
         message,
         senderId
       });
+      
+      // Create notifications for all participants (except sender)
+      try {
+        const participants = await getConversationParticipants(conversationId);
+        const senderInfo = participants.find(p => p.userId === senderId);
+        const senderName = senderInfo?.displayName || senderInfo?.username || 'Someone';
+        
+        // Get conversation name from first message or use default
+        const conversationName = metadata?.conversationName || 'Conversation';
+        
+        // Notify all participants except sender
+        for (const participant of participants) {
+          if (participant.userId !== senderId) {
+            // Check if message contains mention
+            const hasMention = content.includes(`@${participant.username}`) || content.includes(`@${participant.displayName}`);
+            
+            if (hasMention) {
+              await notifyMention(
+                participant.userId,
+                conversationId,
+                conversationName,
+                senderId,
+                senderName,
+                content
+              );
+            } else {
+              await notifyNewMessage(
+                participant.userId,
+                conversationId,
+                conversationName,
+                senderId,
+                senderName,
+                content
+              );
+            }
+          }
+        }
+      } catch (notifError) {
+        // Don't fail the message send if notifications fail
+        console.error('[messaging] Failed to create notifications:', notifError);
+      }
       
       res.json({ message });
     } catch (error) {

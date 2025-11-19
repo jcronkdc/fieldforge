@@ -88,7 +88,20 @@ export function createLeadRouter(): Router {
         email: validatedData.email
       });
 
-      // TODO: Implement email sending with SendGrid/Postmark
+      // Send lead notification email
+      try {
+        const { sendLeadNotification } = await import('../email/emailService.js');
+        await sendLeadNotification({
+          name: validatedData.fullName || 'Unknown',
+          email: validatedData.email || '',
+          company: validatedData.companyName,
+          phone: validatedData.phone,
+          message: `${validatedData.industrySegment} - ${validatedData.companySize} company, ${validatedData.projectsPerYear} projects/year`
+        });
+      } catch (emailError) {
+        console.error('[leads] Failed to send email notification:', emailError);
+        // Don't fail the API if email fails
+      }
       // await sendLeadNotificationEmail(validatedData, leadId);
 
       res.status(201).json({

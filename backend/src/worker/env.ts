@@ -19,6 +19,11 @@ export interface Env {
   DAILY_API_KEY?: string;
   STRIPE_SECRET_KEY?: string;
   STRIPE_WEBHOOK_SECRET?: string;
+  RESEND_API_KEY?: string;
+  TWILIO_ACCOUNT_SID?: string;
+  TWILIO_AUTH_TOKEN?: string;
+  TWILIO_PHONE_NUMBER?: string;
+  SIREN_API_ENDPOINT?: string;
 }
 
 export function loadEnv(): Env {
@@ -60,6 +65,11 @@ export function loadEnv(): Env {
     DAILY_API_KEY,
     STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET,
+    RESEND_API_KEY,
+    TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN,
+    TWILIO_PHONE_NUMBER,
+    SIREN_API_ENDPOINT,
   } = process.env;
 
   if (!DATABASE_URL) {
@@ -90,6 +100,11 @@ export function loadEnv(): Env {
     DAILY_API_KEY,
     STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET,
+    RESEND_API_KEY,
+    TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN,
+    TWILIO_PHONE_NUMBER,
+    SIREN_API_ENDPOINT,
   };
 }
 

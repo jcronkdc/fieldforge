@@ -55,7 +55,21 @@ function createAcquisitionRouter() {
                 contact: validatedData.contactName,
                 email: validatedData.email
             });
-            // TODO: Implement email sending with SendGrid/Postmark
+            // Send acquisition inquiry notification
+            try {
+                const { sendAcquisitionInquiry } = await import('../email/emailService.js');
+                await sendAcquisitionInquiry({
+                    name: validatedData.contactName || 'Unknown',
+                    email: validatedData.email || '',
+                    company: validatedData.companyName || 'Unknown Company',
+                    targetRevenue: validatedData.budget,
+                    timeline: validatedData.timeline,
+                    message: validatedData.projectDescription
+                });
+            }
+            catch (emailError) {
+                console.error('[acquisition] Failed to send email notification:', emailError);
+            }
             // await sendAcquisitionInquiryEmail(validatedData, inquiryId);
             res.status(201).json({
                 success: true,

@@ -1,5 +1,20 @@
 import { Router, Request, Response } from "express";
 import { loadEnv } from "../worker/env.js";
+import {
+  createCollaborationRoom,
+  getCollaborationRoom,
+  getCollaborationRoomByDailyId,
+  getProjectRooms,
+  endCollaborationRoom,
+  addRoomParticipant,
+  updateParticipantToken,
+  getRoomParticipants
+} from "./collaborationRepository.js";
+import {
+  publishCursorUpdate,
+  publishRoomEvent,
+  publishParticipantPresence
+} from "../realtime/collaborationPublisher.js";
 
 /**
  * Daily.co Video Collaboration Routes
@@ -8,7 +23,7 @@ import { loadEnv } from "../worker/env.js";
  * - Create video rooms for project collaboration
  * - Cursor control sharing for real-time co-working
  * - Screen sharing and recording
- * - Invite-only room access
+ * - Invite-only room access with database RLS enforcement
  */
 
 const env = loadEnv();
@@ -75,34 +90,58 @@ export function createCollaborationRouter(): Router {
 
       const dailyRoom = await dailyResponse.json();
 
-      // Store room metadata in database
-      // This would go into a collaboration_rooms table
-      const roomData = {
-        id: dailyRoom.id,
-        name: dailyRoom.name,
-        url: dailyRoom.url,
+      // Store room metadata in database (mycelial persistence)
+      const room = await createCollaborationRoom(
         projectId,
-        conversationId,
-        createdBy,
         roomName,
-        privacy,
-        dailyRoomId: dailyRoom.id,
-        dailyRoomUrl: dailyRoom.url,
-        createdAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
-        settings: {
-          enableCursorControl: true,
-          enableScreenShare: true,
-          enableRecording: true,
-          maxParticipants: 50
-        }
-      };
+        createdBy,
+        {
+          id: dailyRoom.id,
+          name: dailyRoom.name,
+          url: dailyRoom.url
+        },
+        conversationId,
+        privacy
+      );
 
-      console.log('[collaboration] Room created:', roomData);
+      // Add creator as room participant
+      await addRoomParticipant(
+        room.id,
+        createdBy,
+        req.body.creatorName || 'Room Creator',
+        'host',
+        {
+          canScreenShare: true,
+          canRecord: true,
+          canControlCursor: true,
+          isOwner: true
+        }
+      );
+
+      console.log('[collaboration] Room created and persisted:', room.id);
+
+      // Publish real-time event: room created
+      await publishRoomEvent(room.id, 'room.created', {
+        projectId: room.project_id,
+        roomName: room.room_name,
+        createdBy: room.created_by
+      });
 
       res.json({ 
         success: true,
-        room: roomData,
+        room: {
+          id: room.id,
+          roomName: room.room_name,
+          url: room.daily_room_url,
+          dailyRoomUrl: room.daily_room_url,
+          projectId: room.project_id,
+          conversationId: room.conversation_id,
+          createdBy: room.created_by,
+          privacy: room.privacy,
+          settings: room.settings,
+          createdAt: room.created_at,
+          expiresAt: room.expires_at
+        },
         joinUrl: dailyRoom.url
       });
     } catch (error) {
@@ -111,6 +150,22 @@ export function createCollaborationRouter(): Router {
         error: "Failed to create collaboration room",
         details: error instanceof Error ? error.message : String(error)
       });
+    }
+  });
+
+  /**
+   * Get all active collaboration rooms for a project
+   * GET /api/collaboration/projects/:projectId/rooms
+   */
+  router.get("/projects/:projectId/rooms", async (req: Request, res: Response) => {
+    const { projectId } = req.params;
+
+    try {
+      const rooms = await getProjectRooms(projectId);
+      res.json({ rooms });
+    } catch (error) {
+      console.error('[collaboration] get project rooms error:', error);
+      res.status(500).json({ error: "Failed to fetch project rooms" });
     }
   });
 
@@ -149,10 +204,15 @@ export function createCollaborationRouter(): Router {
   /**
    * Delete/end a collaboration room
    * DELETE /api/collaboration/rooms/:roomId
+   * SECURITY: Only room creator or project admin can delete
    */
   router.delete("/rooms/:roomId", async (req: Request, res: Response) => {
     const { roomId } = req.params;
     const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: "userId is required" });
+    }
 
     try {
       if (!env.DAILY_API_KEY) {
@@ -161,10 +221,18 @@ export function createCollaborationRouter(): Router {
         });
       }
 
-      // TODO: Verify user has permission to delete this room
-      // Check if userId is the room creator or project admin
+      // Get room from database to find Daily.co room ID
+      const room = await getCollaborationRoom(roomId);
+      if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+      }
 
-      const dailyResponse = await fetch(`https://api.daily.co/v1/rooms/${roomId}`, {
+      // Verify user has permission (creator or project admin)
+      // This throws an error if unauthorized
+      await endCollaborationRoom(roomId, userId);
+
+      // Delete from Daily.co
+      const dailyResponse = await fetch(`https://api.daily.co/v1/rooms/${room.daily_room_id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${env.DAILY_API_KEY}`
@@ -172,13 +240,20 @@ export function createCollaborationRouter(): Router {
       });
 
       if (!dailyResponse.ok) {
-        return res.status(404).json({ error: "Room not found" });
+        console.error('[collaboration] Daily.co deletion failed, but database updated');
       }
 
-      res.json({ success: true, message: "Room deleted" });
+      // Publish real-time event: room ended
+      await publishRoomEvent(roomId, 'room.ended', {
+        endedBy: userId
+      });
+
+      res.json({ success: true, message: "Room ended" });
     } catch (error) {
       console.error('[collaboration] delete room error:', error);
-      res.status(500).json({ error: "Failed to delete room" });
+      const message = error instanceof Error ? error.message : "Failed to delete room";
+      const status = message.includes('Unauthorized') ? 403 : 500;
+      res.status(status).json({ error: message });
     }
   });
 
@@ -235,11 +310,26 @@ export function createCollaborationRouter(): Router {
       }
 
       const tokenData = await dailyResponse.json();
+      const expiresAt = new Date((Math.floor(Date.now() / 1000) + (24 * 60 * 60)) * 1000).toISOString();
+
+      // Add participant if not already added, or update their token
+      try {
+        await addRoomParticipant(
+          roomId,
+          userId,
+          userName,
+          permissions.isOwner ? 'host' : 'participant',
+          permissions
+        );
+      } catch (err) {
+        // Participant might already exist, update token instead
+        await updateParticipantToken(roomId, userId, tokenData.token, expiresAt);
+      }
 
       res.json({ 
         success: true,
         token: tokenData.token,
-        expiresAt: new Date((Math.floor(Date.now() / 1000) + (24 * 60 * 60)) * 1000).toISOString()
+        expiresAt
       });
     } catch (error) {
       console.error('[collaboration] create token error:', error);
@@ -284,26 +374,27 @@ export function createCollaborationRouter(): Router {
   /**
    * Cursor Control State (WebSocket alternative via Ably)
    * POST /api/collaboration/rooms/:roomId/cursor
+   * Real-time cursor sharing for collaborative editing
    */
   router.post("/rooms/:roomId/cursor", async (req: Request, res: Response) => {
     const { roomId } = req.params;
     const { userId, userName, x, y, action, documentId } = req.body;
 
+    if (!userId || !userName || x === undefined || y === undefined) {
+      return res.status(400).json({ 
+        error: "userId, userName, x, and y are required" 
+      });
+    }
+
     try {
       // Publish cursor position via Ably for real-time sync
       // This allows participants to see each other's cursors
-      const cursorData = {
-        userId,
-        userName,
+      await publishCursorUpdate(roomId, userId, userName, {
         x,
         y,
-        action, // 'move', 'click', 'drag', etc.
-        documentId,
-        timestamp: Date.now()
-      };
-
-      // TODO: Publish to Ably channel: `collaboration:${roomId}:cursors`
-      // await publishToAbly(`collaboration:${roomId}:cursors`, cursorData);
+        action: action || 'move',
+        documentId
+      });
 
       res.json({ success: true });
     } catch (error) {

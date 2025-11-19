@@ -42,6 +42,8 @@ import { createStripeRouter } from "./routes/stripeRoutes.js";
 import { createStripeWebhookRouter } from "./routes/stripeWebhookRoutes.js";
 import { createMessagingRouter } from "./messaging/messagingRoutes.js";
 import { createCollaborationRouter } from "./collaboration/collaborationRoutes.js";
+import { createFeedRouter } from "./feed/feedRoutes.js";
+import { createNotificationRouter } from "./notifications/notificationRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -212,6 +214,12 @@ app.use("/api/messaging", createMessagingRouter());
 
 // Video Collaboration - DAILY.CO INTEGRATION WITH CURSOR CONTROL ✅
 app.use("/api/collaboration", createCollaborationRouter());
+
+// Social Feed - LIKES, COMMENTS, REPOSTS ✅
+app.use("/api/feed", createFeedRouter());
+
+// Notifications - PERSISTENT NOTIFICATIONS FOR COLLABORATIVE FEATURES ✅
+app.use("/api/notifications", createNotificationRouter());
 
 // Settings are now part of user routes (/api/users/settings)
 

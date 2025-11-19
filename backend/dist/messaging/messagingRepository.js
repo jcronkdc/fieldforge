@@ -13,6 +13,7 @@ exports.updateTypingIndicator = updateTypingIndicator;
 exports.getTypingIndicators = getTypingIndicators;
 exports.addParticipantsToConversation = addParticipantsToConversation;
 exports.leaveConversation = leaveConversation;
+exports.getConversationParticipants = getConversationParticipants;
 const env_js_1 = require("../worker/env.js");
 const database_js_1 = require("../database.js");
 const env = (0, env_js_1.loadEnv)();
@@ -252,4 +253,20 @@ async function leaveConversation(conversationId, userId) {
      WHERE conversation_id = $1 AND user_id = $2`, [conversationId, userId]);
     // Send system message
     await sendMessage(conversationId, userId, 'Left the conversation', 'system');
+}
+// Get conversation participants
+async function getConversationParticipants(conversationId) {
+    const result = await (0, database_js_1.query)(`SELECT 
+      cp.user_id,
+      u.email as username,
+      up.full_name as display_name
+     FROM conversation_participants cp
+     LEFT JOIN auth.users u ON u.id = cp.user_id
+     LEFT JOIN user_profiles up ON up.user_id = cp.user_id
+     WHERE cp.conversation_id = $1`, [conversationId]);
+    return result.rows.map(row => ({
+        userId: row.user_id,
+        username: row.username,
+        displayName: row.display_name
+    }));
 }

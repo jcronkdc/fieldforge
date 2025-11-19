@@ -50,7 +50,7 @@ export class ErrorBoundary extends Component<Props, State> {
               ⚠️ Something went wrong
             </h1>
             <p className="text-slate-300 mb-4">
-              An error occurred while loading this page. Please try refreshing or contact support if the issue persists.
+              An error occurred while loading this page. You can go back to the previous page or reload to try again.
             </p>
             
             {import.meta.env.DEV && (
@@ -65,12 +65,26 @@ export class ErrorBoundary extends Component<Props, State> {
               </details>
             )}
             
-            <button
-              onClick={() => window.location.reload()}
-              className="mt-6 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors"
-            >
-              Reload Page
-            </button>
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => window.history.back()}
+                className="flex-1 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors"
+              >
+                ← Go Back
+              </button>
+              <button
+                onClick={() => window.location.href = '/dashboard'}
+                className="flex-1 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors"
+              >
+                🏠 Dashboard
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="flex-1 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition-colors"
+              >
+                🔄 Reload
+              </button>
+            </div>
           </div>
         </div>
       );

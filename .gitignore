@@ -4,3 +4,4 @@ apps/swipe-feed/node_modules/
 apps/swipe-feed/test-results/
 .env
 backend/node_modules/
+.env*.local

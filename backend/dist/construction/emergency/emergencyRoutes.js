@@ -130,15 +130,80 @@ function createEmergencyRouter() {
                 validatedData.contact_number || null
             ]);
             const alert = result.rows[0];
+            // Get recipients based on affected zones and crews
+            const recipientQuery = await (0, database_js_1.query)(`
+        SELECT DISTINCT up.email, up.phone
+        FROM user_profiles up
+        WHERE up.company_id = $1
+        AND (
+          up.role IN ('admin', 'safety_manager')
+          OR up.id IN (
+            SELECT user_id FROM crew_members
+            WHERE crew_id = ANY($2::uuid[])
+          )
+        )
+      `, [req.user?.company_id, validatedData.affected_crews || []]);
+            const recipients = recipientQuery.rows;
             // Trigger notifications based on delivery channels
             if (validatedData.delivery_channels.includes('sms')) {
-                // TODO: Integrate with SMS service (Twilio, etc.)
+                // Send SMS alerts
+                const phoneNumbers = recipients
+                    .map((r) => r.phone)
+                    .filter((phone) => !!phone);
+                if (phoneNumbers.length > 0) {
+                    try {
+                        const { sendEmergencySMS } = await import('../../sms/smsService.js');
+                        await sendEmergencySMS(phoneNumbers, {
+                            type: validatedData.alert_type,
+                            location: validatedData.location,
+                            description: validatedData.message,
+                            reportedBy: `User ${userId || 'Unknown'}`
+                        });
+                    }
+                    catch (smsError) {
+                        console.error('[emergency] Failed to send SMS alerts:', smsError);
+                    }
+                }
             }
             if (validatedData.delivery_channels.includes('email')) {
-                // TODO: Integrate with email service
+                // Send email alerts
+                const emails = recipients
+                    .map((r) => r.email)
+                    .filter((email) => !!email);
+                if (emails.length > 0) {
+                    try {
+                        const { sendEmergencyEmail } = await import('../../sms/smsService.js');
+                        await sendEmergencyEmail(emails, {
+                            type: validatedData.alert_type,
+                            location: validatedData.location,
+                            description: validatedData.message,
+                            reportedBy: `User ${userId || 'Unknown'}`,
+                            severity: validatedData.priority
+                        });
+                    }
+                    catch (emailError) {
+                        console.error('[emergency] Failed to send email alerts:', emailError);
+                    }
+                }
             }
             if (validatedData.delivery_channels.includes('siren')) {
-                // TODO: Trigger physical siren if integrated
+                // Physical siren integration (optional - requires hardware)
+                if (process.env.SIREN_API_ENDPOINT) {
+                    try {
+                        await fetch(process.env.SIREN_API_ENDPOINT, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                alert_type: validatedData.alert_type,
+                                location: validatedData.location,
+                                priority: validatedData.priority
+                            })
+                        });
+                    }
+                    catch (sirenError) {
+                        console.error('[emergency] Failed to trigger siren:', sirenError);
+                    }
+                }
             }
             // Broadcast to real-time subscribers
             // In production, this would use WebSockets or Server-Sent Events

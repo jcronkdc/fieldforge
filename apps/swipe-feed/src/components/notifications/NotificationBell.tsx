@@ -1,226 +1,330 @@
-/**
- * Notification Bell Component
- * © 2025 Cronk Companies, LLC. All Rights Reserved.
- */
+import React, { useState, useEffect } from 'react';
+import { Bell, X, Check, AlertCircle, MessageSquare, Users, Video } from 'lucide-react';
+import { useAuth } from '../../hooks/useAuth';
+import { format } from 'date-fns';
 
-import React, { useState, useEffect, useRef } from 'react';
+/**
+ * NotificationBell - Real-time notification dropdown
+ * 
+ * Mycelial Integration:
+ * - Backend: /api/notifications endpoints (MF-30)
+ * - Database: notifications table (migration 026)
+ * - Real-time: Ably notifications:{userId} channel
+ * - Security: RLS enforces users see only their own notifications
+ * 
+ * Human Test:
+ * - Does badge show unread count accurately?
+ * - Do notifications appear in real-time when events occur?
+ * - Can user mark as read and dismiss easily?
+ * - Is the UI clean and not overwhelming?
+ */
 
 interface Notification {
   id: string;
-  type: 'like' | 'comment' | 'follow' | 'mention' | 'system';
+  type: 'message' | 'mention' | 'room_invite' | 'room_started' | 'project_invite' | 'team_invite' | 'emergency_alert' | 'system';
   title: string;
   message: string;
-  timestamp: string;
-  read: boolean;
-  avatar?: string;
-  actionUrl?: string;
+  link?: string;
+  created_at: string;
+  read_at?: string;
+  metadata?: Record<string, any>;
 }
 
-export function NotificationBell() {
+export const NotificationBell: React.FC = () => {
+  const { session } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
 
-  // Load mock notifications
+  // Fetch notifications when dropdown opens
   useEffect(() => {
-    const mockNotifications: Notification[] = [
-      {
-        id: '1',
-        type: 'like',
-        title: 'New like on your post',
-        message: 'Sarah liked your welcome post',
-        timestamp: '2 minutes ago',
-        read: false,
-      },
-      {
-        id: '2',
-        type: 'comment',
-        title: 'New comment',
-        message: 'Alex commented: "This is amazing."',
-        timestamp: '1 hour ago',
-        read: false,
-      },
-      {
-        id: '3',
-        type: 'follow',
-        title: 'New creator connection',
-        message: 'Jordan is now following you',
-        timestamp: '3 hours ago',
-        read: true,
-      },
-      {
-        id: '4',
-        type: 'system',
-        title: 'Welcome to MythaTron',
-        message: 'Your account has been activated. Start creating.',
-        timestamp: '1 day ago',
-        read: true,
-      },
-    ];
-    
-    setNotifications(mockNotifications);
-    setUnreadCount(mockNotifications.filter(n => !n.read).length);
-  }, []);
+    if (isOpen && session?.access_token) {
+      fetchNotifications();
+    }
+  }, [isOpen, session?.access_token]);
 
-  // Close dropdown when clicking outside
+  // Fetch unread count on mount and periodically
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+    if (session?.access_token) {
+      fetchUnreadCount();
+      // Refresh count every 30 seconds
+      const interval = setInterval(fetchUnreadCount, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [session?.access_token]);
+
+  // TODO: Subscribe to Ably channel for real-time updates
+  // useEffect(() => {
+  //   if (session?.user?.id && window.Ably) {
+  //     const channel = window.Ably.channels.get(`notifications:${session.user.id}`);
+  //     channel.subscribe('new', (message) => {
+  //       setUnreadCount(prev => prev + 1);
+  //       if (isOpen) fetchNotifications();
+  //     });
+  //     return () => channel.unsubscribe();
+  //   }
+  // }, [session?.user?.id, isOpen]);
+
+  const fetchUnreadCount = async () => {
+    if (!session?.access_token) return;
+
+    try {
+      const response = await fetch('/api/notifications/unread-count', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUnreadCount(data.count || 0);
       }
+    } catch (error) {
+      console.error('[NotificationBell] Failed to fetch unread count:', error);
     }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
-    );
-    setUnreadCount(prev => Math.max(0, prev - 1));
   };
 
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    setUnreadCount(0);
+  const fetchNotifications = async () => {
+    if (!session?.access_token) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch('/api/notifications?limit=20', {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data.notifications || []);
+      }
+    } catch (error) {
+      console.error('[NotificationBell] Failed to fetch notifications:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const getIcon = (type: Notification['type']) => {
+  const markAsRead = async (notificationId: string) => {
+    if (!session?.access_token) return;
+
+    try {
+      const response = await fetch(`/api/notifications/${notificationId}/read`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
+
+      if (response.ok) {
+        // Update local state
+        setNotifications(prev =>
+          prev.map(n => n.id === notificationId ? { ...n, read_at: new Date().toISOString() } : n)
+        );
+        setUnreadCount(prev => Math.max(0, prev - 1));
+      }
+    } catch (error) {
+      console.error('[NotificationBell] Failed to mark as read:', error);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    if (!session?.access_token) return;
+
+    try {
+      const response = await fetch('/api/notifications/mark-all-read', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`
+        }
+      });
+
+      if (response.ok) {
+        setNotifications(prev =>
+          prev.map(n => ({ ...n, read_at: new Date().toISOString() }))
+        );
+        setUnreadCount(0);
+      }
+    } catch (error) {
+      console.error('[NotificationBell] Failed to mark all as read:', error);
+    }
+  };
+
+  const getNotificationIcon = (type: Notification['type']) => {
     switch (type) {
-      case 'like':
-        return (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-pink-400">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        );
-      case 'comment':
-        return (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-400">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-          </svg>
-        );
-      case 'follow':
-        return (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-green-400">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <line x1="19" y1="8" x2="19" y2="14"/>
-            <line x1="22" y1="11" x2="16" y2="11"/>
-          </svg>
-        );
+      case 'message':
       case 'mention':
-        return (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-purple-400">
-            <circle cx="12" cy="12" r="4"/>
-            <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/>
-          </svg>
-        );
+        return <MessageSquare className="w-4 h-4" />;
+      case 'room_invite':
+      case 'room_started':
+        return <Video className="w-4 h-4" />;
+      case 'project_invite':
+      case 'team_invite':
+        return <Users className="w-4 h-4" />;
+      case 'emergency_alert':
+        return <AlertCircle className="w-4 h-4" />;
       default:
-        return (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-yellow-400">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-        );
+        return <Bell className="w-4 h-4" />;
     }
   };
+
+  const getNotificationColor = (type: Notification['type']) => {
+    switch (type) {
+      case 'emergency_alert':
+        return 'text-red-500 bg-red-50 border-red-200';
+      case 'mention':
+        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      case 'room_invite':
+      case 'project_invite':
+      case 'team_invite':
+        return 'text-blue-500 bg-blue-50 border-blue-200';
+      default:
+        return 'text-gray-500 bg-gray-50 border-gray-200';
+    }
+  };
+
+  if (!session?.user) {
+    return null; // Don't show bell if not logged in
+  }
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative">
       {/* Bell Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all"
+        className="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+        title="Notifications"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-        </svg>
-        
-        {/* Unread Badge */}
+        <Bell className="w-5 h-5 text-gray-600 dark:text-gray-300" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-xs font-bold text-white">
-            {unreadCount > 9 ? '9+' : unreadCount}
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+            {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
       </button>
 
-      {/* Dropdown */}
+      {/* Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-black/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl z-50">
-          {/* Header */}
-          <div className="p-4 border-b border-white/10 flex items-center justify-between">
-            <h3 className="text-sm font-medium text-white">Notifications</h3>
-            {unreadCount > 0 && (
-              <button
-                onClick={markAllAsRead}
-                className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
-              >
-                Mark all as read
-              </button>
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setIsOpen(false)}
+          />
+
+          {/* Notification Panel */}
+          <div className="absolute right-0 top-12 w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 max-h-[calc(100vh-5rem)] flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-2">
+                <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  Notifications
+                </h3>
+                {unreadCount > 0 && (
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                    ({unreadCount} unread)
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                {unreadCount > 0 && (
+                  <button
+                    onClick={markAllAsRead}
+                    className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                    title="Mark all as read"
+                  >
+                    <Check className="w-4 h-4" />
+                  </button>
+                )}
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Notifications List */}
+            <div className="overflow-y-auto flex-1">
+              {loading ? (
+                <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                  <div className="animate-spin w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2"></div>
+                  Loading...
+                </div>
+              ) : notifications.length === 0 ? (
+                <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                  <Bell className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                  <p>No notifications yet</p>
+                  <p className="text-sm mt-1">You'll see updates here when they arrive</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {notifications.map((notification) => (
+                    <div
+                      key={notification.id}
+                      className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer ${
+                        !notification.read_at ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
+                      }`}
+                      onClick={() => {
+                        if (!notification.read_at) {
+                          markAsRead(notification.id);
+                        }
+                        if (notification.link) {
+                          window.location.href = notification.link;
+                        }
+                      }}
+                    >
+                      <div className="flex items-start gap-3">
+                        {/* Icon */}
+                        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center border ${getNotificationColor(notification.type)}`}>
+                          {getNotificationIcon(notification.type)}
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium text-gray-900 dark:text-white text-sm">
+                              {notification.title}
+                            </p>
+                            {!notification.read_at && (
+                              <span className="flex-shrink-0 w-2 h-2 bg-blue-500 rounded-full mt-1"></span>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                            {notification.message}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                            {format(new Date(notification.created_at), 'MMM d, h:mm a')}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            {notifications.length > 0 && (
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700 text-center">
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    window.location.href = '/notifications'; // TODO: Create notifications page
+                  }}
+                  className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+                >
+                  View All Notifications
+                </button>
+              </div>
             )}
           </div>
-
-          {/* Notifications List */}
-          {notifications.length === 0 ? (
-            <div className="p-8 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/40">
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                </svg>
-              </div>
-              <p className="text-sm text-white/60">No notifications yet</p>
-            </div>
-          ) : (
-            <div className="divide-y divide-white/5">
-              {notifications.map((notification) => (
-                <button
-                  key={notification.id}
-                  onClick={() => markAsRead(notification.id)}
-                  className={`w-full p-4 text-left hover:bg-white/5 transition-all ${
-                    !notification.read ? 'bg-purple-500/5' : ''
-                  }`}
-                >
-                  <div className="flex gap-3">
-                    <div className="flex-shrink-0 mt-1">
-                      {getIcon(notification.type)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white">
-                        {notification.title}
-                      </p>
-                      <p className="text-xs text-white/60 mt-1">
-                        {notification.message}
-                      </p>
-                      <p className="text-xs text-white/40 mt-2">
-                        {notification.timestamp}
-                      </p>
-                    </div>
-                    {!notification.read && (
-                      <div className="flex-shrink-0">
-                        <div className="w-2 h-2 bg-purple-400 rounded-full" />
-                      </div>
-                    )}
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Footer */}
-          {notifications.length > 0 && (
-            <div className="p-3 border-t border-white/10">
-              <button className="w-full text-xs text-center text-purple-400 hover:text-purple-300 transition-colors">
-                View all notifications
-              </button>
-            </div>
-          )}
-        </div>
+        </>
       )}
     </div>
   );
-}
+};

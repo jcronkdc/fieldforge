@@ -1,5 +1,11 @@
 import { Router, Request, Response } from 'express';
 import Stripe from 'stripe';
+import {
+  updateCompanySubscription,
+  getCompanyByStripeCustomer,
+  cancelCompanySubscription,
+  getCompanyByUserId
+} from '../billing/subscriptionRepository.js';
 
 // Create webhook router
 export function createStripeWebhookRouter() {
@@ -77,61 +83,103 @@ export function createStripeWebhookRouter() {
   // Helper functions for webhook handlers
   async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
     console.log('Checkout session completed:', session.id);
-    // Update user subscription in database
-    const userId = session.metadata?.userId;
-    const plan = session.metadata?.plan;
     
-    if (userId && plan) {
-      // TODO: Update user subscription in database
-      console.log(`Activating ${plan} plan for user ${userId}`);
+    try {
+      const userId = session.metadata?.userId;
+      const plan = session.metadata?.plan || 'professional';
       
-      // In production, you would update the user's subscription status
-      // await updateUserSubscription(userId, {
-      //   stripeCustomerId: session.customer,
-      //   stripeSubscriptionId: session.subscription,
-      //   plan: plan,
-      //   status: 'active',
-      //   trialEnd: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000) // 14 days
-      // });
+      if (!userId) {
+        console.warn('[stripe] No userId in checkout session metadata');
+        return;
+      }
+      
+      // Get company ID from user
+      const companyId = await getCompanyByUserId(userId);
+      if (!companyId) {
+        console.error('[stripe] No company found for user:', userId);
+        return;
+      }
+      
+      // Update company subscription
+      await updateCompanySubscription({
+        companyId,
+        stripeCustomerId: session.customer as string,
+        stripeSubscriptionId: session.subscription as string,
+        plan,
+        status: 'active',
+        currentPeriodEnd: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60) // 30 days from now
+      });
+      
+      console.log(`[stripe] Activated ${plan} plan for company ${companyId}`);
+    } catch (error) {
+      console.error('[stripe] Failed to update subscription:', error);
     }
   }
 
   async function handleSubscriptionUpdate(subscription: Stripe.Subscription) {
     console.log('Subscription updated:', subscription.id);
-    const userId = subscription.metadata?.userId;
-    const plan = subscription.metadata?.plan;
     
-    if (userId) {
-      // TODO: Update subscription status in database
-      console.log(`Updating subscription for user ${userId} to ${plan}`);
+    try {
+      // Find company by Stripe customer ID
+      const companyId = await getCompanyByStripeCustomer(subscription.customer as string);
+      if (!companyId) {
+        console.warn('[stripe] No company found for customer:', subscription.customer);
+        return;
+      }
       
-      // await updateUserSubscription(userId, {
-      //   status: subscription.status,
-      //   currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-      //   cancelAtPeriodEnd: subscription.cancel_at_period_end
-      // });
+      const plan = subscription.metadata?.plan || 'professional';
+      
+      await updateCompanySubscription({
+        companyId,
+        stripeCustomerId: subscription.customer as string,
+        stripeSubscriptionId: subscription.id,
+        plan,
+        status: subscription.status as any,
+        currentPeriodEnd: (subscription as any).current_period_end || Date.now() / 1000,
+        cancelAtPeriodEnd: (subscription as any).cancel_at_period_end || false
+      });
+      
+      console.log(`[stripe] Updated subscription for company ${companyId} to ${subscription.status}`);
+    } catch (error) {
+      console.error('[stripe] Failed to update subscription:', error);
     }
   }
 
   async function handleSubscriptionCanceled(subscription: Stripe.Subscription) {
     console.log('Subscription canceled:', subscription.id);
-    const userId = subscription.metadata?.userId;
     
-    if (userId) {
-      // TODO: Update user to free tier in database
-      console.log(`Canceling subscription for user ${userId}`);
+    try {
+      // Find company by Stripe customer ID
+      const companyId = await getCompanyByStripeCustomer(subscription.customer as string);
+      if (!companyId) {
+        console.warn('[stripe] No company found for customer:', subscription.customer);
+        return;
+      }
       
-      // await updateUserSubscription(userId, {
-      //   plan: 'free',
-      //   status: 'canceled',
-      //   canceledAt: new Date()
-      // });
+      await cancelCompanySubscription(companyId);
+      console.log(`[stripe] Canceled subscription for company ${companyId}`);
+    } catch (error) {
+      console.error('[stripe] Failed to cancel subscription:', error);
     }
   }
 
   async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     console.log('Invoice payment succeeded:', invoice.id);
-    // TODO: Send receipt email
+    // Send receipt email
+    if (invoice.customer_email) {
+      try {
+        const { sendStripeReceipt } = await import('../email/emailService.js');
+        await sendStripeReceipt(
+          invoice.customer_email,
+          invoice.amount_paid || 0,
+          invoice.currency || 'usd',
+          invoice.hosted_invoice_url || undefined
+        );
+      } catch (emailError) {
+        console.error('[stripe] Failed to send receipt email:', emailError);
+        // Don't fail the webhook if email fails
+      }
+    }
     
     // if (invoice.customer_email) {
     //   await sendReceiptEmail(invoice.customer_email, {
@@ -145,7 +193,20 @@ export function createStripeWebhookRouter() {
 
   async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
     console.log('Invoice payment failed:', invoice.id);
-    // TODO: Send payment failure notification
+    // Send payment failure notification
+    if (invoice.customer_email) {
+      try {
+        const { sendPaymentFailure } = await import('../email/emailService.js');
+        await sendPaymentFailure(
+          invoice.customer_email,
+          invoice.amount_due || 0,
+          invoice.currency || 'usd',
+          invoice.last_finalization_error?.message
+        );
+      } catch (emailError) {
+        console.error('[stripe] Failed to send payment failure email:', emailError);
+      }
+    }
     
     // if (invoice.customer_email) {
     //   await sendPaymentFailureEmail(invoice.customer_email, {
