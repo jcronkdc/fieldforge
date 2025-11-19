@@ -258,9 +258,15 @@ export const ProjectSchedule: React.FC = () => {
     : tasks;
 
   return (
-    <div className="p-6">
-      <div className="max-w-full mx-auto">
-        <div className="flex justify-between items-center mb-6">
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-full flex-col gap-8 px-8 py-12">
+        <header className="flex justify-between items-center border-b border-gray-800 pb-6">
+          <div className="space-y-2">
+            <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Master Schedule</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              Project Schedule
+            </h1>
+          </div>
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">📅 Project Schedule</h1>
             <p className="text-slate-400">Gantt chart view of project timeline</p>
