@@ -41,8 +41,8 @@ const telemetryCards = [
 ];
 
 export const FuturisticDashboard: React.FC = () => {
-  // Check if this is a new electrical contractor (like National Conductor)
-  const isNewElectricalContractor = !localStorage.getItem('fieldforge_onboarding_complete');
+  // Always use the futuristic dashboard - onboarding is separate flow now
+  const isNewElectricalContractor = false; // Onboarding handled via /welcome route
   
   if (isNewElectricalContractor) {
     // Show specialized onboarding for electrical contractors
