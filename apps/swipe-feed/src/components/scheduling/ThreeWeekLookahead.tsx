@@ -288,50 +288,56 @@ export const ThreeWeekLookahead: React.FC = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">📅 Three Week Lookahead</h1>
-            <p className="text-slate-400">Plan and track upcoming activities</p>
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
+        
+        {/* Header */}
+        <header className="flex flex-col gap-4 border-b border-gray-800 pb-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-3">
+            <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Schedule Planning</p>
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent flex items-center gap-4">
+              <Calendar className="w-12 h-12 text-blue-400" />
+              Three Week Lookahead
+            </h1>
+            <p className="max-w-3xl text-base text-gray-400">Plan and track upcoming activities with your team.</p>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowCollaboration(!showCollaboration)}
-              className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg shadow-blue-500/25 flex items-center gap-2"
             >
               <Video className="w-5 h-5" />
               <span className="hidden sm:inline">Planning Call</span>
             </button>
             <button
               onClick={() => setShowForm(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition"
+              className="px-6 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg hover:border-blue-500/50 hover:bg-gray-800/80 transition-all flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Add Activity
             </button>
           </div>
-        </div>
+        </header>
 
         {/* Week Navigation */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4 mb-6">
+        <section className="bg-gray-800/50 border border-gray-700 rounded-lg p-6">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setCurrentWeek(currentWeek - 1)}
               disabled={currentWeek <= -1}
-              className="p-2 hover:bg-slate-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <ChevronLeft className="w-5 h-5 text-white" />
+              <ChevronLeft className="w-6 h-6 text-white" />
             </button>
             
             <div className="text-center">
-              <h2 className="text-xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-white">
                 {currentWeek === 0 ? 'Current Week' : 
                  currentWeek === 1 ? 'Next Week' : 
                  currentWeek === 2 ? 'Week After Next' :
                  `Week ${currentWeek > 0 ? '+' : ''}${currentWeek}`}
               </h2>
-              <p className="text-slate-400">
+              <p className="text-gray-400 mt-1">
                 {weekStart.toLocaleDateString()} - {weekEnd.toLocaleDateString()}
               </p>
             </div>
@@ -339,22 +345,22 @@ export const ThreeWeekLookahead: React.FC = () => {
             <button
               onClick={() => setCurrentWeek(currentWeek + 1)}
               disabled={currentWeek >= 2}
-              className="p-2 hover:bg-slate-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-3 hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <ChevronRight className="w-5 h-5 text-white" />
+              <ChevronRight className="w-6 h-6 text-white" />
             </button>
           </div>
-        </div>
+        </section>
 
         {/* Activity Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-400">Total Activities</span>
-              <Calendar className="w-5 h-5 text-blue-500" />
+        <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+            <div className="flex items-center justify-between mb-4">
+              <Calendar className="w-8 h-8 text-blue-400" />
+              <span className="text-xs text-gray-500 uppercase tracking-wider">Total</span>
             </div>
-            <div className="text-2xl font-bold text-white">{weekActivities.length}</div>
-            <div className="text-sm text-slate-400">This week</div>
+            <div className="text-3xl font-bold text-white">{weekActivities.length}</div>
+            <div className="text-sm text-gray-400 mt-1">This week</div>
           </div>
 
           <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-lg p-4">
