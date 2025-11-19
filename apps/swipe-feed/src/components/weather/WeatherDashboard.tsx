@@ -209,12 +209,17 @@ export const WeatherDashboard: React.FC = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
+      
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Weather Dashboard</h1>
-          <p className="text-gray-600 mt-1 flex items-center gap-2">
+      <header className="flex flex-col gap-4 border-b border-gray-800 pb-8 lg:flex-row lg:items-center lg:justify-between">
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Weather Monitoring</p>
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Weather Dashboard
+          </h1>
+          <p className="max-w-3xl text-base text-gray-400 flex items-center gap-2">
             <MapPin className="w-4 h-4" />
             {location.name} • Last updated: {lastUpdated.toLocaleTimeString()}
           </p>
@@ -227,11 +232,11 @@ export const WeatherDashboard: React.FC = () => {
               onChange={(e) => setAutoRefresh(e.target.checked)}
               className="rounded text-blue-600"
             />
-            <span className="text-sm text-gray-700">Auto-refresh</span>
+            <span className="text-sm text-gray-400">Auto-refresh</span>
           </label>
           <button
             onClick={fetchWeather}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg shadow-blue-500/25 flex items-center gap-2"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh
