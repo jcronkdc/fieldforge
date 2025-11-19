@@ -241,136 +241,142 @@ export const QAQCHub: React.FC = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Quality Control Hub</h1>
-          <p className="text-gray-600 mt-1">Track inspections and maintain quality standards</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowCollaboration(true)}
-            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all px-4 py-2 flex items-center gap-2 min-h-[44px]"
-            title="Start collaborative inspection review"
-          >
-            <Video className="w-4 h-4" />
-            <span className="hidden sm:inline">Inspection Call</span>
-          </button>
-          <button
-            onClick={() => setShowCreateForm(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 min-h-[44px]"
-          >
-            <Plus className="w-4 h-4" />
-            Schedule Inspection
-          </button>
-        </div>
-      </div>
-
-      {/* Metrics Grid - Mobile Responsive */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
-        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
-          <div className="flex items-center justify-between mb-2">
-            <ClipboardCheck className="w-6 h-6 text-blue-500" />
-            <span className="text-xs text-gray-500">Total</span>
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
+        {/* Header */}
+        <header className="flex flex-col gap-4 border-b border-gray-800 pb-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="space-y-3">
+            <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Quality Assurance</p>
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              QA/QC Hub
+            </h1>
+            <p className="max-w-3xl text-base text-gray-400">
+              Track inspections, maintain quality standards, and collaborate with your team on quality checks.
+            </p>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{metrics.totalInspections}</p>
-          <p className="text-xs text-gray-600 mt-1">Inspections</p>
+          <div className="flex gap-3">
+            <button
+              onClick={() => setShowCollaboration(true)}
+              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg flex items-center gap-2 hover:from-blue-600 hover:to-purple-700 transition-all shadow-lg shadow-blue-500/25"
+              title="Start collaborative inspection review"
+            >
+              <Video className="w-5 h-5" />
+              <span className="hidden sm:inline">Inspection Call</span>
+            </button>
+            <button
+              onClick={() => setShowCreateForm(true)}
+              className="px-6 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg hover:border-blue-500/50 hover:bg-gray-800/80 transition-all flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
+              <span className="hidden sm:inline">Schedule</span>
+            </button>
+          </div>
+        </header>
+
+      {/* Metrics Grid */}
+      <section className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <ClipboardCheck className="w-6 h-6 text-blue-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Total</span>
+          </div>
+          <p className="text-3xl font-bold text-white">{metrics.totalInspections}</p>
+          <p className="text-sm text-gray-400 mt-1">Inspections</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
-          <div className="flex items-center justify-between mb-2">
-            <TrendingUp className="w-6 h-6 text-green-500" />
-            <span className="text-xs text-gray-500">Rate</span>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <TrendingUp className="w-6 h-6 text-green-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Rate</span>
           </div>
-          <p className={`text-2xl font-bold ${getScoreColor(metrics.passRate)}`}>
+          <p className={`text-3xl font-bold ${getScoreColor(metrics.passRate).replace('text-', 'text-')}`}>
             {metrics.passRate}%
           </p>
-          <p className="text-xs text-gray-600 mt-1">Pass Rate</p>
+          <p className="text-sm text-gray-400 mt-1">Pass Rate</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
-          <div className="flex items-center justify-between mb-2">
-            <AlertTriangle className="w-6 h-6 text-orange-500" />
-            <span className="text-xs text-gray-500">Open</span>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <AlertTriangle className="w-6 h-6 text-orange-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Open</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{metrics.openFindings}</p>
-          <p className="text-xs text-gray-600 mt-1">Findings</p>
+          <p className="text-3xl font-bold text-white">{metrics.openFindings}</p>
+          <p className="text-sm text-gray-400 mt-1">Findings</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
-          <div className="flex items-center justify-between mb-2">
-            <CheckCircle className="w-6 h-6 text-blue-500" />
-            <span className="text-xs text-gray-500">Score</span>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <CheckCircle className="w-6 h-6 text-blue-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Score</span>
           </div>
-          <p className={`text-2xl font-bold ${getScoreColor(metrics.avgScore)}`}>
+          <p className={`text-3xl font-bold ${getScoreColor(metrics.avgScore).replace('text-', 'text-')}`}>
             {metrics.avgScore}
           </p>
-          <p className="text-xs text-gray-600 mt-1">Avg Score</p>
+          <p className="text-sm text-gray-400 mt-1">Avg Score</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
-          <div className="flex items-center justify-between mb-2">
-            <Calendar className="w-6 h-6 text-red-500" />
-            <span className="text-xs text-gray-500">Due</span>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <Calendar className="w-6 h-6 text-red-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Due</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{metrics.overdueInspections}</p>
-          <p className="text-xs text-gray-600 mt-1">Overdue</p>
+          <p className="text-3xl font-bold text-white">{metrics.overdueInspections}</p>
+          <p className="text-sm text-gray-400 mt-1">Overdue</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-4 sm:p-5">
-          <div className="flex items-center justify-between mb-2">
-            <CheckCircle className="w-6 h-6 text-purple-500" />
-            <span className="text-xs text-gray-500">Rate</span>
+        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
+          <div className="flex items-center justify-between mb-4">
+            <CheckCircle className="w-6 h-6 text-purple-400" />
+            <span className="text-xs text-gray-500 uppercase tracking-wider">Rate</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{metrics.completionRate}%</p>
-          <p className="text-xs text-gray-600 mt-1">Complete</p>
+          <p className="text-3xl font-bold text-white">{metrics.completionRate}%</p>
+          <p className="text-sm text-gray-400 mt-1">Complete</p>
         </div>
-      </div>
+      </section>
 
       {/* Filter Tabs */}
-      <div className="bg-white rounded-lg shadow p-4">
+      <section className="bg-gray-800/50 border border-gray-700 rounded-lg p-4">
         <div className="flex flex-wrap gap-2">
           {['all', 'scheduled', 'in_progress', 'completed', 'failed'].map(status => (
             <button
               key={status}
               onClick={() => setFilterStatus(status)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors min-h-[44px] ${
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
                 filterStatus === status
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+                  : 'bg-gray-900/50 text-gray-400 hover:text-white hover:bg-gray-900 border border-gray-700'
               }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}
             </button>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* Inspections List */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-4 sm:p-6 border-b">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Inspections</h2>
+      <section className="bg-gray-800/50 border border-gray-700 rounded-lg">
+        <div className="p-6 border-b border-gray-700">
+          <h2 className="text-xl font-semibold text-white">Recent Inspections</h2>
         </div>
-        <div className="divide-y">
+        <div className="divide-y divide-gray-700">
           {inspections.length === 0 ? (
-            <div className="p-8 text-center">
-              <ClipboardCheck className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-600">No inspections found</p>
-              <p className="text-sm text-gray-500 mt-1">Schedule your first inspection to get started</p>
+            <div className="p-12 text-center">
+              <ClipboardCheck className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+              <p className="text-gray-400 text-lg font-medium">No inspections found</p>
+              <p className="text-sm text-gray-500 mt-2">Schedule your first inspection to get started</p>
             </div>
           ) : (
             inspections.map(inspection => (
               <div
                 key={inspection.id}
-                className="p-4 sm:p-6 hover:bg-gray-50 transition-colors cursor-pointer"
+                className="p-6 hover:bg-gray-900/50 transition-colors cursor-pointer"
                 onClick={() => setSelectedInspection(inspection)}
               >
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-medium text-gray-900">{inspection.inspection_type}</h3>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(inspection.status)}`}>
+                    <div className="flex items-center gap-3 mb-3">
+                      <h3 className="text-lg font-semibold text-white">{inspection.inspection_type}</h3>
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${getStatusColor(inspection.status)}`}>
                         {inspection.status.replace('_', ' ')}
                       </span>
                       {inspection.score !== undefined && (
@@ -380,25 +386,25 @@ export const QAQCHub: React.FC = () => {
                       )}
                     </div>
                     
-                    <div className="space-y-1 text-sm text-gray-600">
+                    <div className="space-y-2 text-sm text-gray-400">
                       <p className="flex items-center gap-2">
-                        <Calendar className="w-3 h-3" />
+                        <Calendar className="w-4 h-4 text-blue-400" />
                         Scheduled: {new Date(inspection.scheduled_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                         {inspection.completed_date && (
-                          <span className="text-green-600">
+                          <span className="text-green-400">
                             • Completed: {new Date(inspection.completed_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                           </span>
                         )}
                       </p>
                       {inspection.project_name && (
                         <p className="flex items-center gap-2">
-                          <FileText className="w-3 h-3" />
+                          <FileText className="w-4 h-4 text-blue-400" />
                           {inspection.project_name}
                         </p>
                       )}
                       {inspection.inspector_name && (
                         <p className="flex items-center gap-2">
-                          <Users className="w-3 h-3" />
+                          <Users className="w-4 h-4 text-blue-400" />
                           Inspector: {inspection.inspector_name}
                         </p>
                       )}
@@ -406,14 +412,14 @@ export const QAQCHub: React.FC = () => {
 
                     {/* Findings Summary */}
                     {inspection.findings && inspection.findings.length > 0 && (
-                      <div className="mt-3 flex items-center gap-4 text-sm">
+                      <div className="mt-4 flex items-center gap-4 text-sm">
                         {['critical', 'major', 'minor'].map(severity => {
                           const count = inspection.findings.filter(f => f.severity === severity).length;
                           if (count === 0) return null;
                           return (
-                            <div key={severity} className="flex items-center gap-1">
+                            <div key={severity} className="flex items-center gap-2">
                               {getSeverityIcon(severity)}
-                              <span className="text-gray-600">{count} {severity}</span>
+                              <span className="text-gray-400">{count} {severity}</span>
                             </div>
                           );
                         })}
@@ -429,7 +435,7 @@ export const QAQCHub: React.FC = () => {
                           e.stopPropagation();
                           startInspection(inspection.id);
                         }}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm min-h-[44px]"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                       >
                         Start
                       </button>
@@ -440,7 +446,7 @@ export const QAQCHub: React.FC = () => {
                           e.stopPropagation();
                           window.open(inspection.report_url, '_blank');
                         }}
-                        className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm min-h-[44px] flex items-center gap-2"
+                        className="px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg hover:border-blue-500/50 transition-all text-sm flex items-center gap-2"
                       >
                         <Download className="w-4 h-4" />
                         Report
@@ -452,7 +458,9 @@ export const QAQCHub: React.FC = () => {
             ))
           )}
         </div>
-      </div>
+      </section>
+    </div>
+  </div>
 
       {/* Create Inspection Modal */}
       {showCreateForm && (
