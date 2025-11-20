@@ -8,9 +8,16 @@ export interface Env {
   AI_PROVIDER_URL?: string;
   AI_PROVIDER_API_KEY?: string;
   AI_PROVIDER_MODEL?: string;
+  // Cloud AI (Powerful but sends data to external services)
   ANTHROPIC_API_KEY?: string;  // Claude Sonnet 4.5 - Most powerful AI
   OPENAI_API_KEY?: string;      // GPT-4 Turbo - Fallback AI
   XAI_API_KEY?: string;          // Grok (xAI) - Alternative powerful AI
+  
+  // Local AI (Private, NDA-compliant, data never leaves company)
+  LOCAL_AI_ENABLED?: string;    // Set to 'true' to use local AI only
+  LOCAL_AI_URL?: string;        // URL to local AI endpoint (e.g., Ollama, LM Studio, LocalAI)
+  LOCAL_AI_MODEL?: string;      // Model name (e.g., 'llama3', 'mistral', 'codellama')
+  
   OPENWEATHER_API_KEY?: string; // Real-time weather & forecasts
   NOTIFY_WEBHOOK_DISCORD?: string;
   NOTIFY_SENDGRID_API_KEY?: string;
