@@ -229,70 +229,87 @@ export const TimeTracking: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
-      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       
       {/* Header */}
-      <header className="flex flex-col gap-4 border-b border-gray-800 pb-8">
-        <div className="space-y-3">
-          <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Time Management</p>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      <header className="flex flex-col gap-4 border-b border-gray-800 pb-6">
+        <div className="space-y-2">
+          <p className="text-xs sm:text-sm text-gray-500 font-medium uppercase tracking-wider">Time Management</p>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
             Time Tracking
           </h1>
-          <p className="max-w-3xl text-base text-gray-400">Track your work hours and manage timesheets.</p>
+          <p className="max-w-3xl text-sm sm:text-base text-gray-400">Track your work hours and manage timesheets with real-time location and weather data.</p>
         </div>
       </header>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-5 shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 transition-all">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-400">Today</p>
-              <p className="text-2xl font-bold text-white">{todayHours.toFixed(1)}h</p>
+              <p className="text-xs sm:text-sm text-gray-400 font-medium">Today</p>
+              <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                {todayHours.toFixed(1)}h
+              </p>
             </div>
-            <Calendar className="w-8 h-8 text-blue-500" />
+            <div className="p-3 bg-blue-500/10 rounded-lg">
+              <Calendar className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5">
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-5 shadow-lg shadow-purple-500/10 hover:shadow-purple-500/20 transition-all">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-400">This Week</p>
-              <p className="text-2xl font-bold text-white">{weeklyHours.toFixed(1)}h</p>
+              <p className="text-xs sm:text-sm text-gray-400 font-medium">This Week</p>
+              <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                {weeklyHours.toFixed(1)}h
+              </p>
             </div>
-            <Clock className="w-8 h-8 text-blue-500" />
+            <div className="p-3 bg-purple-500/10 rounded-lg">
+              <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5">
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-5 shadow-lg shadow-green-500/10 hover:shadow-green-500/20 transition-all sm:col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-400">Earnings (est.)</p>
-              <p className="text-2xl font-bold text-white">${(weeklyHours * 45).toFixed(0)}</p>
+              <p className="text-xs sm:text-sm text-gray-400 font-medium">Earnings (est.)</p>
+              <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                ${(weeklyHours * 45).toFixed(0)}
+              </p>
             </div>
-            <DollarSign className="w-8 h-8 text-green-500" />
+            <div className="p-3 bg-green-500/10 rounded-lg">
+              <DollarSign className="w-6 h-6 sm:w-8 sm:h-8 text-green-400" />
+            </div>
           </div>
         </div>
       </div>
 
       {/* Timer Control */}
-      <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
+      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-6 shadow-lg">
         {activeEntry ? (
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-medium text-white">Timer Running</h3>
-                <p className="text-sm text-gray-400 mt-1">{activeEntry.task_description}</p>
-                <p className="text-xs text-gray-500 mt-1">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <h3 className="text-base sm:text-lg font-medium text-white">Timer Running</h3>
+                </div>
+                <p className="text-sm sm:text-base text-gray-300 font-medium">{activeEntry.task_description}</p>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1">
                   {activeEntry.project?.name} • Started {format(new Date(activeEntry.start_time), 'h:mm a')}
                 </p>
               </div>
-              <div className="text-right">
-                <p className="text-3xl font-mono font-bold text-blue-500">{getCurrentDuration()}</p>
+              <div className="text-left sm:text-right">
+                <p className="text-4xl sm:text-5xl font-mono font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                  {getCurrentDuration()}
+                </p>
                 <button
                   onClick={stopTimer}
                   disabled={loading}
-                  className="mt-2 px-6 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 text-white rounded-lg font-medium flex items-center gap-2 transition-colors"
+                  className="w-full sm:w-auto px-6 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-all shadow-lg shadow-red-500/25"
                 >
                   <Pause className="w-4 h-4" />
                   Stop Timer
@@ -301,16 +318,16 @@ export const TimeTracking: React.FC = () => {
             </div>
 
             {/* Location and Weather Info */}
-            <div className="flex items-center gap-4 text-sm text-gray-400">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 pt-4 border-t border-gray-700">
               {activeEntry.location && (
-                <div className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4" />
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400">
+                  <MapPin className="w-4 h-4 text-blue-400" />
                   <span>Location tracked</span>
                 </div>
               )}
               {activeEntry.weather_conditions && (
-                <div className="flex items-center gap-1">
-                  <Cloud className="w-4 h-4" />
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400">
+                  <Cloud className="w-4 h-4 text-cyan-400" />
                   <span>{activeEntry.weather_conditions.temp}°F, {activeEntry.weather_conditions.conditions}</span>
                 </div>
               )}
@@ -323,7 +340,7 @@ export const TimeTracking: React.FC = () => {
               <select
                 value={selectedProject}
                 onChange={(e) => setSelectedProject(e.target.value)}
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-gray-700 focus:outline-none"
+                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
                 disabled={projects.length === 0}
               >
                 <option value="">Select a project</option>
@@ -342,7 +359,7 @@ export const TimeTracking: React.FC = () => {
                 value={currentTask}
                 onChange={(e) => setCurrentTask(e.target.value)}
                 placeholder="e.g., Installing conduit in Building A"
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-gray-700 focus:outline-none"
+                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-all"
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && !loading && selectedProject && currentTask.trim()) {
                     startTimer();
@@ -354,7 +371,7 @@ export const TimeTracking: React.FC = () => {
             <button
               onClick={startTimer}
               disabled={loading || !selectedProject || !currentTask.trim()}
-              className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-colors"
+              className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/25"
             >
               <Play className="w-5 h-5" />
               Start Timer
@@ -364,8 +381,8 @@ export const TimeTracking: React.FC = () => {
       </div>
 
       {/* Recent Entries */}
-      <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-6">
-        <h3 className="text-lg font-medium text-white mb-4">Today's Entries</h3>
+      <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-6 shadow-lg">
+        <h3 className="text-base sm:text-lg font-medium text-white mb-4">Today's Entries</h3>
         
         {loading && entries.length === 0 ? (
           <div className="text-center py-8 text-gray-400">Loading entries...</div>
@@ -383,20 +400,22 @@ export const TimeTracking: React.FC = () => {
                 return (
                   <div 
                     key={entry.id}
-                    className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-gray-900/50 border border-gray-700 rounded-lg hover:bg-gray-900/70 transition-all"
                   >
-                    <div className="flex-1">
-                      <p className="text-white font-medium">{entry.task_description}</p>
-                      <p className="text-sm text-gray-400 mt-1">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white font-medium truncate">{entry.task_description}</p>
+                      <p className="text-xs sm:text-sm text-gray-400 mt-1">
                         {entry.project?.name} • {format(new Date(entry.start_time), 'h:mm a')} - {
                           entry.end_time ? format(new Date(entry.end_time), 'h:mm a') : 'In Progress'
                         }
                       </p>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-medium text-white">{formatDuration(duration)}</p>
+                    <div className="text-left sm:text-right flex-shrink-0">
+                      <p className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                        {formatDuration(duration)}
+                      </p>
                       {!entry.end_time && (
-                        <p className="text-xs text-blue-500 animate-pulse">Active</p>
+                        <p className="text-xs text-green-400 animate-pulse">Active</p>
                       )}
                     </div>
                   </div>
@@ -405,6 +424,7 @@ export const TimeTracking: React.FC = () => {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 };

@@ -290,3 +290,4 @@ COMMENT ON TABLE typing_indicators IS 'Real-time typing status for conversation 
 COMMENT ON FUNCTION create_or_get_direct_conversation(UUID) IS 'Creates or retrieves a direct conversation between two users';
 
 
+

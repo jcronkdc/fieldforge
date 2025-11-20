@@ -397,9 +397,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ session }) => {
         </header>
 
         {/* Page Content */}
-        <main id="main" className="flex-1 overflow-y-auto bg-slate-50">
+        <main id="main" className="flex-1 overflow-y-auto bg-transparent">
           <PushNotifications />
-          <div className="max-w-[1920px] mx-auto">
+          <div className="h-full">
             <Outlet />
           </div>
         </main>

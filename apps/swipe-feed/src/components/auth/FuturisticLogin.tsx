@@ -12,20 +12,29 @@ export const FuturisticLogin: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🔐 Login attempt for:', email);
+    console.log('🔐 Login attempt started');
+    console.log('🔐 Email:', email);
+    console.log('🔐 Password length:', password.length);
     
     setError(null);
     setLoading(true);
 
     try {
-      await signIn(email, password);
+      console.log('🔐 Calling signIn function...');
+      const result = await signIn(email, password);
+      console.log('🔐 SignIn result:', result);
       console.log('🔐 Login successful, navigating to dashboard');
       navigate('/dashboard');
     } catch (error: any) {
-      console.error('🔐 Login error:', error);
+      console.error('🔐 Login error caught:', error);
+      console.error('🔐 Error type:', typeof error);
+      console.error('🔐 Error message:', error?.message);
+      console.error('🔐 Error stack:', error?.stack);
       
       // Enhanced error handling
-      if (error.message === 'Invalid login credentials') {
+      const errorMessage = error?.message || String(error);
+      
+      if (errorMessage === 'Invalid login credentials' || errorMessage.includes('Invalid')) {
         if (email === 'justincronk@pm.me') {
           setError(
             <div>
@@ -38,13 +47,26 @@ export const FuturisticLogin: React.FC = () => {
         } else {
           setError('Invalid email or password. Please check your credentials and try again.');
         }
-      } else if (error.message?.includes('Email not confirmed')) {
+      } else if (errorMessage?.includes('Email not confirmed')) {
         setError('Please check your email and click the confirmation link before signing in.');
+      } else if (errorMessage?.includes('demo')) {
+        setError(
+          <div>
+            Demo account detected but not configured in database. 
+            <br/>Try: <strong>demo@fieldforge.com</strong> with password: <strong>FieldForge2025!Demo</strong>
+          </div>
+        );
       } else {
-        setError(error.message || 'An error occurred during login. Please try again.');
+        setError(
+          <div>
+            <strong>Error:</strong> {errorMessage}
+            <br/><small>Please check browser console for details.</small>
+          </div>
+        );
       }
     } finally {
       setLoading(false);
+      console.log('🔐 Login attempt finished, loading:', loading);
     }
   };
 
@@ -103,7 +125,7 @@ export const FuturisticLogin: React.FC = () => {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 pr-3 py-2 border border-slate-300 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10"
+                    className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10 focus:outline-none"
                     placeholder="you@company.com"
                     required
                   />
@@ -123,7 +145,7 @@ export const FuturisticLogin: React.FC = () => {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-3 py-2 border border-slate-300 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10"
+                    className="w-full pl-10 pr-3 py-2 border border-slate-300 rounded-xl focus:border-slate-900 focus:ring-4 focus:ring-slate-900/10 focus:outline-none"
                     placeholder="Enter your password"
                     required
                   />

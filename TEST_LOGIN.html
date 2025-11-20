@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FieldForge Login Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>FieldForge Login Test</h1>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" value="demo@fieldforge.com"><br><br>
+        <input type="password" id="password" placeholder="Password" value="FieldForge2025!Demo"><br><br>
+        <button type="submit">Sign In</button>
+    </form>
+    <div id="result"></div>
+    
+    <script>
+        const supabaseUrl = 'https://lzfzkrylexsarpxypktt.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6ZnprcnlsZXhzYXJweHlwa3R0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0MzU4NTMsImV4cCI6MjA3ODAxMTg1M30.NkvmFfttYQ-DUpG3KLK10AGrJRS9OlQ-83XXX6CU7cY';
+        
+        const { createClient } = supabase;
+        const client = createClient(supabaseUrl, supabaseKey);
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<p>Testing login...</p>';
+            
+            try {
+                const { data, error } = await client.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    resultDiv.innerHTML = `<p style="color: red;">ERROR: ${error.message}</p>`;
+                    console.error('Login error:', error);
+                } else {
+                    resultDiv.innerHTML = `<p style="color: green;">SUCCESS! User: ${data.user.email}</p>`;
+                    console.log('Login success:', data);
+                }
+            } catch (err) {
+                resultDiv.innerHTML = `<p style="color: red;">EXCEPTION: ${err.message}</p>`;
+                console.error('Exception:', err);
+            }
+        });
+        
+        // Auto-run test
+        setTimeout(() => {
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        }, 1000);
+    </script>
+</body>
+</html>

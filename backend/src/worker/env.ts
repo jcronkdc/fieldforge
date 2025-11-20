@@ -8,6 +8,9 @@ export interface Env {
   AI_PROVIDER_URL?: string;
   AI_PROVIDER_API_KEY?: string;
   AI_PROVIDER_MODEL?: string;
+  ANTHROPIC_API_KEY?: string;  // Claude Sonnet 4.5 - Most powerful AI
+  OPENAI_API_KEY?: string;      // GPT-4 Turbo - Fallback AI
+  OPENWEATHER_API_KEY?: string; // Real-time weather & forecasts
   NOTIFY_WEBHOOK_DISCORD?: string;
   NOTIFY_SENDGRID_API_KEY?: string;
   NOTIFY_EMAIL_FROM?: string;
@@ -18,7 +21,7 @@ export interface Env {
   ABLY_API_KEY?: string;
   DAILY_API_KEY?: string;
   STRIPE_SECRET_KEY?: string;
-  STRIPE_WEBHOOK_SECRET?: string;
+  STRIPE_WEBHOOK_SECRET_KEY?: string;
   RESEND_API_KEY?: string;
   TWILIO_ACCOUNT_SID?: string;
   TWILIO_AUTH_TOKEN?: string;
@@ -54,6 +57,9 @@ export function loadEnv(): Env {
     AI_PROVIDER_URL,
     AI_PROVIDER_API_KEY,
     AI_PROVIDER_MODEL,
+    ANTHROPIC_API_KEY,
+    OPENAI_API_KEY,
+    OPENWEATHER_API_KEY,
     NOTIFY_WEBHOOK_DISCORD,
     NOTIFY_SENDGRID_API_KEY,
     NOTIFY_EMAIL_FROM,
@@ -97,6 +103,8 @@ export function loadEnv(): Env {
     AI_PROVIDER_URL,
     AI_PROVIDER_API_KEY,
     AI_PROVIDER_MODEL,
+    ANTHROPIC_API_KEY,
+    OPENAI_API_KEY,
     DAILY_API_KEY,
     STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET,
