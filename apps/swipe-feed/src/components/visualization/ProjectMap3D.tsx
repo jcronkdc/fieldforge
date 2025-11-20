@@ -253,7 +253,7 @@ export const ProjectMap3D: React.FC = () => {
   ];
 
   return (
-    <div className="h-full w-full relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen w-full relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Control Panel */}
       <div className="absolute top-4 left-4 z-10 space-y-4">
         <div className="bg-slate-800/90 backdrop-blur-sm rounded-lg p-4 border border-slate-700">
