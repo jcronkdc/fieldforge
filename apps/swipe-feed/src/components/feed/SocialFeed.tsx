@@ -203,9 +203,9 @@ export const SocialFeed: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
-      {/* Create Post Section */}
+      {/* Create Post Section - Sticky Header */}
       <div className="sticky top-0 z-10 bg-gray-900/95 backdrop-blur-xl border-b border-gray-700 shadow-lg">
-        <div className="w-full max-w-4xl mx-auto px-4 py-3">
+        <div className="w-full max-w-3xl mx-auto px-4 py-3">
           <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
             <div className="space-y-3">
               {/* Textarea */}
@@ -218,8 +218,8 @@ export const SocialFeed: React.FC = () => {
                 rows={2}
               />
               
-              {/* Post Type Buttons - Simple Icon Grid */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-1">
+              {/* Post Type Buttons - Horizontal Scroll */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
                 {postTypes.map((type) => {
                   const Icon = type.icon;
                   return (
@@ -239,12 +239,12 @@ export const SocialFeed: React.FC = () => {
                 })}
               </div>
 
-              {/* Bottom Row: Select + Buttons */}
-              <div className="flex items-center gap-2">
+              {/* Bottom Row: Project + Post Button */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <select
                   value={selectedProject || ''}
                   onChange={(e) => setSelectedProject(e.target.value)}
-                  className="flex-1 px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-sm text-white focus:border-blue-500 focus:outline-none"
+                  className="flex-1 px-3 py-2.5 bg-gray-900 border border-gray-600 rounded-lg text-sm text-white focus:border-blue-500 focus:outline-none min-w-0"
                   disabled={projects.length === 0}
                 >
                   <option value="" disabled>
@@ -260,7 +260,7 @@ export const SocialFeed: React.FC = () => {
                 <button
                   onClick={handlePost}
                   disabled={!newPost.trim() || !selectedProject}
-                  className="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-700 disabled:to-gray-800 text-white rounded-lg font-medium text-sm transition-all disabled:cursor-not-allowed disabled:opacity-50 flex-shrink-0"
+                  className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-700 disabled:to-gray-800 text-white rounded-lg font-medium text-sm transition-all disabled:cursor-not-allowed disabled:opacity-50 whitespace-nowrap"
                 >
                   Post
                 </button>
@@ -270,8 +270,8 @@ export const SocialFeed: React.FC = () => {
         </div>
       </div>
 
-      {/* Feed */}
-      <div className="w-full max-w-4xl mx-auto px-4 py-4 pb-20">
+      {/* Feed Posts - Same Container Width */}
+      <div className="w-full max-w-3xl mx-auto px-4 py-4 pb-20">
         {loading ? (
           <div className="space-y-4">
             {Array.from({ length: 3 }).map((_, idx) => (
@@ -307,27 +307,27 @@ export const SocialFeed: React.FC = () => {
                       </span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-white text-sm truncate">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-semibold text-white text-sm">
                           {post.author?.first_name} {post.author?.last_name}
                         </span>
                         {getPostIcon(post.post_type)}
                       </div>
-                      <div className="text-xs text-gray-400 truncate">
+                      <div className="text-xs text-gray-400">
                         {post.author?.job_title || 'Team Member'} • {post.project?.name}
                       </div>
                       <div className="text-xs text-gray-500">
                         {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
                       </div>
                     </div>
-                    <button className="text-gray-400 hover:text-white transition-colors p-1">
+                    <button className="text-gray-400 hover:text-white transition-colors p-1 flex-shrink-0">
                       <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>
 
                   {/* Post Content */}
                   <div className="mb-3">
-                    <p className="text-white text-sm leading-relaxed break-words">{post.content}</p>
+                    <p className="text-white text-sm leading-relaxed break-words whitespace-pre-wrap">{post.content}</p>
                     
                     {/* Tags */}
                     {post.tags && post.tags.length > 0 && (
@@ -338,19 +338,21 @@ export const SocialFeed: React.FC = () => {
                             className="px-2 py-0.5 bg-gray-900 text-blue-400 rounded-full text-xs"
                           >
                             #{tag}
-                          </span>
+                          </
+
+</span>
                         ))}
                       </div>
                     )}
 
                     {/* Media */}
                     {post.media_urls && post.media_urls.length > 0 && (
-                      <div className="mt-3">
+                      <div className="mt-3 -mx-1">
                         <div className="aspect-video overflow-hidden rounded-lg">
                           <img
                             src={post.media_urls[0]}
                             alt="Post media"
-                            className="h-full w-full object-cover"
+                            className="w-full h-full object-cover"
                             loading="lazy"
                           />
                         </div>
@@ -359,35 +361,35 @@ export const SocialFeed: React.FC = () => {
                   </div>
 
                   {/* Post Actions */}
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-700">
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-700">
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => handleReaction(post.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-700 transition-all"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-700 transition-all"
                       >
-                        <Heart className={`w-5 h-5 ${post.reactions?.user_reacted ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
-                        <span className={`text-sm ${post.reactions?.user_reacted ? 'text-red-500' : 'text-gray-400'}`}>
+                        <Heart className={`w-4 h-4 ${post.reactions?.user_reacted ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
+                        <span className={`text-sm ${post.reactions?.user_reacted ? 'text-red-400' : 'text-gray-400'}`}>
                           {post.reactions?.count || 0}
                         </span>
                       </button>
                       
                       <button
                         onClick={() => setShowComments(showComments === post.id ? null : post.id)}
-                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-700 transition-all"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-700 transition-all"
                       >
-                        <MessageCircle className="w-5 h-5 text-gray-400" />
+                        <MessageCircle className="w-4 h-4 text-gray-400" />
                         <span className="text-sm text-gray-400">
                           {post.comments_count || 0}
                         </span>
                       </button>
                       
                       <button className="p-1.5 rounded-lg hover:bg-gray-700 transition-all">
-                        <Share2 className="w-5 h-5 text-gray-400" />
+                        <Share2 className="w-4 h-4 text-gray-400" />
                       </button>
                     </div>
                     
                     <button className="p-1.5 rounded-lg hover:bg-gray-700 transition-all">
-                      <Bookmark className="w-5 h-5 text-gray-400" />
+                      <Bookmark className="w-4 h-4 text-gray-400" />
                     </button>
                   </div>
 
@@ -399,10 +401,10 @@ export const SocialFeed: React.FC = () => {
                         <input
                           type="text"
                           placeholder="Add a comment..."
-                          className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                          className="flex-1 min-w-0 px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
                         />
                         <button className="p-2 text-blue-400 hover:text-blue-300 transition-colors flex-shrink-0">
-                          <Send className="w-5 h-5" />
+                          <Send className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
