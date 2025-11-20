@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ClipboardCheck, Calendar, Clock, AlertCircle, CheckCircle, Camera, FileText, Users, MapPin, TrendingUp, Eye, Plus } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 
 interface Inspection {
@@ -78,7 +78,7 @@ const DEFAULT_CHECKLIST_ITEMS = {
 };
 
 export const InspectionManager: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [inspections, setInspections] = useState<Inspection[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedInspection, setSelectedInspection] = useState<Inspection | null>(null);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, AlertTriangle, Activity, FileText, Users, Calendar, TrendingUp, Clock, Compass, Zap, Video } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { format, differenceInDays } from 'date-fns';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -31,7 +31,7 @@ interface SafetyIncident {
 }
 
 export const SafetyHub: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [metrics, setMetrics] = useState<SafetyMetrics>({
     daysWithoutIncident: 0,
     totalIncidents: 0,
@@ -247,9 +247,6 @@ export const SafetyHub: React.FC = () => {
           <p className="text-3xl font-bold text-white">{metrics.daysWithoutIncident}</p>
           <p className="text-sm text-gray-400 mt-1">Without incident</p>
           <p className="text-xs text-green-400 mt-2">Target: 365 days</p>
-            </div>
-            <Shield className="w-10 h-10 text-green-400" />
-          </div>
         </div>
 
         <div className="bg-slate-900/80 backdrop-blur-sm border border-gray-700 rounded-[13px] p-[21px] card-vitruvian border border-gray-700 hover:border-gray-700 transition-all ">
@@ -296,7 +293,7 @@ export const SafetyHub: React.FC = () => {
             <FileText className="w-10 h-10 text-blue-400" />
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-[21px]">
@@ -517,6 +514,7 @@ export const SafetyHub: React.FC = () => {
         </div>
       )}
 
+    </div>
     </div>
   );
 };

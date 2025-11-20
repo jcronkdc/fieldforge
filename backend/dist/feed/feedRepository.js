@@ -23,26 +23,21 @@ function buildFeedEventsCTE() {
     return `
     events as (
       select
-        ve.id::text as id,
-        'angry_lips_published'::text as event_type,
-        coalesce(ve.published_at, ve.created_at) as created_at,
-        ve.title,
-        ve.summary_text as summary,
-        left(ve.story_text, 280) as body,
-        als.host_id::text as actor_user_id,
-        host_profile.username as actor_username,
-        host_profile.display_name as actor_display_name,
-        host_profile.avatar_url as actor_avatar_url,
-        jsonb_build_object(
-          'sessionId', ve.session_id,
-          'genre', als.genre,
-          'templateLength', als.template_length
-        ) as metadata,
-        (coalesce(ve.title, '') || ' ' || coalesce(ve.summary_text, '') || ' ' || coalesce(host_profile.display_name, '') || ' ' || coalesce(host_profile.username, '')) as search_text
-      from public.angry_lips_vault_entries ve
-      join public.angry_lips_sessions als on als.id = ve.session_id
-      left join public.user_profiles host_profile on host_profile.user_id::text = als.host_id
-      where ve.visibility = 'public' and ve.published_at is not null
+        fp.id::text as id,
+        fp.event_type::text as event_type,
+        fp.created_at as created_at,
+        fp.summary as title,
+        fp.summary as summary,
+        fp.summary as body,
+        fp.actor_id::text as actor_user_id,
+        up.email as actor_username,
+        (up.first_name || ' ' || up.last_name) as actor_display_name,
+        null::text as actor_avatar_url,
+        coalesce(fp.metadata, '{}'::jsonb) as metadata,
+        (coalesce(fp.summary, '') || ' ' || coalesce(up.first_name, '') || ' ' || coalesce(up.last_name, '')) as search_text
+      from public.feed_posts fp
+      left join public.user_profiles up on up.id = fp.actor_id
+      where true
 
       union all
 

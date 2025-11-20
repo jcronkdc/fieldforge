@@ -338,9 +338,7 @@ export const SocialFeed: React.FC = () => {
                             className="px-2 py-0.5 bg-gray-900 text-blue-400 rounded-full text-xs"
                           >
                             #{tag}
-                          </
-
-</span>
+                          </span>
                         ))}
                       </div>
                     )}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Package, AlertTriangle, TrendingUp, TrendingDown, Plus, Edit2, Search, Filter, BarChart3, Video } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -49,7 +49,7 @@ const CATEGORIES = [
 ];
 
 export const MaterialInventory: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [materials, setMaterials] = useState<Material[]>([]);
   const [filteredMaterials, setFilteredMaterials] = useState<Material[]>([]);
   const [showForm, setShowForm] = useState(false);

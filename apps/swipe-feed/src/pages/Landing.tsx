@@ -144,30 +144,6 @@ export const Landing: React.FC = () => {
             </Link>
           </div>
           
-          {/* Demo Credentials - Always visible for testing */}
-          <div className="mt-[55px] p-[21px] bg-blue-400/10 border border-gray-700 rounded-[13px] border border-gray-700">
-            <h3 className="text-sm font-semibold text-blue-400 mb-[13px] " >
-              Demo Credentials
-            </h3>
-            <div className="grid md:grid-cols-3 gap-[13px] text-sm text-blue-400/80">
-              <div>
-                <span className="font-medium">Field Worker:</span>
-                <div className="text-white">demo@fieldforge.com</div>
-                <div className="text-xs text-blue-400/60">password: FieldForge2025!Demo</div>
-              </div>
-              <div>
-                <span className="font-medium">Manager:</span>
-                <div className="text-white">manager@fieldforge.com</div>
-                <div className="text-xs text-blue-400/60">password: FieldForge2025!Demo</div>
-              </div>
-              <div>
-                <span className="font-medium">Admin:</span>
-                <div className="text-white">admin@fieldforge.com</div>
-                <div className="text-xs text-blue-400/60">password: FieldForge2025!Demo</div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </>

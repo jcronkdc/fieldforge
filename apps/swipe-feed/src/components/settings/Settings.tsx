@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { BillingSettings } from './BillingSettings';
 
 interface SettingsData {
@@ -88,7 +88,7 @@ interface SettingItem {
 }
 
 export const Settings: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [settings, setSettings] = useState<SettingsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

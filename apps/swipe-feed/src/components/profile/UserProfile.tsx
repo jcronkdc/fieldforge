@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { supabase } from '../../lib/supabase';
 
 interface UserProfileData {
@@ -68,7 +68,7 @@ interface Training {
 }
 
 export const UserProfile: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [profile, setProfile] = useState<UserProfileData | null>(null);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [trainings, setTrainings] = useState<Training[]>([]);

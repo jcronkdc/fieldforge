@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Cloud, CloudRain, CloudSnow, Sun, Wind, Thermometer, AlertTriangle, TrendingUp, TrendingDown, Droplets, Eye, Loader2, MapPin, Calendar, RefreshCw } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 
 interface WeatherData {
@@ -50,7 +50,7 @@ interface WorkRestriction {
 }
 
 export const WeatherDashboard: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [location, setLocation] = useState({ lat: 40.7128, lng: -74.0060, name: 'Project Site' }); // Default NYC
@@ -242,7 +242,7 @@ export const WeatherDashboard: React.FC = () => {
             Refresh
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Weather Alerts */}
       {weatherData?.alerts && weatherData.alerts.length > 0 && (
@@ -417,6 +417,7 @@ export const WeatherDashboard: React.FC = () => {
             </div>
           ))}
         </div>
+      </div>
       </div>
     </div>
   );

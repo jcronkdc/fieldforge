@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
 interface EnvironmentalReading {
@@ -56,7 +56,7 @@ interface ComplianceMetrics {
 }
 
 export const EnvironmentalCompliance: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [activeTab, setActiveTab] = useState<'monitoring' | 'incidents' | 'permits' | 'reports'>('monitoring');
   const [readings, setReadings] = useState<EnvironmentalReading[]>([]);
   const [incidents, setIncidents] = useState<EnvironmentalIncident[]>([]);

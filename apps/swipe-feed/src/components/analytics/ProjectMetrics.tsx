@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, TrendingUp, TrendingDown, BarChart3, PieChart, Clock, DollarSign, Users, Calendar, AlertCircle, CheckCircle, Zap } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 
 interface ProjectData {
@@ -30,7 +30,7 @@ interface MetricCard {
 }
 
 export const ProjectMetrics: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [projects, setProjects] = useState<ProjectData[]>([]);
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);

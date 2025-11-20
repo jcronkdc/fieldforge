@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FileText, Upload, Download, Share2, Folder, Search, Filter, Grid, List, File, Image, FileSpreadsheet, Eye, Trash2, Plus, Loader2, X, Calendar, User, FolderOpen, Video } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -34,7 +34,7 @@ interface Folder {
 }
 
 export const DocumentHub: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [documents, setDocuments] = useState<Document[]>([]);
   const [folders, setFolders] = useState<Folder[]>([]);
   const [currentFolder, setCurrentFolder] = useState<string | null>(null);
@@ -318,7 +318,7 @@ export const DocumentHub: React.FC = () => {
             <span className="hidden sm:inline">Upload</span>
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Stats Summary */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -802,6 +802,7 @@ export const DocumentHub: React.FC = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };

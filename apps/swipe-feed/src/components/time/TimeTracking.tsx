@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Play, Pause, Calendar, MapPin, Cloud, Users, DollarSign, Compass, Ruler } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { format, differenceInMinutes, startOfWeek, endOfWeek } from 'date-fns';
 
 interface TimeEntry {
@@ -27,7 +27,7 @@ interface TimeEntry {
 }
 
 export const TimeTracking: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [activeEntry, setActiveEntry] = useState<TimeEntry | null>(null);
   const [loading, setLoading] = useState(false);

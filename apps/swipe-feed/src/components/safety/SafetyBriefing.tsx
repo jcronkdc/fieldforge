@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Users, AlertTriangle, CheckCircle, Clock, FileText, Plus, Calendar, MapPin, Loader2 } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 
 interface SafetyTopic {
@@ -34,7 +34,7 @@ interface Attendee {
 }
 
 export const SafetyBriefing: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [briefings, setBriefings] = useState<Briefing[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);

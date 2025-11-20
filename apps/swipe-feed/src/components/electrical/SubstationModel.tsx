@@ -13,7 +13,7 @@ import {
 } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import * as THREE from 'three';
 
 interface Equipment {
@@ -403,7 +403,7 @@ function Scene({
 }
 
 export const SubstationModel: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [clearances, setClearances] = useState<Clearance[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<string | null>(null);

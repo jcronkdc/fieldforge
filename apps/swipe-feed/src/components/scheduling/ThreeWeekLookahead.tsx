@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, AlertCircle, CheckCircle, Plus, ChevronLeft, ChevronRight, Zap, Video } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -44,7 +44,7 @@ const CONSTRAINT_TYPES = [
 ];
 
 export const ThreeWeekLookahead: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
@@ -395,7 +395,7 @@ export const ThreeWeekLookahead: React.FC = () => {
             </div>
             <div className="text-sm text-slate-400">To resolve</div>
           </div>
-        </div>
+        </section>
 
         {/* Weekly Calendar View */}
         <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl overflow-hidden">
@@ -630,11 +630,11 @@ export const ThreeWeekLookahead: React.FC = () => {
                           >
                             <AlertCircle className="w-5 h-5" />
                           </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
                 {selectedActivity && (
                   <div>

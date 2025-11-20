@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, Send, Paperclip, Search, Users, Hash, AtSign, Image, FileText, AlertCircle, CheckCheck, Clock, Plus, Settings, Phone, Video, Loader2 } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 
 interface Message {
@@ -51,7 +51,7 @@ interface TeamMessagingProps {
 }
 
 export const TeamMessaging: React.FC<TeamMessagingProps> = ({ onStartVideoCall }) => {
-  const { session } = useAuth();
+  const { session, loading: authLoading, isAuthenticated } = useAuthContext();
   const [channels, setChannels] = useState<Channel[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);

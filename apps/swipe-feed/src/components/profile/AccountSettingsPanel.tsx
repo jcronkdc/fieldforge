@@ -9,7 +9,7 @@ import type { MythacoinSummary } from "../../lib/mythacoin";
 import { PLATFORM_NAMES, formatCurrencyWithSymbol } from "../../config/naming";
 import { AvatarUploader } from "./AvatarUploader";
 import { Button } from "../ui/Button";
-import { useAuth } from "../../context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import { supabaseClient } from "../../lib/supabaseClient";
 
 type SettingsTab = "profile" | "security" | "social" | "activity" | "economy" | "quick";
@@ -49,7 +49,7 @@ export function AccountSettingsPanel({
   onGoToBookwormFeed,
   onResumeSession,
 }: AccountSettingsPanelProps) {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [activeTab, setActiveTab] = useState<SettingsTab>("profile");
   const [username, setUsername] = useState(profile.username ?? "");
   const [displayName, setDisplayName] = useState(profile.display_name ?? "");

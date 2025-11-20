@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Receipt, Camera, Upload, Download, Search, Calendar, DollarSign, Building2, Tag, Loader2, CheckCircle, AlertCircle, Filter, FileText, Video } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -33,7 +33,7 @@ interface ReceiptStats {
 }
 
 export const ReceiptManager: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [receipts, setReceipts] = useState<ReceiptData[]>([]);
   const [stats, setStats] = useState<ReceiptStats>({
     totalAmount: 0,
@@ -363,7 +363,7 @@ export const ReceiptManager: React.FC = () => {
             Add Receipt
           </button>
         </div>
-      </div>
+      </header>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
@@ -826,6 +826,7 @@ export const ReceiptManager: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

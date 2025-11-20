@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { supabase } from '../../lib/supabase';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -41,7 +41,7 @@ interface AlertAcknowledgment {
 }
 
 export const EmergencyAlerts: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [activeAlerts, setActiveAlerts] = useState<EmergencyAlert[]>([]);
   const [alertHistory, setAlertHistory] = useState<EmergencyAlert[]>([]);
   const [acknowledgments, setAcknowledgments] = useState<Record<string, AlertAcknowledgment>>({});

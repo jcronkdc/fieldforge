@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Check, Sparkles, TrendingUp, Shield, Users, Zap, DollarSign, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { loadStripe } from '@stripe/stripe-js';
-import { useAuth } from '../hooks/useAuth';
+import { useAuthContext } from '../components/auth/AuthProvider';
 
 // Initialize Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder');
@@ -23,7 +23,7 @@ export const PricingPage: React.FC = () => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [loading, setLoading] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   
   const tiers: PricingTier[] = [
     {

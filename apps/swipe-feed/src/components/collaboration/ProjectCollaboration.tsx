@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import DailyIframe, { DailyCall } from '@daily-co/daily-js';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 
 interface CollaborationRoom {
@@ -29,7 +29,7 @@ export const ProjectCollaboration: React.FC<ProjectCollaborationProps> = ({
   conversationId,
   onClose 
 }) => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [room, setRoom] = useState<CollaborationRoom | null>(null);
   const [loading, setLoading] = useState(false);
   const [callObject, setCallObject] = useState<DailyCall | null>(null);

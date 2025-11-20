@@ -44,6 +44,7 @@ import { createMessagingRouter } from "./messaging/messagingRoutes.js";
 import { createCollaborationRouter } from "./collaboration/collaborationRoutes.js";
 import { createFeedRouter } from "./feed/feedRoutes.js";
 import { createNotificationRouter } from "./notifications/notificationRoutes.js";
+import { createGISRouter } from "./routes/gisRoutes.js";
 
 /**
  * © 2025 FieldForge. All Rights Reserved.
@@ -220,6 +221,9 @@ app.use("/api/feed", createFeedRouter());
 
 // Notifications - PERSISTENT NOTIFICATIONS FOR COLLABORATIVE FEATURES ✅
 app.use("/api/notifications", createNotificationRouter());
+
+// GIS Infrastructure - POSTGIS-POWERED GEOSPATIAL SYSTEM ✅
+app.use("/api/gis", createGISRouter());
 
 // Settings are now part of user routes (/api/users/settings)
 

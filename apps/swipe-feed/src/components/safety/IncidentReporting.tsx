@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Camera, MapPin, User, Clock, Plus, Check, X, Eye } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 
 interface Incident {
@@ -43,7 +43,7 @@ const SEVERITY_COLORS = {
 };
 
 export const IncidentReporting: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);

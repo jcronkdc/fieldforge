@@ -48,6 +48,7 @@ const messagingRoutes_js_1 = require("./messaging/messagingRoutes.js");
 const collaborationRoutes_js_1 = require("./collaboration/collaborationRoutes.js");
 const feedRoutes_js_1 = require("./feed/feedRoutes.js");
 const notificationRoutes_js_1 = require("./notifications/notificationRoutes.js");
+const gisRoutes_js_1 = require("./routes/gisRoutes.js");
 /**
  * © 2025 FieldForge. All Rights Reserved.
  * PROPRIETARY AND CONFIDENTIAL - DO NOT DISTRIBUTE
@@ -177,6 +178,8 @@ app.use("/api/collaboration", (0, collaborationRoutes_js_1.createCollaborationRo
 app.use("/api/feed", (0, feedRoutes_js_1.createFeedRouter)());
 // Notifications - PERSISTENT NOTIFICATIONS FOR COLLABORATIVE FEATURES ✅
 app.use("/api/notifications", (0, notificationRoutes_js_1.createNotificationRouter)());
+// GIS Infrastructure - POSTGIS-POWERED GEOSPATIAL SYSTEM ✅
+app.use("/api/gis", (0, gisRoutes_js_1.createGISRouter)());
 // Settings are now part of user routes (/api/users/settings)
 // Error handling middleware (must be last)
 app.use(errorHandler_js_1.notFoundHandler); // Handle 404s

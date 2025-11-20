@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
-import { signIn } from '../../lib/auth-robust';
+import { supabase } from '../lib/supabase';
 import { AlertCircle, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 
 interface DiagnosticResult {
@@ -85,12 +84,18 @@ export const AuthDiagnostic: React.FC = () => {
     setDiagnostics([...results]);
 
     try {
-      const result = await signIn(testEmail, testPassword);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: testEmail,
+        password: testPassword
+      });
+      
+      if (error) throw error;
+      
       results[results.length - 1] = {
         name: '3. Demo Account Login',
         status: 'success',
-        message: 'Demo login successful!',
-        details: { email: result.user?.email, hasSession: !!result.session }
+        message: 'Login successful!',
+        details: { email: data.user?.email, hasSession: !!data.session }
       };
       
       // Sign out after test

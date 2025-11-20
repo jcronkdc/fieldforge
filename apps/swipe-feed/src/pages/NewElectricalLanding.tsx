@@ -390,30 +390,13 @@ export const NewElectricalLanding: React.FC = () => {
         </div>
       </section>
 
-      {/* Demo Access Section */}
+      {/* Call to Action Section */}
       <section className="bg-slate-900/50 py-16 border-t border-slate-800">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="bg-slate-800/30 backdrop-blur-sm rounded-2xl p-8 border border-slate-700">
             <h3 className="text-2xl font-bold text-white mb-6 text-center">
-              Test Drive the Platform
+              Ready to Transform Your Workflow?
             </h3>
-              <div className="grid md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-slate-900/50 rounded-xl p-6 border border-blue-500/20">
-                <div className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-2">Field Worker</div>
-                <div className="text-white font-mono mb-1">demo@fieldforge.com</div>
-                <div className="text-xs text-slate-400 font-mono">password: FieldForge2025!Demo</div>
-              </div>
-              <div className="bg-slate-900/50 rounded-xl p-6 border border-purple-500/20">
-                <div className="text-sm font-semibold text-purple-400 uppercase tracking-wider mb-2">Manager</div>
-                <div className="text-white font-mono mb-1">manager@fieldforge.com</div>
-                <div className="text-xs text-slate-400 font-mono">password: FieldForge2025!Demo</div>
-              </div>
-              <div className="bg-slate-900/50 rounded-xl p-6 border border-green-500/20">
-                <div className="text-sm font-semibold text-green-400 uppercase tracking-wider mb-2">Administrator</div>
-                <div className="text-white font-mono mb-1">admin@fieldforge.com</div>
-                <div className="text-xs text-slate-400 font-mono">password: FieldForge2025!Demo</div>
-              </div>
-            </div>
             <div className="text-center space-y-3">
               <a href="/pricing" className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-semibold transition-colors">
                 View Transparent Pricing

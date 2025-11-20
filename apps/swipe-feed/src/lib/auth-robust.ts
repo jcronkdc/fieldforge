@@ -280,96 +280,15 @@ export async function initializeAuth() {
   return globalAuthState;
 }
 
-// Demo account credentials (from Landing.tsx)
-const DEMO_ACCOUNTS = {
-  'demo@fieldforge.com': 'FieldForge2025!Demo',
-  'manager@fieldforge.com': 'FieldForge2025!Demo',
-  'admin@fieldforge.com': 'FieldForge2025!Demo'
-};
-
 // Sign in function
 export async function signIn(email: string, password: string) {
   console.log('🔐 Signing in:', email);
   updateAuthState({ loading: true, error: null });
   
-  // Check if this is a demo account
-  const normalizedEmail = email.toLowerCase().trim();
-  const isDemoAccount = normalizedEmail in DEMO_ACCOUNTS;
-  const correctPassword = DEMO_ACCOUNTS[normalizedEmail as keyof typeof DEMO_ACCOUNTS];
-  
-  // If demo account and password matches, create demo session
-  if (isDemoAccount && password === correctPassword) {
-    console.log('✅ Demo account login detected');
-    
-    // Create demo session
-    const demoSession: Session = {
-      access_token: `demo-token-${Date.now()}`,
-      refresh_token: `demo-refresh-${Date.now()}`,
-      expires_in: 3600,
-      expires_at: Math.floor(Date.now() / 1000) + 3600,
-      token_type: 'bearer',
-      user: {
-        id: `demo-${normalizedEmail.split('@')[0]}`,
-        email: normalizedEmail,
-        email_confirmed_at: new Date().toISOString(),
-        phone: '',
-        confirmed_at: new Date().toISOString(),
-        last_sign_in_at: new Date().toISOString(),
-        app_metadata: {
-          provider: 'email',
-          providers: ['email']
-        },
-        user_metadata: {
-          role: normalizedEmail.includes('admin') ? 'admin' : normalizedEmail.includes('manager') ? 'manager' : 'field_worker',
-          full_name: normalizedEmail.includes('admin') ? 'Demo Admin' : normalizedEmail.includes('manager') ? 'Demo Manager' : 'Demo Worker'
-        },
-        aud: 'authenticated',
-        created_at: new Date().toISOString()
-      }
-    } as Session;
-    
-    // Store demo session
-    if (supabaseUrl && supabaseAnonKey) {
-      // Try real Supabase first, but don't fail if it doesn't work
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: normalizedEmail,
-          password: correctPassword
-        });
-        
-        if (!error && data.session) {
-          console.log('✅ Real Supabase login successful');
-          updateAuthState({ loading: false, error: null, user: data.user, session: data.session });
-          return data;
-        }
-      } catch (supabaseError) {
-        console.log('⚠️ Supabase login failed, using demo session:', supabaseError);
-      }
-    }
-    
-    // Use demo session
-    console.log('✅ Using demo session');
-    updateAuthState({ 
-      loading: false, 
-      error: null, 
-      user: demoSession.user, 
-      session: demoSession 
-    });
-    
-    // Store in localStorage for persistence
-    localStorage.setItem('fieldforge-demo-session', JSON.stringify({
-      user: demoSession.user,
-      access_token: demoSession.access_token,
-      expires_at: demoSession.expires_at
-    }));
-    
-    return { user: demoSession.user, session: demoSession };
-  }
-  
   // Regular Supabase login
   try {
     if (!supabaseUrl || !supabaseAnonKey) {
-      throw new Error('Supabase not configured. Please use demo account: demo@fieldforge.com / FieldForge2025!Demo');
+      throw new Error('Supabase not configured. Please check your environment variables.');
     }
     
     const { data, error } = await supabase.auth.signInWithPassword({

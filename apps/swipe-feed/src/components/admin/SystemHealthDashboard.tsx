@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 
 interface SystemMetric {
   id: string;
@@ -28,7 +28,7 @@ interface ComponentStatus {
 }
 
 export const SystemHealthDashboard: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [metrics, setMetrics] = useState<SystemMetric[]>([]);
   const [components, setComponents] = useState<ComponentStatus[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);

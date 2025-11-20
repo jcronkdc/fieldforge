@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ClipboardCheck, CheckCircle, XCircle, AlertTriangle, Calendar, TrendingUp, Users, FileText, Camera, Download, Upload, Loader2, Plus, Video } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -41,7 +41,7 @@ interface QualityMetrics {
 }
 
 export const QAQCHub: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [inspections, setInspections] = useState<Inspection[]>([]);
   const [metrics, setMetrics] = useState<QualityMetrics>({
     totalInspections: 0,
@@ -460,7 +460,6 @@ export const QAQCHub: React.FC = () => {
         </div>
       </section>
     </div>
-  </div>
 
       {/* Create Inspection Modal */}
       {showCreateForm && (

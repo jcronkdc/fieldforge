@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Power, AlertTriangle, Users, Clock, MapPin, Phone, Calendar, CheckCircle, XCircle, Radio, Zap, Shield, Ruler, Video } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
@@ -38,7 +38,7 @@ interface SwitchingStep {
 }
 
 export const OutageCoordination: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [outages, setOutages] = useState<Outage[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, X, Check, AlertCircle, MessageSquare, Users, Video } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../auth/AuthProvider';
 import { format } from 'date-fns';
 
 /**
@@ -31,7 +31,7 @@ interface Notification {
 }
 
 export const NotificationBell: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [isOpen, setIsOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);

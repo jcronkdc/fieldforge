@@ -49,13 +49,6 @@ export const FuturisticLogin: React.FC = () => {
         }
       } else if (errorMessage?.includes('Email not confirmed')) {
         setError('Please check your email and click the confirmation link before signing in.');
-      } else if (errorMessage?.includes('demo')) {
-        setError(
-          <div>
-            Demo account detected but not configured in database. 
-            <br/>Try: <strong>demo@fieldforge.com</strong> with password: <strong>FieldForge2025!Demo</strong>
-          </div>
-        );
       } else {
         setError(
           <div>
@@ -155,7 +148,7 @@ export const FuturisticLogin: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="btn btn-primary w-full justify-center"
+                className="w-full inline-flex items-center justify-center px-4 py-2.5 text-sm font-semibold text-white bg-slate-900 rounded-xl hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-900/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? 'Signing in…' : 'Sign in'}
                 {!loading && <ArrowRight className="ml-2 h-4 w-4" />}

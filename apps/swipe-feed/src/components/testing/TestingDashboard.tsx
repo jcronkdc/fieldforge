@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Zap, Activity, AlertTriangle, CheckCircle, Clock, Calendar, TrendingUp, BarChart3, Shield, FileText, Download, Filter, Compass, Ruler, Video } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -60,7 +60,7 @@ const TEST_TYPES = [
 ];
 
 export const TestingDashboard: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [upcomingTests, setUpcomingTests] = useState<TestSchedule[]>([]);
   const [selectedTest, setSelectedTest] = useState<TestResult | null>(null);

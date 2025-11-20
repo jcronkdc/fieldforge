@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Calendar, ChevronRight, Clock, Users, AlertCircle, Plus, Edit, Trash2 } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 
 interface Task {
@@ -28,7 +28,7 @@ interface Project {
 const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
 
 export const ProjectSchedule: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -301,7 +301,7 @@ export const ProjectSchedule: React.FC = () => {
               Add Task
             </button>
           </div>
-        </div>
+        </header>
 
         {/* Project Stats */}
         {selectedProject && projects.find(p => p.id === selectedProject) && (

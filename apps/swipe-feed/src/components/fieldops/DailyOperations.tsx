@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Users, MapPin, CloudRain, Sun, Cloud, CheckCircle, AlertCircle, Activity, Camera, FileText, Truck, HardHat, Zap, Video } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -59,7 +59,7 @@ const ACTIVITY_TYPES = {
 };
 
 export const DailyOperations: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [dailyReports, setDailyReports] = useState<DailyReport[]>([]);
   const [todaysActivities, setTodaysActivities] = useState<Activity[]>([]);
@@ -316,7 +316,7 @@ export const DailyOperations: React.FC = () => {
               Create Report
             </button>
           </div>
-        </div>
+        </header>
 
         {/* Daily Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">

@@ -206,16 +206,3 @@ CREATE TRIGGER update_drawings_updated_at BEFORE UPDATE ON drawings
 
 CREATE TRIGGER update_drawing_annotations_updated_at BEFORE UPDATE ON drawing_annotations
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- 15. Insert sample test data (optional - remove for production)
--- INSERT INTO test_schedules (equipment_id, test_type, test_name, scheduled_date, frequency, compliance_standard)
--- SELECT 
---   e.id,
---   'electrical',
---   'Insulation Resistance Test',
---   CURRENT_DATE + INTERVAL '7 days',
---   'quarterly',
---   'IEEE 43-2013'
--- FROM equipment e
--- WHERE e.equipment_type = 'electrical'
--- LIMIT 1;

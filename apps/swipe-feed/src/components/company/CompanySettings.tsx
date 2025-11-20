@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 
 interface CompanyData {
   // Company Information
@@ -119,7 +119,7 @@ interface CompanySection {
 }
 
 export const CompanySettings: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [companyData, setCompanyData] = useState<CompanyData | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
   const [workflows, setWorkflows] = useState<WorkflowTemplate[]>([]);

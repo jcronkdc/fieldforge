@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, FileText, Clock, CheckCircle, XCircle, AlertTriangle, Plus, Eye, Download } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 
 interface Permit {
@@ -63,7 +63,7 @@ const SAFETY_REQUIREMENTS = [
 ];
 
 export const PermitManagement: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [permits, setPermits] = useState<Permit[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedPermit, setSelectedPermit] = useState<Permit | null>(null);

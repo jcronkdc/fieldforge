@@ -12,7 +12,7 @@ import {
 } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import * as THREE from 'three';
 
 interface Equipment {
@@ -265,7 +265,7 @@ function Scene({ equipment, crew, zones, layers }: {
 }
 
 export const ProjectMap3D: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [crew, setCrew] = useState<CrewMember[]>([]);
   const [zones, setZones] = useState<SafetyZone[]>([]);

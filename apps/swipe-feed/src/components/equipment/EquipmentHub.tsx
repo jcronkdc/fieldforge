@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Package, Truck, Wrench, Calendar, QrCode, Search, Filter, Plus, AlertTriangle, Compass, Ruler, Video } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { format, differenceInDays } from 'date-fns';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
 
@@ -30,7 +30,7 @@ interface Equipment {
 }
 
 export const EquipmentHub: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -274,11 +274,6 @@ export const EquipmentHub: React.FC = () => {
           <p className="text-sm text-gray-400 mt-1">In service</p>
         </div>
 
-        <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-[21px] rounded-[13px] border border-gray-700  " style={{ animationDelay: '0.3s' }}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-blue-400/60 " >Due Service</p>
-              <p className="text-xl font-bold text-red-400 mt-[8px]">
         <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-6 hover:border-blue-500/50 transition-all">
           <div className="flex items-center justify-between mb-4">
             <Calendar className="w-8 h-8 text-red-400" />
@@ -459,7 +454,7 @@ export const EquipmentHub: React.FC = () => {
             );
           })
         )}
-      </div>
+      </section>
 
       {/* QR Scanner Modal - Renaissance Style */}
       {showScanner && (
@@ -576,6 +571,7 @@ export const EquipmentHub: React.FC = () => {
         </div>
       )}
 
+    </div>
     </div>
   );
 };

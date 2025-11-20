@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Upload, Clock, CheckCircle, XCircle, AlertCircle, Search, Filter, Compass, RefreshCw, ArrowRight, Video } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
 import { CollaborationHub } from '../collaboration/CollaborationHub';
@@ -26,7 +26,7 @@ interface Submittal {
 }
 
 export const SubmittalManager: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [submittals, setSubmittals] = useState<Submittal[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');

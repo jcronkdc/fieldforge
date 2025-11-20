@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, AlertTriangle, TrendingUp, TrendingDown, Activity, Users, Clock, Calendar, Award, Target, Zap, BarChart3, FileText, CheckCircle } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import toast from 'react-hot-toast';
 import { getRealSafetyMetrics } from '../../utils/real-data-helpers';
 
@@ -29,7 +29,7 @@ interface TrendData {
 }
 
 export const SafetyMetrics: React.FC = () => {
-  const { session } = useAuth();
+  const { session } = useAuthContext();
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
   const [selectedMetric, setSelectedMetric] = useState<'incidents' | 'compliance' | 'training' | 'observations'>('incidents');

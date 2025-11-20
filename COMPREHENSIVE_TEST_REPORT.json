@@ -1,0 +1,757 @@
+{
+  "total": 95,
+  "passed": 87,
+  "failed": 8,
+  "skipped": 0,
+  "warningCount": 3,
+  "errors": [
+    {
+      "category": "Health Checks",
+      "test": "Health endpoint responds",
+      "error": "Invalid response format"
+    },
+    {
+      "category": "API Endpoints",
+      "test": "GET /api/leads",
+      "error": "Unexpected status: 500 (expected: 200/401)"
+    },
+    {
+      "category": "API Endpoints",
+      "test": "GET /api/leads",
+      "error": "500 INTERNAL SERVER ERROR - Critical issue"
+    },
+    {
+      "category": "API Endpoints",
+      "test": "GET /api/acquisition-inquiry",
+      "error": "Unexpected status: 500 (expected: 200/404/405)"
+    },
+    {
+      "category": "API Endpoints",
+      "test": "GET /api/acquisition-inquiry",
+      "error": "500 INTERNAL SERVER ERROR - Critical issue"
+    },
+    {
+      "category": "API Endpoints",
+      "test": "GET /api/nonexistent",
+      "error": "Unexpected status: 401 (expected: 404)"
+    },
+    {
+      "category": "API Endpoints",
+      "test": "GET /api/fake/route",
+      "error": "Unexpected status: 401 (expected: 404)"
+    },
+    {
+      "category": "Error Handling",
+      "test": "404 error handling",
+      "error": "Expected 404, got 401"
+    }
+  ],
+  "warningList": [
+    {
+      "category": "Authentication & Security",
+      "test": "CORS headers present",
+      "message": "CORS headers not found in response"
+    },
+    {
+      "category": "Authentication & Security",
+      "test": "Rate limiting active",
+      "message": "No rate limiting detected (may need adjustment)"
+    },
+    {
+      "category": "Integration",
+      "test": "API endpoints in frontend",
+      "message": "Could not detect API calls in frontend"
+    }
+  ],
+  "details": [
+    {
+      "status": "FAIL",
+      "category": "Health Checks",
+      "test": "Health endpoint responds",
+      "error": "Invalid response format",
+      "timestamp": "2025-11-20T15:42:24.849Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Health Checks",
+      "test": "API health endpoint",
+      "message": "Version: 1.0.0, Timestamp: 2025-11-20T15:42:25.053Z",
+      "timestamp": "2025-11-20T15:42:24.981Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Health Checks",
+      "test": "Response time",
+      "message": "78ms (excellent)",
+      "timestamp": "2025-11-20T15:42:25.061Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /health",
+      "message": "Status: 200 (expected: 200)",
+      "timestamp": "2025-11-20T15:42:25.161Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/health",
+      "message": "Status: 200 (expected: 200)",
+      "timestamp": "2025-11-20T15:42:25.492Z"
+    },
+    {
+      "status": "FAIL",
+      "category": "API Endpoints",
+      "test": "GET /api/leads",
+      "error": "Unexpected status: 500 (expected: 200/401)",
+      "timestamp": "2025-11-20T15:42:25.717Z"
+    },
+    {
+      "status": "FAIL",
+      "category": "API Endpoints",
+      "test": "GET /api/leads",
+      "error": "500 INTERNAL SERVER ERROR - Critical issue",
+      "timestamp": "2025-11-20T15:42:25.717Z"
+    },
+    {
+      "status": "FAIL",
+      "category": "API Endpoints",
+      "test": "GET /api/acquisition-inquiry",
+      "error": "Unexpected status: 500 (expected: 200/404/405)",
+      "timestamp": "2025-11-20T15:42:25.948Z"
+    },
+    {
+      "status": "FAIL",
+      "category": "API Endpoints",
+      "test": "GET /api/acquisition-inquiry",
+      "error": "500 INTERNAL SERVER ERROR - Critical issue",
+      "timestamp": "2025-11-20T15:42:25.948Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/users",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:26.154Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/company",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:26.368Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/field-ops",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:26.597Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/projects",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:26.866Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/equipment",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:27.070Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/equipment/testing",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:27.346Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/safety",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:27.565Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/analytics",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:27.762Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/crews",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:27.997Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/qaqc",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:28.232Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/documents",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:28.431Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/documents/drawings",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:28.696Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/scheduling",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:28.886Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/operations",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:29.087Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/testing",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:29.285Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/reporting",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:29.500Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/inventory",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:29.693Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/receipts",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:29.884Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/environmental",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:30.088Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/emergency",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:30.295Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/feedback",
+      "message": "Status: 401 (expected: 401/405)",
+      "timestamp": "2025-11-20T15:42:30.491Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/submittals",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:30.719Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/outages",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:31.149Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/map",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:31.357Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/substations",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:31.546Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/ai",
+      "message": "Status: 401 (expected: 401/404/405)",
+      "timestamp": "2025-11-20T15:42:31.728Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/payments",
+      "message": "Status: 401 (expected: 401/404/405)",
+      "timestamp": "2025-11-20T15:42:31.970Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/messaging",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:32.178Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/collaboration",
+      "message": "Status: 401 (expected: 401/404/405)",
+      "timestamp": "2025-11-20T15:42:32.361Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/feed",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:32.547Z"
+    },
+    {
+      "status": "PASS",
+      "category": "API Endpoints",
+      "test": "GET /api/notifications",
+      "message": "Status: 401 (expected: 401)",
+      "timestamp": "2025-11-20T15:42:32.752Z"
+    },
+    {
+      "status": "FAIL",
+      "category": "API Endpoints",
+      "test": "GET /api/nonexistent",
+      "error": "Unexpected status: 401 (expected: 404)",
+      "timestamp": "2025-11-20T15:42:32.962Z"
+    },
+    {
+      "status": "FAIL",
+      "category": "API Endpoints",
+      "test": "GET /api/fake/route",
+      "error": "Unexpected status: 401 (expected: 404)",
+      "timestamp": "2025-11-20T15:42:33.154Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Authentication & Security",
+      "test": "Protected routes require auth",
+      "message": "Projects endpoint correctly returns 401",
+      "timestamp": "2025-11-20T15:42:33.360Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Authentication & Security",
+      "test": "Invalid token rejected",
+      "message": "System correctly rejects invalid tokens",
+      "timestamp": "2025-11-20T15:42:33.615Z"
+    },
+    {
+      "status": "WARN",
+      "category": "Authentication & Security",
+      "test": "CORS headers present",
+      "message": "CORS headers not found in response",
+      "timestamp": "2025-11-20T15:42:33.709Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Authentication & Security",
+      "test": "Security header: x-frame-options",
+      "message": "Present",
+      "timestamp": "2025-11-20T15:42:33.817Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Authentication & Security",
+      "test": "Security header: x-content-type-options",
+      "message": "Present",
+      "timestamp": "2025-11-20T15:42:33.817Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Authentication & Security",
+      "test": "Security header: strict-transport-security",
+      "message": "Present",
+      "timestamp": "2025-11-20T15:42:33.817Z"
+    },
+    {
+      "status": "WARN",
+      "category": "Authentication & Security",
+      "test": "Rate limiting active",
+      "message": "No rate limiting detected (may need adjustment)",
+      "timestamp": "2025-11-20T15:42:34.334Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Database",
+      "test": "Migration files present",
+      "message": "Found 35 migration files",
+      "timestamp": "2025-11-20T15:42:34.341Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Database",
+      "test": "Database schema file",
+      "message": "Schema file exists (18.3KB)",
+      "timestamp": "2025-11-20T15:42:34.346Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Database",
+      "test": "Neon CLI available",
+      "message": "2.18.0",
+      "timestamp": "2025-11-20T15:42:36.813Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Database",
+      "test": "Supabase CLI available",
+      "message": "2.54.11",
+      "timestamp": "2025-11-20T15:42:39.397Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:39.570Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /login",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:39.749Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /signup",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:39.909Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /dashboard",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:40.093Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /projects",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:40.420Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /safety",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:40.569Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /equipment",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:40.721Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /qaqc",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:40.981Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /documents",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:41.134Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /scheduling",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:41.319Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /operations",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:41.466Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /testing",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:41.620Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /receipts",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:41.770Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /environmental",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:41.996Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /emergency",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:42.181Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /submittals",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:42.342Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /outages",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:42.496Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /map",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:42.649Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /substations",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:42.802Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /crews",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:43.004Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /field-ops",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:43.172Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /inventory",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:43.328Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /weather",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:43.487Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /feed",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:43.661Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /messaging",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:43.820Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /company",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:43.969Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Frontend Routes",
+      "test": "Route: /settings",
+      "message": "Status: 200",
+      "timestamp": "2025-11-20T15:42:44.128Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Performance",
+      "test": "Cold start time",
+      "message": "118ms (excellent)",
+      "timestamp": "2025-11-20T15:42:44.347Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Performance",
+      "test": "Average response time",
+      "message": "93ms avg (78-132ms range)",
+      "timestamp": "2025-11-20T15:42:45.276Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Performance",
+      "test": "Concurrent requests",
+      "message": "5 requests in 262ms",
+      "timestamp": "2025-11-20T15:42:45.548Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Deployment",
+      "test": "Vercel CLI available",
+      "message": "48.10.2",
+      "timestamp": "2025-11-20T15:42:54.947Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Deployment",
+      "test": "Vercel deployment status",
+      "message": "Can access deployments",
+      "timestamp": "2025-11-20T15:43:07.710Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Deployment",
+      "test": "Vercel configuration",
+      "message": "vercel.json properly configured",
+      "timestamp": "2025-11-20T15:43:07.712Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Deployment",
+      "test": "Environment variables",
+      "message": "Service name configured correctly",
+      "timestamp": "2025-11-20T15:43:07.967Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Deployment",
+      "test": "Build artifacts",
+      "message": "Both backend and frontend built",
+      "timestamp": "2025-11-20T15:43:07.977Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Integration",
+      "test": "Frontend → API integration",
+      "message": "Both frontend and API accessible",
+      "timestamp": "2025-11-20T15:43:08.143Z"
+    },
+    {
+      "status": "WARN",
+      "category": "Integration",
+      "test": "API endpoints in frontend",
+      "message": "Could not detect API calls in frontend",
+      "timestamp": "2025-11-20T15:43:08.232Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Integration",
+      "test": "Database → API timing",
+      "message": "API timestamp is current",
+      "timestamp": "2025-11-20T15:43:08.355Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Security Audit",
+      "test": "SQL injection protection",
+      "message": "Auth layer blocks malicious input",
+      "timestamp": "2025-11-20T15:43:08.460Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Security Audit",
+      "test": "XSS protection header",
+      "message": "Value: 1; mode=block",
+      "timestamp": "2025-11-20T15:43:08.578Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Security Audit",
+      "test": "HTTPS enforcement (HSTS)",
+      "message": "Present: max-age=31536000; includeSubDomains; preload",
+      "timestamp": "2025-11-20T15:43:08.716Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Security Audit",
+      "test": "Sensitive data exposure",
+      "message": "No sensitive data in public endpoint",
+      "timestamp": "2025-11-20T15:43:08.811Z"
+    },
+    {
+      "status": "FAIL",
+      "category": "Error Handling",
+      "test": "404 error handling",
+      "error": "Expected 404, got 401",
+      "timestamp": "2025-11-20T15:43:08.927Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Error Handling",
+      "test": "Error handling (invalid auth)",
+      "message": "Returns 401, not 500",
+      "timestamp": "2025-11-20T15:43:09.377Z"
+    },
+    {
+      "status": "PASS",
+      "category": "Error Handling",
+      "test": "Malformed JSON handling",
+      "message": "Returns 400 - handled gracefully",
+      "timestamp": "2025-11-20T15:43:09.474Z"
+    }
+  ],
+  "duration": 45112,
+  "durationFormatted": "45.11s",
+  "passRate": "91.58%"
+}

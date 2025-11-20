@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CreditCard, Calendar, AlertCircle, CheckCircle, Loader2, ExternalLink } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../auth/AuthProvider';
 
 interface SubscriptionInfo {
   status: string;
@@ -12,7 +12,7 @@ interface SubscriptionInfo {
 }
 
 export const BillingSettings: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [subscription, setSubscription] = useState<SubscriptionInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [portalLoading, setPortalLoading] = useState(false);

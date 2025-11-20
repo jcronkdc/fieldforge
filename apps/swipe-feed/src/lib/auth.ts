@@ -1,11 +1,5 @@
 import { supabase } from './supabase';
 
-// Demo account credentials
-export const DEMO_CREDENTIALS = {
-  email: 'demo@fieldforge.com',
-  password: 'FieldForge2025!Demo'
-};
-
 // Sign up new user
 export async function signUp(
   email: string,

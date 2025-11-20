@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { TeamMessaging } from '../messaging/TeamMessaging';
 import { ProjectCollaboration } from './ProjectCollaboration';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuthContext } from '../auth/AuthProvider';
 
 /**
  * CollaborationHub - Unified interface for team collaboration
@@ -25,10 +25,22 @@ export const CollaborationHub: React.FC<CollaborationHubProps> = ({
   projectId, 
   conversationId 
 }) => {
-  const { session } = useAuth();
+  const { session, loading, isAuthenticated } = useAuthContext();
   const [activeTab, setActiveTab] = useState<'chat' | 'video'>('chat');
 
-  if (!session?.user?.id) {
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div className="collaboration-hub-loading">
+        <div className="text-center py-12">
+          <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading collaboration...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated || !session?.user?.id) {
     return (
       <div className="collaboration-hub-unauthorized">
         <div className="text-center py-12">
@@ -312,6 +324,17 @@ export const CollaborationHub: React.FC<CollaborationHubProps> = ({
         }
 
         .dark .collaboration-hub-unauthorized {
+          background: #1f2937;
+        }
+
+        .collaboration-hub-loading {
+          background: white;
+          border-radius: 16px;
+          padding: 48px;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .collaboration-hub-loading {
           background: #1f2937;
         }
 

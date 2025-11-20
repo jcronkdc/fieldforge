@@ -453,7 +453,7 @@ function calculateWorkabilityScore(dailyForecasts: any[]): any {
     }
   });
   
-  const avgScore = Math.round(scores.reduce((sum, s) => sum + s, 0) / scores.length);
+  const avgScore: number = Math.round(scores.reduce((sum: number, s: number) => sum + s, 0) / scores.length);
   const workableDays = dailyForecasts.filter(d => d.workability !== 'UNSAFE' && d.workability !== 'POOR').length;
   
   return {

@@ -4,7 +4,7 @@ import {
   Shield, Archive, Upload, Save, AlertTriangle, 
   Check, Compass, Settings, Zap
 } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../auth/AuthProvider';
 import { supabase } from '../../lib/supabase';
 import toast from 'react-hot-toast';
 
@@ -56,7 +56,7 @@ interface CompanyData {
 }
 
 export const CompanySettings: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
