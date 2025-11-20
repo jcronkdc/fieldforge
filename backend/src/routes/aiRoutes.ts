@@ -6,6 +6,17 @@ import Anthropic from '@anthropic-ai/sdk';
 import OpenAI from 'openai';
 import axios from 'axios';
 import { getCurrentWeather, getWeatherForecast, getProjectWeather, analyzeWeatherImpact } from './aiWeatherFunctions.js';
+import { 
+  SITE_ROUTES, 
+  AI_INSTRUCTIONS,
+  getRouteInfo,
+  getRoutesByCategory,
+  getInstruction,
+  searchRoutes,
+  getAllCategories,
+  generateNavigationGuidance,
+  generateSiteOverview
+} from './aiNavigationSystem.js';
 
 // Message validation schema
 const messageSchema = z.object({
@@ -347,6 +358,582 @@ export function createAIRouter(): Router {
     } catch (error) {
       console.error('Training error:', error);
       res.status(500).json({ error: 'Failed to record training data' });
+    }
+  });
+
+  // ========================================================================
+  // GOD-LEVEL AI CAPABILITIES - SITE NAVIGATION & COMPREHENSIVE KNOWLEDGE
+  // ========================================================================
+
+  /**
+   * AI Site Navigation - Ask where to go and how to use features
+   * Example: "How do I report a safety incident?" → Returns detailed guidance
+   */
+  router.post('/navigate', async (req: Request, res: Response) => {
+    try {
+      const { query: userQuery, currentPath, userId, projectId } = req.body;
+      
+      if (!userQuery) {
+        return res.status(400).json({ error: 'query is required' });
+      }
+
+      // Search for relevant routes/features
+      const matchingRoutes = searchRoutes(userQuery);
+      
+      // Generate comprehensive guidance
+      let response = '';
+      
+      if (matchingRoutes.length === 0) {
+        response = `I couldn't find a feature matching "${userQuery}".\n\n`;
+        response += `**Available Categories**: ${getAllCategories().join(', ')}\n\n`;
+        response += `Try asking about specific features like:\n`;
+        response += `- "How do I report a safety incident?"\n`;
+        response += `- "Where can I track project budgets?"\n`;
+        response += `- "How do I start a video collaboration?"\n`;
+        response += `- "Show me the weather dashboard"\n`;
+      } else if (matchingRoutes.length === 1) {
+        const route = matchingRoutes[0];
+        const instruction = AI_INSTRUCTIONS.find(i => 
+          i.feature.toLowerCase().includes(route.name.toLowerCase())
+        );
+
+        response += `# ${route.name}\n\n`;
+        response += `**Navigate to**: \`${route.path}\`\n\n`;
+        response += `**Description**: ${route.description}\n\n`;
+        response += `## Key Features\n${route.features.slice(0, 8).map(f => `- ${f}`).join('\n')}\n\n`;
+        
+        if (route.commonTasks && route.commonTasks.length > 0) {
+          response += `## Common Tasks\n${route.commonTasks.map(t => `- ${t}`).join('\n')}\n\n`;
+        }
+
+        if (instruction) {
+          response += `## How to Use\n${instruction.steps.slice(0, 8).map(s => s).join('\n')}\n\n`;
+          if (instruction.tips && instruction.tips.length > 0) {
+            response += `## Pro Tips\n${instruction.tips.slice(0, 5).map(t => `💡 ${t}`).join('\n')}\n\n`;
+          }
+          if (instruction.commonIssues && instruction.commonIssues.length > 0) {
+            response += `## Troubleshooting\n${instruction.commonIssues.map(i => `⚠️ ${i}`).join('\n')}\n\n`;
+          }
+        }
+
+        if (route.integrations && route.integrations.length > 0) {
+          response += `## Integrations\n${route.integrations.map(i => `🔌 ${i}`).join('\n')}\n\n`;
+        }
+
+        if (route.relatedRoutes && route.relatedRoutes.length > 0) {
+          response += `## Related Features\n`;
+          route.relatedRoutes.forEach(relPath => {
+            const relRoute = getRouteInfo(relPath);
+            if (relRoute) {
+              response += `- **${relRoute.name}** (\`${relRoute.path}\`): ${relRoute.description.substring(0, 80)}...\n`;
+            }
+          });
+        }
+
+        response += `\n---\n\nWould you like me to guide you through a specific task?`;
+      } else {
+        // Multiple matches
+        response += `I found **${matchingRoutes.length} features** that match "${userQuery}":\n\n`;
+        matchingRoutes.slice(0, 10).forEach((route, idx) => {
+          response += `## ${idx + 1}. ${route.name}\n`;
+          response += `**Path**: \`${route.path}\` | **Category**: ${route.category}\n`;
+          response += `${route.description}\n\n`;
+          response += `**Key Features**: ${route.features.slice(0, 3).join(', ')}\n\n`;
+        });
+        if (matchingRoutes.length > 10) {
+          response += `_...and ${matchingRoutes.length - 10} more features_\n\n`;
+        }
+        response += `Which feature would you like detailed guidance on?`;
+      }
+
+      // Log navigation request
+      await query(`
+        INSERT INTO ai_conversations (
+          user_id, project_id, message_type, content, category, metadata, created_at
+        ) VALUES ($1, $2, 'navigation', $3, 'general', $4, NOW())
+      `, [
+        userId,
+        projectId,
+        userQuery,
+        JSON.stringify({ matchingRoutes: matchingRoutes.map(r => r.path), currentPath })
+      ]);
+
+      res.json({
+        content: response,
+        routes: matchingRoutes.map(r => ({
+          path: r.path,
+          name: r.name,
+          category: r.category,
+          description: r.description,
+        })),
+        category: 'navigation'
+      });
+    } catch (error) {
+      console.error('[AI] Navigation error:', error);
+      res.status(500).json({ error: 'Failed to process navigation request' });
+    }
+  });
+
+  /**
+   * Get comprehensive site overview
+   * Returns full platform knowledge for AI context
+   */
+  router.get('/site-map', async (req: Request, res: Response) => {
+    try {
+      const overview = generateSiteOverview();
+      const categories = getAllCategories();
+      
+      res.json({
+        overview,
+        totalRoutes: SITE_ROUTES.length,
+        categories,
+        routes: SITE_ROUTES.map(r => ({
+          path: r.path,
+          name: r.name,
+          category: r.category,
+          description: r.description,
+          accessLevel: r.accessLevel,
+          featureCount: r.features.length,
+        })),
+        instructions: AI_INSTRUCTIONS.map(i => ({
+          feature: i.feature,
+          stepCount: i.steps.length,
+          tipCount: i.tips.length,
+        })),
+      });
+    } catch (error) {
+      console.error('[AI] Site map error:', error);
+      res.status(500).json({ error: 'Failed to generate site map' });
+    }
+  });
+
+  /**
+   * Comprehensive Project Summary with AI Analysis
+   * Provides complete project overview, analytics, and insights
+   */
+  router.get('/project/:projectId/summary', async (req: Request, res: Response) => {
+    try {
+      const { projectId } = req.params;
+      const { userId } = req.query;
+
+      if (!projectId) {
+        return res.status(400).json({ error: 'projectId is required' });
+      }
+
+      // Gather comprehensive project data
+      const [
+        projectData,
+        teamData,
+        budgetData,
+        scheduleData,
+        safetyData,
+        qaData,
+        weatherData,
+        recentActivity,
+        equipmentData,
+        documentData
+      ] = await Promise.all([
+        // Project basics
+        query(`SELECT * FROM projects WHERE id = $1`, [projectId]),
+        
+        // Team composition
+        query(`
+          SELECT pm.role, pm.status, COUNT(*) as count
+          FROM project_members pm
+          WHERE pm.project_id = $1
+          GROUP BY pm.role, pm.status
+        `, [projectId]),
+        
+        // Budget performance
+        query(`
+          SELECT 
+            SUM(amount) as total_spent,
+            COUNT(*) as transaction_count
+          FROM receipts
+          WHERE project_id = $1 AND status = 'approved'
+        `, [projectId]),
+        
+        // Schedule status
+        query(`
+          SELECT 
+            COUNT(*) FILTER (WHERE status = 'completed') as completed_tasks,
+            COUNT(*) FILTER (WHERE status = 'in_progress') as active_tasks,
+            COUNT(*) FILTER (WHERE status = 'pending') as pending_tasks,
+            COUNT(*) FILTER (WHERE due_date < NOW() AND status != 'completed') as overdue_tasks
+          FROM project_tasks
+          WHERE project_id = $1
+        `, [projectId]),
+        
+        // Safety metrics
+        query(`
+          SELECT 
+            COUNT(*) FILTER (WHERE incident_type = 'injury') as injuries,
+            COUNT(*) FILTER (WHERE incident_type = 'near_miss') as near_misses,
+            COUNT(*) FILTER (WHERE incident_type = 'property_damage') as property_damage,
+            COUNT(*) as total_incidents
+          FROM safety_incidents
+          WHERE project_id = $1
+        `, [projectId]),
+        
+        // Quality metrics
+        query(`
+          SELECT 
+            COUNT(*) FILTER (WHERE status = 'passed') as passed,
+            COUNT(*) FILTER (WHERE status = 'failed') as failed,
+            COUNT(*) as total_inspections
+          FROM qaqc_inspections
+          WHERE project_id = $1
+        `, [projectId]),
+        
+        // Weather conditions (if project has location)
+        getProjectWeather(projectId, true).catch(() => null),
+        
+        // Recent activity from feed
+        query(`
+          SELECT post_type, COUNT(*) as count
+          FROM feed_posts
+          WHERE project_id = $1 AND created_at > NOW() - INTERVAL '7 days'
+          GROUP BY post_type
+        `, [projectId]),
+        
+        // Equipment status
+        query(`
+          SELECT 
+            status,
+            COUNT(*) as count
+          FROM equipment
+          WHERE project_id = $1
+          GROUP BY status
+        `, [projectId]),
+        
+        // Document count
+        query(`
+          SELECT COUNT(*) as document_count
+          FROM project_documents
+          WHERE project_id = $1
+        `, [projectId])
+      ]);
+
+      const project = projectData.rows[0];
+      if (!project) {
+        return res.status(404).json({ error: 'Project not found' });
+      }
+
+      // Calculate project health score
+      const budget = budgetData.rows[0];
+      const schedule = scheduleData.rows[0];
+      const safety = safetyData.rows[0];
+      const qa = qaData.rows[0];
+
+      const totalBudget = parseFloat(project.budget || 0);
+      const totalSpent = parseFloat(budget?.total_spent || 0);
+      const budgetPerformance = totalBudget > 0 ? ((totalBudget - totalSpent) / totalBudget) * 100 : 0;
+
+      const totalTasks = parseInt(schedule?.completed_tasks || 0) + 
+                        parseInt(schedule?.active_tasks || 0) + 
+                        parseInt(schedule?.pending_tasks || 0);
+      const schedulePerformance = totalTasks > 0 
+        ? (parseInt(schedule?.completed_tasks || 0) / totalTasks) * 100 
+        : 0;
+
+      const safetyScore = Math.max(0, 100 - (parseInt(safety?.injuries || 0) * 20) - (parseInt(safety?.near_misses || 0) * 5));
+      
+      const totalInspections = parseInt(qa?.total_inspections || 0);
+      const qualityScore = totalInspections > 0 
+        ? (parseInt(qa?.passed || 0) / totalInspections) * 100 
+        : 100;
+
+      const healthScore = Math.round(
+        (budgetPerformance * 0.3) + 
+        (schedulePerformance * 0.3) + 
+        (safetyScore * 0.25) + 
+        (qualityScore * 0.15)
+      );
+
+      // Generate AI insights
+      const insights = [];
+      
+      if (budgetPerformance < 70) {
+        insights.push({
+          type: 'warning',
+          category: 'budget',
+          message: `Budget at ${Math.round(budgetPerformance)}% remaining. Consider cost control measures.`
+        });
+      }
+
+      if (parseInt(schedule?.overdue_tasks || 0) > 0) {
+        insights.push({
+          type: 'warning',
+          category: 'schedule',
+          message: `${schedule.overdue_tasks} tasks are overdue. Review schedule and reallocate resources.`
+        });
+      }
+
+      if (parseInt(safety?.injuries || 0) > 0) {
+        insights.push({
+          type: 'critical',
+          category: 'safety',
+          message: `${safety.injuries} injuries reported. Immediate safety review recommended.`
+        });
+      }
+
+      if (weatherData && weatherData.workabilityScore) {
+        if (weatherData.workabilityScore < 60) {
+          insights.push({
+            type: 'warning',
+            category: 'weather',
+            message: `Poor weather conditions expected. Workability score: ${weatherData.workabilityScore}/100.`
+          });
+        }
+      }
+
+      // Build comprehensive summary
+      const summary = {
+        project: {
+          id: project.id,
+          name: project.name,
+          number: project.project_number,
+          status: project.status,
+          startDate: project.start_date,
+          endDate: project.end_date,
+          client: project.client_name,
+          location: {
+            address: project.location_address,
+            city: project.location_city,
+            state: project.location_state,
+            zip: project.location_zip,
+          },
+        },
+        
+        health: {
+          score: healthScore,
+          status: healthScore >= 80 ? 'EXCELLENT' : healthScore >= 60 ? 'GOOD' : healthScore >= 40 ? 'FAIR' : 'POOR',
+          components: {
+            budget: {
+              score: Math.round(budgetPerformance),
+              total: totalBudget,
+              spent: totalSpent,
+              remaining: totalBudget - totalSpent,
+              percentSpent: totalBudget > 0 ? Math.round((totalSpent / totalBudget) * 100) : 0,
+            },
+            schedule: {
+              score: Math.round(schedulePerformance),
+              totalTasks,
+              completed: parseInt(schedule?.completed_tasks || 0),
+              active: parseInt(schedule?.active_tasks || 0),
+              pending: parseInt(schedule?.pending_tasks || 0),
+              overdue: parseInt(schedule?.overdue_tasks || 0),
+            },
+            safety: {
+              score: safetyScore,
+              injuries: parseInt(safety?.injuries || 0),
+              nearMisses: parseInt(safety?.near_misses || 0),
+              propertyDamage: parseInt(safety?.property_damage || 0),
+              totalIncidents: parseInt(safety?.total_incidents || 0),
+            },
+            quality: {
+              score: Math.round(qualityScore),
+              totalInspections,
+              passed: parseInt(qa?.passed || 0),
+              failed: parseInt(qa?.failed || 0),
+            },
+          },
+        },
+
+        team: {
+          composition: teamData.rows,
+          totalMembers: teamData.rows.reduce((sum, r) => sum + parseInt(r.count), 0),
+        },
+
+        weather: weatherData ? {
+          current: weatherData.current,
+          workabilityScore: weatherData.workabilityScore,
+          alerts: weatherData.alerts,
+          forecast: weatherData.forecast,
+        } : null,
+
+        activity: {
+          recent: recentActivity.rows,
+          period: 'Last 7 days',
+        },
+
+        equipment: {
+          status: equipmentData.rows,
+          totalUnits: equipmentData.rows.reduce((sum, r) => sum + parseInt(r.count), 0),
+        },
+
+        documents: {
+          count: parseInt(documentData.rows[0]?.document_count || 0),
+        },
+
+        insights,
+        
+        recommendations: [
+          healthScore < 60 && 'Schedule project review meeting to address performance issues',
+          parseInt(schedule?.overdue_tasks || 0) > 0 && 'Prioritize overdue tasks and adjust timeline',
+          budgetPerformance < 70 && 'Implement cost control measures and review expenses',
+          parseInt(safety?.injuries || 0) > 0 && 'Conduct comprehensive safety audit and retraining',
+          weatherData?.workabilityScore < 60 && 'Adjust schedule for adverse weather conditions',
+        ].filter(Boolean),
+      };
+
+      // Log summary request
+      await query(`
+        INSERT INTO ai_conversations (
+          user_id, project_id, message_type, content, category, metadata, created_at
+        ) VALUES ($1, $2, 'project_summary', $3, 'general', $4, NOW())
+      `, [
+        userId,
+        projectId,
+        `Project summary requested for ${project.name}`,
+        JSON.stringify({ healthScore, insights: insights.length })
+      ]);
+
+      res.json(summary);
+    } catch (error) {
+      console.error('[AI] Project summary error:', error);
+      res.status(500).json({ error: 'Failed to generate project summary' });
+    }
+  });
+
+  /**
+   * Run Analytics Report
+   * Executes comprehensive analytics on demand
+   */
+  router.post('/analytics/run', async (req: Request, res: Response) => {
+    try {
+      const { 
+        projectId, 
+        analysisType, 
+        dateRange, 
+        metrics, 
+        userId 
+      } = req.body;
+
+      if (!projectId) {
+        return res.status(400).json({ error: 'projectId is required' });
+      }
+
+      const validTypes = ['productivity', 'cost', 'schedule', 'safety', 'quality', 'comprehensive'];
+      const type = validTypes.includes(analysisType) ? analysisType : 'comprehensive';
+
+      // Date range
+      const startDate = dateRange?.start || 'NOW() - INTERVAL \'30 days\'';
+      const endDate = dateRange?.end || 'NOW()';
+
+      let analytics = {};
+
+      // Productivity Analytics
+      if (type === 'productivity' || type === 'comprehensive') {
+        const productivityData = await query(`
+          SELECT 
+            DATE(date) as day,
+            SUM(hours_worked) as total_hours,
+            SUM(units_completed) as total_units,
+            ROUND(AVG(productivity_rate), 2) as avg_productivity
+          FROM daily_reports
+          WHERE project_id = $1 
+            AND date BETWEEN ${typeof startDate === 'string' && startDate.includes('INTERVAL') ? startDate : '$2'}
+            AND ${typeof endDate === 'string' && endDate.includes('INTERVAL') ? endDate : '$3'}
+          GROUP BY DATE(date)
+          ORDER BY day DESC
+        `, typeof startDate === 'string' && startDate.includes('INTERVAL') 
+          ? [projectId] 
+          : [projectId, startDate, endDate]
+        );
+
+        analytics = {
+          ...analytics,
+          productivity: {
+            dailyData: productivityData.rows,
+            averageProductivity: productivityData.rows.reduce((sum, r) => sum + parseFloat(r.avg_productivity || 0), 0) / (productivityData.rows.length || 1),
+            totalHours: productivityData.rows.reduce((sum, r) => sum + parseFloat(r.total_hours || 0), 0),
+            totalUnits: productivityData.rows.reduce((sum, r) => sum + parseInt(r.total_units || 0), 0),
+          },
+        };
+      }
+
+      // Cost Analytics
+      if (type === 'cost' || type === 'comprehensive') {
+        const costData = await query(`
+          SELECT 
+            cost_code,
+            SUM(amount) as total,
+            COUNT(*) as transaction_count
+          FROM receipts
+          WHERE project_id = $1 AND status = 'approved'
+          GROUP BY cost_code
+          ORDER BY total DESC
+        `, [projectId]);
+
+        const budgetComparison = await query(`
+          SELECT budget FROM projects WHERE id = $1
+        `, [projectId]);
+
+        analytics = {
+          ...analytics,
+          cost: {
+            byCostCode: costData.rows,
+            totalSpent: costData.rows.reduce((sum, r) => sum + parseFloat(r.total || 0), 0),
+            budget: parseFloat(budgetComparison.rows[0]?.budget || 0),
+            variance: parseFloat(budgetComparison.rows[0]?.budget || 0) - costData.rows.reduce((sum, r) => sum + parseFloat(r.total || 0), 0),
+          },
+        };
+      }
+
+      // Safety Analytics
+      if (type === 'safety' || type === 'comprehensive') {
+        const safetyData = await query(`
+          SELECT 
+            DATE(incident_date) as day,
+            incident_type,
+            severity,
+            COUNT(*) as count
+          FROM safety_incidents
+          WHERE project_id = $1
+          GROUP BY DATE(incident_date), incident_type, severity
+          ORDER BY day DESC
+        `, [projectId]);
+
+        analytics = {
+          ...analytics,
+          safety: {
+            incidents: safetyData.rows,
+            totalIncidents: safetyData.rows.reduce((sum, r) => sum + parseInt(r.count || 0), 0),
+            byType: safetyData.rows.reduce((acc, r) => {
+              acc[r.incident_type] = (acc[r.incident_type] || 0) + parseInt(r.count || 0);
+              return acc;
+            }, {} as Record<string, number>),
+          },
+        };
+      }
+
+      // Log analytics request
+      await query(`
+        INSERT INTO ai_conversations (
+          user_id, project_id, message_type, content, category, metadata, created_at
+        ) VALUES ($1, $2, 'analytics', $3, $4, $5, NOW())
+      `, [
+        userId,
+        projectId,
+        `Analytics report: ${type}`,
+        type,
+        JSON.stringify({ dateRange })
+      ]);
+
+      res.json({
+        projectId,
+        analysisType: type,
+        dateRange: {
+          start: startDate,
+          end: endDate,
+        },
+        analytics,
+        generatedAt: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error('[AI] Analytics error:', error);
+      res.status(500).json({ error: 'Failed to run analytics' });
     }
   });
 

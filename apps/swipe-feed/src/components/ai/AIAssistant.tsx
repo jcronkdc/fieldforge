@@ -85,15 +85,82 @@ export const AIAssistant: React.FC = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const userInput = input;
     setInput('');
     setIsLoading(true);
 
-    // Simulate AI response (in production, this would call your AI service)
-    setTimeout(() => {
-      const aiResponse = generateAIResponse(input);
+    try {
+      // Get current user and project context
+      const { data: { user } } = await supabase.auth.getUser();
+      const currentPath = window.location.pathname;
+
+      // Check if this is a navigation/help query
+      const isNavigationQuery = /\b(where|how|show|navigate|find|go to|help|guide)\b/i.test(userInput);
+      const isProjectQuery = /\b(project|summary|status|overview|analytics)\b/i.test(userInput);
+      
+      let response;
+
+      if (isNavigationQuery) {
+        // Use navigation endpoint
+        response = await fetch('/api/ai/navigate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: userInput,
+            currentPath,
+            userId: user?.id,
+          }),
+        });
+      } else if (isProjectQuery && userInput.toLowerCase().includes('summary')) {
+        // Get project summary
+        const projectId = localStorage.getItem('currentProjectId');
+        if (projectId) {
+          response = await fetch(`/api/ai/project/${projectId}/summary?userId=${user?.id}`);
+        } else {
+          throw new Error('No project selected');
+        }
+      } else {
+        // Use standard AI chat
+        response = await fetch('/api/ai/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            content: userInput,
+            context: {
+              userId: user?.id,
+              category: 'general',
+            },
+          }),
+        });
+      }
+
+      if (!response) {
+        throw new Error('No response from AI');
+      }
+
+      const data = await response.json();
+      
+      const aiResponse: Message = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: data.content || data.summary || generateFallbackResponse(userInput),
+        timestamp: new Date(),
+        suggestions: data.insights || []
+      };
+
       setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      console.error('AI error:', error);
+      // Fallback to local response if API fails
+      const aiResponse = generateAIResponse(userInput);
+      setMessages(prev => [...prev, aiResponse]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
+  };
+
+  const generateFallbackResponse = (query: string): string => {
+    return generateAIResponse(query).content;
   };
 
   const generateAIResponse = (query: string): Message => {
@@ -158,10 +225,10 @@ export const AIAssistant: React.FC = () => {
   };
 
   const quickActions = [
-    { label: 'Safety Check', icon: Shield, query: 'What are the current safety concerns?' },
-    { label: 'Schedule Status', icon: Calendar, query: 'How is the project schedule looking?' },
-    { label: 'Crew Updates', icon: Users, query: 'Give me a crew efficiency report' },
-    { label: 'Weather Impact', icon: Activity, query: 'How will weather affect our work?' }
+    { label: 'Safety Check', icon: Shield, query: 'Show me current safety concerns and how to report an incident' },
+    { label: 'Project Summary', icon: Calendar, query: 'Give me a comprehensive project summary with analytics' },
+    { label: 'Navigation Help', icon: Map, query: 'Show me all features and how to navigate the platform' },
+    { label: 'Weather Impact', icon: Activity, query: 'How will weather affect our work and what is the workability score?' }
   ];
 
   // Show floating button when assistant is hidden
