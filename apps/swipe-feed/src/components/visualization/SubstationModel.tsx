@@ -203,7 +203,7 @@ function EquipmentDetailPanel({ component, onClose }: { component: EquipmentComp
   ];
 
   return (
-    <div className="absolute top-4 right-4 w-96 bg-slate-800/95 backdrop-blur-sm rounded-lg p-6 border border-slate-700 shadow-2xl">
+    <div className="absolute top-4 right-4 w-80 max-w-[calc(100vw-2rem)] bg-slate-800/95 backdrop-blur-sm rounded-lg p-6 border border-slate-700 shadow-2xl max-h-[calc(100vh-2rem)] overflow-y-auto">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
