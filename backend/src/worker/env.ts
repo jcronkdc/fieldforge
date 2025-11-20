@@ -19,6 +19,7 @@ export interface Env {
   LOCAL_AI_MODEL?: string;      // Model name (e.g., 'llama3', 'mistral', 'codellama')
   
   OPENWEATHER_API_KEY?: string; // Real-time weather & forecasts
+  AGROMONITORING_API_KEY?: string; // Agricultural monitoring (soil, vegetation, satellite)
   NOTIFY_WEBHOOK_DISCORD?: string;
   NOTIFY_SENDGRID_API_KEY?: string;
   NOTIFY_EMAIL_FROM?: string;
