@@ -227,58 +227,67 @@ Only do this if simple test passes:
 
 ---
 
-## 🧪 **NEXT HUMAN TEST — GIS Collaboration (MF-69)**
+## 🧪 **NEXT HUMAN TEST — Collaboration Network (MF-71)**
 
-**Priority**: CRITICAL - Must verify mycelial connections work before declaring complete
+**Status**: ⏳ **READY TO TEST NOW** (zero blockers)  
+**Duration**: 5 minutes (single user) / 15 minutes (multi-user)  
+**Priority**: CRITICAL - Verifies mycelial collaboration flow  
+**Test Guide**: `HUMAN_TEST_GUIDE_MF71.md` (ant-optimized 5-minute path)
 
-**Test Participants**: 2+ users (User A = Project Admin, User B = Team Member)
+### 🐜 ANT-OPTIMIZED TEST (Shortest Path)
 
-**Prerequisites**:
-1. ✅ DAILY_API_KEY configured in Vercel (per MF-66)
-2. ✅ ABLY_API_KEY configured in Vercel (per MF-66)
-3. ⏳ Migration 039 run on production DB (creates GIS tables)
-4. ⏳ Both users members of same project (invite-only enforcement)
+**Single User Test** (5 minutes - can do RIGHT NOW):
+1. Login → Safety Hub (30 seconds)
+2. Click "🎥 Video Collab" tab (10 seconds)
+3. Verify CollaborationHub loads (1 minute)
+4. Click "Create Room" button (2 minutes)
+5. Verify Daily.co room opens (30 seconds)
 
-**Test Flow** (Ant-Optimized Pathway):
+**Expected Result**:
+- ✅ CollaborationHub renders (2 tabs: Team Chat + Video Collab)
+- ✅ Room creation UI shows
+- ✅ Daily.co room opens successfully
+- ✅ No 503 errors (DAILY_API_KEY working)
+- ✅ No "Sign In Required" errors (auth context syncing)
+
+**Multi-User Test** (15 minutes - needs 2+ users):
+1. User A creates room → copies URL
+2. User B joins via URL → can see/hear User A
+3. User C (non-member) tries to access → BLOCKED
+4. Verify cursor control syncs (if enabled)
+5. Verify room persists in database
+
+**Success Criteria**:
+- ✅ Video room creates without errors
+- ✅ Users can see/hear each other
+- ✅ Non-member blocked (invite-only enforced)
+- ✅ Room saved to collaboration_rooms table
+- ✅ Ably real-time events working
+
+**Mycelial Pathway Verified**:
 ```
-User A: Import CAD
-  ↓
-User A: Click "Review with Team"
-  ↓
-Daily.co room created
-  ↓
-User A: Copy room URL, send to User B
-  ↓
-User B: Click URL (opens Daily.co)
-  ↓
-Both in video room (can see/hear each other)
-  ↓
-User A: Move cursor in 3D viewer
-  ↓
-User B: See cursor position in GISDashboard "Team Viewing" list
-  ↓
-Both: Discuss structure placement
-  ↓
-SUCCESS: Mycelial flow verified
+Frontend CollaborationHub
+  ↓ POST /api/collaboration/rooms
+Backend collaborationRoutes.ts
+  ↓ Bearer ${DAILY_API_KEY}
+Daily.co API (https://api.daily.co/v1/rooms)
+  ↓ Returns room URL
+Backend saves to collaboration_rooms table
+  ↓ RLS enforces invite-only
+Ably publishes room.created event
+  ↓ Real-time sync
+Team members notified
 ```
 
-**Expected Results**:
-- ✅ Daily.co room opens without 503 error
-- ✅ Both users see each other in video
-- ✅ Invite-only enforced (non-members get 403)
-- ✅ Room appears in "Active" list in GISDashboard
-- ✅ Ably shows both users in "Team Viewing (2)"
-- ✅ Cursor positions sync in real-time
+**Test Locations** (17 components with CollaborationHub):
+- SafetyHub (RECOMMENDED - shortest path)
+- DocumentHub, QAQCHub, EquipmentHub, CrewManagement
+- FieldOperations, ThreeWeekLookahead, DrawingViewer, RFIManager
+- SubmittalManager, OutageCoordination, TestingDashboard
+- EnvironmentalCompliance, MaterialInventory, ReceiptManager
+- ProjectManager, EmergencyAlerts
 
-**Failure Scenarios to Check**:
-- ❌ User C (not in project) tries to join → Should get Daily.co knocking screen
-- ❌ User B tries to access GIS data from different project → RLS blocks (403)
-- ❌ Room expires after 4 hours → Should disappear from active list
-
-**Update MASTER_DOC After Test**:
-Move MF-69 from DONE to TODO / Upcoming Work with status:
-- If PASSES: Move to "Completed Flows" with test date + results
-- If FAILS: Move back to "Active Flows" with exact error messages
+**After Test**: Update this section with results using template in HUMAN_TEST_GUIDE_MF71.md
 
 ---
 
