@@ -68,3 +68,4 @@ $$;
 
 COMMENT ON FUNCTION uses_local_ai_only IS 'Returns TRUE if company requires local-only AI (NDA compliance)';
 
+

@@ -189,3 +189,4 @@ COMMENT ON COLUMN leads.main_challenges IS 'Array of main operational challenges
 COMMENT ON COLUMN leads.interested_features IS 'Array of features they are interested in';
 COMMENT ON COLUMN leads.status IS 'Lead status: new, contacted, qualified, proposal, closed-won, closed-lost';
 
+

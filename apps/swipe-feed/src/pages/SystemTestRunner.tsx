@@ -118,7 +118,7 @@ export const SystemTestRunner: React.FC = () => {
               <div className={`rounded-lg p-4 border ${
                 summary.percentage === 100 
                   ? 'bg-green-900/20 border-green-700' 
-                  : 'bg-blue-900/20 border-gray-700
+                  : 'bg-blue-900/20 border-gray-700'
               }`}>
                 <div className={`text-3xl font-bold ${
                   summary.percentage === 100 ? 'text-green-400' : 'text-blue-400'

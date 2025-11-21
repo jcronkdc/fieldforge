@@ -457,7 +457,7 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Footer Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-[21px] pt-[34px] border-t border-gray-700
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-[21px] pt-[34px] border-t border-gray-700">
         {[
           { label: 'Total Man Hours', value: '12,456', icon: Timer },
           { label: 'Structures Set', value: '45/62', icon: Building2 },

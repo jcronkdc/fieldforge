@@ -414,7 +414,7 @@ export const UserProfile: React.FC = () => {
             onClick={() => setActiveTab(tab)}
             className={`px-[21px] py-[13px] font-medium capitalize transition-all border-b-2 ${
               activeTab === tab
-                ? 'text-blue-400 border-gray-700
+                ? 'text-blue-400 border-gray-700'
                 : 'text-slate-400 border-transparent hover:text-white'
             }`}
           >

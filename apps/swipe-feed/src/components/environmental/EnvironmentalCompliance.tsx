@@ -542,7 +542,7 @@ export const EnvironmentalCompliance: React.FC = () => {
           onClick={() => setActiveTab('monitoring')}
           className={`px-[21px] py-[13px] font-medium transition-all border-b-2 ${
             activeTab === 'monitoring'
-              ? 'text-blue-400 border-gray-700
+              ? 'text-blue-400 border-gray-700'
               : 'text-slate-400 border-transparent hover:text-white'
           }`}
         >
@@ -552,7 +552,7 @@ export const EnvironmentalCompliance: React.FC = () => {
           onClick={() => setActiveTab('incidents')}
           className={`px-[21px] py-[13px] font-medium transition-all border-b-2 ${
             activeTab === 'incidents'
-              ? 'text-blue-400 border-gray-700
+              ? 'text-blue-400 border-gray-700'
               : 'text-slate-400 border-transparent hover:text-white'
           }`}
         >
@@ -562,7 +562,7 @@ export const EnvironmentalCompliance: React.FC = () => {
           onClick={() => setActiveTab('permits')}
           className={`px-[21px] py-[13px] font-medium transition-all border-b-2 ${
             activeTab === 'permits'
-              ? 'text-blue-400 border-gray-700
+              ? 'text-blue-400 border-gray-700'
               : 'text-slate-400 border-transparent hover:text-white'
           }`}
         >
@@ -572,7 +572,7 @@ export const EnvironmentalCompliance: React.FC = () => {
           onClick={() => setActiveTab('reports')}
           className={`px-[21px] py-[13px] font-medium transition-all border-b-2 ${
             activeTab === 'reports'
-              ? 'text-blue-400 border-gray-700
+              ? 'text-blue-400 border-gray-700'
               : 'text-slate-400 border-transparent hover:text-white'
           }`}
         >

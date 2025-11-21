@@ -559,3 +559,4 @@ COMMENT ON TABLE underground_utilities IS 'Existing underground infrastructure a
 COMMENT ON TABLE imported_gis_layers IS 'Generic container for GIS data imported from CAD, Shapefile, etc';
 COMMENT ON TABLE project_coordinate_systems IS 'Project-specific coordinate system definitions and preferences';
 
+

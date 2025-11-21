@@ -222,25 +222,25 @@ export const DrawingViewer: React.FC = () => {
     setNewAnnotation(newAnn);
   };
 
-  const saveAnnotation = async (: Annotation) => {
+  const saveAnnotation = async (annotation: Annotation) => {
     try {
-      const response = await fetch(`/api/documents/drawings/${selectedDrawing?.id}/s`, {
+      const response = await fetch(`/api/documents/drawings/${selectedDrawing?.id}/annotations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session?.access_token}`
         },
-        body: JSON.stringify()
+        body: JSON.stringify(annotation)
       });
 
-      if (!response.ok) throw new Error('Failed to save ');
+      if (!response.ok) throw new Error('Failed to save annotation');
 
-      setAnnotations([...s, ]);
+      setAnnotations([...annotations, annotation]);
       setNewAnnotation(null);
       toast.success('Annotation added');
     } catch (error) {
-      console.error('Error saving :', error);
-      toast.error('Failed to save ');
+      console.error('Error saving annotation:', error);
+      toast.error('Failed to save annotation');
     }
   };
 
@@ -411,17 +411,17 @@ export const DrawingViewer: React.FC = () => {
             )}
 
             {/* Annotations */}
-            {viewerState.showAnnotations && s.map( => (
+            {viewerState.showAnnotations && annotations.map(annotation => (
               <div
-                key={.id}
+                key={annotation.id}
                 className="absolute"
                 style={{ 
-                  left: `${.x}px`, 
-                  top: `${.y}px`,
+                  left: `${annotation.x}px`, 
+                  top: `${annotation.y}px`,
                   transform: 'translate(-50%, -50%)'
                 }}
               >
-                {.type === 'comment' && (
+                {annotation.type === 'comment' && (
                   <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer hover:scale-110 transition">
                     <MessageSquare className="w-4 h-4" />
                   </div>
@@ -546,7 +546,7 @@ export const DrawingViewer: React.FC = () => {
                   key={drawing.id}
                   className={`p-3 rounded-lg cursor-pointer transition ${
                     selectedDrawing?.id === drawing.id
-                      ? 'bg-blue-600/20 border border-gray-700
+                      ? 'bg-blue-600/20 border border-gray-700'
                       : 'bg-slate-700/50 hover:bg-slate-700 border border-transparent'
                   }`}
                   onClick={() => setSelectedDrawing(drawing)}

@@ -285,8 +285,6 @@ export const CrewManagement: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-8 py-12">
-      <div className="" />
-      
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[21px]">
         <div>
@@ -607,6 +605,7 @@ export const CrewManagement: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

@@ -261,7 +261,7 @@ export const CompanySettings: React.FC = () => {
             onClick={() => setActiveTab(tab.id as any)}
             className={`px-[21px] py-[13px] rounded-t-[8px] font-medium transition-all flex items-center gap-[8px] ${
               activeTab === tab.id
-                ? 'bg-blue-500/20 text-blue-400 border-b-2 border-gray-700
+                ? 'bg-blue-500/20 text-blue-400 border-b-2 border-gray-700'
                 : 'text-blue-400/60 hover:text-blue-400 hover:bg-blue-500/10'
             }`}
           >

@@ -30,3 +30,4 @@ COMMENT ON TABLE acquisition_inquiries IS 'Stores acquisition and custom project
 COMMENT ON COLUMN acquisition_inquiries.inquiry_type IS 'Type of inquiry: acquire (acquisition) or custom (custom project)';
 COMMENT ON COLUMN acquisition_inquiries.status IS 'Status: new, contacted, qualified, converted, closed';
 
+

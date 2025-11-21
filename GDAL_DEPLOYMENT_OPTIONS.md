@@ -192,3 +192,4 @@ Expected response:
 
 **⚠️ CURRENT STATUS**: GDAL **NOT** installed on Vercel (cannot be installed). File import will fail until backend deployed to GDAL-capable host.
 
+

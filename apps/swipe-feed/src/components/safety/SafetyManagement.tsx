@@ -281,7 +281,7 @@ export const SafetyManagement: React.FC = () => {
           <p className="text-sm text-gray-600 mt-1">Without Incident</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-gray-700
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-gray-700">
           <div className="flex items-center justify-between mb-2">
             <TrendingUp className={`w-8 h-8 ${getSafetyScoreColor(metrics.safetyScore)}`} />
             <span className="text-sm text-gray-500">Score</span>

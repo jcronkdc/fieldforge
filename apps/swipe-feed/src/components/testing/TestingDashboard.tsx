@@ -379,7 +379,7 @@ export const TestingDashboard: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-[21px]">
           {/* Test Results */}
           <div className="lg:col-span-2 bg-gray-800/50 border border-gray-700 rounded-lg rounded-[21px] border border-gray-700  ">
-            <div className="p-[21px] border-b border-gray-700
+            <div className="p-[21px] border-b border-gray-700">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold text-white ">Test Results</h2>
                 <div className="flex gap-[8px]">

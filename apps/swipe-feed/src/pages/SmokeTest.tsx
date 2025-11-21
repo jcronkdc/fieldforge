@@ -174,7 +174,7 @@ export const SmokeTest: React.FC = () => {
       case 'fail':
         return 'bg-red-400/20 border-red-400/50';
       case 'running':
-        return 'bg-blue-400/20 border-gray-700
+        return 'bg-blue-400/20 border-gray-700';
       default:
         return 'bg-gray-400/20 border-gray-400/50';
     }
