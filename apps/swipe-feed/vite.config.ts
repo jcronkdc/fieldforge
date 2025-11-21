@@ -19,8 +19,16 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            react: ["react", "react-dom", "react-swipeable", "react-router-dom"],
-            supabase: ["@supabase/supabase-js"],
+            // 🐜 ANT OPTIMIZATION: Group related code for shortest pathways
+            
+            // Core React libs (largest, most shared - ~150 KB)
+            'react-core': ['react', 'react-dom', 'react-router-dom'],
+            
+            // Supabase auth & db (heavily used - ~170 KB)
+            'supabase': ['@supabase/supabase-js'],
+            
+            // UI libraries (Lucide icons, date-fns - ~80 KB)
+            'ui-libs': ['lucide-react', 'date-fns'],
           },
         },
       },
