@@ -12,7 +12,9 @@
     "migrate": "tsx src/scripts/runMigrations.ts",
     "seed": "tsx src/scripts/seedDatabase.ts",
     "verify-auth": "tsx src/scripts/verifyAuth.ts",
-    "vercel-build": "npm run build"
+    "vercel-build": "npm run build",
+    "lint": "tsc --noEmit",
+    "test": "echo \"Error: no tests specified\" && exit 0"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.0",
@@ -33,7 +35,7 @@
     "stripe": "^19.3.1",
     "twilio": "^5.10.5",
     "uuid": "^9.0.0",
-    "zod": "^3.23.8"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.15",
@@ -45,7 +47,7 @@
     "typescript": "^5.7.2"
   },
   "engines": {
-    "node": "22.x"
+    "node": ">=20.x"
   },
   "packageManager": "npm@10.9.2"
 }
