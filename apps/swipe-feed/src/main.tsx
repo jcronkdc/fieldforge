@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import AppSafe from "./AppSafe";
+import App from "./App";
 import "./styles/tokens.css";
 import "./styles/a11y-utilities.css";
 import "./styles.css";
@@ -20,11 +20,11 @@ if (typeof window !== "undefined") {
   );
 }
 
-// Using the production-ready safe version of the app
+// Using the production-ready version of the app
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
-      <AppSafe />
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

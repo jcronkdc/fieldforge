@@ -65,17 +65,15 @@ import { SubmittalManager } from './components/submittals/SubmittalManager';
 import { OutageCoordination } from './components/outages/OutageCoordination';
 import { CompanySettings } from './components/settings/CompanySettings';
 
-// Placeholder Components - TO BE REPLACED
-import {
-  SafetyBriefing,
-  EnvironmentalCompliance,
-  TeamMessaging,
-  EmergencyAlerts,
-  ProjectMap3D,
-  SubstationModel,
-  FieldForgeAI,
-  UserProfile
-} from './components/placeholders';
+// Additional Real Components
+import { SafetyBriefing } from './components/safety/SafetyBriefing';
+import { EnvironmentalCompliance } from './components/environmental/EnvironmentalCompliance';
+import { TeamMessaging } from './components/messaging/TeamMessaging';
+import { EmergencyAlerts } from './components/emergency/EmergencyAlerts';
+import { ProjectMap3D } from './components/maps/ProjectMap3D';
+import { SubstationModel } from './components/electrical/SubstationModel';
+import { FieldForgeAI } from './components/ai/FieldForgeAI';
+import { UserProfile } from './components/profile/UserProfile';
 import { SettingsPage } from './pages/Settings';
 
 // Offline Support

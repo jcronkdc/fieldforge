@@ -7,7 +7,7 @@ import {
   Map, Brain, Settings, Loader
 } from 'lucide-react';
 import { runSmokeTest } from '../tests/smoke-test';
-import { useAuth } from '../context/AuthContext';
+import { useAuthContext } from '../context/AuthContext';
 
 interface TestCategory {
   name: string;
@@ -18,7 +18,7 @@ interface TestCategory {
 }
 
 export const SmokeTest: React.FC = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
   const [isRunning, setIsRunning] = useState(false);
   const [testResults, setTestResults] = useState<any>(null);
   const [currentTest, setCurrentTest] = useState<string>('');

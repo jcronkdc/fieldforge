@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signIn, DEMO_CREDENTIALS } from '../../lib/auth';
+import { signIn } from '../../lib/auth';
 import { 
   Zap, Shield, HardHat, Building2, Activity, 
   Map, Users, FileText, Eye, EyeOff, AlertCircle,
@@ -33,15 +33,6 @@ export const LoginPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDemoLogin = async () => {
-    setEmail(DEMO_CREDENTIALS.email);
-    setPassword(DEMO_CREDENTIALS.password);
-    // Auto-submit after setting demo credentials
-    setTimeout(() => {
-      handleLogin(new Event('submit') as any);
-    }, 100);
   };
 
   const features = [
@@ -169,15 +160,6 @@ export const LoginPage: React.FC = () => {
               ) : (
                 'Sign in'
               )}
-            </button>
-
-            {/* Demo Account */}
-            <button
-              type="button"
-              onClick={handleDemoLogin}
-              className="btn btn-secondary w-full justify-center"
-            >
-              Try demo account
             </button>
 
             {/* Sign Up Link */}
