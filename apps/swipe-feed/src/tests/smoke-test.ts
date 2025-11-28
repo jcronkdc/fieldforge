@@ -568,7 +568,5 @@ if (typeof window !== 'undefined') {
   (window as any).runFieldForgeSmokeTest = runSmokeTest;
 }
 
-// Auto-run if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  runSmokeTest().then(() => process.exit(0));
-}
+// Note: To run this test manually, call runSmokeTest() from browser console
+// or use the TestRunner page

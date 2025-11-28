@@ -1,10 +1,11 @@
 /**
  * FieldForge Integration Tests
  * Run these tests to verify all features are working correctly
+ * 
+ * Note: This file is designed to be run in the browser via TestRunner.tsx
  */
 
 import { supabase } from '../lib/supabase';
-import { describe, it } from 'vitest';
 
 // Test configuration
 const TEST_EMAIL = `test_${Date.now()}@fieldforge.com`;
@@ -313,13 +314,6 @@ function printTestSummary() {
   }
 }
 
-// Run tests if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  runIntegrationTests().catch(console.error);
-}
-
-describe.skip('Legacy integration harness', () => {
-  it('executes via manual runner outside Vitest', () => {
-    // Placeholder ensures Vitest treats this helper as a skipped suite.
-  });
-});
+// Tests can be run manually via TestRunner.tsx or the browser console:
+// import { runIntegrationTests } from './tests/integration.test';
+// runIntegrationTests();

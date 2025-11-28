@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./styles/tokens.css";
 import "./styles/a11y-utilities.css";
@@ -11,8 +10,8 @@ import "./styles/premium-animations.css";
 import "./styles/contrast-fixes.css";
 import { pauseOffscreen } from "./utils/viewport-animate";
 
-// Import acquisition tests for $10B valuation
-import "./tests/runAcquisitionTests";
+// Acquisition tests disabled for now (can be run manually)
+// import "./tests/runAcquisitionTests";
 
 if (typeof window !== "undefined") {
   window.requestAnimationFrame(() =>
@@ -21,11 +20,10 @@ if (typeof window !== "undefined") {
 }
 
 // Using the production-ready version of the app
+// Note: App.tsx contains its own BrowserRouter
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <App />
   </React.StrictMode>
 );
 
