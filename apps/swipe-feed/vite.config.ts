@@ -10,9 +10,17 @@ export default defineConfig(({ mode }) => {
     base: env.VITE_BASE_URL || "/",
     plugins: [react()],
     define: {
-      // Shim process.env for Node.js packages that reference it in browser
-      'process.env': JSON.stringify({}),
-      'process.env.NODE_ENV': JSON.stringify(mode),
+      // Shim process for Node.js packages that reference it in browser
+      // Use object literal, not JSON.stringify, so it's a real object
+      'process.env': {
+        NODE_ENV: JSON.stringify(mode),
+      },
+      // Fallback for packages that check process directly
+      'process': {
+        env: {
+          NODE_ENV: JSON.stringify(mode),
+        },
+      },
     },
     resolve: {
       alias: {
