@@ -304,6 +304,11 @@
   <body>
     <a class="skip-to-content" href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
     <div id="root"></div>
+    <!-- Shim process.env for Node.js packages that run in browser -->
+    <script>
+      window.process = window.process || { env: { NODE_ENV: 'production' } };
+      window.global = window.global || window;
+    </script>
     <script type="module" src="/src/main.tsx"></script>
     
     <!-- Google Rich Results Test Helper -->

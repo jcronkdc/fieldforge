@@ -9,19 +9,6 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.VITE_BASE_URL || "/",
     plugins: [react()],
-    define: {
-      // Shim process for Node.js packages that reference it in browser
-      // Use object literal, not JSON.stringify, so it's a real object
-      'process.env': {
-        NODE_ENV: JSON.stringify(mode),
-      },
-      // Fallback for packages that check process directly
-      'process': {
-        env: {
-          NODE_ENV: JSON.stringify(mode),
-        },
-      },
-    },
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
