@@ -9,6 +9,11 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.VITE_BASE_URL || "/",
     plugins: [react()],
+    define: {
+      // Shim process.env for Node.js packages that reference it in browser
+      'process.env': JSON.stringify({}),
+      'process.env.NODE_ENV': JSON.stringify(mode),
+    },
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
